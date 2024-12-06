@@ -10,7 +10,7 @@ properties (Constant)
     Tf = 0.5;        % Time length
     Ts = 2e-5;	   % Sample time
     % TEB
-    Ti = 2e-4;     % Sample time
+    Ti = 1e-4;     % Sample time
     Ti_idx = round(classM3C.Ti/classM3C.Ts)
     % ICB + LFOM
     Tl = 1e-4;     % Sample time
@@ -62,15 +62,17 @@ properties (Constant)
     Von_max = classM3C.Vxy_max / 2;  % Common mode voltage
     Is_max = 250; % Cluster current
     Ix_max = 200; % Input current
+    Ie_max = 1.5*classM3C.Is_max; % Linear independent currents...
+    IB_max = 2*classM3C.Is_max; % Basic currents... both derived from empirical rules
 
     % Cluster capacitor voltage reference
     vc_ref = 1.5 * classM3C.Vxy_max;
     % Capacitor Energy reference
     Ec_ref = (classM3C.C/2/4) * classM3C.vc_ref^2;
 
-    Xmax = [classM3C.Ec_ref*ones(9, 1); classM3C.vc_ref*ones(9, 1); classM3C.Is_max*ones(9, 1)];
+    Xmax = [classM3C.Ec_ref*ones(9, 1); classM3C.vc_ref*ones(9, 1); classM3C.IB_max*ones(9, 1)];
     % Ymax = [classM3C.Is_max*ones(4, 1); classM3C.Von_max; classM3C.Ec_ref*ones(9, 1)];
-    Ymax = [classM3C.Is_max*ones(4, 1); classM3C.Von_max];
+    Ymax = [classM3C.Ie_max*ones(4, 1); classM3C.Von_max];
 end
 
 %% Properties: Initialization
