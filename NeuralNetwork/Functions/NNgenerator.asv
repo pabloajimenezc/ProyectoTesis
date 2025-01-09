@@ -1,0 +1,87 @@
+function net = NNgenerator(NNgenerator_args)
+%% Neural network generator arguments
+Ninputs = NNgenerator_args.Ninputs;                     % int
+Noutputs = NNgenerator_args.Noutputs;                   % int
+NFFlayers = NNgenerator_args.NFFlayers;                 % int
+NRlayers = NNgenerator_args.NRlayers;                   % int
+NFFneurons = NNgenerator_args.NFFneurons;               % int
+Nwindow = NNgenerator_args.Nwindow;                     % int
+hidden_activation = NNgenerator_args.hidden_activation; % str
+output_activation = NNgenerator_args.output_activation; % str
+dropout = NNgenerator_args.dropout;                     % float [0, 1]
+WinitFcn = NNgenerator_args.WinitFcn;                   % str
+BinitFcn = NNgenerator_args.BinitFcn;                   % str
+train_bias = NNgenerator_args.train_bias;               % bool
+scale_data = NNgenerator_args.scale_data;               % bool
+Xmax = NNgenerator_args.Xmax;                           % float
+Ymax = NNgenerator_args.Ymax;                           % float
+
+%% Feedforward blocks
+% Basic feedforward hidden layer
+FFhidden_layer = [fullyConnectedLayer(NFFneurons, 'WeightsInitializer', WinitFcn)
+                  batchNormalizationLayer
+                  eval(hidden_activation)
+                  dropoutLayer(dropout)];
+
+% Repeat FFhidden_layer NFFlayers times
+FFhidden_layers = repmat(FFhidden_layer, NFFlayers, 1);
+
+% Feedforward output layer
+FFoutput_layer = [fullyConnectedLayer(Noutputs, 'WeightsInitializer', WinitFcn)
+                 eval(output_activation)];
+FFoutput_layer(2).Name = output_activation;
+
+% BIAS: trainable or constant 0
+if train_bias % = true, Initialize
+    FFhidden_layer(1).BiasInitializer = BinitFcn;
+    FFoutput_layer(1).BiasInitializer = BinitFcn;
+else % train_bias = false, Set bias = 0
+    FFhidden_layer(1).BiasLearnRateFactor = 0;
+    FFhidden_layer(1).Bias = zeros(NFFneurons, 1);
+    FFoutput_layer(1).BiasLearnRateFactor = 0;
+    FFoutput_layer(1).Bias = zeros(Noutputs, 1);
+end
+
+%% Recurrent blocks
+% Basic recurrent hidden layer
+Rhidden_layer = [lstmLayer(Nwindow, OutputMode="sequence")];
+
+% Repeat recurrent hidden layer NRlayers times
+Rhidden_layers = repmat(Rhidden_layer, NRlayers, 1);
+
+% Single timestep output layer
+Routput_layer = [lstmLayer(Nwindow, OutputMode="last")
+                 batchNormalizationLayer
+                 dropoutLayer(dropout)];
+
+%% Build network + Input/Output scaling
+% FFNN or RNN?, scaling or not scaling?
+input_normalization = @(x) x ./ Xmax;
+if Nwindow == 1 % FFNN
+    if scale_data
+        layers = [featureInputLayer(Ninputs, 'Normalization', input_normalization)];
+    else
+        layers = [featureInputLayer(Ninputs)];
+    end
+else            % RNN
+    if scale_data
+        layers = [sequenceInputLayer(Ninputs, 'Normalization', input_normalization)
+                  Rhidden_layers
+                  Routput_layer];
+    else
+        layers = [sequenceInputLayer(Ninputs)
+                  Rhidden_layers
+                  Routput_layer];
+    end
+end
+
+% This is for both types of network
+layers = [layers
+          FFhidden_layers
+          FFoutput_layer];
+
+% Out
+
+%% Return network
+net = dlnetwork(layers);
+end

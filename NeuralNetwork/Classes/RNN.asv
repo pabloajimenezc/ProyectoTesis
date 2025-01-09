@@ -1,0 +1,41 @@
+classdef RNN
+    % This class create a Recurrent Neural Network
+    % Nlayers: Number of hidden layers
+    % Nneurons: Number of neurons per hidden layer
+
+    properties
+        net
+    end
+    
+    methods
+        function obj = RNN(Ninputs, Noutputs, NRlayers, NFFlayers, Nneurons, hidden_activation, output_activation, dropout, WinitFcn, BinitFcn, RWinitFcn)
+            % Input Layer
+            layers = [sequenceInputLayer(Ninputs)];
+            % Hidden recurrent layers
+            for i = 1:NRlayers
+                layers = [layers
+                          lstmLayer(Nneurons, 'WeightsInitializer', WinitFcn, 'BiasInitializer', BinitFcn, 'RecurrentWeightsInitializer', RWinitFcn, OutputMode="sequence")
+                          dropoutLayer(dropout)
+                          ];
+            end
+            layers = [layers
+                      lstmLayer(Nneurons, 'WeightsInitializer', WinitFcn, 'BiasInitializer', BinitFcn, 'RecurrentWeightsInitializer', RWinitFcn, OutputMode="last")
+                      dropoutLayer(dropout)
+                      ];
+            % Hidden feedforward layers
+            for i = 1:NFFlayers
+                layers = [layers
+                          fullyConnectedLayer(Nneurons, 'WeightsInitializer', WinitFcn, 'BiasInitializer', BinitFcn)
+                          batchNormalizationLayer
+                          eval(hidden_activation)
+                          dropoutLayer(dropout)
+                          ];
+            end
+            % Output layer
+            layers = [layers
+                      fullyConnectedLayer(Noutputs, 'WeightsInitializer', WinitFcn, 'BiasInitializer', BinitFcn)
+                      eval(output_activation)];
+            obj.net = dlnetwork(layers);
+        end
+    end
+end
