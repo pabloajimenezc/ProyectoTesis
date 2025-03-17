@@ -2,7 +2,7 @@ classdef ClassPI
     % ClassPI: Proportional Integral controller
     
     properties % Constants
-        Ti      % Integration step
+        Ts      % Sampling time
         kp      % Proportional constant
         ki      % Integral constant
         n
@@ -20,10 +20,10 @@ classdef ClassPI
             % ClassPI: Construct an instance of this class.
 
             % Constants
-            obj.Ti = specs.Ti;
+            obj.Ts = specs.Ts;
             obj.kp = specs.kp;
             obj.ki = specs.ki;
-            obj.n = 1 - obj.Ti * 0.5 * obj.ki / obj.kp;
+            obj.n = 1 - obj.Ts * 0.5 * obj.ki / obj.kp;
             obj.u_min = specs.u_min;
             obj.u_max= specs.u_max;
 
@@ -37,7 +37,7 @@ classdef ClassPI
             obj.e = r - y;
             obj.a = (obj.n - 1) * obj.u / obj.kp + obj.a * obj.n;
             obj.u = (obj.e - obj.a) * obj.kp;
-            obj.u = clip(obj.u, -obj.u_max, obj.u_max); % Saturation
+            obj.u = clip(obj.u, obj.u_min, obj.u_max); % Saturation
         end
 
         function obj = reset(obj)

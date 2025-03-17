@@ -2,7 +2,7 @@ classdef ClassPLL
     % ClassPLL: Phase Locked Loop
 
     properties % Constants
-        Ti  % Integration step
+        Ts  % Sampling time
         kp  % Proportional constant
         ki  % Integral constant
         n
@@ -21,10 +21,10 @@ classdef ClassPLL
             % ClassPLL: Construct an instance of this class.
 
             % Constants
-            obj.Ti = specs.Ti;
+            obj.Ts = specs.Ts;
             obj.kp = specs.kp;
             obj.ki = specs.ki;
-            obj.n = 1 - obj.Ti * 0.5 * obj.ki / obj.kp;
+            obj.n = 1 - obj.Ts * 0.5 * obj.ki / obj.kp;
 
             % Initialize variables
             obj = obj.reset();
@@ -39,7 +39,7 @@ classdef ClassPLL
             obj.a = (obj.n - 1) * obj.u / obj.kp + obj.a * obj.n;
             obj.u = (obj.e - obj.a) * obj.kp;
             obj.w = obj.u + obj.w;
-            obj.g = obj.g + obj.Ti * obj.w;
+            obj.g = obj.g + obj.Ts * obj.w;
             obj.g = mod(obj.g, 2*pi); % Mapped to [0, 2*pi]
         end
 
