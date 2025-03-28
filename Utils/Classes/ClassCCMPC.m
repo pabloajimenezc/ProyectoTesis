@@ -14,11 +14,11 @@ properties % Variables
 end
 
 methods
-    function obj = ClassCCMPC(M3C)
+    function obj = ClassCCMPC(specsCCMPC)
         % ClassCCMPC: Construct an instance of this class.
 
         % Constants
-        obj.M3C = M3C;
+        obj.M3C = specsCCMPC.M3C;
         obj.lambda = 0.00005;
         obj.options = mpcActiveSetOptions;
         obj.options.MaxIterations = 100;
