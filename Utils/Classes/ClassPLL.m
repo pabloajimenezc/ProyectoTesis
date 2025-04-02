@@ -20,8 +20,8 @@ classdef ClassPLL < ClassPI
         function obj = estimate(obj, vdq, wn)
             % estimate: Estimate angle and frequency.
 
-            obj = obj.control(0, -vdq(2));   % PI controller
-            obj.w = obj.u_t + wn;       % Add to nominal frequency
+            obj = obj.control(0, -vdq(2));  % PI controller
+            obj.w = obj.u_t + wn;           % Add to nominal frequency
             obj.g = obj.g + obj.w * obj.Ts; % Integrate to obtain angle
             obj.g = mod(obj.g, 2*pi);       % Map to [0, 2*pi]
         end

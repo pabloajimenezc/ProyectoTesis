@@ -21,13 +21,6 @@ properties  % Constants
     Csm % Submodule capacitance
     Nsm % Submodules per cluster
     C   % Cluster capacitance
-    % Rx  % Input grid resistance
-    % Lx  % Input grid inductance
-    % Ry  % Output grid resistance
-    % Ly  % Output grid inductance
-    % As  % Current continuous model transition matrix
-    % Bs  % Current continuous model input matrix
-    % Es  % Current continuous model perturbation matrix
     Ad  % Current discrete model transition matrix
     Bd  % Current discrete model input matrix
     Ed  % Current discrete model perturbation matrix
@@ -58,43 +51,6 @@ methods
         obj.Bd = (-obj.R * eye(ClassM3C.m) / obj.L) \ (obj.Ad - eye(ClassM3C.m)) * (-eye(ClassM3C.m) / obj.L);
         obj.Ed = -obj.Bd;
 
-        % obj.Rx = specs.Constants.Rx;
-        % obj.Lx = specs.Constants.Lx;
-        % obj.Ry = specs.Constants.Ry;
-        % obj.Ly = specs.Constants.Ly;
-        % 
-        % Mx = [1, 1, 1, 0, 0, 0, 0, 0, 0;
-        %       1, 1, 1, 0, 0, 0, 0, 0, 0;
-        %       1, 1, 1, 0, 0, 0, 0, 0, 0;
-        %       0, 0, 0, 1, 1, 1, 0, 0, 0;
-        %       0, 0, 0, 1, 1, 1, 0, 0, 0;
-        %       0, 0, 0, 1, 1, 1, 0, 0, 0;
-        %       0, 0, 0, 0, 0, 0, 1, 1, 1;
-        %       0, 0, 0, 0, 0, 0, 1, 1, 1;
-        %       0, 0, 0, 0, 0, 0, 1, 1, 1];
-        % 
-        % My = [1, 0, 0, 1, 0, 0, 1, 0, 0;
-        %       0, 1, 0, 0, 1, 0, 0, 1, 0;
-        %       0, 0, 1, 0, 0, 1, 0, 0, 1;
-        %       1, 0, 0, 1, 0, 0, 1, 0, 0;
-        %       0, 1, 0, 0, 1, 0, 0, 1, 0;
-        %       0, 0, 1, 0, 0, 1, 0, 0, 1;
-        %       1, 0, 0, 1, 0, 0, 1, 0, 0;
-        %       0, 1, 0, 0, 1, 0, 0, 1, 0;
-        %       0, 0, 1, 0, 0, 1, 0, 0, 1];
-        % 
-        % MR = Mx * obj.Rx + eye(ClassM3C.m) * obj.R + My * obj.Ry;
-        % ML = Mx * obj.Lx + eye(ClassM3C.m) * obj.L + My * obj.Ly;
-        % 
-        % obj.As = -ML\MR;
-        % obj.Bs = -inv(ML);
-        % obj.Es = -obj.Bs;
-        % 
-        % obj.Ad = expm(obj.Ti * obj.As);
-        % integrated = obj.As \ (obj.Ad - eye(ClassM3C.m));
-        % obj.Bd = integrated * obj.Bs;
-        % obj.Ed = integrated * obj.Es;
-
         % Variables
         obj = obj.reset(specs);
     end
@@ -117,7 +73,6 @@ methods
         % Update system states
         obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
         obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
-        % obj.is = obj.is + obj.Ti / obj.L * (vB + vo - vs + obj.R * obj.is);
         obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB + vo);
     end
 
