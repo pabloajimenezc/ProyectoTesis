@@ -39,7 +39,7 @@ classdef ClassPI
         end
         
         function obj = control(obj, r_t, y_t)
-            % filter: Calculate discrete control action signal.
+            % control: Calculate discrete control action signal.
             
             % Update previous signals
             obj.e_t_1 = obj.e_t;    % Error

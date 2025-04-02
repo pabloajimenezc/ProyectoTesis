@@ -1,70 +1,37 @@
-classdef ClassPLL
-    % ClassPLL: Phase Locked Loop
-
-    properties % Constants
-        Ts  % Sampling time
-        kp  % Proportional constant
-        ki  % Integral constant
-        n
-    end
+classdef ClassPLL < ClassPI
+    % ClassPLL: Discrete phase locked loop, Tustin approximation.
+    % The internal PI is instantiated from ClassPI
 
     properties % Variables
-        e   % Error
-        a
-        u   % Action
-        w   % Angular frequency
-        g   % Angle
+        g   % Estimated voltage angle
+        w   % Estimated voltage angular frequency
     end
     
     methods
         function obj = ClassPLL(specs)
             % ClassPLL: Construct an instance of this class.
+            
+            obj@ClassPI(specs);
 
-            % Constants
-            obj.Ts = specs.Ts;
-            obj.kp = specs.kp;
-            obj.ki = specs.ki;
-            obj.n = 1 - obj.Ts * 0.5 * obj.ki / obj.kp;
-
-            % Initialize variables
+            % Variables
             obj = obj.reset();
         end
         
-        function obj = step(obj, vdq)
-            % step: Perform a step of the numerical integration of the pll's transition function.
+        function obj = estimate(obj, vdq, wn)
+            % estimate: Estimate angle and frequency.
 
-            % vd = vdq(1);
-            vq = vdq(2);
-            obj.e = vq;
-            obj.a = (obj.n - 1) * obj.u / obj.kp + obj.a * obj.n;
-            obj.u = (obj.e - obj.a) * obj.kp;
-            obj.w = obj.u + obj.w;
-            obj.g = mod(obj.g + obj.Ts * obj.w, 2*pi); % Mapped to [0, 2*pi]
+            obj = obj.control(0, -vdq(2));   % PI controller
+            obj.w = obj.u_t + wn;       % Add to nominal frequency
+            obj.g = obj.g + obj.w * obj.Ts; % Integrate to obtain angle
+            obj.g = mod(obj.g, 2*pi);       % Map to [0, 2*pi]
         end
 
         function obj = reset(obj)
-            % reset: Reset pll's variables to 0.
+            % reset: Reset PLL variables to 0.
 
-            obj.e = 0;
-            obj.a = 0;
-            obj.u = 0;
-            obj.w = 0;
+            obj = reset@ClassPI(obj);
             obj.g = 0;
+            obj.w = 0;
         end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -23,6 +23,7 @@ properties  % Constants
     C   % Cluster capacitance
     Ad  % Current model transition matrix
     Bd  % Current model input matrix
+    Ed  % Current model perturbation matrix
 end
 
 properties % Variables
@@ -46,8 +47,17 @@ methods
         obj.Csm = specs.Constants.Csm;
         obj.Nsm = specs.Constants.Nsm;
         obj.C = obj.Csm / obj.Nsm;
+        % obj.Ad = expm(-obj.R * obj.Ti * eye(ClassM3C.m) / obj.L);
+        % obj.Bd = (-obj.R * eye(ClassM3C.m) / obj.L) \ (obj.Ad - eye(ClassM3C.m)) * (-eye(ClassM3C.m) / obj.L);
+        % obj.Ed = -obj.Bd;
+
+        MR
+
+
+
         obj.Ad = expm(-obj.R * obj.Ti * eye(ClassM3C.m) / obj.L);
         obj.Bd = (-obj.R * eye(ClassM3C.m) / obj.L) \ (obj.Ad - eye(ClassM3C.m)) * (-eye(ClassM3C.m) / obj.L);
+        obj.Ed = -obj.Bd;
 
         % Variables
         obj = obj.reset(specs);
@@ -71,7 +81,8 @@ methods
         % Update system states
         obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
         obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
-        obj.is = obj.is + obj.Ti / obj.L * (vB + vo - vs + obj.R * obj.is);
+        % obj.is = obj.is + obj.Ti / obj.L * (vB + vo - vs + obj.R * obj.is);
+        obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB + vo);
     end
 
     function obj = reset(obj, specs)
