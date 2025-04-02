@@ -39,8 +39,7 @@ classdef ClassPLL
             obj.a = (obj.n - 1) * obj.u / obj.kp + obj.a * obj.n;
             obj.u = (obj.e - obj.a) * obj.kp;
             obj.w = obj.u + obj.w;
-            obj.g = obj.g + obj.Ts * obj.w;
-            obj.g = mod(obj.g, 2*pi); % Mapped to [0, 2*pi]
+            obj.g = mod(obj.g + obj.Ts * obj.w, 2*pi); % Mapped to [0, 2*pi]
         end
 
         function obj = reset(obj)

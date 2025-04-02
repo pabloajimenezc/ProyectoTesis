@@ -1,9 +1,6 @@
-classdef ClassPI
-    % ClassPI: Discrete proportional integral controller, Tustin approximation.
-    %       (-a0 * u_t_1 + b1 * e_t + b0 * e_t_1)
-    % u_t = --------------------------------------
-    %                         a1
-    
+classdef ClassPLL2 < ClassPI
+    % ClassPLL: Discrete phase locked loop, Tustin approximation.
+
     properties % Constants
         Ts  % Sampling time
         kp  % Proportional constant
@@ -22,7 +19,7 @@ classdef ClassPI
     end
     
     methods
-        function obj = ClassPI(specs)
+        function obj = ClassPLL2(specs)
             % ClassPI: Construct an instance of this class.
             
             % Constants

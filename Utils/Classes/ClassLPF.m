@@ -1,5 +1,8 @@
 classdef ClassLPF
     % ClassLPF: Discrete low pass filter, Tustin approximation.
+    %        (-a0 * yf_t_1 + b1 * y_t + b0 * y_t_1)
+    % yf_t = --------------------------------------
+    %                          a1
     
     properties % Constants
         Ts  % Sampling time
