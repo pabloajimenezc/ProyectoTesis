@@ -21,6 +21,13 @@ properties  % Constants
     Csm % Submodule capacitance
     Nsm % Submodules per cluster
     C   % Cluster capacitance
+    Rx  % Input filter resistance
+    Lx  % Input filter inductance
+    Ry  % Output filter resistance
+    Ly  % Output filter inductance
+    As  % Current continuous model transition matrix
+    Bs  % Current continuous model input matrix
+    Es  % Current continuous model perturbation matrix
     Ad  % Current discrete model transition matrix
     Bd  % Current discrete model input matrix
     Ed  % Current discrete model perturbation matrix
@@ -29,6 +36,7 @@ end
 properties % Variables
     ixy % External currents
     is  % Cluster current
+    pis % Cluster current first derivative
     iB  % Basic current
     iz  % Circulating current
     ie  % Linear Independent circulating current
@@ -37,28 +45,61 @@ properties % Variables
 end
 
 methods
-    function obj = ClassM3C(specs)
-        % ClassM3C: Constructor method, create an instance of this class.
+    function obj = ClassM3C(specs, init_vals)
+        % ClassM3C: Construct an instance of this class
 
         % Constants
-        obj.Ti = specs.Constants.Ti;
-        obj.R = specs.Constants.R;
-        obj.L = specs.Constants.L;
-        obj.Csm = specs.Constants.Csm;
-        obj.Nsm = specs.Constants.Nsm;
+        obj.Ti = specs.Ti;
+        obj.R = specs.R;
+        obj.L = specs.L;
+        obj.Csm = specs.Csm;
+        obj.Nsm = specs.Nsm;
         obj.C = obj.Csm / obj.Nsm;
-        obj.Ad = expm(obj.Ti * -obj.R * eye(ClassM3C.m) / obj.L);
-        obj.Bd = (-obj.R * eye(ClassM3C.m) / obj.L) \ (obj.Ad - eye(ClassM3C.m)) * (-eye(ClassM3C.m) / obj.L);
-        obj.Ed = -obj.Bd;
+        obj.Rx = specs.Rx;
+        obj.Lx = specs.Lx;
+        obj.Ry = specs.Ry;
+        obj.Ly = specs.Ly;
+
+        Mx = [1, 1, 1, 0, 0, 0, 0, 0, 0;
+              1, 1, 1, 0, 0, 0, 0, 0, 0;
+              1, 1, 1, 0, 0, 0, 0, 0, 0;
+              0, 0, 0, 1, 1, 1, 0, 0, 0;
+              0, 0, 0, 1, 1, 1, 0, 0, 0;
+              0, 0, 0, 1, 1, 1, 0, 0, 0;
+              0, 0, 0, 0, 0, 0, 1, 1, 1;
+              0, 0, 0, 0, 0, 0, 1, 1, 1;
+              0, 0, 0, 0, 0, 0, 1, 1, 1];
+
+        My = [1, 0, 0, 1, 0, 0, 1, 0, 0;
+              0, 1, 0, 0, 1, 0, 0, 1, 0;
+              0, 0, 1, 0, 0, 1, 0, 0, 1;
+              1, 0, 0, 1, 0, 0, 1, 0, 0;
+              0, 1, 0, 0, 1, 0, 0, 1, 0;
+              0, 0, 1, 0, 0, 1, 0, 0, 1;
+              1, 0, 0, 1, 0, 0, 1, 0, 0;
+              0, 1, 0, 0, 1, 0, 0, 1, 0;
+              0, 0, 1, 0, 0, 1, 0, 0, 1];
+
+        MR = Mx * obj.Rx + eye(ClassM3C.m) * obj.R + My * obj.Ry;
+        ML = Mx * obj.Lx + eye(ClassM3C.m) * obj.L + My * obj.Ly;
+
+        obj.As = -ML\MR;
+        obj.Bs = -inv(ML);
+        obj.Es = -obj.Bs;
+
+        obj.Ad = expm(obj.Ti * obj.As);
+        integrated = obj.As \ (obj.Ad - eye(ClassM3C.m));
+        obj.Bd = integrated * obj.Bs;
+        obj.Ed = integrated * obj.Es;
 
         % Variables
-        obj = obj.reset(specs);
+        obj = obj.reset(init_vals);
     end
 end
 
 methods
     function obj = step(obj, vs, vxy, vo)
-        % step: Perform a step of the numerical integration of the system's transition function.
+        % step: Perform a step of the numerical integration of the system's transition function
         
         % Basic voltages
         vB = ClassM3C.A' * vxy;
@@ -77,16 +118,17 @@ methods
         obj.ie = ClassM3C.pinvN * obj.iz;
     end
 
-    function obj = reset(obj, specs)
-        % reset: Reset all variables to their initial values specified in 'specs'.
+    function obj = reset(obj, init_vals)
+        % reset: Reset all variables to their initial values specified in 'init_vals'
         
-        obj.is = specs.InitialValues.is;
+        obj.is = init_vals.is0;
+        obj.pis = zeros(size(obj.is));
         obj.ixy = ClassM3C.A * obj.is;
         obj.iB = ClassM3C.pinvA * obj.ixy;
         obj.iz = obj.is - obj.iB;
         obj.ie = ClassM3C.pinvN * obj.iz;
         
-        obj.vc = specs.InitialValues.vc;
+        obj.vc = init_vals.vc0;
         obj.Ec = obj.C / 2 * obj.vc .^ 2;
     end
 
