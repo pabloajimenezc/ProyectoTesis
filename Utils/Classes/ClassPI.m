@@ -5,9 +5,11 @@ classdef ClassPI
     %                         a1
     
     properties % Constants
-        Ts  % Sampling time
-        kp  % Proportional constant
-        ki  % Integral constant
+        Ts      % Sampling time
+        kp      % Proportional constant
+        ki      % Integral constant
+        u_min   % Minimum action
+        u_max   % Maximum action
         b0
         b1
         a0
@@ -29,6 +31,8 @@ classdef ClassPI
             obj.Ts = specs.Ts;
             obj.kp = specs.kp;
             obj.ki = specs.ki;
+            obj.u_min = specs.u_min;
+            obj.u_max = specs.u_max;
             obj.b0 = -obj.kp + obj.Ts/2 * obj.ki;
             obj.b1 =  obj.kp + obj.Ts/2 * obj.ki;
             obj.a0 = -1;
@@ -48,6 +52,7 @@ classdef ClassPI
             % Update actual signals
             obj.e_t = r_t - y_t;    % Error
             obj.u_t = (-obj.a0 * obj.u_t_1 + obj.b1 * obj.e_t + obj.b0 * obj.e_t_1) / obj.a1; % Action
+            obj.u_t = clip(obj.u_t, obj.u_min, obj.u_max); % Saturation
         end
 
         function obj = reset(obj)

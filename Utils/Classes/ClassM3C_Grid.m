@@ -36,6 +36,7 @@ end
 properties % Variables
     ixy % External currents
     is  % Cluster current
+    pis  % Cluster current first derivative
     iB  % Basic current
     iz  % Circulating current
     ie  % Linear Independent circulating current
@@ -100,26 +101,31 @@ methods
     function obj = step(obj, vs, vxy_p, vo)
         % step: Perform a step of the numerical integration of the system's transition function.
 
-        obj.ixy = ClassM3C_Grid.A * obj.is;
-        
-        % Basic voltages and currents
+        % Basic internal voltages
         vB_p = ClassM3C_Grid.A' * vxy_p;
+
+        % Update system states
+        obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
+        obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
+        obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB_p + vo);
+
+        % Basic currents
+        obj.ixy = ClassM3C_Grid.A * obj.is;
         obj.iB = ClassM3C_Grid.pinvA * obj.ixy;
         
         % Circulating currents
         obj.iz = obj.is - obj.iB;
         obj.ie = ClassM3C_Grid.pinvN * obj.iz;
 
-        % Update system states
-        obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
-        obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
-        obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB_p + vo);
+        % Cluster current first derivative
+        obj.pis = obj.As * obj.is + obj.Bs * vs + obj.Es * (vB_p + vo);
     end
 
     function obj = reset(obj, specs)
         % reset: Reset all variables to their initial values specified in 'specs'.
         
         obj.is = specs.InitialValues.is;
+        obj.pis = zeros(size(obj.is));
         obj.ixy = ClassM3C_Grid.A * obj.is;
         obj.iB = ClassM3C_Grid.pinvA * obj.ixy;
         obj.iz = obj.is - obj.iB;

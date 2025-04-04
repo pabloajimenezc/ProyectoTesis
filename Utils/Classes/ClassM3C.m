@@ -47,7 +47,7 @@ methods
         obj.Csm = specs.Constants.Csm;
         obj.Nsm = specs.Constants.Nsm;
         obj.C = obj.Csm / obj.Nsm;
-        obj.Ad = expm(-obj.R * obj.Ti * eye(ClassM3C.m) / obj.L);
+        obj.Ad = expm(obj.Ti * -obj.R * eye(ClassM3C.m) / obj.L);
         obj.Bd = (-obj.R * eye(ClassM3C.m) / obj.L) \ (obj.Ad - eye(ClassM3C.m)) * (-eye(ClassM3C.m) / obj.L);
         obj.Ed = -obj.Bd;
 
@@ -59,21 +59,22 @@ end
 methods
     function obj = step(obj, vs, vxy, vo)
         % step: Perform a step of the numerical integration of the system's transition function.
-
-        obj.ixy = ClassM3C.A * obj.is;
         
-        % Basic voltages and currents
+        % Basic voltages
         vB = ClassM3C.A' * vxy;
+        
+        % Update system states
+        obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
+        obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
+        obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB + vo);
+
+        % Basic currents
+        obj.ixy = ClassM3C.A * obj.is;
         obj.iB = ClassM3C.pinvA * obj.ixy;
         
         % Circulating currents
         obj.iz = obj.is - obj.iB;
         obj.ie = ClassM3C.pinvN * obj.iz;
-
-        % Update system states
-        obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
-        obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
-        obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB + vo);
     end
 
     function obj = reset(obj, specs)

@@ -55,6 +55,8 @@ methods
     function obj = control(obj, Ec, vB_pred, iB_pred)
         % control: Calculate optimal circulating currents and common mode voltage references.
         
+        iB_pred = reshape(iB_pred, obj.M3C.m * obj.Np, 1);
+
         e_Ec_pred = repmat(Ec - mean(Ec), obj.Np, 1);
 
         % Initialize common mode voltage vector of horizon Np

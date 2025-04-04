@@ -17,7 +17,7 @@ Ti=2e-4; %Current Control MPC Sample Time
 Tl=1e-4; %Energy Control MPC Superstep
 Ni=round(Tf/Ti+1);
 Nl=round(Tf/Tl+1);
-Np=1;
+Np=20;
 Tp=Ti*Np;
 %A=-[1 0 0 1 0 0 ; 0 1 0 0 1 0 ; 0 0 1 0 0 1 ; -1 -1 -1 0 0 0; 0 0 0 -1 -1 -1]; %M2C incidence matrix
 A=-[1 0 0 1 0 0 1 0 0; 0 1 0 0 1 0 0 1 0; 0 0 1 0 0 1 0 0 1; -1 -1 -1 0 0 0 0 0 0; 0 0 0 -1 -1 -1 0 0 0; 0 0 0 0 0 0 -1 -1 -1]; %M3C incidence matrix
@@ -240,6 +240,8 @@ for t=1:length(Tsim)
     
             lambdao=2*Np;
             lambdav=0.1*Np;
+            lambdao=2;
+            lambdav=0.1;
             
             lmax=10;
 
