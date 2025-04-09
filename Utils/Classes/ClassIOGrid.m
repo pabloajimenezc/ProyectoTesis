@@ -38,8 +38,8 @@ classdef ClassIOGrid
         function obj = step(obj)
             % step: Perform one step of numerical integration
             
-            obj.gx = obj.gx + obj.Ti * obj.wx;
-            obj.gy = obj.gy + obj.Ti * obj.wy;
+            obj.gx = mod(obj.gx + obj.Ti * obj.wx, 2*pi); % Integrate and map to [0, 2*pi]
+            obj.gy = mod(obj.gy + obj.Ti * obj.wy, 2*pi); % Integrate and map to [0, 2*pi]
             vxa = obj.Ax * cos(obj.gx);
             vxb = obj.Ax * cos(obj.gx - 2*pi/3);
             vxc = obj.Ax * cos(obj.gx + 2*pi/3);

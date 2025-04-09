@@ -24,6 +24,7 @@ properties % Variables
     iAv         % Active constraints for voltage subproblem
     exitflag_i  % Verbose for current solver
     exitflag_v  % Verbose for voltage solver
+    exitflag
 end
 
 methods
@@ -67,7 +68,7 @@ methods
         von_temp = zeros(obj.Np, 1);
 
         for l = 1:obj.lmax
-            % Circulating currents subproblem
+            %%% Circulating currents subproblem
 
             % Initialization
             vs_temp = reshape(vB_pred + von_temp', obj.m * obj.Np, 1);
@@ -95,7 +96,7 @@ methods
             [ie_ref_temp, obj.exitflag_i, obj.iAi, ~] = mpcActiveSetSolver(H_ie, f_ie, [obj.NN; -obj.NN], [ub; -lb], zeros(0, obj.n * obj.Np), zeros(0, 1), obj.iAi, obj.options_i);
             iz_ref_temp = obj.NN * ie_ref_temp;
             
-            % Common mode voltage subproblem
+            %%% Common mode voltage subproblem
 
             % Initialization
             is_temp = iB_pred + iz_ref_temp;
@@ -134,6 +135,12 @@ methods
         obj.ie_ref = ie_ref_temp(1:obj.n);
         obj.iz_ref = iz_ref_temp(1:obj.m);
         obj.vo_ref = von_temp(1);
+        
+        if and(0 < obj.exitflag_i, 0 < obj.exitflag_v)
+            obj.exitflag = 1;
+        else
+            obj.exitflag = -10;
+        end
     end
 
     function obj = reset(obj)
@@ -146,6 +153,7 @@ methods
         obj.iAv = false(size(zeros(2 * obj.Np, 1)));
         obj.exitflag_i = -9999;
         obj.exitflag_v = -9999;
+        obj.exitflag = -9999;
     end
 end
 

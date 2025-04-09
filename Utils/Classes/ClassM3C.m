@@ -106,7 +106,7 @@ methods
         
         % Update system states
         obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
-        obj.vc = sqrt(2*abs(obj.Ec) .* sign(obj.Ec) / obj.C);
+        obj.vc = nops(2 * obj.Ec / obj.C, 'sqrt');
         obj.is = obj.Ad * obj.is + obj.Bd * vs + obj.Ed * (vB + vo);
 
         % Basic currents
@@ -129,7 +129,7 @@ methods
         obj.ie = ClassM3C.pinvN * obj.iz;
         
         obj.vc = init_vals.vc0;
-        obj.Ec = obj.C / 2 * obj.vc .^ 2;
+        obj.Ec = obj.C / 2 * nops(obj.vc, 'pow2');
     end
 
 end
