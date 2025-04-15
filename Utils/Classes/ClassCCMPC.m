@@ -61,7 +61,7 @@ methods
 
         obj.vs = zeros(obj.m, 1);
         obj.iA = false(size(zeros(2 * obj.m, 1)));
-        obj.exitflag = -9999;
+        obj.exitflag = -3;
     end
 end
 

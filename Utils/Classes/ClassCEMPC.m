@@ -139,7 +139,7 @@ methods
         if and(0 < obj.exitflag_i, 0 < obj.exitflag_v)
             obj.exitflag = 1;
         else
-            obj.exitflag = -10;
+            obj.exitflag = -3;
         end
     end
 
@@ -151,9 +151,9 @@ methods
         obj.vo_ref = 0;
         obj.iAi = false(size(zeros(2 * obj.m * obj.Np, 1)));
         obj.iAv = false(size(zeros(2 * obj.Np, 1)));
-        obj.exitflag_i = -9999;
-        obj.exitflag_v = -9999;
-        obj.exitflag = -9999;
+        obj.exitflag_i = -3;
+        obj.exitflag_v = -3;
+        obj.exitflag = -3;
     end
 end
 

@@ -1,24 +1,28 @@
 function trained_net = FFNNtrain(args)
 % %% Neural network training arguments
-% args.net             = args.net;             % dlnetwork
-% X_train         = args.X_train;         % dlarray
-% Y_train         = args.Y_train;         % dlarray
-% X_val           = args.X_val;           % dlarray
-% Y_val           = args.Y_val;           % dlarray
-% regularization  = args.regularization;  % float >= 0
-% lr_i            = args.lr_i;            % float > 0
-% lr_f            = args.lr_f;            % float > 0
-% plots           = args.plots;           % str
+% net                   = args.net;             % dlnetwork
+% X_train               = args.X_train;         % dlarray
+% Y_train               = args.Y_train;         % dlarray
+% X_val                 = args.X_val;           % dlarray
+% Y_val                 = args.Y_val;           % dlarray
+% regularization        = args.regularization;  % float >= 0
+% lr_i                  = args.lr_i;            % float > 0
+% lr_f                  = args.lr_f;            % float > 0
+% plots                 = args.plots;           % str
+% MaxEpochs             = args.MaxEpochs;       % int
+% MiniBatchSize         = args.MiniBatchSize;   % int
+% ValidationPatience    = args.MiniBatchSize;   % int
 
 %% Training options (ADAM)
 options = trainingOptions('adam');
-options.MaxEpochs = 500;
-options.MiniBatchSize = 256;
+options.MaxEpochs = args.MaxEpochs;
+options.MiniBatchSize = args.MiniBatchSize;
 options.Shuffle = 'every-epoch';
 options.ValidationData = {args.X_val, args.Y_val};
 options.Plots = args.plots;
 options.Verbose = false;
 options.L2Regularization = args.regularization;
+options.ValidationPatience = args.ValidationPatience;
 
 % Learning rate scheduler (Exponential: df = (ri/ro)^(T/i))
 N = options.MaxEpochs;
