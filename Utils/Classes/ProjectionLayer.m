@@ -1,58 +1,54 @@
 classdef ProjectionLayer < nnet.layer.Layer
-    % Capa que proyecta la salida al conjunto factible A(x)f <= b(x)
+    % ProjectionLayer: Project network output to respect input dependent affine constraints:
+    %   -is_max <= pinv(A)*ixy + N*ie <= is_max
+    %   -vo_max <= vo <= vo_max
     
     properties
-        % Número de restricciones y dimensión de la salida
-        NumConstraints
-        OutputDim
+        A       % M3C incidence matrix
+        pinvA   % Inverse of M3C incidence matrix
+        N       % M3C nullspace matrix
+        Xmax    % Input normalization
+        Ymax    % Output normalization
+        is_max  % Maximum cluster current
+        vo_max  % Maximum common mode voltage
     end
     
     methods
-        function layer = ProjectionLayer(numConstraints, outputDim, name)
+        function layer = ProjectionLayer(A, Xmax, Ymax, is_max, vo_max, name)
             % Constructor
             layer.Name = name;
-            layer.Description = "Proyección a A(x)f <= b(x)";
-            layer.NumConstraints = numConstraints;
-            layer.OutputDim = outputDim;
+            layer.Description = "Affine constraints projection layer";
+            layer.A = A;
+            layer.pinvA = pinv(A);
+            layer.N = null(A, 'rational');
+            layer.Xmax = Xmax;
+            layer.Ymax = Ymax;
+            layer.is_max = is_max;
+            layer.vo_max = vo_max;
         end
         
-        function Z = predict(layer, X, A, b)
-            % X: [d, N] = salidas sin proyectar (una por columna)
-            % A: [m, d, N] = restricciones por muestra
-            % b: [m, N] = cotas por muestra
+        function y_proj = predict(layer, y, x)
+            % y: Unprojected network output
+            % x: Network input
             
-            [d, N] = size(X);
-            m = layer.NumConstraints;
-            Z = zeros(d, N, 'like', X);
+            ixy = x(15:21);
+
+            [d, Nsamples] = size(y);
+            y_proj = zeros(d, Nsamples, 'like', y);
             
-            for i = 1:N
-                Ai = A(:, :, i);   % [m x d]
-                bi = b(:, i);      % [m x 1]
-                xi = X(:, i);      % [d x 1]
+            for k = 1:Nsamples
+                yk = y(:,k);         % [5x1]
+                ixy_k = ixy(:,k);    % [6x1]
                 
-                % Resolvemos la proyección QP:
-                % minimize ||z - xi||^2
-                % subject to Ai*z <= bi
-                H = 2 * eye(d);
-                f = -2 * xi;
+                [A, b] = construirRestriccionesQP(layer.M, layer.N, layer.is_max, layer.vo_max, ixy_k);
                 
-                % Usamos quadprog con restricciones
-                options = optimoptions('quadprog','Display','off');
-                zi = quadprog(H, f, Ai, bi, [], [], [], [], [], options);
+                % Proyección diferenciable
+                Ay_minus_b = A * yk - b;
+                relu_part = max(Ay_minus_b, 0);
+                correction = layer.pinvA * relu_part;
                 
-                if isempty(zi)
-                    warning('La proyección QP falló para la muestra %d. Se usa xi directamente.', i);
-                    zi = xi;
-                end
-                
-                Z(:, i) = zi;
+                y_proj(:,k) = yk - correction;
             end
-        end
-        
-        function [dLdX, dLdA, dLdb] = backward(layer, X, A, b, ~, dLdZ)
-            % Esta versión básica NO implementa el backward,
-            % pero puedes hacerlo con autodiff o numericamente.
-            error("El método backward aún no está implementado.");
         end
     end
 end

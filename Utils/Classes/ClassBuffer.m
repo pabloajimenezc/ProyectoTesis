@@ -56,6 +56,11 @@ classdef ClassBuffer
         iA_CEMPCi
         iA_CEMPCv
         iA_CCMPC
+
+        ixdq            % dq input current
+        iydq            % dq output current
+        ixdq_ref        % dq input current reference
+        iydq_ref        % dq output current reference
     end
     
     methods
@@ -122,6 +127,11 @@ classdef ClassBuffer
             obj.iA_CEMPCi = zeros(1, obj.Ns);
             obj.iA_CEMPCv = zeros(1, obj.Ns);
             obj.iA_CCMPC = zeros(1, obj.Ns);
+
+            obj.ixdq = zeros(2, obj.Ns);
+            obj.iydq = zeros(2, obj.Ns);
+            obj.ixdq_ref = zeros(2, obj.Ns);
+            obj.iydq_ref = zeros(2, obj.Ns);
         end
     end
 end

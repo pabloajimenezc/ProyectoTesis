@@ -12,9 +12,6 @@ function net = FFNNgenerator(args)
 %     args.BinitFcn           (1,:) char {mustBeMember(args.BinitFcn, {'glorot', 'he', 'narrow-normal'})}
 %     argsFFNN.batchnorm      (1,1) logical
 %     args.train_bias         (1,1) logical
-%     args.scaling            (1,1) logical
-%     args.Xmax               (:,1) double
-%     args.Ymax               (:,1) double
 % end
 
 %% Activation function handler
@@ -72,23 +69,10 @@ end
 % Repeat the hidden layer Nlayers times
 hidden_layers = repmat(hidden_layer, args.Nlayers, 1);
 
-%% Input and output normalization
-
-if args.scaling
-    input_normalization = @(x) x ./ args.Xmax;
-    
-    layers = [featureInputLayer(args.Ninputs, 'Normalization', input_normalization)
-              hidden_layers
-              output_layer
-              scalingLayer('Scale', dlarray(args.Ymax, 'CB'))];
-else
-    layers = [featureInputLayer(args.Ninputs)
-              hidden_layers
-              output_layer];
-end
-
 %% Create the neural network
+layers = [featureInputLayer(args.Ninputs)
+          hidden_layers
+          output_layer];
 net = dlnetwork(layers);
 net = dlupdate(@double, net);
-
 end

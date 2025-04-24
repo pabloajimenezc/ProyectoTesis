@@ -95,6 +95,12 @@ methods
             lb = -obj.is_max * ones(obj.m * obj.Np, 1) - iB_pred;
             [ie_ref_temp, obj.exitflag_i, obj.iAi, ~] = mpcActiveSetSolver(H_ie, f_ie, [obj.NN; -obj.NN], [ub; -lb], zeros(0, obj.n * obj.Np), zeros(0, 1), obj.iAi, obj.options_i);
             iz_ref_temp = obj.NN * ie_ref_temp;
+
+            % If unfeasible
+            if obj.exitflag_i < 0
+                ie_ref_temp = zeros(size(ie_ref_temp));
+                iz_ref_temp = zeros(size(iz_ref_temp));
+            end
             
             %%% Common mode voltage subproblem
 
@@ -131,7 +137,7 @@ methods
             lb = -ub;
             [von_temp, obj.exitflag_v, obj.iAv, ~] = mpcActiveSetSolver(H_von, f_von, [eye(obj.Np); -eye(obj.Np)], [ub; -lb], zeros(0, obj.Np), zeros(0, 1), obj.iAv, obj.options_v);
         end
-        
+
         obj.ie_ref = ie_ref_temp(1:obj.n);
         obj.iz_ref = iz_ref_temp(1:obj.m);
         obj.vo_ref = von_temp(1);
