@@ -20,6 +20,7 @@ options.Shuffle = 'every-epoch';
 options.ValidationData = {args.X_val, args.Y_val};
 options.Plots = args.plots;
 options.Verbose = false;
+options.L2Regularization = 0;
 options.ValidationPatience = args.ValidationPatience;
 
 % Learning rate scheduler (Exponential: df = (ri/ro)^(T/i))

@@ -1,109 +1,234 @@
+% function trained_net = FFNNtrain_custom(args)
+% % %% Neural network training arguments
+% % net                   = args.net;             % dlnetwork
+% % X_train               = args.X_train;         % dlarray
+% % Y_train               = args.Y_train;         % dlarray
+% % X_val                 = args.X_val;           % dlarray
+% % Y_val                 = args.Y_val;           % dlarray
+% % lr_i                  = args.lr_i;            % float > 0
+% % lr_f                  = args.lr_f;            % float > 0
+% % plots                 = args.plots;           % str
+% % verbose               = args.verbose;         % bool
+% % MaxEpochs             = args.MaxEpochs;       % int
+% % MiniBatchSize         = args.MiniBatchSize;   % int
+% % ValidationPatience    = args.MiniBatchSize;   % int
+% % delta                 = args.delta;           % int
+% % Yweights              = args.Yweights;        % dlarray
+% 
+% %% Training options (ADAM)
+% options.MaxEpochs = args.MaxEpochs;
+% options.MiniBatchSize = args.MiniBatchSize;
+% options.Shuffle = 'every-epoch';
+% options.ValidationData = {args.X_val, args.Y_val};
+% options.Plots = args.plots;
+% options.Verbose = options.verbose;
+% options.L2Regularization = 0;
+% options.ValidationPatience = args.ValidationPatience;
+% 
+% % Learning rate scheduler (Exponential: df = (ri/ro)^(T/i))
+% N = options.MaxEpochs;
+% T = 1;
+% drop_factor = (args.lr_f/args.lr_i)^(T/N);
+% lr = args.lr_i;
+% 
+% % Initialize the network
+% net = args.net;
+% 
+% % Initialize optimizer states
+% trailingAvg = [];
+% trailingAvgSq = [];
+% 
+% % Initialize arrays for storing losses
+% train_losses = [];
+% val_losses = [];
+% 
+% % Training loop
+% for epoch = 1:options.MaxEpochs
+%     % Shuffle data at the start of each epoch
+%     idx = randperm(size(args.X_train, 2));  % Shuffle indices
+%     X_train_shuffled = args.X_train(:, idx);
+%     Y_train_shuffled = args.Y_train(:, idx);
+% 
+%     % Mini-batch training
+%     for i = 1:options.MiniBatchSize:size(X_train_shuffled, 2) 
+%         % Protect against out-of-bounds indexes
+%         batch_end = min(i + options.MiniBatchSize - 1, size(X_train_shuffled, 2));
+% 
+%         % Get mini-batch data
+%         batch_X = X_train_shuffled(:, i:batch_end);
+%         batch_Y = Y_train_shuffled(:, i:batch_end);
+% 
+%         % Forward pass and loss calculation using the weights
+%         [loss, gradients] = dlfeval(@FFNNLoss, net, batch_X, batch_Y, args.delta, args.Yweights);
+% 
+%         % Update weights using Adam optimizer
+%         [net.Learnables, trailingAvg, trailingAvgSq] = adamupdate( ...
+%          net.Learnables, gradients, trailingAvg, trailingAvgSq, epoch, lr);
+%     end
+% 
+%     % Record training loss
+%     train_losses = [train_losses, loss];
+% 
+%     % Validation and check for patience
+%     [val_loss, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, args.delta, args.Yweights);
+%     val_losses = [val_losses, val_loss];
+% 
+%     % Mostrar por pantalla solo cada cierto número de épocas
+%     if mod(epoch, options.ValidationPatience) == 0 && options.Verbose
+%         fprintf('Epoch %d: Training Loss = %.4f, Validation Loss = %.4f\n', epoch, loss, val_loss);
+%     end
+% 
+%     % Update learning rate
+%     lr = lr * drop_factor;
+% 
+%     % Optional plotting of the loss curve (if specified)
+%     if strcmp(options.Plots, 'training-progress')
+%         % Plot training and validation losses
+%         figure(1);
+%         plot(1:epoch, train_losses, 'b', 'LineWidth', 2);
+%         hold on;
+%         plot(1:epoch, val_losses, 'r', 'LineWidth', 2);
+%         xlabel('Epoch');
+%         ylabel('Loss');
+%         title('Training and Validation Loss');
+%         legend('Training Loss', 'Validation Loss');
+%         drawnow;
+%     end
+% end
+% 
+% trained_net = net;
+% end
+
+
+
+
+
+
 function trained_net = FFNNtrain_custom(args)
-% ENTRENAMIENTO PERSONALIZADO CON ADAM CON WAITBAR Y GRÁFICA
-% args:
-% - net              : red neuronal tipo dlnetwork
-% - X_train, Y_train : datos de entrenamiento (dlarray)
-% - X_val, Y_val     : (opcional) datos de validación (dlarray)
-% - lr_i, lr_f       : tasa de aprendizaje inicial y final
-% - regularization   : lambda para L2
-% - numEpochs        : número total de épocas
-% - minibatch_i/f    : tamaño inicial y final (potencias de 2)
-% - verbose          : true/false
+% %% Neural network training arguments
+% net                   = args.net;             % dlnetwork
+% X_train               = args.X_train;         % dlarray
+% Y_train               = args.Y_train;         % dlarray
+% X_val                 = args.X_val;           % dlarray
+% Y_val                 = args.Y_val;           % dlarray
+% lr_i                  = args.lr_i;            % float > 0
+% lr_f                  = args.lr_f;            % float > 0
+% plots                 = args.plots;           % str
+% verbose               = args.verbose;         % bool
+% MaxEpochs             = args.MaxEpochs;       % int
+% MiniBatchSize         = args.MiniBatchSize;   % int
+% ValidationPatience    = args.ValidationPatience; % int
+% delta                 = args.delta;           % int
+% Yweights              = args.Yweights;        % dlarray
 
-    % Hiperparámetros ADAM
-    beta1 = 0.9;
-    beta2 = 0.999;
-    epsilon = 1e-8;
+%% Training options (ADAM)
+options.MaxEpochs = args.MaxEpochs;
+options.MiniBatchSize = args.MiniBatchSize;
+options.Shuffle = 'every-epoch';
+options.ValidationData = {args.X_val, args.Y_val};
+options.Plots = args.plots;
+options.Verbose = args.verbose;
+options.L2Regularization = 0;
+options.ValidationPatience = args.ValidationPatience;
 
-    velocity = [];
-    squaredGrad = [];
+% Learning rate scheduler (Exponential: df = (ri/ro)^(T/i))
+N = options.MaxEpochs;
+T = 1;
+drop_factor = (args.lr_f / args.lr_i)^(T / N);
+lr = args.lr_i;
 
-    net = args.net;
-    N = args.numEpochs;
+% Initialize the network
+net = args.net;
 
-    lr_i = args.lr_i;
-    lr_f = args.lr_f;
-    drop_factor = (lr_f / lr_i)^(1 / N);
+% Initialize optimizer states
+trailingAvg = [];
+trailingAvgSq = [];
 
-    mb_i = log2(args.minibatch_i);
-    mb_f = log2(args.minibatch_f);
-    mb_slope = (mb_f - mb_i) / N;
+% Initialize arrays for storing losses
+train_losses = [];
+val_losses = [];
 
-    % Inicializar waitbar
-    hbar = waitbar(0, 'Entrenando red neuronal...', 'Name', 'Progreso entrenamiento');
+% Early stopping
+best_val_loss = inf;
+best_net = net;
+patience_counter = 0;
 
-    % Inicializar gráfico
-    fig = figure('Name', 'Pérdida en entrenamiento y validación');
-    hold on;
-    grid on;
-    xlabel('Época');
-    ylabel('Loss');
-    title('Evolución de la función de pérdida');
-    hTrain = animatedline('Color', 'b', 'DisplayName', 'Train');
-    hVal   = animatedline('Color', 'r', 'DisplayName', 'Validation');
-    legend;
+% Training loop
+for epoch = 1:options.MaxEpochs
+    % Shuffle data at the start of each epoch
+    idx = randperm(size(args.X_train, 2));  % Shuffle indices
+    X_train_shuffled = args.X_train(:, idx);
+    Y_train_shuffled = args.Y_train(:, idx);
 
-    trainLosses = zeros(1, N);
-    valLosses = nan(1, N);
+    % Mini-batch training
+    for i = 1:options.MiniBatchSize:size(X_train_shuffled, 2)
+        % Protect against out-of-bounds indexes
+        batch_end = min(i + options.MiniBatchSize - 1, size(X_train_shuffled, 2));
+        
+        % Get mini-batch data
+        batch_X = X_train_shuffled(:, i:batch_end);
+        batch_Y = Y_train_shuffled(:, i:batch_end);
 
-    for epoch = 1:N
-        alpha = lr_i * drop_factor^epoch;
-        log2_batch = mb_i + mb_slope * epoch;
-        miniBatchSize = 2^round(log2_batch);
+        % Forward pass and loss calculation using the weights
+        [loss, gradients] = dlfeval(@FFNNLoss, net, batch_X, batch_Y, args.delta, args.Yweights);
 
-        idx = randperm(size(args.X_train, 2));
-        for i = 1:miniBatchSize:size(args.X_train, 2)
-            batchIdx = idx(i:min(i+miniBatchSize-1, end));
-            X = args.X_train(:, batchIdx);
-            Y = args.Y_train(:, batchIdx);
+        % Update weights using Adam optimizer
+        [net.Learnables, trailingAvg, trailingAvgSq] = adamupdate( ...
+            net.Learnables, gradients, trailingAvg, trailingAvgSq, epoch, lr);
+    end
 
-            [loss, gradients] = dlfeval(@FFNNLoss, net, X, Y, args.regularization);
+    % Record training loss
+    train_losses = [train_losses, loss];
 
-            if isempty(velocity)
-                velocity = gradients;
-                velocity.Value = cellfun(@(x) zeros(size(x), 'like', x), gradients.Value, 'UniformOutput', false);
-                squaredGrad = gradients;
-                squaredGrad.Value = cellfun(@(x) zeros(size(x), 'like', x), gradients.Value, 'UniformOutput', false);
-            end
+    % Validation
+    [val_loss, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, args.delta, args.Yweights);
+    val_losses = [val_losses, val_loss];
 
-            [net, velocity, squaredGrad] = adamupdate(net, gradients, velocity, squaredGrad, epoch, alpha, beta1, beta2, epsilon);
-        end
+    % Early stopping: update if validation improves
+    if val_loss < best_val_loss
+        best_val_loss = val_loss;
+        best_net = net;
+        patience_counter = 0;
+    else
+        patience_counter = patience_counter + 1;
+    end
 
-        % Evaluar pérdida en entrenamiento
-        Y_pred_train = forward(net, args.X_train);
-        trainLoss = mean((Y_pred_train - args.Y_train).^2, 'all') + args.regularization * L2Regularizer(net);
-        trainLosses(epoch) = double(gather(extractdata(trainLoss)));
-
-        % Evaluar pérdida en validación
-        if isfield(args, 'X_val') && isfield(args, 'Y_val')
-            Y_pred_val = forward(net, args.X_val);
-            valLoss = mean((Y_pred_val - args.Y_val).^2, 'all') + args.regularization * L2Regularizer(net);
-            valLosses(epoch) = double(gather(extractdata(valLoss)));
-        end
-
-        % Actualizar barra de progreso y gráfico
-        waitbar(epoch / N, hbar, sprintf('Época %d/%d', epoch, N));
-
-        if isvalid(fig)
-            figure(fig);
-            addpoints(hTrain, epoch, trainLosses(epoch));
-            if ~isnan(valLosses(epoch))
-                addpoints(hVal, epoch, valLosses(epoch));
-            end
-            drawnow;
-        end
-
-        % Mensaje opcional por consola
-        if isfield(args, 'verbose') && args.verbose
-            fprintf('Epoch %3d/%d | Train Loss: %.4e | Val Loss: %.4e | LR: %.2e | Batch: %d\n', ...
-                epoch, N, trainLosses(epoch), valLosses(epoch), alpha, miniBatchSize);
+    % Show progress
+    if mod(epoch, options.ValidationPatience) == 0 || patience_counter == 0
+        if options.Verbose
+            fprintf('Epoch %d: Training Loss = %.4f, Validation Loss = %.4f (Best: %.4f)\n', ...
+                epoch, loss, val_loss, best_val_loss);
         end
     end
 
-    % Cerrar barra de progreso
-    if isvalid(hbar)
-        close(hbar);
+    % Check patience
+    if patience_counter >= options.ValidationPatience
+        if options.Verbose
+            fprintf('Early stopping at epoch %d: no improvement after %d epochs.\n', ...
+                epoch, options.ValidationPatience);
+        end
+        break
     end
 
-    trained_net = net;
+    % Update learning rate
+    lr = lr * drop_factor;
+
+    % Optional plotting of the loss curve
+    if strcmp(options.Plots, 'training-progress')
+        figure(1); clf;
+        plot(1:length(train_losses), train_losses, 'b', 'LineWidth', 2);
+        hold on;
+        plot(1:length(val_losses), val_losses, 'r', 'LineWidth', 2);
+        xlabel('Epoch');
+        ylabel('Loss');
+        title('Training and Validation Loss');
+        legend('Training Loss', 'Validation Loss');
+        grid on;
+        drawnow;
+    end
+end
+
+% Return the best network
+trained_net = best_net;
+
 end

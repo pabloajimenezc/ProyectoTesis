@@ -1,10 +1,23 @@
-function [loss, gradients] = FFNNLoss(net, X, Y, lambda)
-    Y_pred = forward(net, X);
-    mse = mean((Y_pred - Y).^2, 'all');
-    reg = L2Regularizer(net);
-    loss = mse + lambda * reg;
-    gradients = dlgradient(loss, net.Learnables);
+function [loss, gradients] = FFNNLoss(net, X, Y, delta, Yweigths)
+
+% Output weighting
+% The output of the net [ie; vo] suffer of variance imbalance:
+% vo has lower variance than ie
+Y_pred = forward(net, X);
+Error = abs(Y_pred - Y);
+Error = Error .* Yweigths;
+
+% Huber Loss
+loss = zeros(size(Error), 'like', Error);
+mask = Error <= delta;
+loss(mask) = 0.5 * Error(mask).^2;
+loss(~mask) = delta * (Error(~mask) - 0.5 * delta);
+loss = mean(loss, 'all');
+gradients = dlgradient(loss, net.Learnables);
+
 end
+
+
 
 
 % function [reg_loss, phy_loss, total_loss, gradients, state] = FFNNLoss(x_batch, y_batch, net, Xmax, Ymax, Ec_max, Tl, N, lambda)
