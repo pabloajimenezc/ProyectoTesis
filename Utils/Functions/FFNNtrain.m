@@ -1,8 +1,8 @@
 function trained_net = FFNNtrain(args, CustomDefault)
 %% Neural network training arguments
 % net                   % dlnetwork
-% X_train               % dlarray
-% Y_train               % dlarray
+% X_tr                  % dlarray
+% Y_tr                  % dlarray
 % X_val                 % dlarray
 % Y_val                 % dlarray
 % InitialLearningRate   % float > 0
@@ -32,7 +32,7 @@ options.LearnRateDropFactor = (args.FinalLearningRate/args.InitialLearningRate)^
 
 if strcmp(CustomDefault, 'default') % DEFAULT TRAINING
     % Training
-    trained_net = trainnet(args.X_train, args.Y_train, args.net, 'mse', options);
+    trained_net = trainnet(args.X_tr, args.Y_tr, args.net, 'mse', options);
 
 elseif strcmp(CustomDefault, 'custom') % CUSTOM TRAINING
 
@@ -57,7 +57,7 @@ patience_counter = 0;
 
 % Initialization: Progress monitor
 monitor         = trainingProgressMonitor;
-monitor.Info    = ["Epoch", "LearningRate"];
+monitor.Info    = ["Epoch", "LearningRate", "Patience", "PatienceCounter"];
 monitor.Metrics = ["TrainingLoss", "ValidationLoss"];
 monitor.XLabel  = "Epoch";
 groupSubPlot(monitor, "Loss", ["TrainingLoss","ValidationLoss"]);
@@ -65,9 +65,9 @@ groupSubPlot(monitor, "Loss", ["TrainingLoss","ValidationLoss"]);
 % Training loop
 for epoch = 1:options.MaxEpochs
     % Shuffle data at the start of each epoch
-    idx              = randperm(size(args.X_train, 2));  % Shuffle indices
-    X_train_shuffled = args.X_train(:, idx);
-    Y_train_shuffled = args.Y_train(:, idx);
+    idx              = randperm(size(args.X_tr, 2));  % Shuffle indices
+    X_train_shuffled = args.X_tr(:, idx);
+    Y_train_shuffled = args.Y_tr(:, idx);
 
     % Mini-batch training
     for i = 1:options.MiniBatchSize:size(X_train_shuffled, 2)
@@ -79,7 +79,7 @@ for epoch = 1:options.MaxEpochs
         batch_Y = Y_train_shuffled(:, i:batch_end);
 
         % Training loss calculation
-        [loss, gradients, state] = dlfeval(@FFNNLoss, net, batch_X, batch_Y, 'train', args.HuberThreshold, args.ErrorWeights);
+        [~, gradients, state] = dlfeval(@FFNNLoss, net, batch_X, batch_Y, 'train', args.HuberThreshold, args.ErrorWeights);
         net.State                = state;
 
         % Adam update
@@ -87,11 +87,13 @@ for epoch = 1:options.MaxEpochs
          net.Learnables, gradients, trailingAvg, trailingAvgSq, epoch, lr);
     end
 
-    % Record training loss
+    % Training loss calculation
+    rand_idx = randperm(size(args.X_tr, 2), size(args.X_val, 2));
+    [loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_tr(:, rand_idx), args.Y_tr(:, rand_idx), 'validation', args.HuberThreshold, args.ErrorWeights);
     train_losses = [train_losses, extractdata(loss)];
 
     % Validation loss calculation
-    [val_loss, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, 'validation', args.HuberThreshold, args.ErrorWeights);
+    [val_loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, 'validation', args.HuberThreshold, args.ErrorWeights);
     val_losses    = [val_losses, extractdata(val_loss)];
 
     % Check early stopping
@@ -112,13 +114,23 @@ for epoch = 1:options.MaxEpochs
         fprintf('Manual training stopping at epoch %d.\n', epoch);
         break
     end
-
+    
     % Update progress monitor
     if strcmp(options.Plots, 'training-progress')
-        recordMetrics(monitor, epoch, TrainingLoss=double(loss), ValidationLoss=double(val_loss));
-        updateInfo(monitor, Epoch=epoch, LearningRate=lr);
+        recordMetrics(monitor, ...
+                      epoch, ...
+                      TrainingLoss=double(loss), ...
+                      ValidationLoss=double(val_loss));
+        updateInfo(monitor, ...
+                   Epoch=epoch, ...
+                   LearningRate=lr, ...
+                   Patience=options.ValidationPatience, ...
+                   PatienceCounter=patience_counter);
+        
+        % Actualizar progreso
         monitor.Progress = epoch / options.MaxEpochs * 100;
     end
+
 
     % Update learning rate
     lr = lr * options.LearnRateDropFactor;

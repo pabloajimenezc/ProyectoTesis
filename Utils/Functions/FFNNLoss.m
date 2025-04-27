@@ -1,11 +1,13 @@
 function [loss, gradients, state] = FFNNLoss(net, X, Y, TrainValidation, HuberThreshold, ErrorWeights)
-% Prediction error weighting
+% Make predictions
 if strcmp(TrainValidation, 'train')
     [Y_pred, state] = forward(net, X);
 elseif strcmp(TrainValidation, 'validation')
     Y_pred = predict(net, X);
     state = net.State;
 end
+
+% Error weighting
 Error = abs(Y_pred - Y);
 Error = Error .* ErrorWeights;
 
