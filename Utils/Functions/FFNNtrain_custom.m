@@ -80,10 +80,11 @@ for epoch = 1:options.MaxEpochs
     end
 
     % Record training loss
+    [loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_train, args.Y_train, 'validation', args.HuberThreshold, args.ErrorWeights);
     train_losses = [train_losses, extractdata(loss)];
 
     % Validation loss calculation
-    [val_loss, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, 'validation', args.HuberThreshold, args.ErrorWeights);
+    [val_loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, 'validation', args.HuberThreshold, args.ErrorWeights);
     val_losses    = [val_losses, extractdata(val_loss)];
 
     % Check early stopping
