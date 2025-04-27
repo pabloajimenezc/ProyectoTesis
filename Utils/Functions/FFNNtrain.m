@@ -109,7 +109,7 @@ for epoch = 1:options.MaxEpochs
 
     % Stop training button
     if monitor.Stop
-        fprintf('Manual training stop at epoch %d.\n', epoch);
+        fprintf('Manual training stopping at epoch %d.\n', epoch);
         break
     end
 
