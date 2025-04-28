@@ -1,5 +1,13 @@
 function [loss, gradients, state] = FFNNLoss(net, X, Y, TrainValidation, HuberThreshold, ErrorWeights)
-% Make predictions
+%% Loss arguments
+% net             dlnetwork
+% X               dlarray
+% Y               dlarray
+% TrainValidation string
+% HuberThreshold  float [0, 1]
+% ErrorWeights    dlarray > 0
+
+%% Make predictions
 if strcmp(TrainValidation, 'train')
     [Y_pred, state] = forward(net, X);
 elseif strcmp(TrainValidation, 'validation')
@@ -7,11 +15,11 @@ elseif strcmp(TrainValidation, 'validation')
     state = net.State;
 end
 
-% Error weighting
+%% Error weighting
 Error = abs(Y_pred - Y);
 Error = Error .* ErrorWeights;
 
-% Huber Loss
+%% Huber Loss
 loss = zeros(size(Error), 'like', Error);
 mask = Error <= HuberThreshold;
 loss(mask) = 0.5 * Error(mask).^2;

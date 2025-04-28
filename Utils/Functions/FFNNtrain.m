@@ -9,11 +9,11 @@ function trained_net = FFNNtrain(args, CustomDefault)
 % FinalLearningRate     % float > 0
 % Plots                 % str
 % Verbose               % bool
-% MaxEpochs             % int
-% MiniBatchSize         % int
-% ValidationPatience    % int
-% HuberThreshold        % int
-% ErrorWeights          % dlarray
+% MaxEpochs             % int > 0
+% MiniBatchSize         % int > 0
+% ValidationPatience    % int > 0
+% HuberThreshold        % float [0, 1]
+% ErrorWeights          % dlarray > 0
 
 %% Training options
 options = trainingOptions('adam');
@@ -46,9 +46,9 @@ net = args.net;
 trailingAvg   = [];
 trailingAvgSq = [];
 
-% Initialization: Loss history
-train_losses = [];
-val_losses   = [];
+% % Initialization: Loss history
+% train_losses = [];
+% val_losses   = [];
 
 % Initialization: Early stopping
 best_val_loss    = inf;
@@ -56,11 +56,13 @@ best_net         = net;
 patience_counter = 0;
 
 % Initialization: Progress monitor
-monitor         = trainingProgressMonitor;
-monitor.Info    = ["Epoch", "LearningRate", "Patience", "PatienceCounter"];
-monitor.Metrics = ["TrainingLoss", "ValidationLoss"];
-monitor.XLabel  = "Epoch";
-groupSubPlot(monitor, "Loss", ["TrainingLoss","ValidationLoss"]);
+if strcmp(options.Plots, 'training-progress')
+    monitor         = trainingProgressMonitor;
+    monitor.Info    = ["Epoch", "LearningRate", "Patience", "PatienceCounter"];
+    monitor.Metrics = ["TrainingLoss", "ValidationLoss"];
+    monitor.XLabel  = "Epoch";
+    groupSubPlot(monitor, "Loss", ["TrainingLoss","ValidationLoss"]);
+end
 
 % Training loop
 for epoch = 1:options.MaxEpochs
@@ -78,23 +80,45 @@ for epoch = 1:options.MaxEpochs
         batch_X = X_train_shuffled(:, i:batch_end);
         batch_Y = Y_train_shuffled(:, i:batch_end);
 
-        % Training loss calculation
-        [~, gradients, state] = dlfeval(@FFNNLoss, net, batch_X, batch_Y, 'train', args.HuberThreshold, args.ErrorWeights);
-        net.State                = state;
+        % Training mini-batch loss calculation
+        [~, gradients, state] = dlfeval(@FFNNLoss, ...
+                                        net, ...
+                                        batch_X, ...
+                                        batch_Y, ...
+                                        'train', ...
+                                        args.HuberThreshold, ...
+                                        args.ErrorWeights);
+        net.State             = state;
 
         % Adam update
-        [net.Learnables, trailingAvg, trailingAvgSq] = adamupdate( ...
-         net.Learnables, gradients, trailingAvg, trailingAvgSq, epoch, lr);
+        [net.Learnables, trailingAvg, trailingAvgSq] = adamupdate(net.Learnables, ...
+                                                                  gradients, ...
+                                                                  trailingAvg, ...
+                                                                  trailingAvgSq, ...
+                                                                  epoch, ...
+                                                                  lr);
     end
 
     % Training loss calculation
     rand_idx = randperm(size(args.X_tr, 2), size(args.X_val, 2));
-    [loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_tr(:, rand_idx), args.Y_tr(:, rand_idx), 'validation', args.HuberThreshold, args.ErrorWeights);
-    train_losses = [train_losses, extractdata(loss)];
+    [loss, ~, ~] = dlfeval(@FFNNLoss, ...
+                           net, ...
+                           args.X_tr(:, rand_idx), ...
+                           args.Y_tr(:, rand_idx), ...
+                           'validation', ...
+                           args.HuberThreshold, ...
+                           args.ErrorWeights);
+    % train_losses = [train_losses, extractdata(loss)];
 
     % Validation loss calculation
-    [val_loss, ~, ~] = dlfeval(@FFNNLoss, net, args.X_val, args.Y_val, 'validation', args.HuberThreshold, args.ErrorWeights);
-    val_losses    = [val_losses, extractdata(val_loss)];
+    [val_loss, ~, ~] = dlfeval(@FFNNLoss, ...
+                               net, ...
+                               args.X_val, ...
+                               args.Y_val, ...
+                               'validation', ...
+                               args.HuberThreshold, ...
+                               args.ErrorWeights);
+    % val_losses    = [val_losses, extractdata(val_loss)];
 
     % Check early stopping
     if val_loss < best_val_loss
@@ -110,7 +134,7 @@ for epoch = 1:options.MaxEpochs
     end
 
     % Stop training button
-    if monitor.Stop
+    if monitor.Stop && strcmp(options.Plots, 'training-progress')
         fprintf('Manual training stopping at epoch %d.\n', epoch);
         break
     end

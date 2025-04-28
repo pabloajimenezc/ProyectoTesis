@@ -1,16 +1,16 @@
 function net = FFNNgenerator(args)
 %% Neural network generation arguments
-%     args.Ninputs            (1,1) {mustBeInteger, mustBePositive}
-%     args.Noutputs           (1,1) {mustBeInteger, mustBePositive}
-%     args.Nlayers            (1,1) {mustBeInteger, mustBeNonnegative}
-%     args.Nneurons           (1,1) {mustBeInteger, mustBePositive}
-%     args.HiddenActivation  (1,:) char
-%     args.OutputActivation  (1,:) char
-%     args.Dropout            (1,1) {mustBeNonnegative, mustBeLessThanOrEqual(args.Dropout, 1)}
-%     args.WinitFcn           (1,:) char {mustBeMember(args.WinitFcn, {'glorot', 'he', 'narrow-normal'})}
-%     args.BinitFcn           (1,:) char {mustBeMember(args.BinitFcn, {'glorot', 'he', 'narrow-normal'})}
-%     args.BatchNorm      (1,1) logical
-%     args.TrainBias         (1,1) logical
+% Ninputs          % int > 0
+% Noutputs         % int > 0
+% Nlayers          % int > 0
+% Nneurons         % int > 0
+% HiddenActivation % string
+% OutputActivation % string
+% Dropout          % float [0, 1[
+% WinitFcn         % string
+% BinitFcn         % string
+% BatchNorm        % bool
+% TrainBias        % bool
 
 %% Activation function handler
 function layer = actFcn(name)

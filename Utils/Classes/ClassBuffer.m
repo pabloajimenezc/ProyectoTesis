@@ -61,6 +61,9 @@ classdef ClassBuffer
         iydq            % dq output current
         ixdq_ref        % dq input current reference
         iydq_ref        % dq output current reference
+
+        vxdq            % dq input voltage
+        vydq            % dq output voltage
     end
     
     methods
@@ -122,16 +125,19 @@ classdef ClassBuffer
 
             obj.exitflag_CEMPCi = zeros(1, obj.Ns);
             obj.exitflag_CEMPCv = zeros(1, obj.Ns);
-            obj.exitflag_CCMPC = zeros(1, obj.Ns);
+            obj.exitflag_CCMPC  = zeros(1, obj.Ns);
 
             obj.iA_CEMPCi = zeros(1, obj.Ns);
             obj.iA_CEMPCv = zeros(1, obj.Ns);
-            obj.iA_CCMPC = zeros(1, obj.Ns);
+            obj.iA_CCMPC  = zeros(1, obj.Ns);
 
-            obj.ixdq = zeros(2, obj.Ns);
-            obj.iydq = zeros(2, obj.Ns);
+            obj.ixdq     = zeros(2, obj.Ns);
+            obj.iydq     = zeros(2, obj.Ns);
             obj.ixdq_ref = zeros(2, obj.Ns);
             obj.iydq_ref = zeros(2, obj.Ns);
+
+            obj.vxdq = zeros(2, obj.Ns);
+            obj.vydq = zeros(2, obj.Ns);
         end
     end
 end
