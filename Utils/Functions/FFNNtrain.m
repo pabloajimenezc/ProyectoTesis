@@ -1,34 +1,38 @@
 function trained_net = FFNNtrain(args, CustomDefault)
 %% Neural network training arguments
-% net                   % dlnetwork
-% X_tr                  % dlarray
-% Y_tr                  % dlarray
-% X_val                 % dlarray
-% Y_val                 % dlarray
-% InitialLearningRate   % float > 0
-% FinalLearningRate     % float > 0
-% Plots                 % str
-% Verbose               % bool
-% MaxEpochs             % int > 0
-% MiniBatchSize         % int > 0
-% ValidationPatience    % int > 0
-% HuberThreshold        % float [0, 1]
-% ErrorWeights          % dlarray > 0
+% net                % dlnetwork
+% X_tr               % dlarray
+% Y_tr               % dlarray
+% dsXY_tr            % datastore
+% X_val              % dlarray
+% Y_val              % dlarray
+% InitialLearnRate   % float > 0
+% MaxLearnRate       % float > 0
+% FinalLearnRate     % float > 0
+% Plots              % str
+% Verbose            % bool
+% MaxEpochs          % int > 0
+% MiniBatchSize      % int > 0
+% ValidationPatience % int > 0
+% HuberThreshold     % float [0, 1]
+% ErrorWeights       % dlarray > 0
 
 %% Training options
-options = trainingOptions('adam');
-options.MaxEpochs = args.MaxEpochs;
-options.MiniBatchSize = args.MiniBatchSize;
-options.Shuffle = 'every-epoch';
-options.ValidationData = {args.X_val, args.Y_val};
-options.Plots = args.Plots;
-options.Verbose = args.Verbose;
-options.L2Regularization = 0;
-options.ValidationPatience = args.ValidationPatience;
-options.LearnRateSchedule = 'exponential';
-options.InitialLearnRate = args.InitialLearningRate;
-options.LearnRateDropPeriod = 1;
-options.LearnRateDropFactor = (args.FinalLearningRate/args.InitialLearningRate)^(options.LearnRateDropPeriod/options.MaxEpochs);
+options                     = trainingOptions('adam');
+options.MaxEpochs           = args.MaxEpochs;
+options.MiniBatchSize       = args.MiniBatchSize;
+args.Niterations            = ceil(size(args.X_tr, 2)/args.MiniBatchSize);
+args.Nsteps                 = args.Niterations * args.MaxEpochs;
+options.Shuffle             = 'every-epoch';
+options.ValidationData      = {args.X_val, args.Y_val};
+options.Plots               = args.Plots;
+options.Verbose             = args.Verbose;
+options.L2Regularization    = 0;
+options.ValidationPatience  = args.ValidationPatience;
+options.LearnRateSchedule   = 'exponential';
+options.InitialLearnRate    = args.InitialLearnRate;
+options.LearnRateDropPeriod = args.Nsteps;
+options.LearnRateDropFactor = (args.FinalLearnRate/args.InitialLearnRate)^(1/(options.LearnRateDropPeriod-1));
 
 if strcmp(CustomDefault, 'default') % DEFAULT TRAINING
     % Training
@@ -37,18 +41,44 @@ if strcmp(CustomDefault, 'default') % DEFAULT TRAINING
 elseif strcmp(CustomDefault, 'custom') % CUSTOM TRAINING
 
 % Initialization: Learning rate scheduler
-lr = args.InitialLearningRate;
+if strcmp(args.LearnRateScheduler, "test")                  % Linear (raising for Learning Rate Test)
+    % Recommended:
+    % Few steps/epochs (100-200/1-3)
+    % Big mini-batch size (512 or greater)
+    lr_min = 1e-10;
+    lr_max = 3;
+    lr_values = linspace(lr_min, lr_max, args.Nsteps);
+elseif strcmp(args.LearnRateScheduler, "exponential")       % Exponential decay
+    lr_values = options.InitialLearnRate * options.LearnRateDropFactor .^ (0:(options.LearnRateDropPeriod-1));
+elseif strcmp(args.LearnRateScheduler, "super-convergence") % Super convergence
+    N_up = floor(args.Nsteps / 3);
+    N_down = args.Nsteps - N_up;
+    lr_up = linspace(args.InitialLearnRate, args.MaxLearnRate, N_up);
+    lr_down = linspace(args.MaxLearnRate, args.FinalLearnRate, N_down);
+    lr_values = [lr_up, lr_down];
+elseif strcmp(args.LearnRateScheduler, "cyclic")            % Cyclical triangular
+    stepsize = 5 * args.Niterations; % Length of one up or down cycle
+    f = args.Nsteps / stepsize;      % Number of ups and downs
+    assert(mod(f, 1) == 0)           % Check if f is integer
+    lr_min_vec = args.FinalLearnRate * ones(1, args.Nsteps);
+    % lr_max_vec = args.MaxLearnRate * ones(1, args.Nsteps);
+    lr_max_vec = linspace(args.MaxLearnRate, args.FinalLearnRate, args.Nsteps);
+    lr_values = abs(asin(sin(2*pi*f * linspace(0, 1, args.Nsteps)/4))) * 2/pi;
+    lr_values = lr_min_vec + (lr_max_vec - lr_min_vec) .* lr_values;
+else
+    error("Invalid learning rate scheduler specified.");
+end
 
 % Initialization: Network
 net = args.net;
 
 % Initialization: Adam optimizer states
-trailingAvg   = [];
-trailingAvgSq = [];
+averageGrad   = [];
+averageSqGrad = [];
 
-% % Initialization: Loss history
-% train_losses = [];
-% val_losses   = [];
+% Initialization: Loss history
+train_losses = zeros(1, args.Nsteps);    % Record training mini-batch loss every step
+val_losses   = zeros(1, args.MaxEpochs); % Record validation loss every epoch
 
 % Initialization: Early stopping
 best_val_loss    = inf;
@@ -58,58 +88,93 @@ patience_counter = 0;
 % Initialization: Progress monitor
 if strcmp(options.Plots, 'training-progress')
     monitor         = trainingProgressMonitor;
-    monitor.Info    = ["Epoch", "LearningRate", "Patience", "PatienceCounter"];
-    monitor.Metrics = ["TrainingLoss", "ValidationLoss"];
-    monitor.XLabel  = "Epoch";
-    groupSubPlot(monitor, "Loss", ["TrainingLoss","ValidationLoss"]);
+    monitor.Info    = ["ETA", "Epoch", "Iteration", "Step", "LearningRate", "Patience"];
+    monitor.Metrics = ["TrainingLoss", "TrainingLossMovMean", "ValidationLoss", "LearningRate"];
+    monitor.XLabel  = "Step";
+    groupSubPlot(monitor, "Loss", ["TrainingLoss", "TrainingLossMovMean", "ValidationLoss"]);
+    groupSubPlot(monitor, "Scheduler", "LearningRate");
+
+    updateInfo(monitor, ...
+               "Patience", "holamundo")
 end
 
+% Initialization: Mini-batch queue
+mbq = minibatchqueue(args.dsXY_tr, ...
+                     'MiniBatchSize', options.MiniBatchSize, ...
+                     'MiniBatchFormat', {'CB', 'CB'}, ...
+                     'PartialMiniBatch', 'return', ...
+                     'OutputEnvironment', 'auto');
+
+% Initialization: Step
+step = 0;
+
 % Training loop
+tic
 for epoch = 1:options.MaxEpochs
+    
+    % Update progress monitor
+    if strcmp(options.Plots, 'training-progress')
+        updateInfo(monitor, ...
+                   "Epoch", sprintf('%d/%d', epoch, args.MaxEpochs))
+    end
+
     % Shuffle data at the start of each epoch
-    idx              = randperm(size(args.X_tr, 2));  % Shuffle indices
-    X_train_shuffled = args.X_tr(:, idx);
-    Y_train_shuffled = args.Y_tr(:, idx);
+    shuffle(mbq);
+
+    % Initialization: Iteration
+    iteration = 0;
 
     % Mini-batch training
-    for i = 1:options.MiniBatchSize:size(X_train_shuffled, 2)
-        % Protect against out-of-bounds indexes
-        batch_end = min(i + options.MiniBatchSize - 1, size(X_train_shuffled, 2));
-        
+    while hasdata(mbq)
+        % Update iteration
+        iteration = iteration + 1;
+
+        % Update step
+        step = step + 1;
+
+        % Update learning rate
+        lr = lr_values(step);
+
         % Get mini-batch data
-        batch_X = X_train_shuffled(:, i:batch_end);
-        batch_Y = Y_train_shuffled(:, i:batch_end);
+        [batch_X, batch_Y] = next(mbq);
 
         % Training mini-batch loss calculation
-        [~, gradients, state] = dlfeval(@FFNNLoss, ...
-                                        net, ...
-                                        batch_X, ...
-                                        batch_Y, ...
-                                        'train', ...
-                                        args.HuberThreshold, ...
-                                        args.ErrorWeights);
+        [loss, gradients, state] = dlfeval(@FFNNLoss, ...
+                                            net, ...
+                                            batch_X, ...
+                                            batch_Y, ...
+                                            'train', ...
+                                            args.HuberThreshold, ...
+                                            args.ErrorWeights);
         net.State             = state;
 
         % Adam update
-        [net.Learnables, trailingAvg, trailingAvgSq] = adamupdate(net.Learnables, ...
+        [net.Learnables, averageGrad, averageSqGrad] = adamupdate(net.Learnables, ...
                                                                   gradients, ...
-                                                                  trailingAvg, ...
-                                                                  trailingAvgSq, ...
-                                                                  epoch, ...
+                                                                  averageGrad, ...
+                                                                  averageSqGrad, ...
+                                                                  step, ...
                                                                   lr);
+        % Update training loss history
+        train_losses(step) = double(extractdata(loss));
+
+        % Update progress monitor
+        if strcmp(options.Plots, 'training-progress')
+            idx_min_mov_mean = max(1, step - args.Niterations+1);
+            updateInfo(monitor, ...
+                       "ETA", sprintf('%.1f min', toc*(args.Nsteps/step-1)/60),...
+                       "Iteration", sprintf('%d/%d', iteration, args.Niterations), ...
+                       "Step", sprintf('%d/%d', step, args.Nsteps), ...
+                       "LearningRate", lr)
+            recordMetrics(monitor, ...
+                          step, ...
+                          "TrainingLoss", train_losses(step), ...
+                          "TrainingLossMovMean", mean(train_losses(idx_min_mov_mean:step)), ...
+                          "LearningRate", lr)
+            monitor.Progress = step / args.Nsteps * 100;
+        end
     end
-
-    % Training loss calculation
-    rand_idx = randperm(size(args.X_tr, 2), size(args.X_val, 2));
-    [loss, ~, ~] = dlfeval(@FFNNLoss, ...
-                           net, ...
-                           args.X_tr(:, rand_idx), ...
-                           args.Y_tr(:, rand_idx), ...
-                           'validation', ...
-                           args.HuberThreshold, ...
-                           args.ErrorWeights);
-    % train_losses = [train_losses, extractdata(loss)];
-
+   
     % Validation loss calculation
     [val_loss, ~, ~] = dlfeval(@FFNNLoss, ...
                                net, ...
@@ -118,7 +183,9 @@ for epoch = 1:options.MaxEpochs
                                'validation', ...
                                args.HuberThreshold, ...
                                args.ErrorWeights);
-    % val_losses    = [val_losses, extractdata(val_loss)];
+
+    % Update validation loss history
+    val_losses(epoch) = double(extractdata(val_loss));
 
     % Check early stopping
     if val_loss < best_val_loss
@@ -141,23 +208,12 @@ for epoch = 1:options.MaxEpochs
     
     % Update progress monitor
     if strcmp(options.Plots, 'training-progress')
-        recordMetrics(monitor, ...
-                      epoch, ...
-                      TrainingLoss=double(loss), ...
-                      ValidationLoss=double(val_loss));
         updateInfo(monitor, ...
-                   Epoch=epoch, ...
-                   LearningRate=lr, ...
-                   Patience=options.ValidationPatience, ...
-                   PatienceCounter=patience_counter);
-        
-        % Actualizar progreso
-        monitor.Progress = epoch / options.MaxEpochs * 100;
+                   "Patience", sprintf('%d/%d', patience_counter, args.ValidationPatience))
+        recordMetrics(monitor, ...
+                      step, ...
+                      "ValidationLoss", val_losses(epoch))
     end
-
-
-    % Update learning rate
-    lr = lr * options.LearnRateDropFactor;
 end
 
 % Return the best network
