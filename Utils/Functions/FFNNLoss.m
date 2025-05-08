@@ -25,5 +25,18 @@ mask = Error <= HuberThreshold;
 loss(mask) = 0.5 * Error(mask).^2;
 loss(~mask) = HuberThreshold * (Error(~mask) - 0.5 * HuberThreshold);
 loss = mean(loss, 'all');
+
+%% L2 regularization
+L2Factor = 1e-6;
+L2 = 0;
+for i = 1:numel(net.Learnables.Value)
+    param = net.Learnables.Value{i};
+    if ndims(param) > 1  % solo pesos, no biases
+        L2 = L2 + sum(param.^2, 'all');
+    end
+end
+loss = loss + L2Factor * L2;
+
+%% Gradients
 gradients = dlgradient(loss, net.Learnables);
 end
