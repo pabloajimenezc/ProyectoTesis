@@ -1,4 +1,5 @@
 function [loss, gradients, state] = FFNNLoss(net, X, Y, TrainValidation, HuberThreshold, ErrorWeights)
+
 %% Loss arguments
 % net             dlnetwork
 % X               dlarray
@@ -7,7 +8,7 @@ function [loss, gradients, state] = FFNNLoss(net, X, Y, TrainValidation, HuberTh
 % HuberThreshold  float [0, 1]
 % ErrorWeights    dlarray > 0
 
-%% Make predictions
+%% Predict
 if strcmp(TrainValidation, 'train')
     [Y_pred, state] = forward(net, X);
 elseif strcmp(TrainValidation, 'validation')
@@ -27,16 +28,17 @@ loss(~mask) = HuberThreshold * (Error(~mask) - 0.5 * HuberThreshold);
 loss = mean(loss, 'all');
 
 %% L2 regularization
-L2Factor = 1e-6;
-L2 = 0;
-for i = 1:numel(net.Learnables.Value)
-    param = net.Learnables.Value{i};
-    if ndims(param) > 1  % solo pesos, no biases
-        L2 = L2 + sum(param.^2, 'all');
-    end
-end
-loss = loss + L2Factor * L2;
+% L2Factor = 1e-6;
+% L2 = 0;
+% for i = 1:numel(net.Learnables.Value)
+%     param = net.Learnables.Value{i};
+%     if ndims(param) > 1  % solo aplica a pesos, no a biases (que suelen tener ndims == 1)
+%         L2 = L2 + sum(param.^2, 'all');  % suma de cuadrados de todos los pesos
+%     end
+% end
+% loss = loss + L2Factor * L2;
 
 %% Gradients
 gradients = dlgradient(loss, net.Learnables);
+
 end
