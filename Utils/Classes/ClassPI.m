@@ -44,7 +44,7 @@ classdef ClassPI
         
         function obj = control(obj, r_t, y_t)
             % control: Calculate discrete control action signal.
-            
+
             % Update previous signals
             obj.e_t_1 = obj.e_t;    % Error
             obj.u_t_1 = obj.u_t;    % Action

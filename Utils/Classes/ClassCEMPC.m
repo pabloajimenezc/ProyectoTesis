@@ -25,6 +25,7 @@ properties % Variables
     exitflag_i  % Verbose for current solver
     exitflag_v  % Verbose for voltage solver
     exitflag
+    Tex         % Controller execution time
 end
 
 methods
@@ -60,6 +61,8 @@ methods
     function obj = control(obj, Ec, vB_pred, iB_pred)
         % control: Calculate optimal circulating currents and common mode voltage references.
         
+        tic
+
         iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
 
         e_Ec_pred = repmat(Ec - mean(Ec), obj.Np, 1);
@@ -147,6 +150,8 @@ methods
         else
             obj.exitflag = -3;
         end
+
+        obj.Tex = toc;
     end
 
     function obj = reset(obj)
@@ -160,6 +165,7 @@ methods
         obj.exitflag_i = -3;
         obj.exitflag_v = -3;
         obj.exitflag = -3;
+        obj.Tex = 0;
     end
 end
 

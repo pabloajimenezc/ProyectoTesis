@@ -64,6 +64,9 @@ classdef ClassBuffer
 
         vxdq            % dq input voltage
         vydq            % dq output voltage
+
+        Tex_CEMPC       % ICB+LFOM controller execution time
+        Tex_CCMPC       % CC controller execution time
     end
     
     methods
@@ -138,6 +141,9 @@ classdef ClassBuffer
 
             obj.vxdq = zeros(2, obj.Ns);
             obj.vydq = zeros(2, obj.Ns);
+
+            obj.Tex_CEMPC = zeros(1, obj.Ns);
+            obj.Tex_CCMPC = zeros(1, obj.Ns);
         end
     end
 end

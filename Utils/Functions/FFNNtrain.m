@@ -58,8 +58,7 @@ elseif strcmp(args.LearnRateScheduler, "super-convergence") % Super convergence
     lr_down = linspace(args.MaxLearnRate, args.FinalLearnRate, N_down);
     lr_values = [lr_up, lr_down];
 elseif strcmp(args.LearnRateScheduler, "cyclic")            % Cyclical triangular
-    % stepsize = 5 * args.Niterations; % Length of one up or down cycle
-    stepsize = 1 * args.Niterations; % Length of one up or down cycle
+    stepsize = 5 * args.Niterations; % Length of one up or down cycle
     f = args.Nsteps / stepsize;      % Number of ups and downs
     assert(mod(f, 1) == 0)           % Check if f is integer
     lr_min_vec = args.FinalLearnRate * ones(1, args.Nsteps);
