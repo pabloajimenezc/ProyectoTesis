@@ -17,10 +17,10 @@ classdef ClassPI
     end
 
     properties % Variables
-        e_t     % Error signal in actual time step
-        e_t_1   % Error signal in previous time step
-        u_t     % Action signal in actual time step
-        u_t_1   % Action signal in previous time step
+        e_t       % Error signal in actual time step
+        e_t_1     % Error signal in previous time step
+        u_t       % Action signal in actual time step
+        u_t_1     % Action signal in previous time step
     end
     
     methods
@@ -28,15 +28,15 @@ classdef ClassPI
             % ClassPI: Construct an instance of this class.
             
             % Constants
-            obj.Ts = specs.Ts;
-            obj.kp = specs.kp;
-            obj.ki = specs.ki;
+            obj.Ts    = specs.Ts;
+            obj.kp    = specs.kp;
+            obj.ki    = specs.ki;
             obj.u_min = specs.u_min;
             obj.u_max = specs.u_max;
-            obj.b0 = -obj.kp + obj.Ts/2 * obj.ki;
-            obj.b1 =  obj.kp + obj.Ts/2 * obj.ki;
-            obj.a0 = -1;
-            obj.a1 = 1;
+            obj.b0    = -obj.kp + obj.Ts / 2 * obj.ki;
+            obj.b1    =  obj.kp + obj.Ts / 2 * obj.ki;
+            obj.a0    = -1;
+            obj.a1    = 1;
 
             % Variables
             obj = obj.reset();

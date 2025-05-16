@@ -56,7 +56,7 @@ methods
         obj = obj.reset();
     end
 
-    function obj = control(obj, is_ref, vc_mean_ref, is, vB, vo, wx, wy)
+    function obj = control(obj, is_ref, vc, is, vB, vo, wx, wy)
         % control: Calculate optimal cluster voltages.
         tic
 
@@ -78,10 +78,10 @@ methods
         dixy_ref = [dix_ref; diy_ref];
         diB_ref = obj.pinvA * dixy_ref;
 
-        % vs_ref = vB + obj.invBs * (diB_ref - obj.As * iB_ref);
+        vs_ref = vB + obj.invBs * (diB_ref - obj.As * iB_ref);
         % vs_ref = vB + vo + obj.invBs * (diB_ref - obj.As * iB_ref);
         % vs_ref = vB + obj.invBs * (diB_ref - obj.As * is_ref);
-        vs_ref = vB + vo + obj.invBs * (diB_ref - obj.As * is_ref);
+        % vs_ref = vB + vo + obj.invBs * (diB_ref - obj.As * is_ref);
 
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
@@ -99,8 +99,8 @@ methods
 
         % Control action inequalities
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v =  (vc_mean_ref - vo) * ones(obj.m, 1);
-        lb_v = (-vc_mean_ref - vo) * ones(obj.m, 1);
+        ub_v =  (vc - vo);
+        lb_v = (-vc - vo);
         bineq_v = [ub_v; -lb_v];
 
         % Complete inequalities
