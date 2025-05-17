@@ -8,6 +8,7 @@ properties % Constants
     pinvA
     Ad      % Discrete time transition matrix
     Bd      % Discrete time control matrix
+    invBd
     As      % Continous time transition matrix
     Bs      % Continous time control matrix
     invBs
@@ -19,8 +20,9 @@ properties % Constants
 end
 
 properties % Variables
-    iA          % Active restrictions
     vs          % Action
+    vs_prev     % Previous action
+    iA          % Active constraints
     exitflag    % Solver verbose
     Tex         % Controller execution time
 end
@@ -37,17 +39,18 @@ methods
                 -1  0  0 -1  0  0 -1  0  0;
                  0 -1  0  0 -1  0  0 -1  0;
                  0  0 -1  0  0 -1  0  0 -1];
-        obj.pinvA = pinv(obj.A);
-        obj.Ad = specs.Ad;
-        obj.Bd = specs.Bd;
-        obj.As = specs.As;
-        obj.Bs = specs.Bs;
-        obj.invBs = inv(obj.Bs);
-        obj.is_max = specs.is_max;
-        obj.RFT = specs.RFT;
-        obj.lambda = specs.lambda;
+        obj.pinvA   = pinv(obj.A);
+        obj.Ad      = specs.Ad;
+        obj.Bd      = specs.Bd;
+        obj.invBd   = inv(obj.Bd);
+        obj.As      = specs.As;
+        obj.Bs      = specs.Bs;
+        obj.invBs   = inv(obj.Bs);
+        obj.is_max  = specs.is_max;
+        obj.RFT     = specs.RFT;
+        obj.lambda  = specs.lambda;
         obj.options = mpcActiveSetOptions;
-        obj.options.MaxIterations = 100;
+        obj.options.MaxIterations       = 100;
         obj.options.ConstraintTolerance = 1.0e-4;
         obj.rot = [0, -1;
                    1, 0];
@@ -62,26 +65,23 @@ methods
 
         % Current error tracking
         Hi = 2 * (obj.Bd') * obj.Bd;
-        fi = 2 * (obj.Bd') * (obj.Ad * is - obj.Bd * (vB + vo) - is_ref);
+        fi = 2 * (obj.Bd') * (obj.Ad * is - obj.Bd * vB - is_ref);
 
         % Control action penalization
-        ixy_ref = obj.A * is_ref;
-        iB_ref = obj.pinvA * ixy_ref;
-        ix_ref = ixy_ref(1:3);
-        iy_ref = ixy_ref(4:6);
-        ixab_ref = obj.RFT.abc2ab * ix_ref;
-        iyab_ref = obj.RFT.abc2ab * iy_ref;
+        ixy_ref   = obj.A * is_ref;
+        iB_ref    = obj.pinvA * ixy_ref;
+        ix_ref    = ixy_ref(1:3);
+        iy_ref    = ixy_ref(4:6);
+        ixab_ref  = obj.RFT.abc2ab * ix_ref;
+        iyab_ref  = obj.RFT.abc2ab * iy_ref;
         dixab_ref = wx * obj.rot * ixab_ref;
         diyab_ref = wy * obj.rot * iyab_ref;
-        dix_ref = obj.RFT.ab2abc * dixab_ref;
-        diy_ref = obj.RFT.ab2abc * diyab_ref;
-        dixy_ref = [dix_ref; diy_ref];
-        diB_ref = obj.pinvA * dixy_ref;
+        dix_ref   = obj.RFT.ab2abc * dixab_ref;
+        diy_ref   = obj.RFT.ab2abc * diyab_ref;
+        dixy_ref  = [dix_ref; diy_ref];
+        diB_ref   = obj.pinvA * dixy_ref;
 
         vs_ref = vB + obj.invBs * (diB_ref - obj.As * iB_ref);
-        % vs_ref = vB + vo + obj.invBs * (diB_ref - obj.As * iB_ref);
-        % vs_ref = vB + obj.invBs * (diB_ref - obj.As * is_ref);
-        % vs_ref = vB + vo + obj.invBs * (diB_ref - obj.As * is_ref);
 
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
@@ -93,14 +93,14 @@ methods
         
         % Current inequalities
         Aineq_i = [obj.Bd; -obj.Bd];
-        ub_i =  obj.is_max - obj.Ad * is + obj.Bd * vB;
-        lb_i = -obj.is_max - obj.Ad * is + obj.Bd * vB;
+        ub_i    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
+        lb_i    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
         bineq_i = [ub_i; -lb_i];
 
         % Control action inequalities
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v =  (vc - vo);
-        lb_v = (-vc - vo);
+        ub_v    =  (vc - vo);
+        lb_v    = (-vc - vo);
         bineq_v = [ub_v; -lb_v];
 
         % Complete inequalities
@@ -117,10 +117,11 @@ methods
     function obj = reset(obj)
         % reset: Reset controller's variables to 0.
 
-        obj.vs = zeros(obj.m, 1);
-        obj.iA = false(size(zeros(4 * obj.m, 1)));
+        obj.vs       = zeros(obj.m, 1);
+        obj.vs_prev  = zeros(obj.m, 1);
+        obj.iA       = false(size(zeros(4 * obj.m, 1)));
         obj.exitflag = -3;
-        obj.Tex = 0;
+        obj.Tex      = 0;
     end
 end
 

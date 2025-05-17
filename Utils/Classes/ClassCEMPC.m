@@ -59,7 +59,7 @@ methods
         obj = obj.reset();
     end
 
-    function obj = control(obj, Ec, vB_pred, iB_pred)
+    function obj = control(obj, Ec, vB_pred, iB_pred, vc)
         % control: Calculate optimal circulating currents and common mode voltage references.
         
         tic
@@ -130,7 +130,7 @@ methods
 
             % Inequalities matrix and vector
             Aineq_o = [eye(obj.Np); -eye(obj.Np)];
-            ub = obj.vo_max * ones(obj.Np, 1);
+            ub = reshape(max(abs(vc - vB_pred), [], 1), obj.Np, 1);
             lb = -ub;
             bineq_o = [ub; -lb];
 
