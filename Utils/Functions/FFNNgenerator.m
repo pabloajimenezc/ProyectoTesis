@@ -41,9 +41,11 @@ if args.TrainBias % Train bias
                         dropoutLayer(args.Dropout)];
     end
     % Output layer
-    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn)
-                    actFcn(args.OutputActivation)];
-    output_layer(2).Name = args.OutputActivation;
+    % output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn)
+    %                 actFcn(args.OutputActivation)];
+    % output_layer(2).Name = args.OutputActivation;
+    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))];
+    output_layer(1).Name = args.OutputActivation;
 
 else % Don't train bias and set to 0
     % Hidden layers
@@ -59,9 +61,11 @@ else % Don't train bias and set to 0
     end
     
     % Output layer
-    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))
-                    actFcn(args.OutputActivation)];
-    output_layer(2).Name = args.OutputActivation;
+    % output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))
+    %                 actFcn(args.OutputActivation)];
+    % output_layer(2).Name = args.OutputActivation;
+    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))];
+    output_layer(1).Name = args.OutputActivation;
 end
 
 % Repeat the hidden layer Nlayers times

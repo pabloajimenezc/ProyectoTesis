@@ -148,9 +148,9 @@ methods
         obj.vo_ref = von_temp(1);
         
         if and(0 < obj.exitflag_i, 0 < obj.exitflag_v)
-            obj.exitflag = -3;
-        else
             obj.exitflag = 1;
+        else
+            obj.exitflag = -3;
         end
 
         obj.Tex = toc;
