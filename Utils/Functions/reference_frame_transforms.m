@@ -5,6 +5,11 @@ function T = reference_frame_transforms()
 T.abc2dq = @(g) (2/3)*[cos(g),  cos(g-2*pi/3),  cos(g+2*pi/3);
                       -sin(g), -sin(g-2*pi/3), -sin(g+2*pi/3)];
 
+% dq to abc
+T.dq2abc = @(g) [cos(g),        -sin(g);
+                 cos(g-2*pi/3), -sin(g-2*pi/3);
+                 cos(g+2*pi/3), -sin(g+2*pi/3)];
+
 % abc to alpha-beta
 T.abc2ab = (2/3)*[1,      -1/2,       -1/2;
                   0, sqrt(3)/2, -sqrt(3)/2];

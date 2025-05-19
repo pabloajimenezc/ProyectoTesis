@@ -1,5 +1,4 @@
 function y = nops(x, operation)
-
 % nops: Perform operations preserving sign of variables
 %   Supports square root ('sqrt') and raise to the power of 2 ('pow2')
 

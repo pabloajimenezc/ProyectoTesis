@@ -67,6 +67,8 @@ classdef ClassBuffer
 
         Tex_CEMPC       % ICB+LFOM controller execution time
         Tex_CCMPC       % CC controller execution time
+
+        vs_ref          % Steady state cluster voltage reference
     end
     
     methods
@@ -144,6 +146,8 @@ classdef ClassBuffer
 
             obj.Tex_CEMPC = zeros(1, obj.Ns);
             obj.Tex_CCMPC = zeros(1, obj.Ns);
+
+            obj.vs_ref = zeros(obj.m, obj.Ns);
         end
     end
 end

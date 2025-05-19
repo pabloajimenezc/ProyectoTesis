@@ -5,18 +5,16 @@ properties % Constants
     Ts      % Sampling period
     m       % Number of clusters
     A       % Incidence matrix of M3C
-    pinvA
     Ad      % Discrete time transition matrix
     Bd      % Discrete time control matrix
-    invBd
     As      % Continous time transition matrix
     Bs      % Continous time control matrix
-    invBs
     is_max  % Maximum cluster current
-    RFT     % Reference frame transformations
+    ix_max
+    iy_max
+    zB_ratio % Importance between external control and energy balancing
     lambda  % Control action weighting factor
     options % Solver options
-    rot     % pi/2 counter clockwise rotation matrix
 end
 
 properties % Variables
@@ -32,57 +30,48 @@ methods
         % ClassCCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m = specs.m;
-        obj.A = [1  1  1  0  0  0  0  0  0;
-                 0  0  0  1  1  1  0  0  0;
-                 0  0  0  0  0  0  1  1  1;
-                -1  0  0 -1  0  0 -1  0  0;
-                 0 -1  0  0 -1  0  0 -1  0;
-                 0  0 -1  0  0 -1  0  0 -1];
-        obj.pinvA   = pinv(obj.A);
-        obj.Ad      = specs.Ad;
-        obj.Bd      = specs.Bd;
-        obj.invBd   = inv(obj.Bd);
-        obj.As      = specs.As;
-        obj.Bs      = specs.Bs;
-        obj.invBs   = inv(obj.Bs);
+        obj.m = specs.M3C.m;
+        obj.A = specs.M3C.A;
+        obj.Ad      = specs.M3C.Ad;
+        obj.Bd      = specs.M3C.Bd;
+        obj.As      = specs.M3C.As;
+        obj.Bs      = specs.M3C.Bs;
         obj.is_max  = specs.is_max;
-        obj.RFT     = specs.RFT;
+        obj.ix_max = specs.ix_max;
+        obj.iy_max = specs.iy_max;
+        obj.zB_ratio = specs.zB_ratio;
         obj.lambda  = specs.lambda;
         obj.options = mpcActiveSetOptions;
         obj.options.MaxIterations       = 100;
         obj.options.ConstraintTolerance = 1.0e-4;
-        obj.rot = [0, -1;
-                   1, 0];
 
         % Variables
         obj = obj.reset();
     end
 
-    function obj = control(obj, is_ref, vc, is, vB, vo, wx, wy)
+    function obj = control(obj, is_ref, vc, is, vB, vo, vs_ref)
         % control: Calculate optimal cluster voltages.
         tic
 
         % Current error tracking
-        Hi = 2 * (obj.Bd') * obj.Bd;
-        fi = 2 * (obj.Bd') * (obj.Ad * is - obj.Bd * vB - is_ref);
+        % Hi = 2 * (obj.Bd') * obj.Bd;
+        % fi = 2 * (obj.Bd') * (obj.Ad * is - obj.Bd * vB - is_ref);
 
-        % Control action penalization
-        ixy_ref   = obj.A * is_ref;
-        iB_ref    = obj.pinvA * ixy_ref;
-        ix_ref    = ixy_ref(1:3);
-        iy_ref    = ixy_ref(4:6);
-        ixab_ref  = obj.RFT.abc2ab * ix_ref;
-        iyab_ref  = obj.RFT.abc2ab * iy_ref;
-        dixab_ref = wx * obj.rot * ixab_ref;
-        diyab_ref = wy * obj.rot * iyab_ref;
-        dix_ref   = obj.RFT.ab2abc * dixab_ref;
-        diy_ref   = obj.RFT.ab2abc * diyab_ref;
-        dixy_ref  = [dix_ref; diy_ref];
-        diB_ref   = obj.pinvA * dixy_ref;
+        % Basic current error tracking
+        Maux = pinv(obj.A)*obj.A;
+        Hi_B = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
+        fi_B = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
 
-        vs_ref = vB + obj.invBs * (diB_ref - obj.As * iB_ref);
+        % Circulating current error tracking
+        Maux = eye(obj.m) - Maux;
+        Hi_z = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
+        fi_z = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
 
+        % Cluster current error tracking
+        Hi = (1 - obj.zB_ratio) * Hi_B + obj.zB_ratio * Hi_z;
+        fi = (1 - obj.zB_ratio) * fi_B + obj.zB_ratio * fi_z;
+
+        % Control action penalization        
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
 
@@ -91,19 +80,29 @@ methods
         f = fi + obj.lambda * fv;
         H = (H + H') / 2;
         
-        % Current inequalities
-        Aineq_i = [obj.Bd; -obj.Bd];
-        ub_i    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
-        lb_i    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
-        bineq_i = [ub_i; -lb_i];
+        % State constraints
+            % Cluster current
+        Aineq_is = [obj.Bd; -obj.Bd];
+        ub_is    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
+        lb_is    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
+        bineq_is = [ub_is; -lb_is];
+            % External currents
+        Aineq_ixy = [obj.A * obj.Bd; -obj.A * obj.Bd];
+        ixy_max   = [obj.ix_max * ones(3, 1); obj.iy_max * ones(3, 1)];
+        ub_ixy    =  ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        lb_ixy    = -ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        bineq_ixy = [ub_ixy; -lb_ixy];
 
-        % Control action inequalities
+        Aineq_i = [Aineq_is; Aineq_ixy];
+        bineq_i = [bineq_is; bineq_ixy];
+
+        % Control action constraints
         Aineq_v = [eye(obj.m); -eye(obj.m)];
         ub_v    =  (vc - vo);
         lb_v    = (-vc - vo);
         bineq_v = [ub_v; -lb_v];
 
-        % Complete inequalities
+        % Complete constraints
         Aineq = [Aineq_v; Aineq_i];
         bineq = [bineq_v; bineq_i];
 
@@ -119,7 +118,7 @@ methods
 
         obj.vs       = zeros(obj.m, 1);
         obj.vs_prev  = zeros(obj.m, 1);
-        obj.iA       = false(size(zeros(4 * obj.m, 1)));
+        obj.iA       = false(size(zeros(4 * obj.m + 2 * (3 + 3), 1)));
         obj.exitflag = -3;
         obj.Tex      = 0;
     end
