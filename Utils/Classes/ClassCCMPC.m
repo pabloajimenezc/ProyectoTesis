@@ -4,6 +4,8 @@ classdef ClassCCMPC
 properties % Constants
     Ts      % Sampling period
     m       % Number of clusters
+    p       % Number o input ports of the M3C
+    q       % Number o output ports of the M3C
     A       % Incidence matrix of M3C
     Ad      % Discrete time transition matrix
     Bd      % Discrete time control matrix
@@ -14,12 +16,12 @@ properties % Constants
     iy_max
     zB_ratio % Importance between external control and energy balancing
     lambda  % Control action weighting factor
+    lambda_d  % Control action rate of change weighting factor
     options % Solver options
 end
 
 properties % Variables
     vs          % Action
-    vs_prev     % Previous action
     iA          % Active constraints
     exitflag    % Solver verbose
     Tex         % Controller execution time
@@ -30,20 +32,23 @@ methods
         % ClassCCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m = specs.M3C.m;
-        obj.A = specs.M3C.A;
-        obj.Ad      = specs.M3C.Ad;
-        obj.Bd      = specs.M3C.Bd;
-        obj.As      = specs.M3C.As;
-        obj.Bs      = specs.M3C.Bs;
-        obj.is_max  = specs.is_max;
-        obj.ix_max = specs.ix_max;
-        obj.iy_max = specs.iy_max;
+        obj.m  = specs.M3C.m;
+        obj.p  = specs.M3C.p;
+        obj.q  = specs.M3C.q;
+        obj.A  = specs.M3C.A;
+        obj.Ad = specs.M3C.Ad;
+        obj.Bd = specs.M3C.Bd;
+        obj.As = specs.M3C.As;
+        obj.Bs = specs.M3C.Bs;
+        obj.is_max   = specs.is_max;
+        obj.ix_max   = specs.ix_max;
+        obj.iy_max   = specs.iy_max;
         obj.zB_ratio = specs.zB_ratio;
-        obj.lambda  = specs.lambda;
-        obj.options = mpcActiveSetOptions;
+        obj.lambda   = specs.lambda;
+        obj.lambda_d = specs.lambda_d;
+        obj.options  = mpcActiveSetOptions;
         obj.options.MaxIterations       = 100;
-        obj.options.ConstraintTolerance = 1.0e-4;
+        obj.options.ConstraintTolerance = 1.0e-5;
 
         % Variables
         obj = obj.reset();
@@ -54,30 +59,34 @@ methods
         tic
 
         % Current error tracking
-        % Hi = 2 * (obj.Bd') * obj.Bd;
-        % fi = 2 * (obj.Bd') * (obj.Ad * is - obj.Bd * vB - is_ref);
+        Hi = 2 * (obj.Bd') * obj.Bd;
+        fi = 2 * (obj.Bd') * (-is_ref + obj.Ad * is - obj.Bd * vB);
 
-        % Basic current error tracking
-        Maux = pinv(obj.A)*obj.A;
-        Hi_B = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
-        fi_B = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
+        % % Basic current error tracking
+        % Maux = pinv(obj.A)*obj.A;
+        % Hi_B = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
+        % fi_B = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
+        % 
+        % % Circulating current error tracking
+        % Maux = eye(obj.m) - Maux;
+        % Hi_z = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
+        % fi_z = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
 
-        % Circulating current error tracking
-        Maux = eye(obj.m) - Maux;
-        Hi_z = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
-        fi_z = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
-
-        % Cluster current error tracking
-        Hi = (1 - obj.zB_ratio) * Hi_B + obj.zB_ratio * Hi_z;
-        fi = (1 - obj.zB_ratio) * fi_B + obj.zB_ratio * fi_z;
+        % % Cluster current error tracking
+        % Hi = (1 - obj.zB_ratio) * Hi_B + obj.zB_ratio * Hi_z;
+        % fi = (1 - obj.zB_ratio) * fi_B + obj.zB_ratio * fi_z;
 
         % Control action penalization        
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
 
+        % Control action rate of change penalization        
+        Hd = 2 * eye(obj.m);
+        fd = -2 * obj.vs; % Previous vs
+
         % Complete weighted objective function
-        H = Hi + obj.lambda * Hv;
-        f = fi + obj.lambda * fv;
+        H = Hi + obj.lambda * Hv + obj.lambda_d * Hd;
+        f = fi + obj.lambda * fv + obj.lambda_d * fd;
         H = (H + H') / 2;
         
         % State constraints
@@ -117,8 +126,7 @@ methods
         % reset: Reset controller's variables to 0.
 
         obj.vs       = zeros(obj.m, 1);
-        obj.vs_prev  = zeros(obj.m, 1);
-        obj.iA       = false(size(zeros(4 * obj.m + 2 * (3 + 3), 1)));
+        obj.iA       = false(size(zeros(4 * obj.m + 2 * (obj.p + obj.q), 1)));
         obj.exitflag = -3;
         obj.Tex      = 0;
     end

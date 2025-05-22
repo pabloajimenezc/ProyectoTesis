@@ -1,4 +1,4 @@
-classdef ClassM3C% < rl.env.MATLABEnvironment
+classdef ClassM3C
 
 properties (Constant)
     A = [1  1  1  0  0  0  0  0  0;   % M3C incidence matrix
@@ -10,8 +10,11 @@ properties (Constant)
     pinvA = pinv(ClassM3C.A);         % Pseudo inverse of incidence matrix
     m = size(ClassM3C.A, 2);          % Number of clusters
     N = null(ClassM3C.A, 'rational'); % Null matrix
+    % N = null(ClassM3C.A); % Null matrix
     n = size(ClassM3C.N, 2);          % Number of linear independent circulating currents
     pinvN = pinv(ClassM3C.N);         % Pseudo inverse of null matrix
+    p = 3;                            % Number of input ports
+    q = 3;                            % Number of output ports
 end
 
 properties  % Constants

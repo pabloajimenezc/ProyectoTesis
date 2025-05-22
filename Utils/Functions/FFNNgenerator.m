@@ -12,69 +12,55 @@ function net = FFNNgenerator(args)
 % BatchNorm        % bool
 % TrainBias        % bool
 
-%% Activation function handler
+% Función de activación
 function layer = actFcn(name)
     switch lower(name)
-        case 'relu'
-            layer = reluLayer;
-        case 'tanh'
-            layer = tanhLayer;
-        case 'sigmoid'
-            layer = sigmoidLayer;
-        otherwise
-            error("Unknown activation function: '%s'.", name);
+        case 'relu',    layer = reluLayer;
+        case 'tanh',    layer = tanhLayer;
+        case 'sigmoid', layer = sigmoidLayer;
+        case 'linear',  layer = [];  % Sin activación
+        otherwise, error("Unknown activation function: '%s'.", name);
     end
 end
 
-%% Network blocks
+% Capa fully connected con o sin bias entrenable
+baseLayer = @(n) fullyConnectedLayer(n, ...
+    'WeightsInitializer', args.WinitFcn, ...
+    'BiasLearnRateFactor', double(~args.TrainBias), ...
+    'Bias', zeros(n, 1));
 
-if args.TrainBias % Train bias
-    % Hidden layers
-    if args.BatchNorm
-        hidden_layer = [fullyConnectedLayer(args.Nneurons, 'WeightsInitializer', args.WinitFcn)
-                        batchNormalizationLayer
-                        actFcn(args.HiddenActivation)
-                        dropoutLayer(args.Dropout)];
-    else
-        hidden_layer = [fullyConnectedLayer(args.Nneurons, 'WeightsInitializer', args.WinitFcn)
-                        actFcn(args.HiddenActivation)
-                        dropoutLayer(args.Dropout)];
-    end
-    % Output layer
-    % output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn)
-    %                 actFcn(args.OutputActivation)];
-    % output_layer(2).Name = args.OutputActivation;
-    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))];
-    output_layer(1).Name = args.OutputActivation;
+% Capas condicionales
+dropout = @(d) conditionalLayer(d > 0, dropoutLayer(d));
+bn      = @(b) conditionalLayer(b, batchNormalizationLayer);
 
-else % Don't train bias and set to 0
-    % Hidden layers
-    if args.BatchNorm
-        hidden_layer = [fullyConnectedLayer(args.Nneurons, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Nneurons, 1))
-                        batchNormalizationLayer
-                        actFcn(args.HiddenActivation)
-                        dropoutLayer(args.Dropout)];
-    else
-        hidden_layer = [fullyConnectedLayer(args.Nneurons, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Nneurons, 1))
-                        actFcn(args.HiddenActivation)
-                        dropoutLayer(args.Dropout)];
-    end
-    
-    % Output layer
-    % output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))
-    %                 actFcn(args.OutputActivation)];
-    % output_layer(2).Name = args.OutputActivation;
-    output_layer = [fullyConnectedLayer(args.Noutputs, 'WeightsInitializer', args.WinitFcn, 'BiasLearnRateFactor', 0, 'Bias', zeros(args.Noutputs, 1))];
+% Capas de activación
+hiddenAct = actFcn(args.HiddenActivation);
+outputAct = actFcn(args.OutputActivation);
+
+% Bloque de capa oculta
+hiddenBlock = @(n) [baseLayer(n); ...
+                    bn(args.BatchNorm); ...
+                    hiddenAct; ...
+                    dropout(args.Dropout)];
+
+% Construcción de capas
+hidden_layers = repmat(hiddenBlock(args.Nneurons), args.Nlayers, 1);
+output_layer  = [baseLayer(args.Noutputs); outputAct];
+if ~isempty(outputAct)
     output_layer(1).Name = args.OutputActivation;
 end
 
-% Repeat the hidden layer Nlayers times
-hidden_layers = repmat(hidden_layer, args.Nlayers, 1);
-
-%% Create the neural network
-layers = [featureInputLayer(args.Ninputs)
-          hidden_layers
-          output_layer];
+% Construcción final de la red
+layers = [featureInputLayer(args.Ninputs); hidden_layers; output_layer];
 net = dlnetwork(layers);
 net = dlupdate(@double, net);
+end
+
+% Función auxiliar para condicionales limpios
+function layer = conditionalLayer(cond, layerIfTrue)
+    if cond
+        layer = layerIfTrue;
+    else
+        layer = [];
+    end
 end

@@ -7,6 +7,7 @@ classdef ClassBuffer
         m   % Number of clusters
         n   % Number of linear independet circulating currents
         A   % Incidence matrix
+        Tsim % Vector of simulated timesteps
     end
 
     properties % Variables
@@ -81,6 +82,7 @@ classdef ClassBuffer
             obj.m = specs.m;
             obj.n = specs.n;
             obj.A = specs.A;
+            obj.Tsim = specs.Tsim;
 
             % Variables
             obj = obj.reset();
