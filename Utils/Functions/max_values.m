@@ -1,7 +1,7 @@
 function [ix_max, iy_max, is_max, vo_max, vB_max, VCdiff] = max_values(Ax, Ay)
 iy_max = 100;                               % Maximum output current
 ix_max = Ay / Ax * iy_max;                  % Maximum input current
-eta = 1;
+eta = 1.5;
 is_max = (ix_max + iy_max) / 3 * (1 + eta); % Maximum cluster current
 vo_max = (Ax + Ay) / 2;                   % Maximum common mode voltage
 % vo_max = 0.5 * (Ax + Ay) / 2;
