@@ -30,20 +30,20 @@ classdef BasicVariablesPredictor
             angles = (1:obj.Np-1) * (wx * obj.Ts);
             cos_vals = cos(angles);
             sin_vals = sin(angles);
-            ROTx = reshape([cos_vals; -sin_vals; sin_vals; cos_vals], 2, 2*obj.Np)';
+            ROTx = reshape([cos_vals; -sin_vals; sin_vals; cos_vals], 2, 2*(obj.Np-1))';
             
             angles = (1:obj.Np-1) * (wy * obj.Ts);
             cos_vals = cos(angles);
             sin_vals = sin(angles);
-            ROTy = reshape([cos_vals; -sin_vals; sin_vals; cos_vals], 2, 2*obj.Np)';
+            ROTy = reshape([cos_vals; -sin_vals; sin_vals; cos_vals], 2, 2*(obj.Np-1))';
             
             % DISCLAIMER: This rotation matrices produce a vector of Np steps starting
             % from now, so it actually only predicts Np-1 steps. This has to be taken in
             % account in case of control delay compensation.
             
             % Transform from abc to alpha-beta and predict (rotate vectors assuming steady state)
-            var_x_ab_pred = reshape(ROTx * obj.RFT.abc2ab * var_xy(1:3), 2, obj.Np);
-            var_y_ab_pred = reshape(ROTy * obj.RFT.abc2ab * var_xy(4:6), 2, obj.Np);
+            var_x_ab_pred = reshape(ROTx * obj.RFT.abc2ab * var_xy(1:3), 2, obj.Np-1);
+            var_y_ab_pred = reshape(ROTy * obj.RFT.abc2ab * var_xy(4:6), 2, obj.Np-1);
             
             % Transform back to abc
             var_x_pred = obj.RFT.ab2abc * var_x_ab_pred;

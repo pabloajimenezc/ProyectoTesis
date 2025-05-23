@@ -6,13 +6,13 @@ classdef ClassIOGrid
         Ti  % Integration step
         Ax  % Input grid voltage amplitude
         Ay  % Output grid voltage amplitude
+    end
+
+    properties % Variables
         fx  % Input grid voltage frequency
         fy  % Output grid voltage frequency
         wx  % Input grid voltage angular frequency
         wy  % Output grid voltage angular frequency
-    end
-
-    properties % Variables
         gx  % Input grid voltage angle
         gy  % Output grid voltage angle
         vxy % Input/output voltage vector
@@ -37,6 +37,8 @@ classdef ClassIOGrid
         
         function obj = step(obj)
             % step: Perform one step of numerical integration
+            obj.wx = 2*pi*obj.fx;
+            obj.wy = 2*pi*obj.fy;
             
             obj.gx = mod(obj.gx + obj.Ti * obj.wx, 2*pi); % Integrate and map to [0, 2*pi]
             obj.gy = mod(obj.gy + obj.Ti * obj.wy, 2*pi); % Integrate and map to [0, 2*pi]
@@ -61,6 +63,8 @@ classdef ClassIOGrid
             vys = obj.Ay * cos(obj.gy - 2*pi/3);
             vyt = obj.Ay * cos(obj.gy + 2*pi/3);
             obj.vxy = [vxa; vxb; vxc; vyr; vys; vyt];
+            obj.wx = 2 * pi * obj.fx;
+            obj.wy = 2 * pi * obj.fy;
         end
     end
 end
