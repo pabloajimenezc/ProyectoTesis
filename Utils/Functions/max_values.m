@@ -19,7 +19,7 @@ end
 %% Voltages
 vo_max = (Ax + Ay) / 2;                     % Maximum common mode voltage
 vB_max = Ax + Ay;                           % Maximum branch voltage
-VCdiff = 15/100;                            % Max. fraction of capacitor voltage deviation
+VCdiff = 1/100;                            % Max. fraction of capacitor voltage deviation
 % VCdiff is used for training
 % and is supposed to be maximum deviation during real operation.
 
