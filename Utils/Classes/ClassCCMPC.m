@@ -73,7 +73,7 @@ methods
         % Maux = eye(obj.m) - Maux;
         % Hi_z = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
         % fi_z = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
-
+        % 
         % % Cluster current error tracking
         % Hi = (1 - obj.zB_ratio) * Hi_B + obj.zB_ratio * Hi_z;
         % fi = (1 - obj.zB_ratio) * fi_B + obj.zB_ratio * fi_z;

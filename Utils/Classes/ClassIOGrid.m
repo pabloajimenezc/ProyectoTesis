@@ -28,8 +28,6 @@ classdef ClassIOGrid
             obj.Ay = specs.Ay;
             obj.p  = specs.p;
             obj.q  = specs.q;
-            obj.wx = specs.wx;
-            obj.wy = specs.wy;
 
             % Variables
             obj = obj.reset(init_vals);
@@ -57,6 +55,8 @@ classdef ClassIOGrid
 
         function obj = reset(obj, init_vals)
             % reset: Reset system variables
+            obj.wx = init_vals.wx0;
+            obj.wy = init_vals.wy0;
 
             obj.gx = init_vals.gx0;
             obj.gy = init_vals.gy0;
