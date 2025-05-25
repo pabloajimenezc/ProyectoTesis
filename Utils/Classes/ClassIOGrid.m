@@ -55,12 +55,13 @@ classdef ClassIOGrid
 
         function obj = reset(obj, init_vals)
             % reset: Reset system variables
-            obj.wx = init_vals.wx0;
-            obj.wy = init_vals.wy0;
 
-            obj.gx = init_vals.gx0;
+            obj.wy = init_vals.wy0;
             obj.gy = init_vals.gy0;
+
             if and(obj.p == 3, obj.q == 3)               % M3C
+                obj.wx = init_vals.wx0;
+                obj.gx = init_vals.gx0;
                 vxa = obj.Ax * cos(obj.gx);
                 vxb = obj.Ax * cos(obj.gx - 2*pi/3);
                 vxc = obj.Ax * cos(obj.gx + 2*pi/3);
@@ -69,6 +70,8 @@ classdef ClassIOGrid
                 vyt = obj.Ay * cos(obj.gy + 2*pi/3);
                 obj.vxy = [vxa; vxb; vxc; vyr; vys; vyt];
             elseif and(obj.p == 2, obj.q == 3)           % M2C
+                obj.wx = 0;
+                obj.gx = 0;
                 vxa =  obj.Ax;
                 vxb = -obj.Ax;
                 vyr = obj.Ay * cos(obj.gy);
