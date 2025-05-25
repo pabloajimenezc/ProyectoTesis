@@ -2,11 +2,13 @@ classdef ClassBuffer
     % ClassBuffer: Save simulation variables
     
     properties % Constants
-        Ts  % Control sample time
-        Ns  % Number of steps
-        m   % Number of clusters
-        n   % Number of linear independet circulating currents
-        A   % Incidence matrix
+        Ts   % Control sample time
+        Ns   % Number of steps
+        m    % Number of clusters
+        n    % Number of linear independet circulating currents
+        A    % Incidence matrix
+        p    % Number of input ports
+        q    %
         Tsim % Vector of simulated timesteps
     end
 

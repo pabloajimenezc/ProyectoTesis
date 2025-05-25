@@ -41,8 +41,8 @@ methods
         % ClassCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m        = specs.M3C.m;
-        obj.n        = specs.M3C.n;
+        obj.m        = specs.MMCC.m;
+        obj.n        = specs.MMCC.n;
         obj.is_max   = specs.is_max;
         obj.vo_max   = specs.vo_max;
         obj.Ts       = specs.Ts;
@@ -52,7 +52,7 @@ methods
         obj.lambda_do = specs.lambda_do;
         obj.lmax     = specs.lmax;
         obj.Np       = specs.Np;
-        obj.NN       = repmat({specs.M3C.N}, obj.Np, 1);
+        obj.NN       = repmat({specs.MMCC.N}, obj.Np, 1);
         obj.NN       = blkdiag(obj.NN{:});
         obj.one      = repmat({ones(obj.m, 1)}, obj.Np, 1);
         obj.one      = blkdiag(obj.one{:});

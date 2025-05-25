@@ -4,9 +4,9 @@ classdef ClassCCMPC
 properties % Constants
     Ts      % Sampling period
     m       % Number of clusters
-    p       % Number o input ports of the M3C
-    q       % Number o output ports of the M3C
-    A       % Incidence matrix of M3C
+    p       % Number o input ports of the MMCC
+    q       % Number o output ports of the MMCC
+    A       % Incidence matrix of MMCC
     Ad      % Discrete time transition matrix
     Bd      % Discrete time control matrix
     As      % Continous time transition matrix
@@ -14,6 +14,7 @@ properties % Constants
     is_max  % Maximum cluster current
     ix_max
     iy_max
+    ixy_max
     zB_ratio % Importance between external control and energy balancing
     lambda  % Control action weighting factor
     lambda_d  % Control action rate of change weighting factor
@@ -32,17 +33,18 @@ methods
         % ClassCCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m  = specs.M3C.m;
-        obj.p  = specs.M3C.p;
-        obj.q  = specs.M3C.q;
-        obj.A  = specs.M3C.A;
-        obj.Ad = specs.M3C.Ad;
-        obj.Bd = specs.M3C.Bd;
-        obj.As = specs.M3C.As;
-        obj.Bs = specs.M3C.Bs;
+        obj.m  = specs.MMCC.m;
+        obj.p  = specs.MMCC.p;
+        obj.q  = specs.MMCC.q;
+        obj.A  = specs.MMCC.A;
+        obj.Ad = specs.MMCC.Ad;
+        obj.Bd = specs.MMCC.Bd;
+        obj.As = specs.MMCC.As;
+        obj.Bs = specs.MMCC.Bs;
         obj.is_max   = specs.is_max;
         obj.ix_max   = specs.ix_max;
         obj.iy_max   = specs.iy_max;
+        obj.ixy_max  = [obj.ix_max * ones(obj.p, 1); obj.iy_max * ones(obj.q, 1)];
         obj.zB_ratio = specs.zB_ratio;
         obj.lambda   = specs.lambda;
         obj.lambda_d = specs.lambda_d;
@@ -97,9 +99,8 @@ methods
         bineq_is = [ub_is; -lb_is];
             % External currents
         Aineq_ixy = [obj.A * obj.Bd; -obj.A * obj.Bd];
-        ixy_max   = [obj.ix_max * ones(3, 1); obj.iy_max * ones(3, 1)];
-        ub_ixy    =  ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
-        lb_ixy    = -ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        ub_ixy    =  obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        lb_ixy    = -obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
         bineq_ixy = [ub_ixy; -lb_ixy];
 
         Aineq_i = [Aineq_is; Aineq_ixy];
