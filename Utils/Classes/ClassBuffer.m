@@ -84,6 +84,8 @@ classdef ClassBuffer
             obj.m = specs.m;
             obj.n = specs.n;
             obj.A = specs.A;
+            obj.p = specs.p;
+            obj.q = specs.q;
             obj.Tsim = specs.Tsim;
 
             % Variables

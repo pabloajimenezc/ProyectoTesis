@@ -50,7 +50,7 @@ classdef BasicVariablesPredictor
                 
                 elseif and(obj.p == 2, obj.q == 3) % M2C
 
-                    var_x_pred = repmat(var_xy(1:2), 1, obj.Np);
+                    var_x_pred = repmat(var_xy(1:2), 1, obj.Np-1);
 
                 end
                 

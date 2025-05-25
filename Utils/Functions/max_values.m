@@ -1,4 +1,5 @@
 function [ix_max, iy_max, is_max, vo_max, vB_max, VCdiff, eta] = max_values(Ax, Ay, Topology)
+    % max_values: Get maximum values for system variables
 
 %% Currents
 

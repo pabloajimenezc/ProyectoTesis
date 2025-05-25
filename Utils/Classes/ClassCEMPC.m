@@ -6,6 +6,9 @@ properties % Constants
     n           % Number of linear independent circulating currents
     NN          % Null matrix for full planning horizon
     one         % Ones vector for full planning horizon
+    IM
+    IM2
+    K
     Np          % Horizon length, # of predicted steps for external variables
     is_max      % Absolute maximum cluster current
     vo_max      % Absolute maximum common mode voltage
@@ -38,8 +41,8 @@ methods
         % ClassCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m        = specs.M3C.m;
-        obj.n        = specs.M3C.n;
+        obj.m        = specs.MMCC.m;
+        obj.n        = specs.MMCC.n;
         obj.is_max   = specs.is_max;
         obj.vo_max   = specs.vo_max;
         obj.Ts       = specs.Ts;
@@ -49,10 +52,13 @@ methods
         obj.lambda_do = specs.lambda_do;
         obj.lmax     = specs.lmax;
         obj.Np       = specs.Np;
-        obj.NN       = repmat({specs.M3C.N}, obj.Np, 1);
+        obj.NN       = repmat({specs.MMCC.N}, obj.Np, 1);
         obj.NN       = blkdiag(obj.NN{:});
         obj.one      = repmat({ones(obj.m, 1)}, obj.Np, 1);
         obj.one      = blkdiag(obj.one{:});
+        obj.IM       = eye(obj.m * obj.Np) - obj.one * (obj.one') / obj.m;
+        obj.IM2      = (obj.IM') * obj.IM;
+        obj.K        = kron(tril(ones(obj.Np)), eye(obj.m));
 
         obj.options_i                     = mpcActiveSetOptions;
         obj.options_i.MaxIterations       = 20;
@@ -73,90 +79,50 @@ methods
         iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
         vB_pred = reshape(vB_pred, obj.m * obj.Np, 1);
 
-        e_Ec_pred = repmat(Ec - mean(Ec), obj.Np, 1);
-
         % Initialize common mode voltage vector of horizon Np
         vo_ref_temp = zeros(obj.Np, 1);
 
         for l = 1:obj.lmax
-            %%% Circulating currents subproblem Jz = Jz_E + Jz_z
+            %%% Circulating currents subproblem Jz = Jz_x + Jz_u
 
             % Initialization
             vs_temp = vB_pred + obj.one * vo_ref_temp;
 
             % Formulation
 
-            % Energy tracking error Jz_E
-            Hz_E = 2 * obj.Ts^2 * (obj.NN') * diag(vs_temp.^2) * obj.NN;
-            fz_E = 2 * obj.Ts * (obj.NN') * diag(vs_temp) * (e_Ec_pred + obj.Ts * diag(vs_temp) * iB_pred);
-
-            % LICCs penalization Jz_z
-            Hz_z = 2 * (obj.NN') * obj.NN;
-            fz_z = 2 * (obj.NN') * iB_pred;
-            
-            % LICCs derivative penalization Jz_dz
-            Hz_dz = 2 * eye(obj.n * obj.Np);
-            fz_dz = -2 * obj.ie_ref_prev;
-
-            % Complete weighted objective function Jz
-            Hz = Hz_E + obj.lambda_z * Hz_z + obj.lambda_dz * Hz_dz;
-            fz = fz_E + obj.lambda_z * fz_z + obj.lambda_dz * fz_dz;
-            Hz = (Hz + Hz')/2;
+            % Control action penalization Jz_u
+            Hu_z = 2 * (obj.NN') * obj.NN;
+            fu_z = 2 * (obj.NN') * iB_pred;
 
             % Constraints
             Aineq_z = [obj.NN; -obj.NN];
-            ub =  obj.is_max - iB_pred;
-            lb = -obj.is_max - iB_pred;
+            ub      =  obj.is_max - iB_pred;
+            lb      = -obj.is_max - iB_pred;
             bineq_z = [ub; -lb];
 
             % Solve
-            [ie_ref_temp, obj.exitflag_i, obj.iAi, ~] = mpcActiveSetSolver(Hz, fz, Aineq_z, bineq_z, zeros(0, obj.n * obj.Np), zeros(0, 1), obj.iAi, obj.options_i);
+            [ie_ref_temp, obj.exitflag_i, obj.iAi, ~] = solve_subproblem(obj, Ec, vs_temp, iB_pred, obj.NN, Hu_z, fu_z, Aineq_z, bineq_z, obj.lambda_z, obj.iAi, obj.options_i);
             iz_ref_temp = obj.NN * ie_ref_temp;
 
-            % % If unfeasible
-            % if obj.exitflag_i < 0
-            %     ie_ref_temp = zeros(size(ie_ref_temp));
-            %     iz_ref_temp = zeros(size(iz_ref_temp));
-            % end
-            % 
-            %%% Common mode voltage subproblem Jo = Jo_E + Jo_z
+            %%% Common mode voltage subproblem Jo = Jo_x + Jo_u
 
             % Initialization
             is_temp = iB_pred + iz_ref_temp;
 
             % Formulation
 
-            % Energy tracking error Jo_E
-            Ho_E = 2 * obj.Ts^2 * (obj.one') * diag(is_temp.^2) * obj.one;
-            fo_E = 2 * obj.Ts * (obj.one') * diag(is_temp) * (e_Ec_pred + obj.Ts * diag(is_temp) * vB_pred);            
+            % Control action penalization Jo_u
+            Hu_o = 2 * eye(obj.Np);
+            fu_o = zeros(obj.Np, 1);
 
-            % CMV penalization Jo_z
-            Ho_o = 2 * eye(obj.Np);
-            fo_o = zeros(obj.Np, 1);
-
-            % CMV derivative penalization Jz_dz
-            Ho_do = 2 * eye(obj.Np);
-            fo_do = -2 * obj.vo_ref_prev;
-
-            % Complete weighted objective function Jo
-            Ho = Ho_E + obj.lambda_o * Ho_o + obj.lambda_do * Ho_do;
-            fo = fo_E + obj.lambda_o * fo_o + obj.lambda_do * fo_do;
-            Ho = (Ho + Ho')/2;
-
-            % Inequalities matrix and vector
+            % Constraints
             Aineq_o = [eye(obj.Np); -eye(obj.Np)];
-            % ub = min( vc - reshape(vB_pred, obj.m, obj.Np), [], 1)';
-            % lb = max(-vc - reshape(vB_pred, obj.m, obj.Np), [], 1)';
             ub = obj.vo_max * ones(obj.Np, 1);
             lb = -ub;
             bineq_o = [ub; -lb];
             % Solve
-            [vo_ref_temp, obj.exitflag_v, obj.iAv, ~] = mpcActiveSetSolver(Ho, fo, Aineq_o, bineq_o, zeros(0, obj.Np), zeros(0, 1), obj.iAv, obj.options_v);
 
-            % % If unfeasible
-            % if obj.exitflag_v < 0
-            %     von_temp = zeros(size(von_temp));
-            % end
+            [vo_ref_temp, obj.exitflag_v, obj.iAv, ~] = solve_subproblem(obj, Ec, is_temp, vB_pred, obj.one, Hu_o, fu_o, Aineq_o, bineq_o, obj.lambda_o, obj.iAv, obj.options_v);
         end
 
         obj.ie_ref_prev = ie_ref_temp;
@@ -172,6 +138,27 @@ methods
         end
 
         obj.Tex = toc;
+    end
+
+    function [Uopt, exitflag, iA, mu] = solve_subproblem(obj, x, var_s, P, Maux, Hu, fu, Aineq, bineq, lambda, iA, options)
+        % solve_subproblem: Find Uopt which brings state variables close to its mean
+        
+        % Suitable for any input affine system. (The model for each block
+        % in BCD is input affine).
+        % Model: X[t+1:t+Np-1] = A * x[t] + B * U[t:t+Np-1] + E * P[t:t+Np-1]
+
+        % Cost function: J = ||X[t+1:t+Np-1] - mean(X)[t+1:t+Np-1]||^2
+        %                J = ||(I-1*1'/m)*X[t+1:t+Np-1]||^2 = ||IM*X[t+1:t+Np-1]||^2
+        %                J = X' * IM' * IM * X = X' * IM2 * X
+
+        E = obj.Ts * obj.K * diag(var_s);
+        B = E * Maux;
+        Hx = 2 * (B') * obj.IM2 * B;
+        fx = 2 * (B') * obj.IM2 * (repmat(x, obj.Np, 1) + E * P);
+        H = Hx + lambda * Hu;
+        f = fx + lambda * fu;
+        H = (H + H') / 2;
+        [Uopt, exitflag, iA, mu] = mpcActiveSetSolver(H, f, Aineq, bineq, zeros(0, size(Maux, 2)), zeros(0, 1), iA, options);
     end
 
     function obj = reset(obj)

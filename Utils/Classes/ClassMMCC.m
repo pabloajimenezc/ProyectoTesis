@@ -134,7 +134,7 @@ methods
         
         % Update system states
         obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
-        obj.vc = sqrt(2 * obj.Ec / obj.C);
+        obj.vc = sqrt(2 * abs(obj.Ec) / obj.C) .* sign(obj.Ec);
         obj.is = obj.Ad * obj.is + obj.Bd * (vs - vo - vB);
 
         % Basic currents
