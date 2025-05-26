@@ -41,24 +41,24 @@ methods
         % ClassCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m        = specs.MMCC.m;
-        obj.n        = specs.MMCC.n;
-        obj.is_max   = specs.is_max;
-        obj.vo_max   = specs.vo_max;
-        obj.Ts       = specs.Ts;
-        obj.lambda_z = specs.lambda_z;
-        obj.lambda_o = specs.lambda_o;
+        obj.m         = specs.MMCC.m;
+        obj.n         = specs.MMCC.n;
+        obj.is_max    = specs.is_max;
+        obj.vo_max    = specs.vo_max;
+        obj.Ts        = specs.Ts;
+        obj.lambda_z  = specs.lambda_z;
+        obj.lambda_o  = specs.lambda_o;
         obj.lambda_dz = specs.lambda_dz;
         obj.lambda_do = specs.lambda_do;
-        obj.lmax     = specs.lmax;
-        obj.Np       = specs.Np;
-        obj.NN       = repmat({specs.MMCC.N}, obj.Np, 1);
-        obj.NN       = blkdiag(obj.NN{:});
-        obj.one      = repmat({ones(obj.m, 1)}, obj.Np, 1);
-        obj.one      = blkdiag(obj.one{:});
-        obj.IM       = eye(obj.m * obj.Np) - obj.one * (obj.one') / obj.m;
-        obj.IM2      = (obj.IM') * obj.IM;
-        obj.K        = kron(tril(ones(obj.Np)), eye(obj.m));
+        obj.lmax      = specs.lmax;
+        obj.Np        = specs.Np;
+        obj.NN        = repmat({specs.MMCC.N}, obj.Np, 1);
+        obj.NN        = blkdiag(obj.NN{:});
+        obj.one       = repmat({ones(obj.m, 1)}, obj.Np, 1);
+        obj.one       = blkdiag(obj.one{:});
+        obj.IM        = eye(obj.m * obj.Np) - obj.one * (obj.one') / obj.m;
+        obj.IM2       = (obj.IM') * obj.IM;
+        obj.K         = kron(tril(ones(obj.Np)), eye(obj.m));
 
         obj.options_i                     = mpcActiveSetOptions;
         obj.options_i.MaxIterations       = 20;
