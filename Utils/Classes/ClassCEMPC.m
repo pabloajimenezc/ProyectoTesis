@@ -74,7 +74,7 @@ methods
 
     function obj = control(obj, Ec, vB_pred, iB_pred, vc)
         % control: Calculate optimal circulating currents and common mode voltage references.
-        tic
+        % tic
         
         iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
         vB_pred = reshape(vB_pred, obj.m * obj.Np, 1);
@@ -137,7 +137,7 @@ methods
             obj.exitflag = -3;
         end
 
-        obj.Tex = toc;
+        % obj.Tex = toc;
     end
 
     function [Uopt, exitflag, iA, mu] = solve_subproblem(obj, x, var_s, P, Maux, Hu, fu, Aineq, bineq, lambda, iA, options)
