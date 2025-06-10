@@ -82,39 +82,39 @@ methods
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
 
-        % Control action rate of change penalization        
-        Hd = 2 * eye(obj.m);
-        fd = -2 * obj.vs; % Previous vs
+        % % Control action rate of change penalization        
+        % Hd = 2 * eye(obj.m);
+        % fd = -2 * obj.vs; % Previous vs
 
         % Complete weighted objective function
-        H = Hi + obj.lambda * Hv + obj.lambda_d * Hd;
-        f = fi + obj.lambda * fv + obj.lambda_d * fd;
+        H = Hi + obj.lambda * Hv;% + obj.lambda_d * Hd;
+        f = fi + obj.lambda * fv;% + obj.lambda_d * fd;
         H = (H + H') / 2;
         
-        % State constraints
-            % Cluster current
-        Aineq_is = [obj.Bd; -obj.Bd];
-        ub_is    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
-        lb_is    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
-        bineq_is = [ub_is; -lb_is];
-            % External currents
-        Aineq_ixy = [obj.A * obj.Bd; -obj.A * obj.Bd];
-        ub_ixy    =  obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
-        lb_ixy    = -obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
-        bineq_ixy = [ub_ixy; -lb_ixy];
-
-        Aineq_i = [Aineq_is; Aineq_ixy];
-        bineq_i = [bineq_is; bineq_ixy];
+        % % State constraints
+        %     % Cluster current
+        % Aineq_is = [obj.Bd; -obj.Bd];
+        % ub_is    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
+        % lb_is    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
+        % bineq_is = [ub_is; -lb_is];
+        % %     % External currents
+        % % Aineq_ixy = [obj.A * obj.Bd; -obj.A * obj.Bd];
+        % % ub_ixy    =  obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        % % lb_ixy    = -obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        % % bineq_ixy = [ub_ixy; -lb_ixy];
+        % 
+        % Aineq_i = Aineq_is;% Aineq_ixy];
+        % bineq_i = bineq_is;% bineq_ixy];
 
         % Control action constraints
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v    =  (vc - vo);
-        lb_v    = (-vc - vo);
+        ub_v    =  (vc*0 + 520 + vo);
+        lb_v    = (-vc*0 - 520 + vo);
         bineq_v = [ub_v; -lb_v];
 
         % Complete constraints
-        Aineq = [Aineq_v; Aineq_i];
-        bineq = [bineq_v; bineq_i];
+        Aineq = Aineq_v;% Aineq_i];
+        bineq = bineq_v;% bineq_i];
 
         % Solve
         [vsp, obj.exitflag, obj.iA, ~] = mpcActiveSetSolver(H, f, Aineq, bineq, zeros(0, obj.m), zeros(0, 1), obj.iA, obj.options);
@@ -127,7 +127,8 @@ methods
         % reset: Reset controller's variables to 0.
 
         obj.vs       = zeros(obj.m, 1);
-        obj.iA       = false(size(zeros(4 * obj.m + 2 * (obj.p + obj.q), 1)));
+        % obj.iA       = false(size(zeros(4 * obj.m + 2 * (obj.p + obj.q), 1)));
+        obj.iA       = false(size(zeros(2 * obj.m, 1)));
         obj.exitflag = -3;
         obj.Tex      = 0;
     end

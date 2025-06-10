@@ -10,6 +10,11 @@ tNN_s   = dataNN.buffer.Tex_CEMPC;
 tBCD_s  = dataBCD.buffer.Tex_CEMPC;
 Tsim    = dataNN.buffer.Tsim;  % mismo para NN y BCD
 
+mask = Tsim > 1e-3;
+tNN_s = tNN_s(mask);
+tBCD_s = tBCD_s(mask);
+Tsim = Tsim(mask);
+
 % Convertir a milisegundos
 tNN_ms  = tNN_s  * 1e3;
 tBCD_ms = tBCD_s * 1e3;
@@ -57,3 +62,71 @@ end
 filename = fullfile(outputFolder, 'execution_time_comparison.png');
 print(fig, filename, '-dpng', '-r300');
 fprintf('Figure saved as %s\n', filename);
+
+% ------------------------------------------------------------
+% 10) Figura de caja y bigote para comparación de tiempos (colores personalizados)
+fig2 = figure('Units','pixels','Position',[100,100,800,450]*3, ...
+              'Color',[1 1 1]);
+ax2 = axes(fig2);
+hold(ax2,'on');
+grid(ax2,'on');
+
+% Preparar datos: columna 1 = NN, columna 2 = BCD
+data_ms = [tNN_ms(:), tBCD_ms(:)];
+
+% Colores por defecto de MATLAB para las dos series
+colorNN  = [0    0.4470    0.7410];
+colorBCD = [0.8500 0.3250    0.0980];
+colors   = [colorNN; colorBCD];
+
+% Dibujar boxplot con esos colores
+boxplot(ax2, data_ms, {'NN','BCD'}, ...
+        'Widths',0.5, ...
+        'BoxStyle','outline', ...
+        'Whisker',1.5, ...
+        'Colors', colors, ...
+        'Symbol','+');
+
+% Posiciones personalizadas: más juntas
+% pos = [1.0, 1.6];  
+
+% Ajusta manualmente los límites de X para quitar espacio
+ax2.XLim = [0.5, 2.5];
+% ax2.XTick = pos;        % ticks en las posiciones reales
+ax2.XTickLabel = {'NN','BCD'};
+
+% Ajustar grosor de todas las líneas del axes de golpe
+allLW = findall(ax2, '-property', 'LineWidth');
+set(allLW, 'LineWidth', 3);
+
+% Ajustar colores de medianas también
+h = findobj(ax2, 'Tag', 'Median');
+n = size(colors, 1);  % número de series (2)
+for k = 1:length(h)
+    % Como los objetos 'Median' vienen en orden inverso:
+    row = n - k + 1;
+    set(h(k), 'Color', colors(row, :), 'LineWidth', 3);
+end
+
+% Formato de ejes y grid
+ax2.FontSize   = 40;
+ax2.LineWidth  = 1;
+ax2.Color      = [1 1 1];
+ax2.XColor     = [0 0 0];
+ax2.YColor     = [0 0 0];
+ax2.GridColor  = [0 0 0];
+
+% Etiquetas
+xlabel(ax2, 'Control method',      'FontSize',40, 'Color','k');
+ylabel(ax2, 'Execution time (ms)', 'FontSize',40, 'Color','k');
+
+% Limitar eje Y al mismo rango
+ylim(ax2, yLimit_ms);
+
+hold(ax2,'off');
+
+% 11) Guardar la figura de caja en la misma carpeta
+filename2 = fullfile(outputFolder, 'execution_time_boxplot.png');
+print(fig2, filename2, '-dpng', '-r300');
+fprintf('Boxplot saved as %s\n', filename2);
+% ------------------------------------------------------------

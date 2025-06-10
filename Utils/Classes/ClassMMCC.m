@@ -3,6 +3,8 @@ classdef ClassMMCC
 properties % Constants
     Topology % Power converter topology 
     A       % Power converter incidence matrix
+    ax
+    ay
     pinvA   % Pseudo inverse of incidence matrix
     m       % Number of clusters
     N       % Null matrix
@@ -11,8 +13,8 @@ properties % Constants
     p       % Number of input ports
     q       % Number of output ports
     Ti      % Integration step
-    R       % Branch resistance
-    L       % Branch inductance
+    Rb       % Branch resistance
+    Lb       % Branch inductance
     Csm     % Submodule capacitance
     Nsm     % Submodules per cluster
     C       % Cluster capacitance
@@ -20,10 +22,13 @@ properties % Constants
     Lx      % Input filter inductance
     Ry      % Output filter resistance
     Ly      % Output filter inductance
+    Mx
+    My
     As      % Current continuous model transition matrix
     Bs      % Current continuous model input matrix
     Ad      % Current discrete model transition matrix
     Bd      % Current discrete model input matrix
+    init_vals
 end
 
 properties % Variables
@@ -40,17 +45,17 @@ methods
     function obj = ClassMMCC(specs, init_vals)
         % ClassM3C: Construct an instance of this class
 
+        obj.init_vals = init_vals;
+
         % Topology dependent
         obj.Topology = specs.Topology;
         if strcmp(specs.Topology, 'M3C')
-            obj.A = [1  1  1  0  0  0  0  0  0;
-                     0  0  0  1  1  1  0  0  0;
-                     0  0  0  0  0  0  1  1  1;
-                    -1  0  0 -1  0  0 -1  0  0;
-                     0 -1  0  0 -1  0  0 -1  0;
-                     0  0 -1  0  0 -1  0  0 -1];
-            obj.p = 3;
-            obj.q = 3;
+            obj.ax = [1  1  1  0  0  0  0  0  0;
+                      0  0  0  1  1  1  0  0  0;
+                      0  0  0  0  0  0  1  1  1];
+            obj.ay = [1  0  0  1  0  0  1  0  0;
+                      0  1  0  0  1  0  0  1  0;
+                      0  0  1  0  0  1  0  0  1];
             Mx = [1, 1, 1, 0, 0, 0, 0, 0, 0;
                   1, 1, 1, 0, 0, 0, 0, 0, 0;
                   1, 1, 1, 0, 0, 0, 0, 0, 0;
@@ -71,13 +76,11 @@ methods
                   0, 1, 0, 0, 1, 0, 0, 1, 0;
                   0, 0, 1, 0, 0, 1, 0, 0, 1];
         elseif strcmp(specs.Topology, 'M2C')
-            obj.A = [1  1  1  0  0  0;
-                     0  0  0  1  1  1;
-                    -1  0  0 -1  0  0;
-                     0 -1  0  0 -1  0;
-                     0  0 -1  0  0 -1];
-            obj.p = 2;
-            obj.q = 3;
+            obj.ax = [1  1  1  0  0  0;
+                      0  0  0  1  1  1];
+            obj.ay = [1  0  0  1  0  0;
+                      0  1  0  0  1  0;
+                      0  0  1  0  0  1];
             Mx = [1, 1, 1, 0, 0, 0;
                   1, 1, 1, 0, 0, 0;
                   1, 1, 1, 0, 0, 0;
@@ -85,13 +88,19 @@ methods
                   0, 0, 0, 1, 1, 1;
                   0, 0, 0, 1, 1, 1];
 
-            My = [1, 0, 0, 1, 0, 0,
+            My = [1, 0, 0, 1, 0, 0;
                   0, 1, 0, 0, 1, 0;
                   0, 0, 1, 0, 0, 1;
                   1, 0, 0, 1, 0, 0;
                   0, 1, 0, 0, 1, 0;
                   0, 0, 1, 0, 0, 1];
         end
+        obj.Mx = Mx;
+        obj.My = My;
+        obj.A = [obj.ax;
+                -obj.ay];
+        obj.p = size(obj.ax, 1);
+        obj.q = size(obj.ay, 1);
         obj.pinvA = pinv(obj.A);
         obj.m     = size(obj.A, 2);
         obj.N     = null(obj.A, 'rational');
@@ -100,8 +109,8 @@ methods
         
         % Constants
         obj.Ti  = specs.Ti;
-        obj.R   = specs.R;
-        obj.L   = specs.L;
+        obj.Rb   = specs.Rb;
+        obj.Lb   = specs.Lb;
         obj.Csm = specs.Csm;
         obj.Nsm = specs.Nsm;
         obj.C   = obj.Csm / obj.Nsm;
@@ -110,8 +119,8 @@ methods
         obj.Ry  = specs.Ry;
         obj.Ly  = specs.Ly;
 
-        MR = Mx * obj.Rx + eye(obj.m) * obj.R + My * obj.Ry;
-        ML = Mx * obj.Lx + eye(obj.m) * obj.L + My * obj.Ly;
+        MR = Mx * obj.Rx + eye(obj.m) * obj.Rb + My * obj.Ry;
+        ML = Mx * obj.Lx + eye(obj.m) * obj.Lb + My * obj.Ly;
 
         obj.As = -ML\MR;
         obj.Bs = -inv(ML);

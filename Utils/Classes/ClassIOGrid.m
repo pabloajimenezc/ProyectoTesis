@@ -4,13 +4,13 @@ classdef ClassIOGrid
     
     properties % Constants
         Ti  % Integration step
-        Ax  % Input grid voltage amplitude
-        Ay  % Output grid voltage amplitude
         p   % Number of input ports
         q   % Number of output ports
     end
 
     properties % Variables
+        Ax  % Input grid voltage amplitude
+        Ay  % Output grid voltage amplitude
         wx  % Input grid voltage angular frequency
         wy  % Output grid voltage angular frequency
         gx  % Input grid voltage angle
@@ -24,8 +24,6 @@ classdef ClassIOGrid
 
             % Constants
             obj.Ti = specs.Ti;
-            obj.Ax = specs.Ax;
-            obj.Ay = specs.Ay;
             obj.p  = specs.p;
             obj.q  = specs.q;
 
@@ -56,6 +54,8 @@ classdef ClassIOGrid
         function obj = reset(obj, init_vals)
             % reset: Reset system variables
 
+            obj.Ax = init_vals.Ax0;
+            obj.Ay = init_vals.Ay0;
             obj.wy = init_vals.wy0;
             obj.gy = init_vals.gy0;
 
