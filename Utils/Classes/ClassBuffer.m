@@ -72,6 +72,10 @@ classdef ClassBuffer
         Tex_CCMPC       % CC controller execution time
 
         vs_ref          % Steady state cluster voltage reference
+
+        w               % Machine speed
+        Te              % Machine electrical torque
+        ir              % Machine rotor currents
     end
     
     methods
@@ -154,6 +158,10 @@ classdef ClassBuffer
             obj.Tex_CCMPC = zeros(1, obj.Ns);
 
             obj.vs_ref = zeros(obj.m, obj.Ns);
+
+            obj.w  = zeros(1, obj.Ns);
+            obj.Te = zeros(1, obj.Ns);
+            obj.ir = zeros(3, obj.Ns);
         end
     end
 end

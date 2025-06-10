@@ -6,6 +6,7 @@ classdef ClassIOGrid
         Ti  % Integration step
         p   % Number of input ports
         q   % Number of output ports
+        init_vals
     end
 
     properties % Variables
@@ -22,6 +23,8 @@ classdef ClassIOGrid
         function obj = ClassIOGrid(specs, init_vals)
             % ClassIOGrid: Construct an instance of this class
 
+            obj.init_vals = init_vals;
+            
             % Constants
             obj.Ti = specs.Ti;
             obj.p  = specs.p;
