@@ -30,6 +30,7 @@ classdef ClassIM
         
         FrN
         isdN
+        kT
         
         R
         Lss
@@ -42,6 +43,7 @@ classdef ClassIM
         dL
         A
         B
+        init_vals
     end
     
     properties % Induction Machine Variables (abc)
@@ -54,12 +56,15 @@ classdef ClassIM
         Te
         w
         g
+        vs
     end
 
     methods
-        function obj = ClassIM(specs)
+        function obj = ClassIM(specs, init_vals)
             %ClassIM: Construct an instance of this class
-            
+
+            obj.init_vals = init_vals;
+
             % Induction Machine Parameters
             obj.Ti   = specs.Ti;
             obj.VLLN = 380;
@@ -86,13 +91,14 @@ classdef ClassIM
             obj.tau_r = obj.Lr / obj.Rr;
             obj.sigma = 1 - obj.ks * obj.kr;
             obj.Rsig  = obj.Rs + obj.Rr * obj.kr^2;
+            obj.kT = 1.5 * obj.np * obj.kr;
             
             obj.FrN  = sqrt(2/3) * obj.VLLN / (2 * pi * obj.fN);
             obj.isdN = obj.FrN / obj.Lm;
             
             obj.R    = diag([obj.Rs * ones(1, 3), obj.Rr * ones(1, 3)]);
-            obj.Lss  = (obj.Los + obj.Ls) * eye(3) - 0.5 * obj.Ls + 0.5 * obj.Ls * eye(3);
-            obj.Lrr  = (obj.Lor + obj.Lr) * eye(3) - 0.5 * obj.Lr + 0.5 * obj.Lr * eye(3);
+            obj.Lss  = (obj.Los + obj.Lm) * eye(3) - 0.5 * obj.Lm + 0.5 * obj.Lm * eye(3);
+            obj.Lrr  = (obj.Lor + obj.Lm) * eye(3) - 0.5 * obj.Lm + 0.5 * obj.Lm * eye(3);
             obj.pi23 = pi * 2 / 3;
             obj.Lsr  = @(g) obj.Lm * cos(g + obj.pi23 * [0,  1, -1;
                                                         -1,  0,  1;
@@ -100,7 +106,7 @@ classdef ClassIM
             obj.dLsr_dg = @(g) -obj.Lm * sin(g + obj.pi23 * [0,  1, -1;
                                                             -1,  0,  1;
                                                              1, -1,  0]);
-            obj.dLsr_dt = @(g, w) obj.np * w * obj.dLsr_dg(g);
+            obj.dLsr_dt = @(g, w) w * obj.dLsr_dg(g);
             obj.L = @(g) [obj.Lss, obj.Lsr(g)
                           obj.Lsr(g)', obj.Lrr];
             obj.dL = @(g, w) [zeros(3), obj.dLsr_dt(g, w)
@@ -109,7 +115,7 @@ classdef ClassIM
             obj.B = @(g) inv(obj.L(g));
 
             % Initialize variables
-            obj = obj.reset();
+            obj = obj.reset(init_vals);
         end
 
         function obj = step(obj, vs)
@@ -118,11 +124,11 @@ classdef ClassIM
 
             v     = [vs; zeros(3, 1)];
             di    = obj.A(obj.g, obj.w) * obj.i + obj.B(obj.g) * v;
-            dw    = obj.Te * obj.np / 2 / obj.J;
+            dw    = obj.Te / obj.J;
             obj.i = obj.i + obj.Ti * di;
             obj.w = obj.w + obj.Ti * dw;
         
-            obj.g = obj.g + obj.np * obj.w * obj.Ti;
+            obj.g = obj.g + obj.w * obj.Ti;
             obj.F = obj.L(obj.g) * obj.i;
 
             obj.is = obj.i(1:3);
@@ -131,16 +137,17 @@ classdef ClassIM
             obj.Fr = obj.F(4:6);
         end
 
-        function obj = reset(obj)
+        function obj = reset(obj, init_vals)
             obj.i  = zeros(6, 1);
             obj.is = zeros(3, 1);
             obj.ir = zeros(3, 1);
-            obj.F  = zeros(6, 1);
             obj.Fs = zeros(3, 1);
             obj.Fr = zeros(3, 1);
+            obj.F  = zeros(6, 1);
             obj.Te = 0;
-            obj.w  = 0;
+            obj.w  = init_vals.w0;
             obj.g  = 0;
+            obj.vs = zeros(3, 1);
         end
     end
 end

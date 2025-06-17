@@ -3,8 +3,8 @@ classdef ClassMMCC
 properties % Constants
     Topology % Power converter topology 
     A       % Power converter incidence matrix
-    ax
-    ay
+    ax      % Absolute input incidence matrix
+    ay      % Absolute output incidence matrix
     pinvA   % Pseudo inverse of incidence matrix
     m       % Number of clusters
     N       % Null matrix
@@ -13,8 +13,8 @@ properties % Constants
     p       % Number of input ports
     q       % Number of output ports
     Ti      % Integration step
-    Rb       % Branch resistance
-    Lb       % Branch inductance
+    Rb      % Branch resistance
+    Lb      % Branch inductance
     Csm     % Submodule capacitance
     Nsm     % Submodules per cluster
     C       % Cluster capacitance
@@ -22,8 +22,8 @@ properties % Constants
     Lx      % Input filter inductance
     Ry      % Output filter resistance
     Ly      % Output filter inductance
-    Mx
-    My
+    Mx      % Cluster effect of input impedance
+    My      % Cluster effect of output impedance
     As      % Current continuous model transition matrix
     Bs      % Current continuous model input matrix
     Ad      % Current discrete model transition matrix
@@ -32,11 +32,7 @@ properties % Constants
 end
 
 properties % Variables
-    ixy % External currents
     is  % Cluster current
-    iB  % Basic current
-    iz  % Circulating current
-    ie  % Linear Independent circulating current
     vc  % Cluster capacitor voltage
     Ec  % Cluster capacitor energy
 end
@@ -141,29 +137,51 @@ methods
         % Basic voltages
         vB = obj.A' * vxy;
         
-        % Update system states
-        obj.Ec = obj.Ec + obj.Ti * vs .* obj.is;
-        obj.vc = sqrt(2 * abs(obj.Ec) / obj.C) .* sign(obj.Ec);
-        obj.is = obj.Ad * obj.is + obj.Bd * (vs - vo - vB);
+        %%% Converter cluster capacitor energy and voltage
 
-        % Basic currents
-        obj.ixy = obj.A * obj.is;
-        obj.iB = obj.pinvA * obj.ixy;
-        
-        % Circulating currents
-        obj.iz = obj.is - obj.iB;
-        obj.ie = obj.pinvN * obj.iz;
+        % % Forward Euler derivatives
+        % dE = vs .* obj.MMCC.is;
+
+        % Runge Kutta 4 derivatives
+        B_u = vs .* obj.is;
+        k1 = B_u;
+        k2 = 0.5 * obj.Ti * k1 + B_u;
+        k3 = 0.5 * obj.Ti * k2 + B_u;
+        k4 = obj.Ti * k3 + B_u;
+        dE = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+
+        % Update
+        obj.Ec = obj.Ec + obj.Ti * dE;
+        obj.vc = sqrt(2 * abs(obj.Ec) / obj.C) .* sign(obj.Ec);
+
+        %%% Cluster currents
+
+        % % Zero Order Hold update
+        % obj.is = obj.Ad * obj.is + obj.Bd * (vs - vo - vB);
+
+        % Input vector
+        u = vs - vo - vB;
+
+        % % Forward Euler derivatives
+        % dis = obj.As * obj.is + obj.Bs * u;
+
+        % Runge Kutta 4 derivatives
+        A_x = obj.As * obj.is;
+        B_u = obj.Bs * u;
+        k1 = A_x + B_u;
+        k2 = A_x + obj.As * (0.5 * obj.Ti * k1) + B_u;
+        k3 = A_x + obj.As * (0.5 * obj.Ti * k2) + B_u;
+        k4 = A_x + obj.As * (obj.Ti * k3) + B_u;
+        dis = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+
+        % Update
+        obj.is = obj.is + obj.Ti * dis;
     end
 
     function obj = reset(obj, init_vals)
         % reset: Reset all variables to their initial values specified in 'init_vals'
         
-        obj.is  = init_vals.is0;
-        obj.ixy = obj.A * obj.is;
-        obj.iB  = obj.pinvA * obj.ixy;
-        obj.iz  = obj.is - obj.iB;
-        obj.ie  = obj.pinvN * obj.iz;
-        
+        obj.is  = init_vals.is0;        
         obj.vc  = init_vals.vc0;
         obj.Ec  = obj.C / 2 * obj.vc .^ 2;
     end

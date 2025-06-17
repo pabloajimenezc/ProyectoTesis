@@ -14,8 +14,6 @@ properties % Constants
     vo_max      % Absolute maximum common mode voltage
     lambda_z    % Circulating current weighting factor
     lambda_o    % Common mode voltage weighting factor
-    lambda_dz   % Circulating current rate of change weighting factor
-    lambda_do   % Common mode voltage rate of change weighting factor
     lmax        % Maximum iterations for Block Coordinate Descent
     options_i   % Configuration for current solver
     options_v   % Configuration for voltage solver
@@ -48,8 +46,6 @@ methods
         obj.Ts        = specs.Ts;
         obj.lambda_z  = specs.lambda_z;
         obj.lambda_o  = specs.lambda_o;
-        obj.lambda_dz = specs.lambda_dz;
-        obj.lambda_do = specs.lambda_do;
         obj.lmax      = specs.lmax;
         obj.Np        = specs.Np;
         obj.NN        = repmat({specs.MMCC.N}, obj.Np, 1);

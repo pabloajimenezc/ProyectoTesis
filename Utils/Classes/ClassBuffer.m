@@ -76,6 +76,7 @@ classdef ClassBuffer
         w               % Machine speed
         Te              % Machine electrical torque
         ir              % Machine rotor currents
+        Fr_dq           % Machine rotor flux
     end
     
     methods
@@ -159,9 +160,10 @@ classdef ClassBuffer
 
             obj.vs_ref = zeros(obj.m, obj.Ns);
 
-            obj.w  = zeros(1, obj.Ns);
-            obj.Te = zeros(1, obj.Ns);
-            obj.ir = zeros(3, obj.Ns);
+            obj.w   = zeros(1, obj.Ns);
+            obj.Te  = zeros(1, obj.Ns);
+            obj.ir  = zeros(3, obj.Ns);
+            obj.Fr_dq = zeros(2, obj.Ns);
         end
     end
 end

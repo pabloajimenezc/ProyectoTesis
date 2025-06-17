@@ -16,9 +16,8 @@ properties % Constants
     iy_max
     ixy_max
     zB_ratio % Importance between external control and energy balancing
-    lambda  % Control action weighting factor
-    lambda_d  % Control action rate of change weighting factor
-    options % Solver options
+    lambda   % Control action weighting factor
+    options  % Solver options
 end
 
 properties % Variables
@@ -47,7 +46,6 @@ methods
         obj.ixy_max  = [obj.ix_max * ones(obj.p, 1); obj.iy_max * ones(obj.q, 1)];
         obj.zB_ratio = specs.zB_ratio;
         obj.lambda   = specs.lambda;
-        obj.lambda_d = specs.lambda_d;
         obj.options  = mpcActiveSetOptions;
         obj.options.MaxIterations       = 100;
         obj.options.ConstraintTolerance = 1.0e-5;
@@ -82,13 +80,9 @@ methods
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
 
-        % Control action rate of change penalization
-        Hd = 2 * eye(obj.m);
-        fd = -2 * obj.vs; % Previous vs
-
         % Complete weighted objective function
-        H = Hi + obj.lambda * Hv + obj.lambda_d * Hd;
-        f = fi + obj.lambda * fv + obj.lambda_d * fd;
+        H = Hi + obj.lambda * Hv;
+        f = fi + obj.lambda * fv;
         H = (H + H') / 2;
         
         % State constraints
@@ -108,8 +102,8 @@ methods
 
         % Control action constraints
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v    =  (vc + vo);
-        lb_v    = (-vc + vo);
+        ub_v    =  (vc*0+520 + vo);
+        lb_v    = (-vc*0-520 + vo);
         bineq_v = [ub_v; -lb_v];
 
         % Complete constraints

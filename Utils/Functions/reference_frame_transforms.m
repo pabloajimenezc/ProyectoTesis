@@ -18,4 +18,7 @@ T.abc2ab = (2/3)*[1,      -1/2,       -1/2;
 T.ab2abc = (1/2)*[2,        0;
                  -1,  sqrt(3);
                  -1, -sqrt(3)];
+% pi/2 rotation matrix
+T.rot = [0 -1
+         1  0];
 end
