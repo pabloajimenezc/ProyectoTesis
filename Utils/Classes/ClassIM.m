@@ -115,7 +115,7 @@ classdef ClassIM
             obj.B = @(g) inv(obj.L(g));
 
             % Initialize variables
-            obj = obj.reset(init_vals);
+            obj = obj.reset();
         end
 
         function obj = step(obj, vs)
@@ -137,7 +137,7 @@ classdef ClassIM
             obj.Fr = obj.F(4:6);
         end
 
-        function obj = reset(obj, init_vals)
+        function obj = reset(obj)
             obj.i  = zeros(6, 1);
             obj.is = zeros(3, 1);
             obj.ir = zeros(3, 1);
@@ -145,7 +145,7 @@ classdef ClassIM
             obj.Fr = zeros(3, 1);
             obj.F  = zeros(6, 1);
             obj.Te = 0;
-            obj.w  = init_vals.w0;
+            obj.w  = obj.init_vals.w0;
             obj.g  = 0;
             obj.vs = zeros(3, 1);
         end

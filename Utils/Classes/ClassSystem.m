@@ -11,13 +11,13 @@ properties % Constants
 end
 
 properties % Variables
-    x      % State variables
-    MMCC   % Power converter
-    IM     % Induction Machine
-    InGrid % Input grid
-    vxy    % External voltage
-    As     % Full system continous time transition matrix
-    Bs     % Full system continous time input matrix
+    x    % State variables
+    MMCC % Power converter
+    IM   % Induction Machine
+    Grid % Input grid
+    vxy  % External voltage
+    As   % Full system continous time transition matrix
+    Bs   % Full system continous time input matrix
 end
 
 methods
@@ -25,13 +25,13 @@ methods
         % ClassSystem: Construct an instance of this class      
         
         % Constants
-        obj.Ti     = specs.Ti;
-        obj.RFT    = specs.RFT;
-        obj.MMCC   = specs.MMCC;
-        obj.IM     = specs.IM;
-        obj.InGrid = specs.InGrid;
-        obj.Ss     = [eye(obj.MMCC.m), zeros(obj.MMCC.m, 3)];
-        obj.Sr     = [zeros(3, obj.MMCC.m), eye(3)];
+        obj.Ti   = specs.Ti;
+        obj.RFT  = specs.RFT;
+        obj.MMCC = specs.MMCC;
+        obj.IM   = specs.IM;
+        obj.Grid = specs.Grid;
+        obj.Ss   = [eye(obj.MMCC.m), zeros(obj.MMCC.m, 3)];
+        obj.Sr   = [zeros(3, obj.MMCC.m), eye(3)];
 
         obj.MR = obj.MMCC.Mx * obj.MMCC.Rx + eye(obj.MMCC.m) * obj.MMCC.Rb + obj.MMCC.ay' * (obj.MMCC.Ry + obj.IM.Rs) * obj.MMCC.ay;
         obj.ML = obj.MMCC.Mx * obj.MMCC.Lx + eye(obj.MMCC.m) * obj.MMCC.Lb + obj.MMCC.ay' * (obj.MMCC.Ly + obj.IM.Lss) * obj.MMCC.ay;
@@ -65,7 +65,7 @@ methods
         %%% Basic input voltage
 
         % Update
-        vBx = obj.MMCC.ax' * obj.InGrid.vx;
+        vBx = obj.MMCC.ax' * obj.Grid.vx;
         
         %%% Mechanical speed
 
@@ -143,8 +143,8 @@ methods
         obj.IM.Fr = obj.IM.F(4:6);
 
         % Input voltage
-        obj.InGrid = obj.InGrid.step();
-        obj.vxy = [obj.InGrid.vx; obj.IM.vs];
+        obj.Grid = obj.Grid.step();
+        obj.vxy  = [obj.Grid.vx; obj.IM.vs];
 
         %%% Machine stator voltage
         dis    = obj.Ss * dx;
@@ -157,11 +157,11 @@ methods
     function obj = reset(obj)
         % reset: Reset all variables to their initial values specified in 'init_vals'
         
-        obj.x      = zeros(obj.MMCC.m + 3, 1);
-        obj.MMCC   = obj.MMCC.reset(obj.MMCC.init_vals);
-        obj.IM     = obj.IM.reset(obj.IM.init_vals);
-        obj.InGrid = obj.InGrid.reset(obj.InGrid.init_vals);
-        obj.vxy    = [obj.InGrid.vx; obj.IM.vs];
+        obj.x    = zeros(obj.MMCC.m + 3, 1);
+        obj.MMCC = obj.MMCC.reset();
+        obj.IM   = obj.IM.reset();
+        obj.Grid = obj.Grid.reset();
+        obj.vxy  = [obj.Grid.vx; obj.IM.vs];
     end
 
 end

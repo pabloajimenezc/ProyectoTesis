@@ -3,13 +3,15 @@ classdef ClassBuffer
     
     properties % Constants
         Ts   % Control sample time
-        Ns   % Number of steps
+        Ns   % Number of simulation steps
         m    % Number of clusters
         n    % Number of linear independet circulating currents
         A    % Incidence matrix
         p    % Number of input ports
-        q    %
+        q    % Number of output ports
         Tsim % Vector of simulated timesteps
+        Topology
+        Np   % Inter cluster energy balance prediction horizon
     end
 
     properties % Variables
@@ -46,19 +48,19 @@ classdef ClassBuffer
         ey_pll          % Output PLL error
         uy_pll          % Output PLL control action
         
-        is_ref
-        ixy_ref
-        iB_ref
-        iz_ref
-        ie_ref
+        is_ref          % Cluster current reference
+        ixy_ref         % External current reference
+        iB_ref          % Basic current reference
+        iz_ref          % Circulating current reference
+        ie_ref          % Linearly independent circulating current reference
 
-        exitflag_CEMPCi
-        exitflag_CEMPCv
-        exitflag_CCMPC
+        exitflag_CEMPCi % Verbose, intercluster energy balance BCD, last iteration of LICCs subproblem
+        exitflag_CEMPCv % Verbose, intercluster energy balance BCD, last iteration of CMV subproblem
+        exitflag_CCMPC  % Verbose, current control
 
-        iA_CEMPCi
-        iA_CEMPCv
-        iA_CCMPC
+        iA_CEMPCi       % Active constraints, intercluster energy balance BCD, last iteration of LICCs subproblem
+        iA_CEMPCv       % Active constraints, intercluster energy balance BCD, last iteration of CMV subproblem
+        iA_CCMPC        % Active constraints, current control
 
         ixdq            % dq input current
         iydq            % dq output current
@@ -77,6 +79,9 @@ classdef ClassBuffer
         Te              % Machine electrical torque
         ir              % Machine rotor currents
         Fr_dq           % Machine rotor flux
+
+        vxy_pred        % External voltages predictions
+        ixy_pred        % External currents predictions
     end
     
     methods
@@ -86,12 +91,14 @@ classdef ClassBuffer
             % Constants
             obj.Ts = specs.Ts;
             obj.Ns = specs.Ns;
-            obj.m = specs.m;
-            obj.n = specs.n;
-            obj.A = specs.A;
-            obj.p = specs.p;
-            obj.q = specs.q;
             obj.Tsim = specs.Tsim;
+            obj.m = specs.MMCC.m;
+            obj.n = specs.MMCC.n;
+            obj.A = specs.MMCC.A;
+            obj.p = specs.MMCC.p;
+            obj.q = specs.MMCC.q;
+            obj.Topology = specs.MMCC.Topology;
+            obj.Np = specs.Np;
 
             % Variables
             obj = obj.reset();
@@ -100,70 +107,73 @@ classdef ClassBuffer
         function obj = reset(obj)
             % reset: Reset buffer variables history
 
-            obj.is           = zeros(obj.m, obj.Ns);            % Cluster current
-            obj.ixy          = zeros(size(obj.A, 1), obj.Ns);   % External current
-            obj.iB           = zeros(obj.m, obj.Ns);            % Basic current
-            obj.iz           = zeros(obj.m, obj.Ns);            % Circulating current
-            obj.ie           = zeros(obj.n, obj.Ns);            % L.I. circulating current
-            obj.vs           = zeros(obj.m, obj.Ns);            % Cluster voltage
-            obj.vxy          = zeros(size(obj.A, 1), obj.Ns);   % External voltage
-            obj.vB           = zeros(obj.m, obj.Ns);            % Basic voltage
-            obj.vo           = zeros(1, obj.Ns);                % Common mode voltage
-            obj.Ec           = zeros(obj.m, obj.Ns);            % Cluster capacitor energy (one-step lookahead)
-            obj.vc           = zeros(obj.m, obj.Ns);            % Cluster capacitor voltage
-            obj.Ec_mean      = zeros(1, obj.Ns);                % Predicted mean cluster capacitor energy
-            obj.Ec_mean_filt = zeros(1, obj.Ns);                % Predicted filtered mean cluster capacitor energy
-            obj.vc_mean      = zeros(1, obj.Ns);                % Predicted mean cluster capacitor energy
-            obj.vc_mean_filt = zeros(1, obj.Ns);                % Predicted filtered mean cluster capacitor voltage
+            obj.is              = zeros(obj.m, obj.Ns);
+            obj.ixy             = zeros(size(obj.A, 1), obj.Ns);
+            obj.iB              = zeros(obj.m, obj.Ns);
+            obj.iz              = zeros(obj.m, obj.Ns);
+            obj.ie              = zeros(obj.n, obj.Ns);
+            obj.vs              = zeros(obj.m, obj.Ns);
+            obj.vxy             = zeros(size(obj.A, 1), obj.Ns);
+            obj.vB              = zeros(obj.m, obj.Ns);
+            obj.vo              = zeros(1, obj.Ns);
+            obj.Ec              = zeros(obj.m, obj.Ns);
+            obj.vc              = zeros(obj.m, obj.Ns);
+            obj.Ec_mean         = zeros(1, obj.Ns);
+            obj.Ec_mean_filt    = zeros(1, obj.Ns);
+            obj.vc_mean         = zeros(1, obj.Ns);
+            obj.vc_mean_filt    = zeros(1, obj.Ns);
             
-            obj.u_TEB        = zeros(1, obj.Ns);                % TEB PI control action
+            obj.u_TEB           = zeros(1, obj.Ns);
             
-            obj.gx           = zeros(1, obj.Ns);                % Input voltage angle
-            obj.wx           = zeros(1, obj.Ns);                % Input voltage frequency
-            obj.gy           = zeros(1, obj.Ns);                % Output voltage angle
-            obj.wy           = zeros(1, obj.Ns);                % Output voltage frequency
+            obj.gx              = zeros(1, obj.Ns);
+            obj.wx              = zeros(1, obj.Ns);
+            obj.gy              = zeros(1, obj.Ns);
+            obj.wy              = zeros(1, obj.Ns);
             
-            obj.gx_pll       = zeros(1, obj.Ns);                % PLL estimation of input voltage angle
-            obj.wx_pll       = zeros(1, obj.Ns);                % PLL estimation of input voltage frequency
-            obj.gy_pll       = zeros(1, obj.Ns);                % PLL estimation of output voltage angle
-            obj.wy_pll       = zeros(1, obj.Ns);                % PLL estimation of output voltage frequency
+            obj.gx_pll          = zeros(1, obj.Ns);
+            obj.wx_pll          = zeros(1, obj.Ns);
+            obj.gy_pll          = zeros(1, obj.Ns);
+            obj.wy_pll          = zeros(1, obj.Ns);
             
-            obj.ex_pll       = zeros(1, obj.Ns);                % Input PLL error
-            obj.ux_pll       = zeros(1, obj.Ns);                % Input PLL control action
-            obj.ey_pll       = zeros(1, obj.Ns);                % Output PLL error
-            obj.uy_pll       = zeros(1, obj.Ns);                % Output PLL control action
+            obj.ex_pll          = zeros(1, obj.Ns);
+            obj.ux_pll          = zeros(1, obj.Ns);
+            obj.ey_pll          = zeros(1, obj.Ns);
+            obj.uy_pll          = zeros(1, obj.Ns);
             
-            obj.is_ref       = zeros(obj.m, obj.Ns);
-            obj.ixy_ref      = zeros(size(obj.A, 1), obj.Ns);
-            obj.iB_ref       = zeros(obj.m, obj.Ns);
-            obj.iz_ref       = zeros(obj.m, obj.Ns);
-            obj.ie_ref       = zeros(obj.n, obj.Ns);
+            obj.is_ref          = zeros(obj.m, obj.Ns);
+            obj.ixy_ref         = zeros(size(obj.A, 1), obj.Ns);
+            obj.iB_ref          = zeros(obj.m, obj.Ns);
+            obj.iz_ref          = zeros(obj.m, obj.Ns);
+            obj.ie_ref          = zeros(obj.n, obj.Ns);
 
             obj.exitflag_CEMPCi = zeros(1, obj.Ns);
             obj.exitflag_CEMPCv = zeros(1, obj.Ns);
             obj.exitflag_CCMPC  = zeros(1, obj.Ns);
 
-            obj.iA_CEMPCi = zeros(1, obj.Ns);
-            obj.iA_CEMPCv = zeros(1, obj.Ns);
-            obj.iA_CCMPC  = zeros(1, obj.Ns);
+            obj.iA_CEMPCi       = zeros(1, obj.Ns);
+            obj.iA_CEMPCv       = zeros(1, obj.Ns);
+            obj.iA_CCMPC        = zeros(1, obj.Ns);
 
-            obj.ixdq     = zeros(2, obj.Ns);
-            obj.iydq     = zeros(2, obj.Ns);
-            obj.ixdq_ref = zeros(2, obj.Ns);
-            obj.iydq_ref = zeros(2, obj.Ns);
+            obj.ixdq            = zeros(2, obj.Ns);
+            obj.iydq            = zeros(2, obj.Ns);
+            obj.ixdq_ref        = zeros(2, obj.Ns);
+            obj.iydq_ref        = zeros(2, obj.Ns);
 
-            obj.vxdq = zeros(2, obj.Ns);
-            obj.vydq = zeros(2, obj.Ns);
+            obj.vxdq            = zeros(2, obj.Ns);
+            obj.vydq            = zeros(2, obj.Ns);
 
-            obj.Tex_CEMPC = zeros(1, obj.Ns);
-            obj.Tex_CCMPC = zeros(1, obj.Ns);
+            obj.Tex_CEMPC       = zeros(1, obj.Ns);
+            obj.Tex_CCMPC       = zeros(1, obj.Ns);
 
-            obj.vs_ref = zeros(obj.m, obj.Ns);
+            obj.vs_ref          = zeros(obj.m, obj.Ns);
 
-            obj.w   = zeros(1, obj.Ns);
-            obj.Te  = zeros(1, obj.Ns);
-            obj.ir  = zeros(3, obj.Ns);
-            obj.Fr_dq = zeros(2, obj.Ns);
+            obj.w               = zeros(1, obj.Ns);
+            obj.Te              = zeros(1, obj.Ns);
+            obj.ir              = zeros(3, obj.Ns);
+            obj.Fr_dq           = zeros(2, obj.Ns);
+
+            obj.vxy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
+            obj.ixy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
         end
     end
 end

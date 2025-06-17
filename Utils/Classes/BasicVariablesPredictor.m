@@ -14,6 +14,7 @@ classdef BasicVariablesPredictor
         A   % Converter incidence matrix
         p   % Number of input ports
         q   % Number of output ports
+        Topology
     end
 
     methods
@@ -26,15 +27,16 @@ classdef BasicVariablesPredictor
             obj.A   = specs.MMCC.A;
             obj.p   = specs.MMCC.p;
             obj.q   = specs.MMCC.q;
+            obj.Topology = specs.MMCC.Topology;
         end
 
-        function var_B_pred = predict(obj, var_xy, wx, wy)
+        function [var_B_pred, var_xy_pred] = predict(obj, var_xy, wx, wy)
 
             if obj.Np > 1
 
-                % Input port
+                %%% Input port
 
-                if and(obj.p == 3, obj.q == 3) % M3C
+                if strcmp(obj.Topology, 'M3C')
 
                     % Construct rotation matrix
                     angles = (1:obj.Np-1) * (wx * obj.Ts);
@@ -48,13 +50,13 @@ classdef BasicVariablesPredictor
                     % Transform back to abc
                     var_x_pred = obj.RFT.ab2abc * var_x_ab_pred;
                 
-                elseif and(obj.p == 2, obj.q == 3) % M2C
+                elseif strcmp(obj.Topology, 'M2C')
 
                     var_x_pred = repmat(var_xy(1:2), 1, obj.Np-1);
 
                 end
                 
-                % Output port
+                %%% Output port
 
                 % Construct rotation matrix
                 angles = (1:obj.Np-1) * (wy * obj.Ts);
@@ -67,6 +69,8 @@ classdef BasicVariablesPredictor
                 
                 % Transform back to abc
                 var_y_pred = obj.RFT.ab2abc * var_y_ab_pred;
+
+                %%% Predictions formatting
 
                 % Concatenate input/output predictions
                 var_xy_pred = [var_x_pred; var_y_pred];

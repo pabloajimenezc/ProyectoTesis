@@ -126,7 +126,7 @@ methods
         obj.Bd     = integrated * obj.Bs;
 
         % Variables
-        obj = obj.reset(init_vals);
+        obj = obj.reset();
     end
 end
 
@@ -178,11 +178,11 @@ methods
         obj.is = obj.is + obj.Ti * dis;
     end
 
-    function obj = reset(obj, init_vals)
+    function obj = reset(obj)
         % reset: Reset all variables to their initial values specified in 'init_vals'
         
-        obj.is  = init_vals.is0;        
-        obj.vc  = init_vals.vc0;
+        obj.is  = obj.init_vals.is0;        
+        obj.vc  = obj.init_vals.vc0;
         obj.Ec  = obj.C / 2 * obj.vc .^ 2;
     end
 

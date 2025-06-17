@@ -11,6 +11,7 @@ classdef ClassLPF
         b1
         a0
         a1
+        init_vals
     end
 
     properties % Variables
@@ -24,6 +25,8 @@ classdef ClassLPF
         function obj = ClassLPF(specs, init_vals)
             % ClassLPF: Construct an instance of this class.
             
+            obj.init_vals = init_vals;
+
             % Constants
             obj.Ts = specs.Ts;
             obj.wn = specs.wn;
@@ -33,7 +36,7 @@ classdef ClassLPF
             obj.a1 = 2 + specs.Ts * specs.wn;
 
             % Variables
-            obj = obj.reset(init_vals);
+            obj = obj.reset();
         end
         
         function obj = filter(obj, y_t)
@@ -48,13 +51,13 @@ classdef ClassLPF
             obj.yf_t = (-obj.a0 * obj.yf_t_1 + obj.b1 * obj.y_t + obj.b0 * obj.y_t_1) / obj.a1; % Filtered
         end
 
-        function obj = reset(obj, init_vals)
+        function obj = reset(obj)
             % reset: Reset filter's variables to init_vals.
 
-            obj.y_t    = init_vals.y0;
-            obj.y_t_1  = init_vals.y0;
-            obj.yf_t   = init_vals.y0;
-            obj.yf_t_1 = init_vals.y0;
+            obj.y_t    = obj.init_vals.y0;
+            obj.y_t_1  = obj.init_vals.y0;
+            obj.yf_t   = obj.init_vals.y0;
+            obj.yf_t_1 = obj.init_vals.y0;
         end
     end
 end
