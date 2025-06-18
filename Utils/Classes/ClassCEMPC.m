@@ -4,11 +4,12 @@ properties % Constants
     Ts          % Sampling period
     m           % Number of clusters
     n           % Number of linear independent circulating currents
+    N           % Null matrix
     NN          % Null matrix for full planning horizon
     one         % Ones vector for full planning horizon
-    IM
-    IM2
-    K
+    IM          % identity - mean matrix for full planning horizon
+    IM2         % IM squared
+    K           % Auxiliar matrix for long horizon model B matrix
     Np          % Horizon length, # of predicted steps for external variables
     is_max      % Absolute maximum cluster current
     vo_max      % Absolute maximum common mode voltage
@@ -23,15 +24,13 @@ properties % Variables
     ie_ref      % Generated LICCs reference
     iz_ref      % Generated CCs reference
     vo_ref      % Generated CMV reference
-    ie_ref_prev % Previous LICCs reference
-    iz_ref_prev % Previous CCs reference
-    vo_ref_prev % Previous CMV reference
     iAi         % Active constraints for current subproblem
     iAv         % Active constraints for voltage subproblem
     exitflag_i  % Verbose for current solver
     exitflag_v  % Verbose for voltage solver
     exitflag    % Verbose for the last iteration of coupled complete problem
     Tex         % Controller execution time
+    J           % MPC cost function value
 end
 
 methods
@@ -48,7 +47,8 @@ methods
         obj.lambda_o  = specs.lambda_o;
         obj.Nl        = specs.Nl;
         obj.Np        = specs.Np;
-        obj.NN        = repmat({specs.MMCC.N}, obj.Np, 1);
+        obj.N         = specs.MMCC.N;
+        obj.NN        = repmat({obj.N}, obj.Np, 1);
         obj.NN        = blkdiag(obj.NN{:});
         obj.one       = repmat({ones(obj.m, 1)}, obj.Np, 1);
         obj.one       = blkdiag(obj.one{:});
@@ -71,7 +71,9 @@ methods
     function obj = control(obj, Ec, vB_pred, iB_pred, vc)
         % control: Calculate optimal circulating currents and common mode voltage references.
         % tic
-        
+        vB_pred_orig = vB_pred;
+        iB_pred_orig = iB_pred;
+
         iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
         vB_pred = reshape(vB_pred, obj.m * obj.Np, 1);
 
@@ -121,8 +123,6 @@ methods
             [vo_ref_temp, obj.exitflag_v, obj.iAv, ~] = solve_subproblem(obj, Ec, is_temp, vB_pred, obj.one, Hu_o, fu_o, Aineq_o, bineq_o, obj.lambda_o, obj.iAv, obj.options_v);
         end
 
-        obj.ie_ref_prev = ie_ref_temp;
-        obj.vo_ref_prev = vo_ref_temp;
         obj.ie_ref = ie_ref_temp(1:obj.n);
         obj.iz_ref = iz_ref_temp(1:obj.m);
         obj.vo_ref = vo_ref_temp(1);
@@ -133,6 +133,8 @@ methods
             obj.exitflag = -3;
         end
 
+        Ec_pred = Ec + obj.Ts * (vB_pred(1:obj.m) + vo_ref_temp(1)) .* (iB_pred(1:obj.m) + iz_ref_temp(1:obj.m));
+        obj.J = norm(Ec_pred - mean(Ec_pred))^2 + obj.lambda_z * norm(iB_pred(1:obj.m) + iz_ref_temp(1:obj.m))^2 + obj.lambda_o * vo_ref_temp(1)^2;
         % obj.Tex = toc;
     end
 
@@ -163,15 +165,13 @@ methods
         obj.ie_ref      = zeros(obj.n, 1);
         obj.iz_ref      = zeros(obj.m, 1);
         obj.vo_ref      = 0;
-        obj.ie_ref_prev = zeros(obj.n * obj.Np, 1);
-        obj.iz_ref_prev = zeros(obj.m * obj.Np, 1);
-        obj.vo_ref_prev = zeros(obj.Np, 1);
         obj.iAi         = false(size(zeros(2 * obj.m * obj.Np, 1)));
         obj.iAv         = false(size(zeros(2 * obj.Np, 1)));
         obj.exitflag_i  = -3;
         obj.exitflag_v  = -3;
         obj.exitflag    = -3;
         obj.Tex         = 0;
+        obj.J           = 0;
     end
 end
 

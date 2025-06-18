@@ -12,8 +12,8 @@ properties % Constants
     As      % Continous time transition matrix
     Bs      % Continous time control matrix
     is_max  % Maximum cluster current
-    ix_max
-    iy_max
+    ix_max  % Maximum input current
+    iy_max  % Maximum output current
     ixy_max
     zB_ratio % Importance between external control and energy balancing
     lambda   % Control action weighting factor
@@ -102,8 +102,8 @@ methods
 
         % Control action constraints
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v    =  (vc*0+520 + vo);
-        lb_v    = (-vc*0-520 + vo);
+        ub_v    =  vc*0+520;
+        lb_v    = -vc*0-520;
         bineq_v = [ub_v; -lb_v];
 
         % Complete constraints

@@ -76,17 +76,15 @@ classdef BasicVariablesPredictor
                 var_xy_pred = [var_x_pred; var_y_pred];
     
                 % Add actual measurement as first predicted step
-                var_xy_pred = [var_xy, var_xy_pred];
-                
-                % Transform to basic component of cluster currents/voltages
-                var_B_pred = obj.A' * var_xy_pred;
-                % Shape: (m, Np)
-            
+                var_xy_pred = [var_xy, var_xy_pred];            
             else
 
-                var_B_pred = obj.A' * var_xy;
-                % Shape: (m, 1)
+                var_xy_pred = var_xy;
             end
+
+            % Transform to basic component of cluster currents/voltages
+            var_B_pred = obj.A' * var_xy_pred;
+            % Shape: (m, Np)
         end
     end
 end

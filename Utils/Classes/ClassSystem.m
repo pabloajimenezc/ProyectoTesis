@@ -66,28 +66,6 @@ methods
 
         % Update
         vBx = obj.MMCC.ax' * obj.Grid.vx;
-        
-        %%% Mechanical speed
-
-        % Electrical torque
-        obj.IM.Te = obj.IM.np / 2 * obj.IM.is' * obj.IM.dLsr_dg(obj.IM.g) * obj.IM.ir;
-
-        % % Forward Euler derivatives
-        % dw = obj.IM.Te / obj.IM.J;
-
-        % Runge Kutta 4 derivatives
-        B_u = obj.IM.Te / obj.IM.J;
-        k1 = B_u;
-        k2 = 0.5 * obj.Ti * k1 + B_u;
-        k3 = 0.5 * obj.Ti * k2 + B_u;
-        k4 = obj.Ti * k3 + B_u;
-        dw = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
-
-        % Update
-        obj.IM.w = obj.IM.w + obj.Ti * dw;
-
-        %%% Machine rotor angle
-        obj.IM.g = obj.IM.g + obj.IM.w * obj.Ti;
 
         %%% Converter cluster capacitor energy and voltage
 
@@ -126,6 +104,35 @@ methods
         % Update
         obj.x = obj.x + obj.Ti * dx;
 
+        %%% Machine stator voltage
+        dis    = obj.Ss * dx;
+        dixy   = obj.MMCC.A * dis;
+        dis_IM = -dixy(obj.MMCC.p+1:end);
+        dir_IM = obj.Sr * dx;
+        obj.IM.vs = obj.IM.Rs * obj.IM.is + obj.IM.Lss * dis_IM + obj.IM.dLsr_dt(obj.IM.g, obj.IM.w) * obj.IM.ir + obj.IM.Lsr(obj.IM.g) * dir_IM;
+
+        %%% Mechanical speed
+
+        % Electrical torque
+        obj.IM.Te = obj.IM.np / 2 * obj.IM.is' * obj.IM.dLsr_dg(obj.IM.g) * obj.IM.ir;
+
+        % % Forward Euler derivatives
+        % dw = obj.IM.Te / obj.IM.J;
+
+        % Runge Kutta 4 derivatives
+        B_u = obj.IM.Te / obj.IM.J;
+        k1 = B_u;
+        k2 = 0.5 * obj.Ti * k1 + B_u;
+        k3 = 0.5 * obj.Ti * k2 + B_u;
+        k4 = obj.Ti * k3 + B_u;
+        dw = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+
+        % Update
+        obj.IM.w = obj.IM.w + obj.Ti * dw;
+
+        %%% Machine rotor angle
+        obj.IM.g = obj.IM.g + obj.IM.w * obj.Ti;
+
         %%% Update other system variables
 
         % Cluster currents
@@ -145,13 +152,6 @@ methods
         % Input voltage
         obj.Grid = obj.Grid.step();
         obj.vxy  = [obj.Grid.vx; obj.IM.vs];
-
-        %%% Machine stator voltage
-        dis    = obj.Ss * dx;
-        dixy   = obj.MMCC.A * dis;
-        dis_IM = -dixy(obj.MMCC.p+1:end);
-        dir_IM = obj.Sr * dx;
-        obj.IM.vs = obj.IM.Rs * obj.IM.is + obj.IM.Lss * dis_IM + obj.IM.dLsr_dt(obj.IM.g, obj.IM.w) * obj.IM.ir + obj.IM.Lsr(obj.IM.g) * dir_IM;
     end
 
     function obj = reset(obj)
