@@ -68,14 +68,14 @@ methods
         obj = obj.reset();
     end
 
-    function obj = control(obj, Ec, vB_pred, iB_pred, vc)
+    function obj = control(obj, Ec, vB_pred, iB_pred, iB_ref_pred, vc)
         % control: Calculate optimal circulating currents and common mode voltage references.
         % tic
-        vB_pred_orig = vB_pred;
-        iB_pred_orig = iB_pred;
 
-        iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
+        vB_pred_orig = vB_pred;
         vB_pred = reshape(vB_pred, obj.m * obj.Np, 1);
+        iB_pred = reshape(iB_pred, obj.m * obj.Np, 1);
+        iB_ref_pred = reshape(iB_ref_pred, obj.m * obj.Np, 1);
 
         % Initialize common mode voltage vector of horizon Np
         vo_ref_temp = zeros(obj.Np, 1);
@@ -94,8 +94,10 @@ methods
 
             % Constraints
             Aineq_z = [obj.NN; -obj.NN];
-            ub      =  obj.is_max - iB_pred;
-            lb      = -obj.is_max - iB_pred;
+            % ub      =  obj.is_max - iB_pred;
+            % lb      = -obj.is_max - iB_pred;
+            ub      =  obj.is_max - iB_ref_pred;
+            lb      = -obj.is_max - iB_ref_pred;
             bineq_z = [ub; -lb];
 
             % Solve
@@ -115,8 +117,10 @@ methods
 
             % Constraints
             Aineq_o = [eye(obj.Np); -eye(obj.Np)];
-            ub = obj.vo_max * ones(obj.Np, 1);
-            lb = -ub;
+            % ub = obj.vo_max * ones(obj.Np, 1);
+            % lb = -ub;
+            ub = min(vc - vB_pred_orig, [], 1)';
+            lb = max(-vc - vB_pred_orig, [], 1)';
             bineq_o = [ub; -lb];
             % Solve
 

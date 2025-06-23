@@ -70,8 +70,8 @@ classdef ClassBuffer
         vxdq            % dq input voltage
         vydq            % dq output voltage
 
-        Tex_CEMPC       % ICB+LFOM controller execution time
-        Tex_CCMPC       % CC controller execution time
+        Tex_CEMPC       % Controller execution time, ICB+LFOM
+        Tex_CCMPC       % Controller execution time, CC
 
         vs_ref          % Steady state cluster voltage reference
 
@@ -82,6 +82,9 @@ classdef ClassBuffer
 
         vxy_pred        % External voltages predictions
         ixy_pred        % External currents predictions
+
+        J_CEMPC         % First step cost function, ICB+LFOM
+        J_CCMPC         % First step cost function, CC
     end
     
     methods
@@ -174,6 +177,9 @@ classdef ClassBuffer
 
             obj.vxy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
             obj.ixy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
+
+            obj.J_CEMPC         = zeros(1, obj.Ns);
+            obj.J_CCMPC         = zeros(1, obj.Ns);
         end
     end
 end

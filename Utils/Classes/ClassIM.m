@@ -143,7 +143,10 @@ classdef ClassIM
             obj.ir = zeros(3, 1);
             obj.Fs = zeros(3, 1);
             obj.Fr = zeros(3, 1);
-            obj.F  = zeros(6, 1);
+            if obj.init_vals.Magnetized
+                obj.Fr(1) = obj.FrN;
+            end
+            obj.F  = [obj.Fs; obj.Fr];
             obj.Te = 0;
             obj.w  = obj.init_vals.w0;
             obj.g  = 0;

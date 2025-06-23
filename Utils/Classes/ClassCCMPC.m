@@ -25,6 +25,7 @@ properties % Variables
     iA          % Active constraints
     exitflag    % Solver verbose
     Tex         % Controller execution time
+    J           % Optimal cost function value
 end
 
 methods
@@ -101,9 +102,13 @@ methods
         bineq_i = [bineq_is; bineq_ixy];
 
         % Control action constraints
+        % Neglecting the filter voltage drop, vo + vB = vs
+        % but vo is synthetized from vc, as well as vs: vB = vs - vo
+        % Thus, -vc <= vs - vo <= vc
+        %  -vc + vo <= vs      <= vc + vo
         Aineq_v = [eye(obj.m); -eye(obj.m)];
-        ub_v    =  vc*0+520;
-        lb_v    = -vc*0-520;
+        ub_v    =  vc + vo;
+        lb_v    = -vc + vo;
         bineq_v = [ub_v; -lb_v];
 
         % Complete constraints
@@ -115,6 +120,9 @@ methods
         obj.vs = vsp + vo;
 
         obj.Tex = toc;
+
+        is_pred = is + obj.Ad * is + obj.Bd * (obj.vs - vB - vo);
+        obj.J   = norm(is_pred - is_ref)^2 + obj.lambda * norm(obj.vs - vs_ref)^2;
     end
 
     function obj = reset(obj)
@@ -124,6 +132,7 @@ methods
         obj.iA       = false(size(zeros(4 * obj.m + 2 * (obj.p + obj.q), 1)));
         obj.exitflag = -3;
         obj.Tex      = 0;
+        obj.J        = 0;
     end
 end
 
