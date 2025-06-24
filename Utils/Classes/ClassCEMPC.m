@@ -94,8 +94,6 @@ methods
 
             % Constraints
             Aineq_z = [obj.NN; -obj.NN];
-            % ub      =  obj.is_max - iB_pred;
-            % lb      = -obj.is_max - iB_pred;
             ub      =  obj.is_max - iB_ref_pred;
             lb      = -obj.is_max - iB_ref_pred;
             bineq_z = [ub; -lb];

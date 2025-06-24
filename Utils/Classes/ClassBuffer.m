@@ -80,9 +80,6 @@ classdef ClassBuffer
         ir              % Machine rotor currents
         Fr_dq           % Machine rotor flux
 
-        vxy_pred        % External voltages predictions
-        ixy_pred        % External currents predictions
-
         J_CEMPC         % First step cost function, ICB+LFOM
         J_CCMPC         % First step cost function, CC
     end
@@ -174,9 +171,6 @@ classdef ClassBuffer
             obj.Te              = zeros(1, obj.Ns);
             obj.ir              = zeros(3, obj.Ns);
             obj.Fr_dq           = zeros(2, obj.Ns);
-
-            obj.vxy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
-            obj.ixy_pred        = zeros(obj.p + obj.q, obj.Np, obj.Ns);
 
             obj.J_CEMPC         = zeros(1, obj.Ns);
             obj.J_CCMPC         = zeros(1, obj.Ns);

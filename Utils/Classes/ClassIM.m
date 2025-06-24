@@ -25,8 +25,9 @@ classdef ClassIM
         kr
         ks
         tau_r
-        sigma
-        Rsig
+        o % sigma
+        Ro
+        tau_o
         
         FrN
         isdN
@@ -89,8 +90,9 @@ classdef ClassIM
             obj.kr    = obj.Lm / obj.Lr;
             obj.ks    = obj.Lm / obj.Ls;
             obj.tau_r = obj.Lr / obj.Rr;
-            obj.sigma = 1 - obj.ks * obj.kr;
-            obj.Rsig  = obj.Rs + obj.Rr * obj.kr^2;
+            obj.o     = 1 - obj.ks * obj.kr;
+            obj.Ro    = obj.Rs + obj.Rr * obj.kr^2;
+            obj.tau_o = obj.o * obj.Ls / obj.Ro;
             obj.kT = 1.5 * obj.np * obj.kr;
             
             obj.FrN  = sqrt(2/3) * obj.VLLN / (2 * pi * obj.fN);

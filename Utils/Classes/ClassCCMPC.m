@@ -87,23 +87,25 @@ methods
         H = (H + H') / 2;
         
         % State constraints
+        aux = - obj.Ad * is + obj.Bd * vB;
+        ABd = obj.A * obj.Bd;
+        Aaux = obj.A * aux;
             % Cluster current
         Aineq_is = [obj.Bd; -obj.Bd];
-        ub_is    =  obj.is_max - obj.Ad * is + obj.Bd * vB;
-        lb_is    = -obj.is_max - obj.Ad * is + obj.Bd * vB;
+        ub_is    =  obj.is_max + aux;
+        lb_is    = -obj.is_max + aux;
         bineq_is = [ub_is; -lb_is];
             % External currents
-        Aineq_ixy = [obj.A * obj.Bd; -obj.A * obj.Bd];
-        ub_ixy    =  obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
-        lb_ixy    = -obj.ixy_max + obj.A * (- obj.Ad * is + obj.Bd * vB);
+        Aineq_ixy = [ABd; -ABd];
+        ub_ixy    =  obj.ixy_max + Aaux;
+        lb_ixy    = -obj.ixy_max + obj.A * aux;
         bineq_ixy = [ub_ixy; -lb_ixy];
 
         Aineq_i = [Aineq_is; Aineq_ixy];
         bineq_i = [bineq_is; bineq_ixy];
 
         % Control action constraints
-        % Neglecting the filter voltage drop, vo + vB = vs
-        % but vo is synthetized from vc, as well as vs: vB = vs - vo
+        % The modulation must synthetize vs and vo from vc
         % Thus, -vc <= vs - vo <= vc
         %  -vc + vo <= vs      <= vc + vo
         Aineq_v = [eye(obj.m); -eye(obj.m)];
