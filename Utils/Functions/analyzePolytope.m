@@ -8,7 +8,8 @@ tol = 1e-8;
 props = struct();
 
 %% 0) Check feasibility using linprog
-opts = optimoptions('linprog','Display','off');
+% opts = optimoptions('linprog','Display','off');
+opts = optimset('Display','off');
 [x0, ~, exitflag] = linprog(zeros(n,1), A, b, [], [], [], [], opts);
 if exitflag ~= 1
     warning('Infeasible or ill-posed polytope. Returning empty props.');

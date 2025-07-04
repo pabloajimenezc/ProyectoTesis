@@ -18,6 +18,8 @@ properties % Constants
     Nl          % Number of iterations for Block Coordinate Descent
     options_i   % Configuration for current solver
     options_v   % Configuration for voltage solver
+    Ec_mean_ref % Mean cluster capacitor energy reference
+    vc_mean_ref % Mean cluster capacitor voltage reference
 end
 
 properties % Variables
@@ -30,7 +32,10 @@ properties % Variables
     exitflag_v  % Verbose for voltage solver
     exitflag    % Verbose for the last iteration of coupled complete problem
     Tex         % Controller execution time
-    J           % MPC cost function value
+    J_E         % Energy deviation cost function value
+    J_z         % Circulating current cost function value
+    J_o         % Common mode voltage cost function value
+    J           % Total cost function value
 end
 
 methods
@@ -38,23 +43,25 @@ methods
         % ClassCMPC: Construct an instance of this class.
 
         % Constants
-        obj.m         = specs.MMCC.m;
-        obj.n         = specs.MMCC.n;
-        obj.is_max    = specs.is_max;
-        obj.vo_max    = specs.vo_max;
-        obj.Ts        = specs.Ts;
-        obj.lambda_z  = specs.lambda_z;
-        obj.lambda_o  = specs.lambda_o;
-        obj.Nl        = specs.Nl;
-        obj.Np        = specs.Np;
-        obj.N         = specs.MMCC.N;
-        obj.NN        = repmat({obj.N}, obj.Np, 1);
-        obj.NN        = blkdiag(obj.NN{:});
-        obj.one       = repmat({ones(obj.m, 1)}, obj.Np, 1);
-        obj.one       = blkdiag(obj.one{:});
-        obj.IM        = eye(obj.m * obj.Np) - obj.one * (obj.one') / obj.m;
-        obj.IM2       = (obj.IM') * obj.IM;
-        obj.K         = kron(tril(ones(obj.Np)), eye(obj.m));
+        obj.m           = specs.MMCC.m;
+        obj.n           = specs.MMCC.n;
+        obj.is_max      = specs.is_max;
+        obj.vo_max      = specs.vo_max;
+        obj.Ts          = specs.Ts;
+        obj.lambda_z    = specs.lambda_z;
+        obj.lambda_o    = specs.lambda_o;
+        obj.Nl          = specs.Nl;
+        obj.Np          = specs.Np;
+        obj.N           = specs.MMCC.N;
+        obj.Ec_mean_ref = specs.Ec_mean_ref;
+        obj.vc_mean_ref = specs.vc_mean_ref;
+        obj.NN          = repmat({obj.N}, obj.Np, 1);
+        obj.NN          = blkdiag(obj.NN{:});
+        obj.one         = repmat({ones(obj.m, 1)}, obj.Np, 1);
+        obj.one         = blkdiag(obj.one{:});
+        obj.IM          = eye(obj.m * obj.Np) - obj.one * (obj.one') / obj.m;
+        obj.IM2         = (obj.IM') * obj.IM;
+        obj.K           = kron(tril(ones(obj.Np)), eye(obj.m));
 
         obj.options_i                     = mpcActiveSetOptions;
         obj.options_i.MaxIterations       = 20;
@@ -91,6 +98,8 @@ methods
             % Control action penalization Jz_u
             Hu_z = 2 * (obj.NN') * obj.NN;
             fu_z = 2 * (obj.NN') * iB_pred;
+            Hu_z = Hu_z / obj.is_max^2;
+            fu_z = fu_z / obj.is_max^2;
 
             % Constraints
             Aineq_z = [obj.NN; -obj.NN];
@@ -112,16 +121,16 @@ methods
             % Control action penalization Jo_u
             Hu_o = 2 * eye(obj.Np);
             fu_o = zeros(obj.Np, 1);
+            Hu_o = Hu_o / obj.vc_mean_ref^2;
+            fu_o = fu_o / obj.vc_mean_ref^2;
 
             % Constraints
             Aineq_o = [eye(obj.Np); -eye(obj.Np)];
-            % ub = obj.vo_max * ones(obj.Np, 1);
-            % lb = -ub;
             ub = min(vc - vB_pred_orig, [], 1)';
             lb = max(-vc - vB_pred_orig, [], 1)';
             bineq_o = [ub; -lb];
-            % Solve
 
+            % Solve
             [vo_ref_temp, obj.exitflag_v, obj.iAv, ~] = solve_subproblem(obj, Ec, is_temp, vB_pred, obj.one, Hu_o, fu_o, Aineq_o, bineq_o, obj.lambda_o, obj.iAv, obj.options_v);
         end
 
@@ -136,7 +145,10 @@ methods
         end
 
         Ec_pred = Ec + obj.Ts * (vB_pred(1:obj.m) + vo_ref_temp(1)) .* (iB_pred(1:obj.m) + iz_ref_temp(1:obj.m));
-        obj.J = norm(Ec_pred - mean(Ec_pred))^2 + obj.lambda_z * norm(iB_pred(1:obj.m) + iz_ref_temp(1:obj.m))^2 + obj.lambda_o * vo_ref_temp(1)^2;
+        obj.J_E = norm(Ec_pred - mean(Ec_pred))^2                 / obj.Ec_mean_ref^2;
+        obj.J_z = norm(iB_pred(1:obj.m) + iz_ref_temp(1:obj.m))^2 / obj.is_max^2;
+        obj.J_o = vo_ref_temp(1)^2                                / obj.vc_mean_ref^2;
+        obj.J = obj.J_E + obj.lambda_z * obj.J_z + obj.lambda_o * obj.J_o;
         % obj.Tex = toc;
     end
 
@@ -155,6 +167,8 @@ methods
         B = E * Maux;
         Hx = 2 * (B') * obj.IM2 * B;
         fx = 2 * (B') * obj.IM2 * (repmat(x, obj.Np, 1) + E * P);
+        Hx = Hx / obj.Ec_mean_ref^2;
+        fx = fx / obj.Ec_mean_ref^2;
         H = Hx + lambda * Hu;
         f = fx + lambda * fu;
         H = (H + H') / 2;

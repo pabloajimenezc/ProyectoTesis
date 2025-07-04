@@ -18,6 +18,7 @@ properties % Constants
     zB_ratio % Importance between external control and energy balancing
     lambda   % Control action weighting factor
     options  % Solver options
+    vc_mean_ref
 end
 
 properties % Variables
@@ -25,7 +26,9 @@ properties % Variables
     iA          % Active constraints
     exitflag    % Solver verbose
     Tex         % Controller execution time
-    J           % Optimal cost function value
+    J_i         % Current tracking cost function value
+    J_v         % Cluster voltage cost function value
+    J           % Total cost function value
 end
 
 methods
@@ -47,6 +50,7 @@ methods
         obj.ixy_max  = [obj.ix_max * ones(obj.p, 1); obj.iy_max * ones(obj.q, 1)];
         obj.zB_ratio = specs.zB_ratio;
         obj.lambda   = specs.lambda;
+        obj.vc_mean_ref = specs.vc_mean_ref;
         obj.options  = mpcActiveSetOptions;
         obj.options.MaxIterations       = 100;
         obj.options.ConstraintTolerance = 1.0e-5;
@@ -62,24 +66,14 @@ methods
         % Current error tracking
         Hi = 2 * (obj.Bd') * obj.Bd;
         fi = 2 * (obj.Bd') * (-is_ref + obj.Ad * is - obj.Bd * vB);
-
-        % % Basic current error tracking
-        % Maux = pinv(obj.A)*obj.A;
-        % Hi_B = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
-        % fi_B = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
-        % 
-        % % Circulating current error tracking
-        % Maux = eye(obj.m) - Maux;
-        % Hi_z = 2 * (obj.Bd') * (Maux') * Maux * obj.Bd;
-        % fi_z = 2 * (obj.Bd') * Maux * (obj.Ad * is - obj.Bd * vB - is_ref);
-        % 
-        % % Cluster current error tracking
-        % Hi = (1 - obj.zB_ratio) * Hi_B + obj.zB_ratio * Hi_z;
-        % fi = (1 - obj.zB_ratio) * fi_B + obj.zB_ratio * fi_z;
+        Hi = Hi / obj.is_max^2;
+        fi = fi / obj.is_max^2;
 
         % Control action penalization
         Hv = 2 * eye(obj.m);
         fv = -2 * vs_ref;
+        Hv = Hv / obj.vc_mean_ref^2;
+        fv = fv / obj.vc_mean_ref^2;
 
         % Complete weighted objective function
         H = Hi + obj.lambda * Hv;
@@ -123,8 +117,11 @@ methods
 
         obj.Tex = toc;
 
-        is_pred = is + obj.Ad * is + obj.Bd * (obj.vs - vB - vo);
-        obj.J   = norm(is_pred - is_ref)^2 + obj.lambda * norm(obj.vs - vs_ref)^2;
+        is_pred = obj.Ad * is + obj.Bd * (obj.vs - vB - vo);
+
+        obj.J_i = norm(is_pred - is_ref)^2 / obj.is_max^2;
+        obj.J_v = norm(obj.vs - vs_ref)^2  / obj.vc_mean_ref^2;
+        obj.J   = obj.J_i + obj.lambda * obj.J_v;
     end
 
     function obj = reset(obj)
