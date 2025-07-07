@@ -67,6 +67,14 @@ function stop = plotSurrogate(results, state)
     contourf(axMain, Xi, Xj, MuC, 20, 'LineColor','none');
     hold(axMain, 'on');
     scatter(axMain, Xobs{:,idx_lambda_z}, Xobs{:,idx_lambda_o}, 25, Yobs, 'filled', 'MarkerEdgeColor','k');
+    % --------- RESALTAR PUNTO OPTIMO EN ROJO -----------
+    % Obtener el punto óptimo (mínimo costo)
+    [~, idx_best] = min(Yobs);
+    lambda_z_opt = Xobs{idx_best, idx_lambda_z};
+    lambda_o_opt = Xobs{idx_best, idx_lambda_o};
+    plot(axMain, lambda_z_opt, lambda_o_opt, 'ro', ...
+        'MarkerSize', 12, 'MarkerFaceColor', 'r', 'LineWidth', 2);
+    % ---------------------------------------------------
     set(axMain, 'XScale','log', 'YScale','log');
     xlabel(axMain, 'lambda\_z');
     ylabel(axMain, 'lambda\_o');

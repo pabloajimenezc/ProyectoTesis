@@ -5,7 +5,7 @@ function [cost] = simulate(x)
 
 % Parameters
 %% Simulation and control steps
-Tf = 0.5;        % Total simulation time
+Tf = 2;        % Total simulation time
 fs = 6e3;
 Ts = 1/fs;        % Sampling time
 Ns = ceil(Tf/Ts); % Number of sampling steps
@@ -444,8 +444,8 @@ vs_ref = vsRefGen.get_vs_ref(ix_ref, iy_ref, iB_ref, vB, PLLx.w, PLLy.w);
 CCMPC  = CCMPC.control(is_ref, vc, is, vB, vo_ref, vs_ref);
 vs     = CCMPC.vs;
 
-% % Store variables
-% buffer.is(:, ts)           = is;
+% Store variables
+buffer.is(:, ts)           = is;
 % buffer.ixy(:, ts)          = ixy;
 % buffer.iB(:, ts)           = iB;
 % buffer.iz(:, ts)           = iz;
@@ -537,4 +537,20 @@ close(h)
 % Total cost
 cost = J_CEMPC + J_CCMPC;
 cost = cost / Ns;
+
+% % Harmonic spectrum penalization
+% y = buffer.is;
+% Y = fft(y, [], 2);
+% P2 = abs(Y/Ns);
+% P1 = P2(:, 1:Ns/2+1);
+% P1(:, 2:end-1) = 2*P1(:, 2:end-1);
+% f = fs*(0:(Ns/2))/Ns;
+% 
+% fc = 500;
+% mask = (f > fc);
+% 
+% harmonic_distortion = norm(P1(:, mask)) / is_max;
+% 
+% cost = cost + harmonic_distortion * 0.1;
+
 end
