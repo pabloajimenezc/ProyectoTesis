@@ -513,8 +513,8 @@ vs     = CCMPC.vs;
 % buffer.J_CEMPC(ts) = CEMPC.J;
 % buffer.J_CCMPC(ts) = CCMPC.J;
 
-J_CEMPC = J_CEMPC + CEMPC.J + (sum(CEMPC.iAi) + sum(CEMPC.iAv) > 0);
-J_CCMPC = J_CCMPC + CCMPC.J + (sum(CCMPC.iA) > 0);
+J_CEMPC = J_CEMPC + CEMPC.J + (sum(CEMPC.iAi) + sum(CEMPC.iAv) > 0) * 0.1;
+J_CCMPC = J_CCMPC + CCMPC.J + (sum(CCMPC.iA) > 0) * 0.1;
 
 % Integrate external system and converter
 for ti = 1:Ni
