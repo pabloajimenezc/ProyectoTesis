@@ -165,8 +165,10 @@ methods
 
         E = obj.Ts * obj.K * diag(var_s);
         B = E * Maux;
-        Hx = 2 * (B') * obj.IM2 * B;
-        fx = 2 * (B') * obj.IM2 * (repmat(x, obj.Np, 1) + E * P);
+        % Hx = 2 * (B') * obj.IM2 * B;
+        % fx = 2 * (B') * obj.IM2 * (repmat(x, obj.Np, 1) + E * P);
+        Hx = 2 * (B') * B;
+        fx = 2 * (B') * (repmat(x-mean(x), obj.Np, 1) + E * P);
         Hx = Hx / obj.Ec_mean_ref^2;
         fx = fx / obj.Ec_mean_ref^2;
         H = Hx + lambda * Hu;

@@ -327,6 +327,7 @@ h = waitbar(0, 'Simulating...');
 
 J_CEMPC = 0;
 J_CCMPC = 0;
+cost = 0;
 
 for ts = 1:Ns
 
@@ -513,8 +514,10 @@ buffer.is(:, ts)           = is;
 % buffer.J_CEMPC(ts) = CEMPC.J;
 % buffer.J_CCMPC(ts) = CCMPC.J;
 
-J_CEMPC = J_CEMPC + CEMPC.J;% + (sum(CEMPC.iAi) + sum(CEMPC.iAv) > 0) * 1;
-J_CCMPC = J_CCMPC + CCMPC.J;% + (sum(CCMPC.iA) > 0) * 1;
+% J_CEMPC = J_CEMPC + CEMPC.J;% + (sum(CEMPC.iAi) + sum(CEMPC.iAv) > 0) * 1;
+% J_CCMPC = J_CCMPC + CCMPC.J;% + (sum(CCMPC.iA) > 0) * 1;
+
+cost = sum((Ec - Ec_mean).^2)/(Ec_mean_ref*MMCC.m) + sum((is - is_ref).^2)/(is_max*MMCC.m);
 
 % Integrate external system and converter
 for ti = 1:Ni
@@ -535,22 +538,16 @@ close(h)
 % run('Plot.mlx')
 
 % Total cost
-cost = J_CEMPC + J_CCMPC * 10;
+% cost = J_CEMPC + J_CCMPC * 10;
 cost = cost / Ns;
 
-% % Harmonic spectrum penalization
-% y = buffer.is;
-% Y = fft(y, [], 2);
-% P2 = abs(Y/Ns);
-% P1 = P2(:, 1:Ns/2+1);
-% P1(:, 2:end-1) = 2*P1(:, 2:end-1);
-% f = fs*(0:(Ns/2))/Ns;
-% 
-% fc = 500;
-% mask = (f > fc);
-% 
-% harmonic_distortion = norm(P1(:, mask)) / is_max;
-% 
-% cost = cost + harmonic_distortion * 0.1;
+% Harmonic spectrum penalization
+y = buffer.is;
+Y = fft(y, [], 2);
+P2 = abs(Y/Ns);
+P1 = P2(:, 1:Ns/2+1);
+P1(:, 2:end-1) = 2*P1(:, 2:end-1);
+
+cost = cost + mean(sum(P1.^2, 2)/is_max^2);
 
 end
