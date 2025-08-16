@@ -123,6 +123,9 @@ im_estimated = zeros(size(im_real));
 Fr_estimated = zeros(size(Fr_real));
 wm_estimated = zeros(size(wm_real));
 
+nu_all = zeros(KF.ny, Ns);              % innovaciones
+S_all  = zeros(KF.ny, KF.ny, Ns);       % cov. de innovación
+
 for t = 1:Ns
 
 % Measurement update
@@ -130,6 +133,12 @@ Kt = SIGt_apriori * C' / (R + C * SIGt_apriori * C');
 yt_est = C * xt_est_apriori;
 xt_est = xt_est_apriori + Kt * (y(:, t) - yt_est);
 SIGt = (Inx - Kt * C) * SIGt_apriori;
+
+% Guarda innovación y su covarianza (para métricas)
+St = R + C * SIGt_apriori * C';
+nu = y(:, t) - yt_est;     % innovación
+nu_all(:, t) = nu;
+S_all(:, :, t) = St;
 
 % System matrices actualization
 ima  = xt_est(1);
@@ -176,10 +185,80 @@ wm_estimated(:, t) = np * xt1_est(5);
 end
 
 %% Compute mean squared error
-error_i = mean((im_real-im_estimated).^2, 'all') / IM.isdN;
-error_F = mean((Fr_real-Fr_estimated).^2, 'all') / IM.FrN;
-error_w = mean((wm_real-wm_estimated).^2, 'all') / IM.wN;
+error_i = mean((im_real-im_estimated).^2, 'all') / IM.isdN^2;
+error_F = mean((Fr_real-Fr_estimated).^2, 'all') / IM.FrN^2;
+error_w = mean((wm_real-wm_estimated).^2, 'all') / IM.wN^2;
 
 cost = error_i + error_F + error_w;
+
+%% Métricas adicionales (verosimilitud, consistencia y blancura)
+% 1) NLL (promedio por muestra y por salida, para que quede ~O(1))
+nll = 0; nis = zeros(1, Ns);
+for tt = 1:Ns
+    Stt = S_all(:,:,tt);
+    % estabilidad numérica
+    [L,p] = chol(Stt,'lower');
+    if p~=0
+        Stt = Stt + 1e-12*eye(KF.ny); %#ok<NASGU>
+        L = chol(Stt,'lower');
+    end
+    alpha = L'\(L\ nu_all(:,tt));
+    nll = nll + 2*sum(log(diag(L))) + (nu_all(:,tt).'*alpha);
+    nis(tt) = nu_all(:,tt).' * (Stt \ nu_all(:,tt));
+end
+nll_per   = nll / (Ns * KF.ny);   % NLL normalizado
+anis      = mean(nis);            % ANIS
+anis_pen  = (anis - KF.ny)^2;     % debería ~ KF.ny si está bien calibrado
+
+% 2) Blancura de innovaciones (suma de rho^2 hasta lag L)
+Lags = 10;
+rho2_sum = 0;
+for i = 1:KF.ny
+    nu_i = detrend(nu_all(i,:));
+    ac = xcorr(nu_i, Lags, 'coeff');          % largo = 2*Lags+1
+    ac_no0 = [ac(1:Lags), ac(Lags+2:end)];    % excluye lag 0
+    rho2_sum = rho2_sum + sum(ac_no0.^2);
+end
+white_pen = rho2_sum / KF.ny;
+
+% 3) Matching de covarianza empírica vs promedio de S
+Cemp = cov(nu_all');                    % [ny x ny]
+Sbar = mean(S_all, 3);
+relErrCov = norm(Cemp - Sbar, 'fro') / max(1e-12, norm(Sbar,'fro'));
+
+% 4) Cobertura 95% (NIS <= chi2_{0.95})
+if exist('chi2inv','file')
+    thr95 = chi2inv(0.95, KF.ny);
+elseif exist('icdf','file')
+    thr95 = icdf('Chisquare', 0.95, KF.ny);
+else
+    thr95 = KF.ny + 2*sqrt(2*KF.ny);   % aproximación grosera
+end
+coverage95 = mean(nis <= thr95);
+cov_pen = (coverage95 - 0.95)^2;
+
+% 5) Robustez a colas (opcional): MAE y P95 de las innovaciones
+mae_nu  = mean(abs(nu_all), 'all');
+p95_nu  = prctile(abs(nu_all(:)), 95);
+
+% Pesos (ajústalos a tu escala/criterio)
+W = struct( ...
+    'nll',     1e-2, ...   % peso para NLL normalizado
+    'anis',    1.0,  ...   % penaliza desviación de ANIS
+    'white',   0.1,  ...   % penaliza autocorrelación residual
+    'covm',    0.5,  ...   % matching de covarianzas
+    'cov95',   0.5,  ...   % penaliza mala cobertura
+    'mae',     0.0,  ...   % opcional
+    'p95',     0.0);       % opcional
+
+% Suma al costo (mantén tus RMSE y añade calibración/consistencia)
+cost = cost ...
+     + W.nll   * nll_per ...
+     + W.anis  * anis_pen ...
+     + W.white * white_pen ...
+     + W.covm  * relErrCov ...
+     + W.cov95 * cov_pen ...
+     + W.mae   * mae_nu ...
+     + W.p95   * p95_nu;
 
 end
