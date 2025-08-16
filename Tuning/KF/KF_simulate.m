@@ -91,17 +91,20 @@ KF.Bd(2, 2) = FOC.Ts/IM.Lo;
 KF.C = eye(KF.ny, KF.nx); % Measurement matrix
 
 %% Get simulation variables
-vy_ab = evalin('base', 'out.vy_ab.Data')';
-im_ab = evalin('base', 'out.im_ab.Data')';
-Fr_ab = evalin('base', 'out.Fr_ab.Data')';
-wm_ab = evalin('base', 'out.wm.Data')';
+% vy_real = evalin('base', 'out.vy_ab.Data')';
+% im_real = evalin('base', 'out.im_ab.Data')';
+% Fr_real = evalin('base', 'out.Fr_ab.Data')';
+% wm_real = evalin('base', 'out.wm.Data')';
 
-x_real = [im_ab;
-          Fr_ab;
-          wm_ab];
-y = im_ab;
+out = load('SimulationData.mat').out;
+vy_real = out.vy_ab.Data';
+im_real = out.im_ab.Data';
+Fr_real = out.Fr_ab.Data';
+wm_real = out.wm.Data';
 
-u = vy_ab;
+y = im_real;
+
+u = vy_real;
 
 %% Apply Kalman Filter
 
@@ -112,24 +115,23 @@ Q  = KF.Q;
 R  = KF.R;
 Bd = KF.Bd;
 C  = KF.C;
-kT = IM.kT;
 np = IM.np;
 Inx = eye(KF.nx);
 
-%% Measurement update
+Ns = size(y, 2);
+im_estimated = zeros(size(im_real));
+Fr_estimated = zeros(size(Fr_real));
+wm_estimated = zeros(size(wm_real));
+
+for t = 1:Ns
+
+% Measurement update
 Kt = SIGt_apriori * C' / (R + C * SIGt_apriori * C');
 yt_est = C * xt_est_apriori;
-xt_est = xt_est_apriori + Kt * (yt - yt_est);
+xt_est = xt_est_apriori + Kt * (y(:, t) - yt_est);
 SIGt = (Inx - Kt * C) * SIGt_apriori;
 
-%% NIS (Normalized Innovation Squared)
-v   = yt - yt_est;
-S   = R + C * SIGt_apriori * C';
-Lns = chol(S, 'lower');
-t   = Lns'\v;
-NIS = t' * t;
-
-%% System matrices actualization
+% System matrices actualization
 ima  = xt_est(1);
 imb  = xt_est(2);
 Fra  = xt_est(3);
@@ -160,18 +162,24 @@ Adt(4, 5) = Adt(4, 5) * Fra;
 Adt(5, 3) = Adt(5, 3) * imb;
 Adt(5, 4) = Adt(5, 4) * ima;
 
-%% Temporal update
-xt1_est = Ad * xt_est + Bd * ut;
-% yt1_est = C * xt1_est;
+% Temporal update
+xt1_est = Ad * xt_est + Bd * u(:, t);
 SIGt1 = Q + Adt * SIGt * Adt';
 SIGt_apriori = SIGt1;
 xt_est_apriori = xt1_est;
 
-%% Output
-im = xt1_est(1:2);
-Fr = xt1_est(3:4);
-wm = np * xt1_est(5);
-Te = kT * (Fr(2) * im(1) - Fr(1) * im(2));
-Tex = toc;
+% Output
+im_estimated(:, t) = xt1_est(1:2);
+Fr_estimated(:, t) = xt1_est(3:4);
+wm_estimated(:, t) = np * xt1_est(5);
+
 end
 
+%% Compute mean squared error
+error_i = mean((im_real-im_estimated).^2, 'all') / IM.isdN;
+error_F = mean((Fr_real-Fr_estimated).^2, 'all') / IM.FrN;
+error_w = mean((wm_real-wm_estimated).^2, 'all') / IM.wN;
+
+cost = error_i + error_F + error_w;
+
+end
