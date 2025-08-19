@@ -1,4 +1,4 @@
-function [cost] = simulate(x)
+function cost = MPC_simulate(x)
 
 % Induction Machine + MMCC Simulation
 % Current topology: M2C
