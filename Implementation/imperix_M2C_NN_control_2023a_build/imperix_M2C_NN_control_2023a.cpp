@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_M2C_NN_control_2023a'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.0
+// Model version                  : 19.1
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Thu Sep  4 17:35:00 2025
+// C/C++ source code generated on : Thu Sep  4 17:53:33 2025
 //
 #include "imperix_M2C_NN_control_2023a.h"
 #include "rtwtypes.h"
@@ -339,7 +339,7 @@ real_T rt_atan2d_snf(real_T u0, real_T u1)
   return y;
 }
 
-void microKernel844521080387869344(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel12222317247877270824(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -357,7 +357,7 @@ void microKernel844521080387869344(int32_T K, const real32_T *A, int32_T LDA,
   C[0] = c;
 }
 
-void microKernel17912267989538489906(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel5205615041564833814(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -401,7 +401,7 @@ void microKernel17912267989538489906(int32_T K, const real32_T *A, int32_T LDA,
   C[6] = c_5;
 }
 
-void macroKernel3846288779099331862(int32_T M, int32_T K, int32_T N, const
+void macroKernel11606535516385392581(int32_T M, int32_T K, int32_T N, const
   real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C, int32_T
   LDC)
 {
@@ -417,14 +417,14 @@ void macroKernel3846288779099331862(int32_T M, int32_T K, int32_T N, const
     i = 0;
     idxA = 0;
     while (i <= M - 7) {
-      microKernel17912267989538489906(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel5205615041564833814(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA += 7;
       idxC += 7;
       i += 7;
     }
 
     while (i <= M - 1) {
-      microKernel844521080387869344(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel12222317247877270824(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA++;
       idxC++;
       i++;
@@ -435,7 +435,7 @@ void macroKernel3846288779099331862(int32_T M, int32_T K, int32_T N, const
   }
 }
 
-void matrixMultiply3846288779099331862(int32_T M, int32_T K, int32_T N, int32_T
+void matrixMultiply11606535516385392581(int32_T M, int32_T K, int32_T N, int32_T
   blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A, const
   real32_T *B, real32_T *C)
 {
@@ -490,7 +490,7 @@ void matrixMultiply3846288779099331862(int32_T M, int32_T K, int32_T N, int32_T
           tmp = blockSizeM;
         }
 
-        macroKernel3846288779099331862(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
+        macroKernel11606535516385392581(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
           j1], K, &C[i + M * j1], M);
       }
     }
@@ -796,14 +796,14 @@ static void imperix_M2C_NN_control__predict(const real32_T inputsT_0_f1[14],
     0.0212948825F, 0.000384214334F, 0.0569474883F, 0.0248425025F, -0.0187710021F,
     -0.053958822F, -0.276011795F, -0.398972213F, -0.0430829935F };
 
-  matrixMultiply3846288779099331862(70, 14, 1, 64, 64, 64, &(&tmp[0])[0],
+  matrixMultiply11606535516385392581(70, 14, 1, 64, 64, 64, &(&tmp[0])[0],
     &inputsT_0_f1[0], &X[0]);
   for (channelIdx = 0; channelIdx < 70; channelIdx++) {
     X[channelIdx] = std::fmax(0.0F, (X[channelIdx] + b[channelIdx]) *
       combinedGamma[channelIdx] + combinedBeta[channelIdx]);
   }
 
-  matrixMultiply3846288779099331862(3, 70, 1, 64, 64, 64, &(&tmp_0[0])[0], &X[0],
+  matrixMultiply11606535516385392581(3, 70, 1, 64, 64, 64, &(&tmp_0[0])[0], &X[0],
     &outputs_0_f1[0]);
   outputs_0_f1[0] = std::tanh(outputs_0_f1[0] - 0.0464356802F);
   outputs_0_f1[1] = std::tanh(outputs_0_f1[1] + 0.0463817865F);

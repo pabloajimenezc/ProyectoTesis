@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_M2C_NN_control_2023a'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.0
+// Model version                  : 19.1
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Thu Sep  4 17:35:00 2025
+// C/C++ source code generated on : Thu Sep  4 17:53:33 2025
 //
 #ifndef imperix_M2C_NN_control_2023a_h_
 #define imperix_M2C_NN_control_2023a_h_
