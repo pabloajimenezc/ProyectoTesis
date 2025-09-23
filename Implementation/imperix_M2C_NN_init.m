@@ -38,13 +38,9 @@ T = [An;
 sqr2=1.73205080756888;
 PI=3.1415926535897932384626433832795;
 TWOPI=6.283185307179586476925286766559;
-%Ag=2*7000;			%Grid Amplitude
 Ag=520;
-%Ag=80;
 Fg=0;			%Grid Frequency
-%Am=4900;
 Am=380*sqrt(2/3);
-%Am=100;
 Fm=50;		%Input frequency
 Wg=2*pi*Fg;
 Wm=2*pi*Fm;
@@ -53,9 +49,8 @@ n=4;				%Bridges per arm
 %Kcap=1/7e-3;
 %Kcap=1/20e-3; 
 Kcap=1/(987e-6);
+
 %Tiempos y matriz
-
-
 N1=repmat({N(:,1)},1,Np);
 N1=blkdiag(N1{:});
 N2=repmat({N(:,2)},1,Np);
