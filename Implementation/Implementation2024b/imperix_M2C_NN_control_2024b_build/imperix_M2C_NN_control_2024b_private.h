@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_M2C_NN_control_2024b'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.8
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Oct 14 16:13:52 2025
+// C/C++ source code generated on : Tue Oct 21 15:31:07 2025
 //
 #ifndef imperix_M2C_NN_control_2024b_private_h_
 #define imperix_M2C_NN_control_2024b_private_h_
@@ -26,14 +26,14 @@ int Eth_Write(unsigned int mailbox_id, void* data, int size);
 tUserSafe SimulinkInterrupt(void);
 void ConfigureReadTriggerDelayInNs(int);
 extern real_T rt_atan2d_snf(real_T u0, real_T u1);
-extern void microKernel11572246788790903127(int32_T K, const real32_T *A,
+extern void microKernel12234298825249083535(int32_T K, const real32_T *A,
   int32_T LDA, const real32_T *B, real32_T *C);
-extern void microKernel8492573986212425386(int32_T K, const real32_T *A, int32_T
-  LDA, const real32_T *B, real32_T *C);
-extern void macroKernel3084562926610886582(int32_T M, int32_T K, int32_T N,
+extern void microKernel16256063908817381782(int32_T K, const real32_T *A,
+  int32_T LDA, const real32_T *B, real32_T *C);
+extern void macroKernel16943049303738605558(int32_T M, int32_T K, int32_T N,
   const real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C,
   int32_T LDC);
-extern void matrixMultiply3084562926610886582(int32_T M, int32_T K, int32_T N,
+extern void matrixMultiply16943049303738605558(int32_T M, int32_T K, int32_T N,
   int32_T blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A,
   const real32_T *B, real32_T *C);
 extern real_T rt_powd_snf(real_T u0, real_T u1);

@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_M2C_NN_control_2024b'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.8
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Oct 14 16:13:52 2025
+// C/C++ source code generated on : Tue Oct 21 15:31:07 2025
 //
 #include "imperix_M2C_NN_control_2024b.h"
 #include "rtwtypes.h"
@@ -21,19 +21,19 @@
 #include "cmath"
 #include "rt_defines.h"
 
-int16_T* ix_raw_adc_ptr_0_2;
-int16_T* ix_raw_adc_ptr_2_2;
-int16_T* ix_raw_adc_ptr_4_2;
-int16_T* ix_raw_adc_ptr_1_2;
-int16_T* ix_raw_adc_ptr_3_2;
-int16_T* ix_raw_adc_ptr_5_2;
+int16_T* ix_raw_adc_ptr_6_0;
+int16_T* ix_raw_adc_ptr_7_0;
+int16_T* ix_raw_adc_ptr_0_1;
+int16_T* ix_raw_adc_ptr_1_1;
+int16_T* ix_raw_adc_ptr_2_1;
+int16_T* ix_raw_adc_ptr_3_1;
 int16_T* ix_raw_adc_ptr_0_0;
 int16_T* ix_raw_adc_ptr_1_0;
 int16_T* ix_raw_adc_ptr_2_0;
 int16_T* ix_raw_adc_ptr_3_0;
 int16_T* ix_raw_adc_ptr_4_0;
 int16_T* ix_raw_adc_ptr_5_0;
-int16_T* ix_raw_adc_ptr_7_0;
+int16_T* ix_raw_adc_ptr_4_1;
 real32_T flux_ref;                     // Tunable parameter
 int32_T flux_control;                  // Tunable parameter
 int32_T speed_control;                 // Tunable parameter
@@ -98,6 +98,7 @@ real32_T ibr_zref;                     // Probe
 unsigned char __attribute__ ((section ("devicescount"))) __attribute__((used))
   ____DEVICES_COUNT = (2U+1);
 real32_T w_ref;                        // Tunable parameter
+int16_T* ix_raw_adc_ptr_0_2;
 real32_T vdc;                          // Probe
 real32_T imq_ref;                      // Probe
 
@@ -333,7 +334,7 @@ real_T rt_atan2d_snf(real_T u0, real_T u1)
   return y;
 }
 
-void microKernel11572246788790903127(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel12234298825249083535(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -351,7 +352,7 @@ void microKernel11572246788790903127(int32_T K, const real32_T *A, int32_T LDA,
   C[0] = c;
 }
 
-void microKernel8492573986212425386(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel16256063908817381782(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -395,7 +396,7 @@ void microKernel8492573986212425386(int32_T K, const real32_T *A, int32_T LDA,
   C[6] = c_5;
 }
 
-void macroKernel3084562926610886582(int32_T M, int32_T K, int32_T N, const
+void macroKernel16943049303738605558(int32_T M, int32_T K, int32_T N, const
   real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C, int32_T
   LDC)
 {
@@ -411,14 +412,14 @@ void macroKernel3084562926610886582(int32_T M, int32_T K, int32_T N, const
     i = 0;
     idxA = 0;
     while (i <= M - 7) {
-      microKernel8492573986212425386(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel16256063908817381782(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA += 7;
       idxC += 7;
       i += 7;
     }
 
     while (i <= M - 1) {
-      microKernel11572246788790903127(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel12234298825249083535(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA++;
       idxC++;
       i++;
@@ -429,7 +430,7 @@ void macroKernel3084562926610886582(int32_T M, int32_T K, int32_T N, const
   }
 }
 
-void matrixMultiply3084562926610886582(int32_T M, int32_T K, int32_T N, int32_T
+void matrixMultiply16943049303738605558(int32_T M, int32_T K, int32_T N, int32_T
   blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A, const
   real32_T *B, real32_T *C)
 {
@@ -484,14 +485,14 @@ void matrixMultiply3084562926610886582(int32_T M, int32_T K, int32_T N, int32_T
           tmp = blockSizeM;
         }
 
-        macroKernel3084562926610886582(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
+        macroKernel16943049303738605558(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
           j1], K, &C[i + M * j1], M);
       }
     }
   }
 }
 
-// Function for MATLAB Function: '<S144>/MLFB'
+// Function for MATLAB Function: '<S147>/MLFB'
 static void imperix_M2C_NN_control__predict(const real32_T inputsT_0_f1[14],
   real32_T outputs_0_f1[3])
 {
@@ -790,14 +791,14 @@ static void imperix_M2C_NN_control__predict(const real32_T inputsT_0_f1[14],
     0.0212948825F, 0.000384214334F, 0.0569474883F, 0.0248425025F, -0.0187710021F,
     -0.053958822F, -0.276011795F, -0.398972213F, -0.0430829935F };
 
-  matrixMultiply3084562926610886582(70, 14, 1, 64, 64, 64, &(&tmp[0])[0],
+  matrixMultiply16943049303738605558(70, 14, 1, 64, 64, 64, &(&tmp[0])[0],
     &inputsT_0_f1[0], &X[0]);
   for (channelIdx = 0; channelIdx < 70; channelIdx++) {
     X[channelIdx] = std::fmax(0.0F, (X[channelIdx] + b[channelIdx]) *
       combinedGamma[channelIdx] + combinedBeta[channelIdx]);
   }
 
-  matrixMultiply3084562926610886582(3, 70, 1, 64, 64, 64, &(&tmp_0[0])[0], &X[0],
+  matrixMultiply16943049303738605558(3, 70, 1, 64, 64, 64, &(&tmp_0[0])[0], &X[0],
     &outputs_0_f1[0]);
   outputs_0_f1[0] = std::tanh(outputs_0_f1[0] - 0.0464356802F);
   outputs_0_f1[1] = std::tanh(outputs_0_f1[1] + 0.0463817865F);
@@ -1881,28 +1882,28 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     imperix_M2C_NN_control_2024b_M->Timing.RateInteraction.TID0_1 = 0;
   }
 
-  // S-Function (ADC): '<S116>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC = (float)(*ix_raw_adc_ptr_0_2) * 0.027466F
+  // S-Function (ADC): '<S119>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC = (float)(*ix_raw_adc_ptr_6_0) * 0.027466F
     + 0.0F;
 
-  // S-Function (ADC): '<S132>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_k = (float)(*ix_raw_adc_ptr_2_2) *
+  // S-Function (ADC): '<S135>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_k = (float)(*ix_raw_adc_ptr_7_0) *
     0.027466F + 0.0F;
 
-  // S-Function (ADC): '<S110>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_e = (float)(*ix_raw_adc_ptr_4_2) *
+  // S-Function (ADC): '<S113>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_e = (float)(*ix_raw_adc_ptr_0_1) *
     0.027466F + 0.0F;
 
-  // S-Function (ADC): '<S118>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_b = (float)(*ix_raw_adc_ptr_1_2) *
+  // S-Function (ADC): '<S121>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_b = (float)(*ix_raw_adc_ptr_1_1) *
     0.027466F + 0.0F;
 
-  // S-Function (ADC): '<S112>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_k2 = (float)(*ix_raw_adc_ptr_3_2) *
+  // S-Function (ADC): '<S115>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_k2 = (float)(*ix_raw_adc_ptr_2_1) *
     0.027466F + 0.0F;
 
-  // S-Function (ADC): '<S114>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_f = (float)(*ix_raw_adc_ptr_5_2) *
+  // S-Function (ADC): '<S117>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_f = (float)(*ix_raw_adc_ptr_3_1) *
     0.027466F + 0.0F;
 
   // SignalConversion generated from: '<S1>/Mean' incorporates:
@@ -1923,7 +1924,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   // Gain: '<S1>/Gain6'
   rtb_Pm = 1.0 / imperix_M2C_NN_control_2024b_P.n;
 
-  // Gain: '<S28>/Gain3'
+  // Gain: '<S29>/Gain3'
   Mean2_AccVal = imperix_M2C_NN_control_2024b_P.C / 2.0;
   for (i = 0; i < 6; i++) {
     // Math: '<S1>/Square3' incorporates:
@@ -1938,13 +1939,13 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
     rtb_Fcn = rtb_Pm * rtb_vq_ref;
 
-    // Gain: '<S28>/Gain3' incorporates:
-    //   Math: '<S28>/Square'
+    // Gain: '<S29>/Gain3' incorporates:
+    //   Math: '<S29>/Square'
 
     rtb_us[i] = rtb_Fcn * rtb_Fcn * Mean2_AccVal;
   }
 
-  // S-Function (sdspstatfcns): '<S28>/Mean2'
+  // S-Function (sdspstatfcns): '<S29>/Mean2'
   Mean2_AccVal = rtb_us[0];
   for (i = 4; i >= 0; i--) {
     Mean2_AccVal += rtb_us[5 - i];
@@ -1952,39 +1953,39 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   Mean2_AccVal /= 6.0;
 
-  // End of S-Function (sdspstatfcns): '<S28>/Mean2'
+  // End of S-Function (sdspstatfcns): '<S29>/Mean2'
 
-  // SignalConversion generated from: '<S28>/Vector Concatenate'
+  // SignalConversion generated from: '<S29>/Vector Concatenate'
   rtb_VectorConcatenate[0] = Mean2_AccVal;
 
-  // Sum: '<S28>/Sum'
+  // Sum: '<S29>/Sum'
   for (i = 0; i < 6; i++) {
     rtb_VectorConcatenate[i + 1] = rtb_us[i] - Mean2_AccVal;
   }
 
-  // End of Sum: '<S28>/Sum'
+  // End of Sum: '<S29>/Sum'
 
-  // S-Function (ADC): '<S128>/ADC'
+  // S-Function (ADC): '<S131>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_n = (float)(*ix_raw_adc_ptr_0_0) *
     0.00045776F + 0.0F;
 
-  // S-Function (ADC): '<S130>/ADC'
+  // S-Function (ADC): '<S133>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_p = (float)(*ix_raw_adc_ptr_1_0) *
     0.00045776F + 0.0F;
 
-  // S-Function (ADC): '<S120>/ADC'
+  // S-Function (ADC): '<S123>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_fj = (float)(*ix_raw_adc_ptr_2_0) *
     0.00045776F + 0.0F;
 
-  // S-Function (ADC): '<S108>/ADC'
+  // S-Function (ADC): '<S111>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_o = (float)(*ix_raw_adc_ptr_3_0) *
     0.00045776F + 0.0F;
 
-  // S-Function (ADC): '<S122>/ADC'
+  // S-Function (ADC): '<S125>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_bn = (float)(*ix_raw_adc_ptr_4_0) *
     0.00045776F + 0.0F;
 
-  // S-Function (ADC): '<S124>/ADC'
+  // S-Function (ADC): '<S127>/ADC'
   imperix_M2C_NN_control_2024b_B.ADC_i = (float)(*ix_raw_adc_ptr_5_0) *
     0.00045776F + 0.0F;
 
@@ -2029,33 +2030,33 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of MATLAB Function: '<S1>/Tab0'
 
-  // SignalConversion generated from: '<S142>/Gain3' incorporates:
-  //   Constant: '<S28>/Constant'
+  // SignalConversion generated from: '<S145>/Gain3' incorporates:
+  //   Constant: '<S29>/Constant'
 
   rtb_Gain1_n[0] = Mean2_AccVal;
   rtb_Gain1_n[1] = rtb_Fcn;
   rtb_Gain1_n[2] = imperix_M2C_NN_control_2024b_P.Constant_Value;
 
-  // Gain: '<S350>/Gain3'
+  // Gain: '<S353>/Gain3'
   rtb_TmpSignalConversionAtGain_0 = 0.0;
   rtb_TmpSignalConversionAtGain_1 = 0.0;
 
-  // Gain: '<S142>/Gain3'
+  // Gain: '<S145>/Gain3'
   rtb_Gain1_p = 0.0;
   rtb_Gain20_idx_0 = 0.0;
   for (i = 0; i < 3; i++) {
     rtb_Pm = rtb_Gain1_n[i];
     rtb_Gain1_p += imperix_M2C_NN_control_2024b_P.Gain3_Gain[3 * i] * rtb_Pm;
 
-    // Gain: '<S350>/Gain3' incorporates:
-    //   Gain: '<S142>/Gain3'
+    // Gain: '<S353>/Gain3' incorporates:
+    //   Gain: '<S145>/Gain3'
 
     rtb_Gain1_p_tmp = 3 * i + 1;
     rtb_Gain20_idx_0 +=
       imperix_M2C_NN_control_2024b_P.Gain3_Gain[rtb_Gain1_p_tmp] * rtb_Pm;
 
-    // Gain: '<S350>/Gain3' incorporates:
-    //   Gain: '<S142>/Gain3'
+    // Gain: '<S353>/Gain3' incorporates:
+    //   Gain: '<S145>/Gain3'
 
     rtb_Pm = rtb_Gain1[i + 2];
     rtb_TmpSignalConversionAtGain_0 +=
@@ -2064,30 +2065,30 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
       imperix_M2C_NN_control_2024b_P.Gain3_Gain_n[rtb_Gain1_p_tmp] * rtb_Pm;
   }
 
-  // SignalConversion generated from: '<S28>/Vector Concatenate' incorporates:
-  //   Gain: '<S142>/Gain3'
+  // SignalConversion generated from: '<S29>/Vector Concatenate' incorporates:
+  //   Gain: '<S145>/Gain3'
 
   rtb_VectorConcatenate[7] = rtb_Gain1_p;
   rtb_VectorConcatenate[8] = rtb_Gain20_idx_0;
 
-  // Gain: '<S350>/Gain1'
+  // Gain: '<S353>/Gain1'
   rtb_TmpSignalConversionAtGain_0 *= imperix_M2C_NN_control_2024b_P.Gain1_Gain;
   rtb_TmpSignalConversionAtGain_1 *= imperix_M2C_NN_control_2024b_P.Gain1_Gain;
 
-  // InitialCondition: '<S138>/Initial'
+  // InitialCondition: '<S141>/Initial'
   if (imperix_M2C_NN_control_2024b_DW.Initial_FirstOutputTime) {
     imperix_M2C_NN_control_2024b_DW.Initial_FirstOutputTime = false;
 
-    // InitialCondition: '<S138>/Initial'
+    // InitialCondition: '<S141>/Initial'
     Mean2_AccVal =
       imperix_M2C_NN_control_2024b_P.IntegratorwithWrappedStateDis_g;
   } else {
-    // InitialCondition: '<S138>/Initial' incorporates:
-    //   Bias: '<S141>/Bias'
-    //   Gain: '<S141>/Gain'
-    //   Gain: '<S141>/Gain1'
-    //   Rounding: '<S141>/Rounding Function'
-    //   Sum: '<S141>/Sum1'
+    // InitialCondition: '<S141>/Initial' incorporates:
+    //   Bias: '<S144>/Bias'
+    //   Gain: '<S144>/Gain'
+    //   Gain: '<S144>/Gain1'
+    //   Rounding: '<S144>/Rounding Function'
+    //   Sum: '<S144>/Sum1'
 
     Mean2_AccVal = imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE - std::
       floor(1.0 /
@@ -2099,14 +2100,14 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
        imperix_M2C_NN_control_2024b_P.IntegratorwithWrappedStateDiscr);
   }
 
-  // End of InitialCondition: '<S138>/Initial'
+  // End of InitialCondition: '<S141>/Initial'
 
-  // DiscreteIntegrator: '<S138>/Integrator' incorporates:
-  //   Constant: '<S139>/Constant'
-  //   Constant: '<S140>/Constant'
-  //   Logic: '<S138>/Logical Operator'
-  //   RelationalOperator: '<S139>/Compare'
-  //   RelationalOperator: '<S140>/Compare'
+  // DiscreteIntegrator: '<S141>/Integrator' incorporates:
+  //   Constant: '<S142>/Constant'
+  //   Constant: '<S143>/Constant'
+  //   Logic: '<S141>/Logical Operator'
+  //   RelationalOperator: '<S142>/Compare'
+  //   RelationalOperator: '<S143>/Compare'
 
   if ((imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE <
        imperix_M2C_NN_control_2024b_P.IntegratorwithWrappedStateDiscr) ||
@@ -2115,29 +2116,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE = Mean2_AccVal;
   }
 
-  // Fcn: '<S349>/Fcn' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // Fcn: '<S352>/Fcn' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
 
   rtb_Fcn = rtb_TmpSignalConversionAtGain_0 * std::cos
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) +
     rtb_TmpSignalConversionAtGain_1 * std::sin
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE);
 
-  // Fcn: '<S349>/Fcn1' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // Fcn: '<S352>/Fcn1' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
 
   rtb_Fcn1 = -rtb_TmpSignalConversionAtGain_0 * std::sin
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) +
     rtb_TmpSignalConversionAtGain_1 * std::cos
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE);
 
-  // S-Function (ADC): '<S126>/ADC'
-  imperix_M2C_NN_control_2024b_B.ADC_j = (float)(*ix_raw_adc_ptr_7_0) *
+  // S-Function (ADC): '<S129>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_j = (float)(*ix_raw_adc_ptr_4_1) *
     0.012207F + 0.0F;
 
   // MATLAB Function: '<S1>/Flux obs2' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion36'
-  //   SignalConversion generated from: '<S23>/ SFunction '
+  //   SignalConversion generated from: '<S24>/ SFunction '
 
   imperix_M2C_NN_control_2024b_DW.psir0 =
     (imperix_M2C_NN_control_2024b_P.prmt_EST[1] /
@@ -2156,10 +2157,10 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   Mean2_AccVal += imperix_M2C_NN_control_2024b_B.ADC_j;
 
-  // S-Function (TUNABLE_PARAM): '<S342>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S345>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction = flux_ref;
 
-  // S-Function (TUNABLE_PARAM): '<S344>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S347>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_f = flux_control;
 
   // MATLAB Function: '<S1>/Flux Control Proportional Control1' incorporates:
@@ -2197,7 +2198,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of RateTransition generated from: '<S1>/Product4'
 
-  // S-Function (TUNABLE_PARAM): '<S348>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S351>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_c = speed_control;
 
   // Product: '<S1>/Product4' incorporates:
@@ -2209,7 +2210,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   // MATLAB Function: '<S1>/Output Current Control Proportional Integral Control1' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion82'
   //   Gain: '<S1>/Gain31'
-  //   SignalConversion generated from: '<S29>/ SFunction '
+  //   SignalConversion generated from: '<S30>/ SFunction '
 
   imperix_M2C_NN_control_2024b_DW.ad = (imperix_M2C_NN_control_2024b_P.prmt_OCC
     [1] - 1.0) * imperix_M2C_NN_control_2024b_DW.ud /
@@ -2251,8 +2252,8 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   // End of MATLAB Function: '<S1>/Output Current Control Proportional Integral Control1' 
 
   // MATLAB Function: '<S1>/dq --> ab' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
-  //   SignalConversion generated from: '<S106>/ SFunction '
+  //   DiscreteIntegrator: '<S141>/Integrator'
+  //   SignalConversion generated from: '<S107>/ SFunction '
 
   mag_u = std::cos(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) *
     rtb_vd_ref + -std::sin(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) *
@@ -2261,15 +2262,15 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     rtb_vd_ref + std::cos(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) *
     rtb_vq_ref;
 
-  // SignalConversion generated from: '<S143>/Gain3' incorporates:
-  //   Constant: '<S28>/Constant1'
+  // SignalConversion generated from: '<S146>/Gain3' incorporates:
+  //   Constant: '<S29>/Constant1'
   //   Gain: '<S1>/Gain84'
 
   rtb_Gain1_n[0] = imperix_M2C_NN_control_2024b_P.Gain84_Gain * mag_u;
   rtb_Gain1_n[1] = imperix_M2C_NN_control_2024b_P.Gain84_Gain * ang_u;
   rtb_Gain1_n[2] = imperix_M2C_NN_control_2024b_P.Constant1_Value;
 
-  // Gain: '<S143>/Gain3'
+  // Gain: '<S146>/Gain3'
   rtb_TmpSignalConversionAtGain_0 = 0.0;
   rtb_TmpSignalConversionAtGain_1 = 0.0;
   rtb_TmpSignalConversionAtGain_2 = 0.0;
@@ -2283,58 +2284,58 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
       imperix_M2C_NN_control_2024b_P.Gain3_Gain_j[3 * i + 2] * rtb_Pm;
   }
 
-  // End of Gain: '<S143>/Gain3'
+  // End of Gain: '<S146>/Gain3'
 
-  // Sum: '<S28>/Sum2'
+  // Sum: '<S29>/Sum2'
   rtb_TmpSignalConversionAtGain_0 -= rtb_TmpSignalConversionAtGain_2;
 
-  // Sum: '<S28>/Sum3'
+  // Sum: '<S29>/Sum3'
   rtb_TmpSignalConversionAtGain_2 = rtb_TmpSignalConversionAtGain_1 -
     rtb_TmpSignalConversionAtGain_2;
 
-  // SignalConversion generated from: '<S28>/Vector Concatenate'
+  // SignalConversion generated from: '<S29>/Vector Concatenate'
   rtb_VectorConcatenate[9] = rtb_TmpSignalConversionAtGain_0;
   rtb_VectorConcatenate[10] = rtb_TmpSignalConversionAtGain_2;
 
-  // Product: '<S28>/Product' incorporates:
-  //   Gain: '<S142>/Gain3'
+  // Product: '<S29>/Product' incorporates:
+  //   Gain: '<S145>/Gain3'
 
   rtb_VectorConcatenate[11] = rtb_Gain1_p * rtb_TmpSignalConversionAtGain_0;
   rtb_VectorConcatenate[12] = rtb_Gain20_idx_0 * rtb_TmpSignalConversionAtGain_2;
 
-  // SignalConversion generated from: '<S28>/Vector Concatenate'
+  // SignalConversion generated from: '<S29>/Vector Concatenate'
   rtb_VectorConcatenate[13] = rtb_Gain1[0];
 
-  // DataTypeConversion: '<S28>/Data Type Conversion2' incorporates:
-  //   Concatenate: '<S28>/Vector Concatenate'
-  //   Gain: '<S28>/Gain'
+  // DataTypeConversion: '<S29>/Data Type Conversion2' incorporates:
+  //   Concatenate: '<S29>/Vector Concatenate'
+  //   Gain: '<S29>/Gain'
 
   for (i = 0; i < 14; i++) {
     tmp_0[i] = static_cast<real32_T>(1.0 / imperix_M2C_NN_control_2024b_P.Xmax[i]
       * rtb_VectorConcatenate[i]);
   }
 
-  // End of DataTypeConversion: '<S28>/Data Type Conversion2'
+  // End of DataTypeConversion: '<S29>/Data Type Conversion2'
 
-  // MATLAB Function: '<S144>/MLFB'
+  // MATLAB Function: '<S147>/MLFB'
   imperix_M2C_NN_control__predict(tmp_0, tmp_1);
 
-  // Gain: '<S28>/Gain1' incorporates:
-  //   DataTypeConversion: '<S28>/Data Type Conversion6'
-  //   MATLAB Function: '<S144>/MLFB'
+  // Gain: '<S29>/Gain1' incorporates:
+  //   DataTypeConversion: '<S29>/Data Type Conversion6'
+  //   MATLAB Function: '<S147>/MLFB'
 
   rtb_Gain1_n[0] = imperix_M2C_NN_control_2024b_P.Ymax[0] * tmp_1[0];
   rtb_Gain1_n[1] = imperix_M2C_NN_control_2024b_P.Ymax[1] * tmp_1[1];
   rtb_Gain1_n[2] = imperix_M2C_NN_control_2024b_P.Ymax[2] * tmp_1[2];
 
-  // DataTypeConversion: '<S149>/Data Type Conversion'
+  // DataTypeConversion: '<S152>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion = static_cast<real32_T>
     (rtb_Gain1_n[2]);
 
-  // S-Function (PROBE): '<S149>/S-Function'
+  // S-Function (PROBE): '<S152>/S-Function'
   v0_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion;
 
-  // Gain: '<S28>/Gain2'
+  // Gain: '<S29>/Gain2'
   for (i = 0; i < 6; i++) {
     imperix_M2C_NN_control_2024b_B.Gain2[i] = 0.0;
   }
@@ -2347,43 +2348,43 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     }
   }
 
-  // End of Gain: '<S28>/Gain2'
+  // End of Gain: '<S29>/Gain2'
 
-  // DataTypeConversion: '<S151>/Data Type Conversion'
+  // DataTypeConversion: '<S154>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_o = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[2]);
 
-  // S-Function (PROBE): '<S151>/S-Function'
+  // S-Function (PROBE): '<S154>/S-Function'
   icr_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_o;
 
-  // DataTypeConversion: '<S153>/Data Type Conversion'
+  // DataTypeConversion: '<S156>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_d = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[3]);
 
-  // S-Function (PROBE): '<S153>/S-Function'
+  // S-Function (PROBE): '<S156>/S-Function'
   ias_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_d;
 
-  // DataTypeConversion: '<S155>/Data Type Conversion'
+  // DataTypeConversion: '<S158>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_a = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[4]);
 
-  // S-Function (PROBE): '<S155>/S-Function'
+  // S-Function (PROBE): '<S158>/S-Function'
   ibs_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_a;
 
-  // DataTypeConversion: '<S157>/Data Type Conversion'
+  // DataTypeConversion: '<S160>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_i = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[5]);
 
-  // S-Function (PROBE): '<S157>/S-Function'
+  // S-Function (PROBE): '<S160>/S-Function'
   ics_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_i;
 
-  // DataTypeConversion: '<S159>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S162>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain17'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_il = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.Gain17_Gain * Kpt);
 
-  // S-Function (PROBE): '<S159>/S-Function'
+  // S-Function (PROBE): '<S162>/S-Function'
   imd_r = imperix_M2C_NN_control_2024b_B.DataTypeConversion_il;
 
   // Sum: '<S1>/Sum2' incorporates:
@@ -2394,14 +2395,14 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     rtb_TmpSignalConversionAtGain_2 += rtb_TmpSignalConversionAtSFun_h[i];
   }
 
-  // SignalConversion generated from: '<S17>/Gain3' incorporates:
+  // SignalConversion generated from: '<S18>/Gain3' incorporates:
   //   Constant: '<S1>/Constant1'
 
   rtb_Gain31_0[0] = mag_u;
   rtb_Gain31_0[1] = ang_u;
   rtb_Gain31_0[2] = imperix_M2C_NN_control_2024b_P.Constant1_Value_l;
 
-  // Gain: '<S17>/Gain3'
+  // Gain: '<S18>/Gain3'
   rtb_TmpSignalConversionAtGain_0 = 0.0;
   rtb_TmpSignalConversionAtGain_1 = 0.0;
   rtb_Gain20_idx_0 = 0.0;
@@ -2415,14 +2416,14 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
       rtb_Pm;
   }
 
-  // End of Gain: '<S17>/Gain3'
+  // End of Gain: '<S18>/Gain3'
 
   // Gain: '<S1>/Gain'
   rtb_Gain1_p = imperix_M2C_NN_control_2024b_P.Gain_Gain *
     rtb_TmpSignalConversionAtGain_0;
   rtb_TmpSignalConversionAtGain_0 = rtb_Gain1_p;
 
-  // SignalConversion generated from: '<S30>/ SFunction ' incorporates:
+  // SignalConversion generated from: '<S31>/ SFunction ' incorporates:
   //   MATLAB Function: '<S1>/P'
 
   rtb_TmpSignalConversionAtSFun_h[3] = rtb_Gain1_p;
@@ -2432,7 +2433,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     rtb_TmpSignalConversionAtGain_1;
   rtb_TmpSignalConversionAtGain_1 = rtb_Gain1_p;
 
-  // SignalConversion generated from: '<S30>/ SFunction ' incorporates:
+  // SignalConversion generated from: '<S31>/ SFunction ' incorporates:
   //   MATLAB Function: '<S1>/P'
 
   rtb_TmpSignalConversionAtSFun_h[4] = rtb_Gain1_p;
@@ -2441,7 +2442,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   rtb_Gain1_p = imperix_M2C_NN_control_2024b_P.Gain_Gain * rtb_Gain20_idx_0;
 
   // MATLAB Function: '<S1>/P' incorporates:
-  //   SignalConversion generated from: '<S30>/ SFunction '
+  //   SignalConversion generated from: '<S31>/ SFunction '
 
   rtb_Gain31_0[0] = rtb_Gain1[2];
   rtb_Gain31_0[1] = rtb_Gain1[3];
@@ -2467,7 +2468,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   rtb_Pm = (rtb_Gain20_idx_0 * vab_idx_0 + rtb_Gain20_idx_1 * vab_idx_1) * 1.5;
 
-  // S-Function (TUNABLE_PARAM): '<S336>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S339>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_i = input_control;
 
   // MATLAB Function: '<S1>/TEB Control Proportional Integral Control1' incorporates:
@@ -2523,24 +2524,24 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of MATLAB Function: '<S1>/TEB Control Proportional Integral Control1'
 
-  // DataTypeConversion: '<S161>/Data Type Conversion'
+  // DataTypeConversion: '<S164>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_m = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // S-Function (PROBE): '<S161>/S-Function'
+  // S-Function (PROBE): '<S164>/S-Function'
   iP_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_m;
 
-  // DataTypeConversion: '<S163>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S166>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain17'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_dx = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.Gain17_Gain * rtb_Product4);
 
-  // S-Function (PROBE): '<S163>/S-Function'
+  // S-Function (PROBE): '<S166>/S-Function'
   imq_r = imperix_M2C_NN_control_2024b_B.DataTypeConversion_dx;
 
-  // DataTypeConversion: '<S165>/Data Type Conversion' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // DataTypeConversion: '<S168>/Data Type Conversion' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
   //   Fcn: '<S3>/abc->d'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_k = static_cast<real32_T>
@@ -2550,11 +2551,11 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
       (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE + 2.0943951023931953) *
       rtb_Gain1[4]) * 0.66666666666666663);
 
-  // S-Function (PROBE): '<S165>/S-Function'
+  // S-Function (PROBE): '<S168>/S-Function'
   imd = imperix_M2C_NN_control_2024b_B.DataTypeConversion_k;
 
-  // DataTypeConversion: '<S167>/Data Type Conversion' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // DataTypeConversion: '<S170>/Data Type Conversion' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
   //   Fcn: '<S3>/abc->q'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_c = static_cast<real32_T>(((
@@ -2564,45 +2565,45 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE + 2.0943951023931953) *
     rtb_Gain1[4]) * 0.66666666666666663);
 
-  // S-Function (PROBE): '<S167>/S-Function'
+  // S-Function (PROBE): '<S170>/S-Function'
   imq = imperix_M2C_NN_control_2024b_B.DataTypeConversion_c;
 
-  // DataTypeConversion: '<S169>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S172>/Data Type Conversion' incorporates:
   //   MATLAB Function: '<S1>/Flux obs2'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_j = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_DW.psir0);
 
-  // S-Function (PROBE): '<S169>/S-Function'
+  // S-Function (PROBE): '<S172>/S-Function'
   flux = imperix_M2C_NN_control_2024b_B.DataTypeConversion_j;
 
-  // DataTypeConversion: '<S171>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S174>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion7'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_p =
     imperix_M2C_NN_control_2024b_B.ADC_n;
 
-  // S-Function (PROBE): '<S171>/S-Function'
+  // S-Function (PROBE): '<S174>/S-Function'
   iar = imperix_M2C_NN_control_2024b_B.DataTypeConversion_p;
 
-  // DataTypeConversion: '<S175>/Data Type Conversion'
+  // DataTypeConversion: '<S178>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_h = static_cast<real32_T>
     (rtb_vd_ref);
 
-  // S-Function (PROBE): '<S175>/S-Function'
+  // S-Function (PROBE): '<S178>/S-Function'
   vd_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_h;
 
-  // DataTypeConversion: '<S177>/Data Type Conversion'
+  // DataTypeConversion: '<S180>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_dy = static_cast<real32_T>
     (rtb_vq_ref);
 
-  // S-Function (PROBE): '<S177>/S-Function'
+  // S-Function (PROBE): '<S180>/S-Function'
   vq_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_dy;
 
   // MATLAB Function: '<S1>/Input Current Control Proportional Integral Control' incorporates:
   //   Constant: '<S1>/Constant14'
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
-  //   SignalConversion generated from: '<S25>/ SFunction '
+  //   SignalConversion generated from: '<S26>/ SFunction '
 
   imperix_M2C_NN_control_2024b_DW.a_d =
     (imperix_M2C_NN_control_2024b_P.prmt_ICC[1] - 1.0) *
@@ -2629,25 +2630,25 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of MATLAB Function: '<S1>/Input Current Control Proportional Integral Control' 
 
-  // DataTypeConversion: '<S179>/Data Type Conversion'
+  // DataTypeConversion: '<S182>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_g = static_cast<real32_T>
     (rtb_vd_ref);
 
-  // S-Function (PROBE): '<S179>/S-Function'
+  // S-Function (PROBE): '<S182>/S-Function'
   vy_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_g;
 
-  // DataTypeConversion: '<S181>/Data Type Conversion'
+  // DataTypeConversion: '<S184>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_dg = static_cast<real32_T>
     (rtb_Gain1[0]);
 
-  // S-Function (PROBE): '<S181>/S-Function'
+  // S-Function (PROBE): '<S184>/S-Function'
   igd = imperix_M2C_NN_control_2024b_B.DataTypeConversion_dg;
 
-  // DataTypeConversion: '<S183>/Data Type Conversion'
+  // DataTypeConversion: '<S186>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_hg = static_cast<real32_T>
     (rtb_Pm);
 
-  // S-Function (PROBE): '<S183>/S-Function'
+  // S-Function (PROBE): '<S186>/S-Function'
   p_m = imperix_M2C_NN_control_2024b_B.DataTypeConversion_hg;
   imperix_M2C_NN_c_MovingRMS1(imperix_M2C_NN_control_2024b_B.Gain2,
     &imperix_M2C_NN_control_2024b_B.MovingRMS1,
@@ -2709,25 +2710,25 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of MATLAB Function: '<S1>/Divide'
 
-  // DataTypeConversion: '<S185>/Data Type Conversion'
+  // DataTypeConversion: '<S188>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_b = static_cast<real32_T>
     (rtb_Pm);
 
-  // S-Function (PROBE): '<S185>/S-Function'
+  // S-Function (PROBE): '<S188>/S-Function'
   izkpi = imperix_M2C_NN_control_2024b_B.DataTypeConversion_b;
 
-  // DataTypeConversion: '<S187>/Data Type Conversion'
+  // DataTypeConversion: '<S190>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_l = static_cast<real32_T>
     (rtb_Product4);
 
-  // S-Function (PROBE): '<S187>/S-Function'
+  // S-Function (PROBE): '<S190>/S-Function'
   isqr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_l;
 
-  // DataTypeConversion: '<S189>/Data Type Conversion'
+  // DataTypeConversion: '<S192>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_m5 = static_cast<real32_T>
     (Kpt);
 
-  // S-Function (PROBE): '<S189>/S-Function'
+  // S-Function (PROBE): '<S192>/S-Function'
   isdr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_m5;
 
   // Gain: '<S1>/Gain41'
@@ -2745,10 +2746,10 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of Gain: '<S1>/Gain41'
 
-  // S-Function (TUNABLE_PARAM): '<S340>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S343>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_p = enable_cc;
 
-  // S-Function (TUNABLE_PARAM): '<S338>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S341>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_n = ie_lambda;
 
   // MATLAB Function: '<S1>/Circulating Current Control MPC' incorporates:
@@ -2855,7 +2856,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   imperix_M2C_NN_control_2_qpkwik(Linv, Linv_0, tmp_3, tmp_4, tmp_5, iA1, 200,
     1.0E-6, is_dq, rtb_TmpSignalConversionAtSFun_d, &i);
 
-  // SignalConversion generated from: '<S27>/ SFunction ' incorporates:
+  // SignalConversion generated from: '<S28>/ SFunction ' incorporates:
   //   Gain: '<S1>/Gain54'
   //   MATLAB Function: '<S1>/MATLAB Function4'
 
@@ -2866,7 +2867,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   imperix_M2C_NN_control_2024b_DW.ialbet_delr[0] =
     rtb_TmpSignalConversionAtSFun_h[4];
 
-  // SignalConversion generated from: '<S27>/ SFunction ' incorporates:
+  // SignalConversion generated from: '<S28>/ SFunction ' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion77'
   //   MATLAB Function: '<S1>/Circulating Current Control MPC'
   //   MATLAB Function: '<S1>/MATLAB Function4'
@@ -2878,7 +2879,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   imperix_M2C_NN_control_2024b_DW.ialbet_delr[1] =
     rtb_TmpSignalConversionAtSFun_h[5];
 
-  // SignalConversion generated from: '<S27>/ SFunction ' incorporates:
+  // SignalConversion generated from: '<S28>/ SFunction ' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion77'
   //   MATLAB Function: '<S1>/Circulating Current Control MPC'
   //   MATLAB Function: '<S1>/MATLAB Function4'
@@ -2925,179 +2926,179 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   rtb_us[2] = std::fmax(std::fmin(rtb_us[2], 4.0), 0.0);
   rtb_us[5] = std::fmin(std::fmax(rtb_us[5], -4.0), 0.0);
 
-  // DataTypeConversion: '<S191>/Data Type Conversion'
+  // DataTypeConversion: '<S194>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_og = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[0]);
 
-  // S-Function (PROBE): '<S191>/S-Function'
+  // S-Function (PROBE): '<S194>/S-Function'
   vr_ar = imperix_M2C_NN_control_2024b_B.DataTypeConversion_og;
 
-  // DataTypeConversion: '<S193>/Data Type Conversion'
+  // DataTypeConversion: '<S196>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_it = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_0);
 
-  // S-Function (PROBE): '<S193>/S-Function'
+  // S-Function (PROBE): '<S196>/S-Function'
   vma = imperix_M2C_NN_control_2024b_B.DataTypeConversion_it;
 
-  // DataTypeConversion: '<S195>/Data Type Conversion'
+  // DataTypeConversion: '<S198>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_l4 = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_1);
 
-  // S-Function (PROBE): '<S195>/S-Function'
+  // S-Function (PROBE): '<S198>/S-Function'
   vmb = imperix_M2C_NN_control_2024b_B.DataTypeConversion_l4;
 
-  // DataTypeConversion: '<S197>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S200>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_kh = static_cast<real32_T>
     (rtb_Gain1_p);
 
-  // S-Function (PROBE): '<S197>/S-Function'
+  // S-Function (PROBE): '<S200>/S-Function'
   vmc = imperix_M2C_NN_control_2024b_B.DataTypeConversion_kh;
 
-  // DataTypeConversion: '<S201>/Data Type Conversion'
+  // DataTypeConversion: '<S204>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_jl = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[1]);
 
-  // S-Function (PROBE): '<S201>/S-Function'
+  // S-Function (PROBE): '<S204>/S-Function'
   vr_br = imperix_M2C_NN_control_2024b_B.DataTypeConversion_jl;
 
-  // DataTypeConversion: '<S203>/Data Type Conversion'
+  // DataTypeConversion: '<S206>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_f = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[2]);
 
-  // S-Function (PROBE): '<S203>/S-Function'
+  // S-Function (PROBE): '<S206>/S-Function'
   vr_cr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_f;
 
-  // DataTypeConversion: '<S205>/Data Type Conversion'
+  // DataTypeConversion: '<S208>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_dm = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[3]);
 
-  // S-Function (PROBE): '<S205>/S-Function'
+  // S-Function (PROBE): '<S208>/S-Function'
   vr_as = imperix_M2C_NN_control_2024b_B.DataTypeConversion_dm;
 
-  // DataTypeConversion: '<S207>/Data Type Conversion' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // DataTypeConversion: '<S210>/Data Type Conversion' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_is = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE);
 
-  // S-Function (PROBE): '<S207>/S-Function'
+  // S-Function (PROBE): '<S210>/S-Function'
   theta_m = imperix_M2C_NN_control_2024b_B.DataTypeConversion_is;
 
-  // DataTypeConversion: '<S209>/Data Type Conversion'
+  // DataTypeConversion: '<S212>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_do = static_cast<real32_T>
     (Mean2_AccVal);
 
-  // S-Function (PROBE): '<S209>/S-Function'
+  // S-Function (PROBE): '<S212>/S-Function'
   ws = imperix_M2C_NN_control_2024b_B.DataTypeConversion_do;
 
-  // DataTypeConversion: '<S211>/Data Type Conversion'
+  // DataTypeConversion: '<S214>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_cq = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[4]);
 
-  // S-Function (PROBE): '<S211>/S-Function'
+  // S-Function (PROBE): '<S214>/S-Function'
   vr_bs = imperix_M2C_NN_control_2024b_B.DataTypeConversion_cq;
 
-  // DataTypeConversion: '<S213>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S216>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain21'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_n = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.Gain21_Gain * rtb_Fcn1);
 
-  // S-Function (PROBE): '<S213>/S-Function'
+  // S-Function (PROBE): '<S216>/S-Function'
   isq = imperix_M2C_NN_control_2024b_B.DataTypeConversion_n;
 
-  // DataTypeConversion: '<S215>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S218>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain21'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_n0 = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.Gain21_Gain * rtb_Fcn);
 
-  // S-Function (PROBE): '<S215>/S-Function'
+  // S-Function (PROBE): '<S218>/S-Function'
   isd = imperix_M2C_NN_control_2024b_B.DataTypeConversion_n0;
 
-  // DataTypeConversion: '<S217>/Data Type Conversion'
+  // DataTypeConversion: '<S220>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_aq = static_cast<real32_T>
     (rtb_Gain1[2]);
 
-  // S-Function (PROBE): '<S217>/S-Function'
+  // S-Function (PROBE): '<S220>/S-Function'
   ima = imperix_M2C_NN_control_2024b_B.DataTypeConversion_aq;
 
-  // DataTypeConversion: '<S219>/Data Type Conversion'
+  // DataTypeConversion: '<S222>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_e = static_cast<real32_T>
     (rtb_Gain1[3]);
 
-  // S-Function (PROBE): '<S219>/S-Function'
+  // S-Function (PROBE): '<S222>/S-Function'
   imb = imperix_M2C_NN_control_2024b_B.DataTypeConversion_e;
 
-  // DataTypeConversion: '<S221>/Data Type Conversion'
+  // DataTypeConversion: '<S224>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_ln = static_cast<real32_T>
     (rtb_Gain1[4]);
 
-  // S-Function (PROBE): '<S221>/S-Function'
+  // S-Function (PROBE): '<S224>/S-Function'
   imc = imperix_M2C_NN_control_2024b_B.DataTypeConversion_ln;
 
-  // DataTypeConversion: '<S223>/Data Type Conversion' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // DataTypeConversion: '<S226>/Data Type Conversion' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
   //   Gain: '<S1>/Gain3'
   //   MATLAB Function: '<S1>/DQ - AlphaBeta'
-  //   SignalConversion generated from: '<S20>/ SFunction '
+  //   SignalConversion generated from: '<S21>/ SFunction '
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_bp = static_cast<real32_T>
     ((Kpt * std::cos(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) -
       rtb_Product4 * std::sin(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE))
      * imperix_M2C_NN_control_2024b_P.Gain3_Gain_a);
 
-  // S-Function (PROBE): '<S223>/S-Function'
+  // S-Function (PROBE): '<S226>/S-Function'
   ia0_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_bp;
 
-  // DataTypeConversion: '<S225>/Data Type Conversion' incorporates:
-  //   DiscreteIntegrator: '<S138>/Integrator'
+  // DataTypeConversion: '<S228>/Data Type Conversion' incorporates:
+  //   DiscreteIntegrator: '<S141>/Integrator'
   //   Gain: '<S1>/Gain3'
   //   MATLAB Function: '<S1>/DQ - AlphaBeta'
-  //   SignalConversion generated from: '<S20>/ SFunction '
+  //   SignalConversion generated from: '<S21>/ SFunction '
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_f5 = static_cast<real32_T>
     ((Kpt * std::sin(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE) +
       rtb_Product4 * std::cos(imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE))
      * imperix_M2C_NN_control_2024b_P.Gain3_Gain_a);
 
-  // S-Function (PROBE): '<S225>/S-Function'
+  // S-Function (PROBE): '<S228>/S-Function'
   ib0_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_f5;
 
-  // DataTypeConversion: '<S227>/Data Type Conversion'
+  // DataTypeConversion: '<S230>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_kk = static_cast<real32_T>
     (rtb_TmpSignalConversionAtSFun_h[5]);
 
-  // S-Function (PROBE): '<S227>/S-Function'
+  // S-Function (PROBE): '<S230>/S-Function'
   vr_cs = imperix_M2C_NN_control_2024b_B.DataTypeConversion_kk;
 
-  // DataTypeConversion: '<S229>/Data Type Conversion' incorporates:
-  //   DataTypeConversion: '<S189>/Data Type Conversion'
+  // DataTypeConversion: '<S232>/Data Type Conversion' incorporates:
+  //   DataTypeConversion: '<S192>/Data Type Conversion'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_on = static_cast<real32_T>
     (Kpt);
 
-  // S-Function (PROBE): '<S229>/S-Function'
+  // S-Function (PROBE): '<S232>/S-Function'
   imd_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_on;
 
-  // DataTypeConversion: '<S231>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S234>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion40'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_ci =
     imperix_M2C_NN_control_2024b_B.ADC;
 
-  // S-Function (PROBE): '<S231>/S-Function'
+  // S-Function (PROBE): '<S234>/S-Function'
   Vc_ar = imperix_M2C_NN_control_2024b_B.DataTypeConversion_ci;
 
-  // DataTypeConversion: '<S233>/Data Type Conversion' incorporates:
-  //   DataTypeConversion: '<S181>/Data Type Conversion'
+  // DataTypeConversion: '<S236>/Data Type Conversion' incorporates:
+  //   DataTypeConversion: '<S184>/Data Type Conversion'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_n4 = static_cast<real32_T>
     (rtb_Gain1[0]);
 
-  // S-Function (PROBE): '<S233>/S-Function'
+  // S-Function (PROBE): '<S236>/S-Function'
   idc = imperix_M2C_NN_control_2024b_B.DataTypeConversion_n4;
 
   // S-Function (sdspstatfcns): '<S1>/Mean' incorporates:
@@ -3125,7 +3126,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     rtb_Fcn += rtb_Square_n[5 - i];
   }
 
-  // DataTypeConversion: '<S235>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S238>/Data Type Conversion' incorporates:
   //   Gain: '<S1>/Gain25'
   //   S-Function (sdspstatfcns): '<S1>/Mean1'
   //   Sqrt: '<S1>/Square Root'
@@ -3133,123 +3134,123 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_o0 = static_cast<real32_T>
     (std::sqrt(rtb_Fcn / 6.0) * imperix_M2C_NN_control_2024b_P.Gain25_Gain);
 
-  // S-Function (PROBE): '<S235>/S-Function'
+  // S-Function (PROBE): '<S238>/S-Function'
   vckpi = imperix_M2C_NN_control_2024b_B.DataTypeConversion_o0;
 
-  // DataTypeConversion: '<S237>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S240>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion34'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_gg =
     imperix_M2C_NN_control_2024b_B.ADC_k;
 
-  // S-Function (PROBE): '<S237>/S-Function'
+  // S-Function (PROBE): '<S240>/S-Function'
   Vc_br = imperix_M2C_NN_control_2024b_B.DataTypeConversion_gg;
 
-  // DataTypeConversion: '<S239>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S242>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion44'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_khy =
     imperix_M2C_NN_control_2024b_B.ADC_e;
 
-  // S-Function (PROBE): '<S239>/S-Function'
+  // S-Function (PROBE): '<S242>/S-Function'
   Vc_cr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_khy;
 
-  // DataTypeConversion: '<S241>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S244>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion39'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_hb =
     imperix_M2C_NN_control_2024b_B.ADC_b;
 
-  // S-Function (PROBE): '<S241>/S-Function'
+  // S-Function (PROBE): '<S244>/S-Function'
   Vc_as = imperix_M2C_NN_control_2024b_B.DataTypeConversion_hb;
 
-  // DataTypeConversion: '<S243>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S246>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion24'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_by =
     imperix_M2C_NN_control_2024b_B.ADC_p;
 
-  // S-Function (PROBE): '<S243>/S-Function'
+  // S-Function (PROBE): '<S246>/S-Function'
   ibr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_by;
 
-  // DataTypeConversion: '<S245>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S248>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion47'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_if =
     imperix_M2C_NN_control_2024b_B.ADC_k2;
 
-  // S-Function (PROBE): '<S245>/S-Function'
+  // S-Function (PROBE): '<S248>/S-Function'
   Vc_bs = imperix_M2C_NN_control_2024b_B.DataTypeConversion_if;
 
-  // DataTypeConversion: '<S247>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S250>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion29'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_gw =
     imperix_M2C_NN_control_2024b_B.ADC_f;
 
-  // S-Function (PROBE): '<S247>/S-Function'
+  // S-Function (PROBE): '<S250>/S-Function'
   Vc_cs = imperix_M2C_NN_control_2024b_B.DataTypeConversion_gw;
 
-  // DataTypeConversion: '<S249>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S252>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion36'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_ne =
     imperix_M2C_NN_control_2024b_B.ADC_j;
 
-  // S-Function (PROBE): '<S249>/S-Function'
+  // S-Function (PROBE): '<S252>/S-Function'
   w = imperix_M2C_NN_control_2024b_B.DataTypeConversion_ne;
 
-  // DataTypeConversion: '<S251>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S254>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion25'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_nf =
     imperix_M2C_NN_control_2024b_B.ADC_fj;
 
-  // S-Function (PROBE): '<S251>/S-Function'
+  // S-Function (PROBE): '<S254>/S-Function'
   icr = imperix_M2C_NN_control_2024b_B.DataTypeConversion_nf;
 
-  // DataTypeConversion: '<S253>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S256>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion26'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_lj =
     imperix_M2C_NN_control_2024b_B.ADC_o;
 
-  // S-Function (PROBE): '<S253>/S-Function'
+  // S-Function (PROBE): '<S256>/S-Function'
   ias = imperix_M2C_NN_control_2024b_B.DataTypeConversion_lj;
 
-  // DataTypeConversion: '<S255>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S258>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion27'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_nfm =
     imperix_M2C_NN_control_2024b_B.ADC_bn;
 
-  // S-Function (PROBE): '<S255>/S-Function'
+  // S-Function (PROBE): '<S258>/S-Function'
   ibs = imperix_M2C_NN_control_2024b_B.DataTypeConversion_nfm;
 
-  // DataTypeConversion: '<S257>/Data Type Conversion' incorporates:
+  // DataTypeConversion: '<S260>/Data Type Conversion' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion28'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_ka =
     imperix_M2C_NN_control_2024b_B.ADC_i;
 
-  // S-Function (PROBE): '<S257>/S-Function'
+  // S-Function (PROBE): '<S260>/S-Function'
   ics = imperix_M2C_NN_control_2024b_B.DataTypeConversion_ka;
 
-  // DataTypeConversion: '<S259>/Data Type Conversion'
+  // DataTypeConversion: '<S262>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_pc = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[0]);
 
-  // S-Function (PROBE): '<S259>/S-Function'
+  // S-Function (PROBE): '<S262>/S-Function'
   iar_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_pc;
 
-  // DataTypeConversion: '<S261>/Data Type Conversion'
+  // DataTypeConversion: '<S264>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_ki = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_B.Gain2[1]);
 
-  // S-Function (PROBE): '<S261>/S-Function'
+  // S-Function (PROBE): '<S264>/S-Function'
   ibr_zref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_ki;
 
-  // S-Function (TUNABLE_PARAM): '<S346>/S-Function'
+  // S-Function (TUNABLE_PARAM): '<S349>/S-Function'
   imperix_M2C_NN_control_2024b_B.SFunction_d = w_ref;
 
   // Gain: '<S1>/Gain9'
@@ -3259,27 +3260,27 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
 
   // End of Gain: '<S1>/Gain9'
 
-  // DataTypeConversion: '<S31>/Data Type Conversion1' incorporates:
+  // DataTypeConversion: '<S32>/Data Type Conversion1' incorporates:
   //   Constant: '<S1>/Constant3'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1 = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.Constant3_Value);
 
-  // DataTypeConversion: '<S31>/Data Type Conversion2' incorporates:
-  //   Constant: '<S31>/phase'
+  // DataTypeConversion: '<S32>/Data Type Conversion2' incorporates:
+  //   Constant: '<S32>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2 = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value);
 
-  // DataTypeConversion: '<S31>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S32>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3 =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S146>/generation'
-  // S-Function (CB_PWM): '<S147>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S149>/generation'
+  // S-Function (CB_PWM): '<S150>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3 > 0.0) {
     CbPwm_Activate((tPwmOutput) 8, 1);
@@ -3290,27 +3291,27 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 8,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1, 1);
 
-  // End of Outputs for SubSystem: '<S146>/generation'
+  // End of Outputs for SubSystem: '<S149>/generation'
 
-  // DataTypeConversion: '<S262>/Data Type Conversion1'
+  // DataTypeConversion: '<S265>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_b = static_cast<real32_T>
     (rtb_us[1]);
 
-  // DataTypeConversion: '<S262>/Data Type Conversion2' incorporates:
-  //   Constant: '<S262>/phase'
+  // DataTypeConversion: '<S265>/Data Type Conversion2' incorporates:
+  //   Constant: '<S265>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_e = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_n);
 
-  // DataTypeConversion: '<S262>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S265>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_e =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S266>/generation'
-  // S-Function (CB_PWM): '<S267>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S269>/generation'
+  // S-Function (CB_PWM): '<S270>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_e > 0.0) {
     CbPwm_Activate((tPwmOutput) 0, 1);
@@ -3321,29 +3322,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 0,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_b, 1);
 
-  // End of Outputs for SubSystem: '<S266>/generation'
+  // End of Outputs for SubSystem: '<S269>/generation'
 
-  // DataTypeConversion: '<S263>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S262>/Data Type Conversion1'
+  // DataTypeConversion: '<S266>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S265>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_l = static_cast<real32_T>
     (rtb_us[1]);
 
-  // DataTypeConversion: '<S263>/Data Type Conversion2' incorporates:
-  //   Constant: '<S263>/phase'
+  // DataTypeConversion: '<S266>/Data Type Conversion2' incorporates:
+  //   Constant: '<S266>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_i = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_b);
 
-  // DataTypeConversion: '<S263>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S266>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_b =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S268>/generation'
-  // S-Function (CB_PWM): '<S269>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S271>/generation'
+  // S-Function (CB_PWM): '<S272>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_b > 0.0) {
     CbPwm_Activate((tPwmOutput) 1, 1);
@@ -3354,29 +3355,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 1,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_l, 1);
 
-  // End of Outputs for SubSystem: '<S268>/generation'
+  // End of Outputs for SubSystem: '<S271>/generation'
 
-  // DataTypeConversion: '<S264>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S262>/Data Type Conversion1'
+  // DataTypeConversion: '<S267>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S265>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_e = static_cast<real32_T>
     (rtb_us[1]);
 
-  // DataTypeConversion: '<S264>/Data Type Conversion2' incorporates:
-  //   Constant: '<S264>/phase'
+  // DataTypeConversion: '<S267>/Data Type Conversion2' incorporates:
+  //   Constant: '<S267>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_g = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_nr);
 
-  // DataTypeConversion: '<S264>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S267>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_o =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S270>/generation'
-  // S-Function (CB_PWM): '<S271>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S273>/generation'
+  // S-Function (CB_PWM): '<S274>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_o > 0.0) {
     CbPwm_Activate((tPwmOutput) 2, 1);
@@ -3387,29 +3388,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 2,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_e, 1);
 
-  // End of Outputs for SubSystem: '<S270>/generation'
+  // End of Outputs for SubSystem: '<S273>/generation'
 
-  // DataTypeConversion: '<S265>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S262>/Data Type Conversion1'
+  // DataTypeConversion: '<S268>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S265>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_k = static_cast<real32_T>
     (rtb_us[1]);
 
-  // DataTypeConversion: '<S265>/Data Type Conversion2' incorporates:
-  //   Constant: '<S265>/phase'
+  // DataTypeConversion: '<S268>/Data Type Conversion2' incorporates:
+  //   Constant: '<S268>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_gn = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_i);
 
-  // DataTypeConversion: '<S265>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S268>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_j =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S272>/generation'
-  // S-Function (CB_PWM): '<S273>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S275>/generation'
+  // S-Function (CB_PWM): '<S276>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_j > 0.0) {
     CbPwm_Activate((tPwmOutput) 3, 1);
@@ -3420,27 +3421,27 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 3,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_k, 1);
 
-  // End of Outputs for SubSystem: '<S272>/generation'
+  // End of Outputs for SubSystem: '<S275>/generation'
 
-  // DataTypeConversion: '<S274>/Data Type Conversion1'
+  // DataTypeConversion: '<S277>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_j = static_cast<real32_T>
     (rtb_us[2]);
 
-  // DataTypeConversion: '<S274>/Data Type Conversion2' incorporates:
-  //   Constant: '<S274>/phase'
+  // DataTypeConversion: '<S277>/Data Type Conversion2' incorporates:
+  //   Constant: '<S277>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_f = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_c);
 
-  // DataTypeConversion: '<S274>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S277>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_g =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S278>/generation'
-  // S-Function (CB_PWM): '<S279>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S281>/generation'
+  // S-Function (CB_PWM): '<S282>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_g > 0.0) {
     CbPwm_Activate((tPwmOutput) 8, 0);
@@ -3451,29 +3452,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 8,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_j, 0);
 
-  // End of Outputs for SubSystem: '<S278>/generation'
+  // End of Outputs for SubSystem: '<S281>/generation'
 
-  // DataTypeConversion: '<S275>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S274>/Data Type Conversion1'
+  // DataTypeConversion: '<S278>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S277>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_n = static_cast<real32_T>
     (rtb_us[2]);
 
-  // DataTypeConversion: '<S275>/Data Type Conversion2' incorporates:
-  //   Constant: '<S275>/phase'
+  // DataTypeConversion: '<S278>/Data Type Conversion2' incorporates:
+  //   Constant: '<S278>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_j = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_o);
 
-  // DataTypeConversion: '<S275>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S278>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_h =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S280>/generation'
-  // S-Function (CB_PWM): '<S281>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S283>/generation'
+  // S-Function (CB_PWM): '<S284>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_h > 0.0) {
     CbPwm_Activate((tPwmOutput) 9, 0);
@@ -3484,29 +3485,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 9,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_n, 0);
 
-  // End of Outputs for SubSystem: '<S280>/generation'
+  // End of Outputs for SubSystem: '<S283>/generation'
 
-  // DataTypeConversion: '<S276>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S274>/Data Type Conversion1'
+  // DataTypeConversion: '<S279>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S277>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_lt = static_cast<real32_T>
     (rtb_us[2]);
 
-  // DataTypeConversion: '<S276>/Data Type Conversion2' incorporates:
-  //   Constant: '<S276>/phase'
+  // DataTypeConversion: '<S279>/Data Type Conversion2' incorporates:
+  //   Constant: '<S279>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_ev = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_by);
 
-  // DataTypeConversion: '<S276>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S279>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_l =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S282>/generation'
-  // S-Function (CB_PWM): '<S283>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S285>/generation'
+  // S-Function (CB_PWM): '<S286>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_l > 0.0) {
     CbPwm_Activate((tPwmOutput) 10, 0);
@@ -3517,29 +3518,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 10,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_lt, 0);
 
-  // End of Outputs for SubSystem: '<S282>/generation'
+  // End of Outputs for SubSystem: '<S285>/generation'
 
-  // DataTypeConversion: '<S277>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S274>/Data Type Conversion1'
+  // DataTypeConversion: '<S280>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S277>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_g = static_cast<real32_T>
     (rtb_us[2]);
 
-  // DataTypeConversion: '<S277>/Data Type Conversion2' incorporates:
-  //   Constant: '<S277>/phase'
+  // DataTypeConversion: '<S280>/Data Type Conversion2' incorporates:
+  //   Constant: '<S280>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_k = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_bys);
 
-  // DataTypeConversion: '<S277>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S280>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_m =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S284>/generation'
-  // S-Function (CB_PWM): '<S285>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S287>/generation'
+  // S-Function (CB_PWM): '<S288>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_m > 0.0) {
     CbPwm_Activate((tPwmOutput) 11, 0);
@@ -3550,31 +3551,31 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 11,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_g, 0);
 
-  // End of Outputs for SubSystem: '<S284>/generation'
+  // End of Outputs for SubSystem: '<S287>/generation'
 
-  // Gain: '<S92>/Gain1'
+  // Gain: '<S93>/Gain1'
   rtb_TmpSignalConversionAtGain_2 = imperix_M2C_NN_control_2024b_P.Gain1_Gain_l *
     rtb_us[3];
 
-  // DataTypeConversion: '<S286>/Data Type Conversion1'
+  // DataTypeConversion: '<S289>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_c = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S286>/Data Type Conversion2' incorporates:
-  //   Constant: '<S286>/phase'
+  // DataTypeConversion: '<S289>/Data Type Conversion2' incorporates:
+  //   Constant: '<S289>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_h = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_p);
 
-  // DataTypeConversion: '<S286>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S289>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_k =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S290>/generation'
-  // S-Function (CB_PWM): '<S291>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S293>/generation'
+  // S-Function (CB_PWM): '<S294>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_k > 0.0) {
     CbPwm_Activate((tPwmOutput) 4, 0);
@@ -3585,29 +3586,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 4,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_c, 0);
 
-  // End of Outputs for SubSystem: '<S290>/generation'
+  // End of Outputs for SubSystem: '<S293>/generation'
 
-  // DataTypeConversion: '<S287>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S286>/Data Type Conversion1'
+  // DataTypeConversion: '<S290>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S289>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_m = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S287>/Data Type Conversion2' incorporates:
-  //   Constant: '<S287>/phase'
+  // DataTypeConversion: '<S290>/Data Type Conversion2' incorporates:
+  //   Constant: '<S290>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_fi = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_oc);
 
-  // DataTypeConversion: '<S287>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S290>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_d =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S292>/generation'
-  // S-Function (CB_PWM): '<S293>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S295>/generation'
+  // S-Function (CB_PWM): '<S296>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_d > 0.0) {
     CbPwm_Activate((tPwmOutput) 5, 0);
@@ -3618,29 +3619,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 5,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_m, 0);
 
-  // End of Outputs for SubSystem: '<S292>/generation'
+  // End of Outputs for SubSystem: '<S295>/generation'
 
-  // DataTypeConversion: '<S288>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S286>/Data Type Conversion1'
+  // DataTypeConversion: '<S291>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S289>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_h = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S288>/Data Type Conversion2' incorporates:
-  //   Constant: '<S288>/phase'
+  // DataTypeConversion: '<S291>/Data Type Conversion2' incorporates:
+  //   Constant: '<S291>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_d = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_i0);
 
-  // DataTypeConversion: '<S288>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S291>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_bn =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S294>/generation'
-  // S-Function (CB_PWM): '<S295>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S297>/generation'
+  // S-Function (CB_PWM): '<S298>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_bn > 0.0) {
     CbPwm_Activate((tPwmOutput) 6, 0);
@@ -3651,29 +3652,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 6,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_h, 0);
 
-  // End of Outputs for SubSystem: '<S294>/generation'
+  // End of Outputs for SubSystem: '<S297>/generation'
 
-  // DataTypeConversion: '<S289>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S286>/Data Type Conversion1'
+  // DataTypeConversion: '<S292>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S289>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_bn = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S289>/Data Type Conversion2' incorporates:
-  //   Constant: '<S289>/phase'
+  // DataTypeConversion: '<S292>/Data Type Conversion2' incorporates:
+  //   Constant: '<S292>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_b = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_l);
 
-  // DataTypeConversion: '<S289>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S292>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_k2 =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S296>/generation'
-  // S-Function (CB_PWM): '<S297>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S299>/generation'
+  // S-Function (CB_PWM): '<S300>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_k2 > 0.0) {
     CbPwm_Activate((tPwmOutput) 7, 0);
@@ -3684,31 +3685,31 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 7,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_bn, 0);
 
-  // End of Outputs for SubSystem: '<S296>/generation'
+  // End of Outputs for SubSystem: '<S299>/generation'
 
-  // Gain: '<S93>/Gain3'
+  // Gain: '<S94>/Gain3'
   rtb_TmpSignalConversionAtGain_2 = imperix_M2C_NN_control_2024b_P.Gain3_Gain_c *
     rtb_us[4];
 
-  // DataTypeConversion: '<S298>/Data Type Conversion1'
+  // DataTypeConversion: '<S301>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_d = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S298>/Data Type Conversion2' incorporates:
-  //   Constant: '<S298>/phase'
+  // DataTypeConversion: '<S301>/Data Type Conversion2' incorporates:
+  //   Constant: '<S301>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_l = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_bj);
 
-  // DataTypeConversion: '<S298>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S301>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_p =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S302>/generation'
-  // S-Function (CB_PWM): '<S303>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S305>/generation'
+  // S-Function (CB_PWM): '<S306>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_p > 0.0) {
     CbPwm_Activate((tPwmOutput) 4, 1);
@@ -3719,29 +3720,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 4,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_d, 1);
 
-  // End of Outputs for SubSystem: '<S302>/generation'
+  // End of Outputs for SubSystem: '<S305>/generation'
 
-  // DataTypeConversion: '<S299>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S298>/Data Type Conversion1'
+  // DataTypeConversion: '<S302>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_c0 = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S299>/Data Type Conversion2' incorporates:
-  //   Constant: '<S299>/phase'
+  // DataTypeConversion: '<S302>/Data Type Conversion2' incorporates:
+  //   Constant: '<S302>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_eb = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_d);
 
-  // DataTypeConversion: '<S299>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S302>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_or =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S304>/generation'
-  // S-Function (CB_PWM): '<S305>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S307>/generation'
+  // S-Function (CB_PWM): '<S308>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_or > 0.0) {
     CbPwm_Activate((tPwmOutput) 5, 1);
@@ -3752,29 +3753,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 5,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_c0, 1);
 
-  // End of Outputs for SubSystem: '<S304>/generation'
+  // End of Outputs for SubSystem: '<S307>/generation'
 
-  // DataTypeConversion: '<S300>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S298>/Data Type Conversion1'
+  // DataTypeConversion: '<S303>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_ls = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S300>/Data Type Conversion2' incorporates:
-  //   Constant: '<S300>/phase'
+  // DataTypeConversion: '<S303>/Data Type Conversion2' incorporates:
+  //   Constant: '<S303>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_kr = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_bm);
 
-  // DataTypeConversion: '<S300>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S303>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_ln =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S306>/generation'
-  // S-Function (CB_PWM): '<S307>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S309>/generation'
+  // S-Function (CB_PWM): '<S310>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_ln > 0.0) {
     CbPwm_Activate((tPwmOutput) 6, 1);
@@ -3785,29 +3786,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 6,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_ls, 1);
 
-  // End of Outputs for SubSystem: '<S306>/generation'
+  // End of Outputs for SubSystem: '<S309>/generation'
 
-  // DataTypeConversion: '<S301>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S298>/Data Type Conversion1'
+  // DataTypeConversion: '<S304>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_bo = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S301>/Data Type Conversion2' incorporates:
-  //   Constant: '<S301>/phase'
+  // DataTypeConversion: '<S304>/Data Type Conversion2' incorporates:
+  //   Constant: '<S304>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_a = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_h);
 
-  // DataTypeConversion: '<S301>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S304>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_df =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S308>/generation'
-  // S-Function (CB_PWM): '<S309>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S311>/generation'
+  // S-Function (CB_PWM): '<S312>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_df > 0.0) {
     CbPwm_Activate((tPwmOutput) 7, 1);
@@ -3818,31 +3819,31 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 7,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_bo, 1);
 
-  // End of Outputs for SubSystem: '<S308>/generation'
+  // End of Outputs for SubSystem: '<S311>/generation'
 
-  // Gain: '<S94>/Gain3'
+  // Gain: '<S95>/Gain3'
   rtb_TmpSignalConversionAtGain_2 = imperix_M2C_NN_control_2024b_P.Gain3_Gain_f *
     rtb_us[5];
 
-  // DataTypeConversion: '<S310>/Data Type Conversion1'
+  // DataTypeConversion: '<S313>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_p = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S310>/Data Type Conversion2' incorporates:
-  //   Constant: '<S310>/phase'
+  // DataTypeConversion: '<S313>/Data Type Conversion2' incorporates:
+  //   Constant: '<S313>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_hz = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_lt);
 
-  // DataTypeConversion: '<S310>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S313>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_je =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S314>/generation'
-  // S-Function (CB_PWM): '<S315>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S317>/generation'
+  // S-Function (CB_PWM): '<S318>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_je > 0.0) {
     CbPwm_Activate((tPwmOutput) 12, 0);
@@ -3853,29 +3854,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 12,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_p, 0);
 
-  // End of Outputs for SubSystem: '<S314>/generation'
+  // End of Outputs for SubSystem: '<S317>/generation'
 
-  // DataTypeConversion: '<S311>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S310>/Data Type Conversion1'
+  // DataTypeConversion: '<S314>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S313>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_i = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S311>/Data Type Conversion2' incorporates:
-  //   Constant: '<S311>/phase'
+  // DataTypeConversion: '<S314>/Data Type Conversion2' incorporates:
+  //   Constant: '<S314>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_k0 = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_k);
 
-  // DataTypeConversion: '<S311>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S314>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_og =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S316>/generation'
-  // S-Function (CB_PWM): '<S317>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S319>/generation'
+  // S-Function (CB_PWM): '<S320>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_og > 0.0) {
     CbPwm_Activate((tPwmOutput) 13, 0);
@@ -3886,29 +3887,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 13,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_i, 0);
 
-  // End of Outputs for SubSystem: '<S316>/generation'
+  // End of Outputs for SubSystem: '<S319>/generation'
 
-  // DataTypeConversion: '<S312>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S310>/Data Type Conversion1'
+  // DataTypeConversion: '<S315>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S313>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_jv = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S312>/Data Type Conversion2' incorporates:
-  //   Constant: '<S312>/phase'
+  // DataTypeConversion: '<S315>/Data Type Conversion2' incorporates:
+  //   Constant: '<S315>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_fr = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_n1);
 
-  // DataTypeConversion: '<S312>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S315>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_he =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S318>/generation'
-  // S-Function (CB_PWM): '<S319>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S321>/generation'
+  // S-Function (CB_PWM): '<S322>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_he > 0.0) {
     CbPwm_Activate((tPwmOutput) 14, 0);
@@ -3919,29 +3920,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 14,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_jv, 0);
 
-  // End of Outputs for SubSystem: '<S318>/generation'
+  // End of Outputs for SubSystem: '<S321>/generation'
 
-  // DataTypeConversion: '<S313>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S310>/Data Type Conversion1'
+  // DataTypeConversion: '<S316>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S313>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_ko = static_cast<real32_T>
     (rtb_TmpSignalConversionAtGain_2);
 
-  // DataTypeConversion: '<S313>/Data Type Conversion2' incorporates:
-  //   Constant: '<S313>/phase'
+  // DataTypeConversion: '<S316>/Data Type Conversion2' incorporates:
+  //   Constant: '<S316>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_m = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_cv);
 
-  // DataTypeConversion: '<S313>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S316>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_n =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S320>/generation'
-  // S-Function (CB_PWM): '<S321>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S323>/generation'
+  // S-Function (CB_PWM): '<S324>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_n > 0.0) {
     CbPwm_Activate((tPwmOutput) 15, 0);
@@ -3952,34 +3953,34 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 15,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_ko, 0);
 
-  // End of Outputs for SubSystem: '<S320>/generation'
+  // End of Outputs for SubSystem: '<S323>/generation'
 
-  // MATLAB Function: '<S95>/MATLAB Function1'
+  // MATLAB Function: '<S96>/MATLAB Function1'
   rtb_Fcn = imperix_M2C_NN_control_2024b_DW.p4;
   imperix_M2C_NN_control_2024b_DW.p4 = imperix_M2C_NN_control_2024b_DW.p3;
   imperix_M2C_NN_control_2024b_DW.p3 = imperix_M2C_NN_control_2024b_DW.p2;
   imperix_M2C_NN_control_2024b_DW.p2 = imperix_M2C_NN_control_2024b_DW.p1;
   imperix_M2C_NN_control_2024b_DW.p1 = rtb_Fcn;
 
-  // DataTypeConversion: '<S323>/Data Type Conversion1'
+  // DataTypeConversion: '<S326>/Data Type Conversion1'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_f = static_cast<real32_T>
     (rtb_us[0]);
 
-  // DataTypeConversion: '<S323>/Data Type Conversion2' incorporates:
-  //   Constant: '<S323>/phase'
+  // DataTypeConversion: '<S326>/Data Type Conversion2' incorporates:
+  //   Constant: '<S326>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_n = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_f);
 
-  // DataTypeConversion: '<S323>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S326>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_a =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S327>/generation'
-  // S-Function (CB_PWM): '<S328>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S330>/generation'
+  // S-Function (CB_PWM): '<S331>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_a > 0.0) {
     CbPwm_Activate((tPwmOutput) 0, 0);
@@ -3990,29 +3991,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 0,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_f, 0);
 
-  // End of Outputs for SubSystem: '<S327>/generation'
+  // End of Outputs for SubSystem: '<S330>/generation'
 
-  // DataTypeConversion: '<S324>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S323>/Data Type Conversion1'
+  // DataTypeConversion: '<S327>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S326>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_km = static_cast<real32_T>
     (rtb_us[0]);
 
-  // DataTypeConversion: '<S324>/Data Type Conversion2' incorporates:
-  //   Constant: '<S324>/phase'
+  // DataTypeConversion: '<S327>/Data Type Conversion2' incorporates:
+  //   Constant: '<S327>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_av = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_n13);
 
-  // DataTypeConversion: '<S324>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S327>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_gg =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S329>/generation'
-  // S-Function (CB_PWM): '<S330>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S332>/generation'
+  // S-Function (CB_PWM): '<S333>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_gg > 0.0) {
     CbPwm_Activate((tPwmOutput) 1, 0);
@@ -4023,29 +4024,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 1,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_km, 0);
 
-  // End of Outputs for SubSystem: '<S329>/generation'
+  // End of Outputs for SubSystem: '<S332>/generation'
 
-  // DataTypeConversion: '<S325>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S323>/Data Type Conversion1'
+  // DataTypeConversion: '<S328>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S326>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_gd = static_cast<real32_T>
     (rtb_us[0]);
 
-  // DataTypeConversion: '<S325>/Data Type Conversion2' incorporates:
-  //   Constant: '<S325>/phase'
+  // DataTypeConversion: '<S328>/Data Type Conversion2' incorporates:
+  //   Constant: '<S328>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_gw = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_e);
 
-  // DataTypeConversion: '<S325>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S328>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_i =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S331>/generation'
-  // S-Function (CB_PWM): '<S332>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S334>/generation'
+  // S-Function (CB_PWM): '<S335>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_i > 0.0) {
     CbPwm_Activate((tPwmOutput) 2, 0);
@@ -4056,29 +4057,29 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 2,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_gd, 0);
 
-  // End of Outputs for SubSystem: '<S331>/generation'
+  // End of Outputs for SubSystem: '<S334>/generation'
 
-  // DataTypeConversion: '<S326>/Data Type Conversion1' incorporates:
-  //   DataTypeConversion: '<S323>/Data Type Conversion1'
+  // DataTypeConversion: '<S329>/Data Type Conversion1' incorporates:
+  //   DataTypeConversion: '<S326>/Data Type Conversion1'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion1_dr = static_cast<real32_T>
     (rtb_us[0]);
 
-  // DataTypeConversion: '<S326>/Data Type Conversion2' incorporates:
-  //   Constant: '<S326>/phase'
+  // DataTypeConversion: '<S329>/Data Type Conversion2' incorporates:
+  //   Constant: '<S329>/phase'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion2_gu = static_cast<real32_T>
     (imperix_M2C_NN_control_2024b_P.phase_Value_g);
 
-  // DataTypeConversion: '<S326>/Data Type Conversion3' incorporates:
+  // DataTypeConversion: '<S329>/Data Type Conversion3' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion8'
 
   imperix_M2C_NN_control_2024b_B.DataTypeConversion3_mp =
     imperix_M2C_NN_control_2024b_B.SFunction_i;
 
-  // Outputs for Atomic SubSystem: '<S333>/generation'
-  // S-Function (CB_PWM): '<S334>/PWM' incorporates:
-  //   Constant: '<S137>/clk_id'
+  // Outputs for Atomic SubSystem: '<S336>/generation'
+  // S-Function (CB_PWM): '<S337>/PWM' incorporates:
+  //   Constant: '<S140>/clk_id'
 
   if (imperix_M2C_NN_control_2024b_B.DataTypeConversion3_mp > 0.0) {
     CbPwm_Activate((tPwmOutput) 3, 0);
@@ -4089,7 +4090,7 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
   CbPwm_SetDutyCycle((tPwmOutput) 3,
                      imperix_M2C_NN_control_2024b_B.DataTypeConversion1_dr, 0);
 
-  // End of Outputs for SubSystem: '<S333>/generation'
+  // End of Outputs for SubSystem: '<S336>/generation'
 
   // RateTransition generated from: '<S1>/Speed Control Proportional Integral Control1' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion36'
@@ -4114,7 +4115,11 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
       imperix_M2C_NN_control_2024b_B.SFunction_f;
   }
 
-  // DataTypeConversion: '<S199>/Data Type Conversion' incorporates:
+  // S-Function (ADC): '<S109>/ADC'
+  imperix_M2C_NN_control_2024b_B.ADC_jl = (float)(*ix_raw_adc_ptr_0_2) *
+    0.012207F + 0.0F;
+
+  // DataTypeConversion: '<S202>/Data Type Conversion' incorporates:
   //   Constant: '<S1>/Constant4'
   //   Gain: '<S1>/Gain5'
 
@@ -4122,10 +4127,10 @@ void imperix_M2C_NN_control_2024b_step0(void) // Sample time: [0.000166667s, 0.0
     (imperix_M2C_NN_control_2024b_P.Gain5_Gain *
      imperix_M2C_NN_control_2024b_P.Constant4_Value);
 
-  // S-Function (PROBE): '<S199>/S-Function'
+  // S-Function (PROBE): '<S202>/S-Function'
   vdc = imperix_M2C_NN_control_2024b_B.DataTypeConversion_er;
 
-  // Update for DiscreteIntegrator: '<S138>/Integrator'
+  // Update for DiscreteIntegrator: '<S141>/Integrator'
   imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE +=
     imperix_M2C_NN_control_2024b_P.Integrator_gainval * Mean2_AccVal;
 }
@@ -4163,11 +4168,11 @@ void imperix_M2C_NN_control_2024b_step1(void) // Sample time: [0.001s, 0.0s]
 
   // End of MATLAB Function: '<S1>/Speed Control Proportional Integral Control1' 
 
-  // DataTypeConversion: '<S173>/Data Type Conversion'
+  // DataTypeConversion: '<S176>/Data Type Conversion'
   imperix_M2C_NN_control_2024b_B.DataTypeConversion_k0 = static_cast<real32_T>
     (rtb_iq_ref);
 
-  // S-Function (PROBE): '<S173>/S-Function'
+  // S-Function (PROBE): '<S176>/S-Function'
   imq_ref = imperix_M2C_NN_control_2024b_B.DataTypeConversion_k0;
 
   // RateTransition generated from: '<S1>/Product4'
@@ -4189,66 +4194,66 @@ void imperix_M2C_NN_control_2024b_initialize(void)
       0.25, 0.25, 0.0, -0.433, 0.433, -0.0, -0.433, 0.433, 1.0, -1.0, 0.0, -1.0,
       1.0, -0.0, 1.0, 0.0, -1.0, -1.0, -0.0, 1.0 };
 
-    // Start for S-Function (ADC): '<S116>/ADC'
-    Adc_ConfigureInput(0, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(0, 2, &ix_raw_adc_ptr_0_2);
+    // Start for S-Function (ADC): '<S119>/ADC'
+    Adc_ConfigureInput(6, 0.027466F, 0.0F, 0);
+    Adc_GetPointer(6, 0, &ix_raw_adc_ptr_6_0);
 
-    // Start for S-Function (ADC): '<S132>/ADC'
-    Adc_ConfigureInput(2, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(2, 2, &ix_raw_adc_ptr_2_2);
+    // Start for S-Function (ADC): '<S135>/ADC'
+    Adc_ConfigureInput(7, 0.027466F, 0.0F, 0);
+    Adc_GetPointer(7, 0, &ix_raw_adc_ptr_7_0);
 
-    // Start for S-Function (ADC): '<S110>/ADC'
-    Adc_ConfigureInput(4, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(4, 2, &ix_raw_adc_ptr_4_2);
+    // Start for S-Function (ADC): '<S113>/ADC'
+    Adc_ConfigureInput(0, 0.027466F, 0.0F, 1);
+    Adc_GetPointer(0, 1, &ix_raw_adc_ptr_0_1);
 
-    // Start for S-Function (ADC): '<S118>/ADC'
-    Adc_ConfigureInput(1, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(1, 2, &ix_raw_adc_ptr_1_2);
+    // Start for S-Function (ADC): '<S121>/ADC'
+    Adc_ConfigureInput(1, 0.027466F, 0.0F, 1);
+    Adc_GetPointer(1, 1, &ix_raw_adc_ptr_1_1);
 
-    // Start for S-Function (ADC): '<S112>/ADC'
-    Adc_ConfigureInput(3, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(3, 2, &ix_raw_adc_ptr_3_2);
+    // Start for S-Function (ADC): '<S115>/ADC'
+    Adc_ConfigureInput(2, 0.027466F, 0.0F, 1);
+    Adc_GetPointer(2, 1, &ix_raw_adc_ptr_2_1);
 
-    // Start for S-Function (ADC): '<S114>/ADC'
-    Adc_ConfigureInput(5, 0.027466F, 0.0F, 2);
-    Adc_GetPointer(5, 2, &ix_raw_adc_ptr_5_2);
+    // Start for S-Function (ADC): '<S117>/ADC'
+    Adc_ConfigureInput(3, 0.027466F, 0.0F, 1);
+    Adc_GetPointer(3, 1, &ix_raw_adc_ptr_3_1);
 
-    // Start for S-Function (ADC): '<S128>/ADC'
+    // Start for S-Function (ADC): '<S131>/ADC'
     Adc_ConfigureInput(0, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(0, 0, &ix_raw_adc_ptr_0_0);
 
-    // Start for S-Function (ADC): '<S130>/ADC'
+    // Start for S-Function (ADC): '<S133>/ADC'
     Adc_ConfigureInput(1, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(1, 0, &ix_raw_adc_ptr_1_0);
 
-    // Start for S-Function (ADC): '<S120>/ADC'
+    // Start for S-Function (ADC): '<S123>/ADC'
     Adc_ConfigureInput(2, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(2, 0, &ix_raw_adc_ptr_2_0);
 
-    // Start for S-Function (ADC): '<S108>/ADC'
+    // Start for S-Function (ADC): '<S111>/ADC'
     Adc_ConfigureInput(3, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(3, 0, &ix_raw_adc_ptr_3_0);
 
-    // Start for S-Function (ADC): '<S122>/ADC'
+    // Start for S-Function (ADC): '<S125>/ADC'
     Adc_ConfigureInput(4, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(4, 0, &ix_raw_adc_ptr_4_0);
 
-    // Start for S-Function (ADC): '<S124>/ADC'
+    // Start for S-Function (ADC): '<S127>/ADC'
     Adc_ConfigureInput(5, 0.00045776F, 0.0F, 0);
     Adc_GetPointer(5, 0, &ix_raw_adc_ptr_5_0);
 
-    // Start for InitialCondition: '<S138>/Initial'
+    // Start for InitialCondition: '<S141>/Initial'
     imperix_M2C_NN_control_2024b_DW.Initial_FirstOutputTime = true;
 
-    // Start for S-Function (ADC): '<S126>/ADC'
-    Adc_ConfigureInput(7, 0.012207F, 0.0F, 0);
-    Adc_GetPointer(7, 0, &ix_raw_adc_ptr_7_0);
+    // Start for S-Function (ADC): '<S129>/ADC'
+    Adc_ConfigureInput(4, 0.012207F, 0.0F, 1);
+    Adc_GetPointer(4, 1, &ix_raw_adc_ptr_4_1);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S342>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S345>/S-Function'
     flux_ref = 0.987F;                 // Tunable parameter initialization
     ConfigureTunable(&flux_ref, 0, 0);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S344>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S347>/S-Function'
     flux_control = 0.0F;               // Tunable parameter initialization
     ConfigureTunable(&flux_control, 0, 0);
 
@@ -4256,208 +4261,208 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     imperix_M2C_NN_control_2024b_B.iq_ref =
       imperix_M2C_NN_control_2024b_P.iq_ref_InitialCondition;
 
-    // Start for S-Function (TUNABLE_PARAM): '<S348>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S351>/S-Function'
     speed_control = 0.0F;              // Tunable parameter initialization
     ConfigureTunable(&speed_control, 0, 0);
 
-    // Start for S-Function (PROBE): '<S149>/S-Function'
+    // Start for S-Function (PROBE): '<S152>/S-Function'
     ConfigureProbe(&v0_ref, 0);
 
-    // Start for S-Function (PROBE): '<S151>/S-Function'
+    // Start for S-Function (PROBE): '<S154>/S-Function'
     ConfigureProbe(&icr_zref, 0);
 
-    // Start for S-Function (PROBE): '<S153>/S-Function'
+    // Start for S-Function (PROBE): '<S156>/S-Function'
     ConfigureProbe(&ias_zref, 0);
 
-    // Start for S-Function (PROBE): '<S155>/S-Function'
+    // Start for S-Function (PROBE): '<S158>/S-Function'
     ConfigureProbe(&ibs_zref, 0);
 
-    // Start for S-Function (PROBE): '<S157>/S-Function'
+    // Start for S-Function (PROBE): '<S160>/S-Function'
     ConfigureProbe(&ics_zref, 0);
 
-    // Start for S-Function (PROBE): '<S159>/S-Function'
+    // Start for S-Function (PROBE): '<S162>/S-Function'
     ConfigureProbe(&imd_r, 0);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S336>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S339>/S-Function'
     input_control = 0.0F;              // Tunable parameter initialization
     ConfigureTunable(&input_control, 0, 0);
 
-    // Start for S-Function (PROBE): '<S161>/S-Function'
+    // Start for S-Function (PROBE): '<S164>/S-Function'
     ConfigureProbe(&iP_ref, 0);
 
-    // Start for S-Function (PROBE): '<S163>/S-Function'
+    // Start for S-Function (PROBE): '<S166>/S-Function'
     ConfigureProbe(&imq_r, 0);
 
-    // Start for S-Function (PROBE): '<S165>/S-Function'
+    // Start for S-Function (PROBE): '<S168>/S-Function'
     ConfigureProbe(&imd, 0);
 
-    // Start for S-Function (PROBE): '<S167>/S-Function'
+    // Start for S-Function (PROBE): '<S170>/S-Function'
     ConfigureProbe(&imq, 0);
 
-    // Start for S-Function (PROBE): '<S169>/S-Function'
+    // Start for S-Function (PROBE): '<S172>/S-Function'
     ConfigureProbe(&flux, 0);
 
-    // Start for S-Function (PROBE): '<S171>/S-Function'
+    // Start for S-Function (PROBE): '<S174>/S-Function'
     ConfigureProbe(&iar, 0);
 
-    // Start for S-Function (PROBE): '<S175>/S-Function'
+    // Start for S-Function (PROBE): '<S178>/S-Function'
     ConfigureProbe(&vd_ref, 0);
 
-    // Start for S-Function (PROBE): '<S177>/S-Function'
+    // Start for S-Function (PROBE): '<S180>/S-Function'
     ConfigureProbe(&vq_ref, 0);
 
-    // Start for S-Function (PROBE): '<S179>/S-Function'
+    // Start for S-Function (PROBE): '<S182>/S-Function'
     ConfigureProbe(&vy_ref, 0);
 
-    // Start for S-Function (PROBE): '<S181>/S-Function'
+    // Start for S-Function (PROBE): '<S184>/S-Function'
     ConfigureProbe(&igd, 0);
 
-    // Start for S-Function (PROBE): '<S183>/S-Function'
+    // Start for S-Function (PROBE): '<S186>/S-Function'
     ConfigureProbe(&p_m, 0);
     imperix_M2_MovingRMS1_Start(&imperix_M2C_NN_control_2024b_DW.MovingRMS1);
     imperix_M2_MovingRMS1_Start(&imperix_M2C_NN_control_2024b_DW.MovingRMS2);
 
-    // Start for S-Function (PROBE): '<S185>/S-Function'
+    // Start for S-Function (PROBE): '<S188>/S-Function'
     ConfigureProbe(&izkpi, 0);
 
-    // Start for S-Function (PROBE): '<S187>/S-Function'
+    // Start for S-Function (PROBE): '<S190>/S-Function'
     ConfigureProbe(&isqr, 0);
 
-    // Start for S-Function (PROBE): '<S189>/S-Function'
+    // Start for S-Function (PROBE): '<S192>/S-Function'
     ConfigureProbe(&isdr, 0);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S340>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S343>/S-Function'
     enable_cc = 0.0F;                  // Tunable parameter initialization
     ConfigureTunable(&enable_cc, 0, 0);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S338>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S341>/S-Function'
     ie_lambda = 0.002081F;             // Tunable parameter initialization
     ConfigureTunable(&ie_lambda, 0, 0);
 
-    // Start for S-Function (PROBE): '<S191>/S-Function'
+    // Start for S-Function (PROBE): '<S194>/S-Function'
     ConfigureProbe(&vr_ar, 0);
 
-    // Start for S-Function (PROBE): '<S193>/S-Function'
+    // Start for S-Function (PROBE): '<S196>/S-Function'
     ConfigureProbe(&vma, 0);
 
-    // Start for S-Function (PROBE): '<S195>/S-Function'
+    // Start for S-Function (PROBE): '<S198>/S-Function'
     ConfigureProbe(&vmb, 0);
 
-    // Start for S-Function (PROBE): '<S197>/S-Function'
+    // Start for S-Function (PROBE): '<S200>/S-Function'
     ConfigureProbe(&vmc, 0);
 
-    // Start for S-Function (PROBE): '<S201>/S-Function'
+    // Start for S-Function (PROBE): '<S204>/S-Function'
     ConfigureProbe(&vr_br, 0);
 
-    // Start for S-Function (PROBE): '<S203>/S-Function'
+    // Start for S-Function (PROBE): '<S206>/S-Function'
     ConfigureProbe(&vr_cr, 0);
 
-    // Start for S-Function (PROBE): '<S205>/S-Function'
+    // Start for S-Function (PROBE): '<S208>/S-Function'
     ConfigureProbe(&vr_as, 0);
 
-    // Start for S-Function (PROBE): '<S207>/S-Function'
+    // Start for S-Function (PROBE): '<S210>/S-Function'
     ConfigureProbe(&theta_m, 0);
 
-    // Start for S-Function (PROBE): '<S209>/S-Function'
+    // Start for S-Function (PROBE): '<S212>/S-Function'
     ConfigureProbe(&ws, 0);
 
-    // Start for S-Function (PROBE): '<S211>/S-Function'
+    // Start for S-Function (PROBE): '<S214>/S-Function'
     ConfigureProbe(&vr_bs, 0);
 
-    // Start for S-Function (PROBE): '<S213>/S-Function'
+    // Start for S-Function (PROBE): '<S216>/S-Function'
     ConfigureProbe(&isq, 0);
 
-    // Start for S-Function (PROBE): '<S215>/S-Function'
+    // Start for S-Function (PROBE): '<S218>/S-Function'
     ConfigureProbe(&isd, 0);
 
-    // Start for S-Function (PROBE): '<S217>/S-Function'
+    // Start for S-Function (PROBE): '<S220>/S-Function'
     ConfigureProbe(&ima, 0);
 
-    // Start for S-Function (PROBE): '<S219>/S-Function'
+    // Start for S-Function (PROBE): '<S222>/S-Function'
     ConfigureProbe(&imb, 0);
 
-    // Start for S-Function (PROBE): '<S221>/S-Function'
+    // Start for S-Function (PROBE): '<S224>/S-Function'
     ConfigureProbe(&imc, 0);
 
-    // Start for S-Function (PROBE): '<S223>/S-Function'
+    // Start for S-Function (PROBE): '<S226>/S-Function'
     ConfigureProbe(&ia0_ref, 0);
 
-    // Start for S-Function (PROBE): '<S225>/S-Function'
+    // Start for S-Function (PROBE): '<S228>/S-Function'
     ConfigureProbe(&ib0_ref, 0);
 
-    // Start for S-Function (PROBE): '<S227>/S-Function'
+    // Start for S-Function (PROBE): '<S230>/S-Function'
     ConfigureProbe(&vr_cs, 0);
 
-    // Start for S-Function (PROBE): '<S229>/S-Function'
+    // Start for S-Function (PROBE): '<S232>/S-Function'
     ConfigureProbe(&imd_ref, 0);
 
-    // Start for S-Function (PROBE): '<S231>/S-Function'
+    // Start for S-Function (PROBE): '<S234>/S-Function'
     ConfigureProbe(&Vc_ar, 0);
 
-    // Start for S-Function (PROBE): '<S233>/S-Function'
+    // Start for S-Function (PROBE): '<S236>/S-Function'
     ConfigureProbe(&idc, 0);
 
-    // Start for S-Function (PROBE): '<S235>/S-Function'
+    // Start for S-Function (PROBE): '<S238>/S-Function'
     ConfigureProbe(&vckpi, 0);
 
-    // Start for S-Function (PROBE): '<S237>/S-Function'
+    // Start for S-Function (PROBE): '<S240>/S-Function'
     ConfigureProbe(&Vc_br, 0);
 
-    // Start for S-Function (PROBE): '<S239>/S-Function'
+    // Start for S-Function (PROBE): '<S242>/S-Function'
     ConfigureProbe(&Vc_cr, 0);
 
-    // Start for S-Function (PROBE): '<S241>/S-Function'
+    // Start for S-Function (PROBE): '<S244>/S-Function'
     ConfigureProbe(&Vc_as, 0);
 
-    // Start for S-Function (PROBE): '<S243>/S-Function'
+    // Start for S-Function (PROBE): '<S246>/S-Function'
     ConfigureProbe(&ibr, 0);
 
-    // Start for S-Function (PROBE): '<S245>/S-Function'
+    // Start for S-Function (PROBE): '<S248>/S-Function'
     ConfigureProbe(&Vc_bs, 0);
 
-    // Start for S-Function (PROBE): '<S247>/S-Function'
+    // Start for S-Function (PROBE): '<S250>/S-Function'
     ConfigureProbe(&Vc_cs, 0);
 
-    // Start for S-Function (PROBE): '<S249>/S-Function'
+    // Start for S-Function (PROBE): '<S252>/S-Function'
     ConfigureProbe(&w, 0);
 
-    // Start for S-Function (PROBE): '<S251>/S-Function'
+    // Start for S-Function (PROBE): '<S254>/S-Function'
     ConfigureProbe(&icr, 0);
 
-    // Start for S-Function (PROBE): '<S253>/S-Function'
+    // Start for S-Function (PROBE): '<S256>/S-Function'
     ConfigureProbe(&ias, 0);
 
-    // Start for S-Function (PROBE): '<S255>/S-Function'
+    // Start for S-Function (PROBE): '<S258>/S-Function'
     ConfigureProbe(&ibs, 0);
 
-    // Start for S-Function (PROBE): '<S257>/S-Function'
+    // Start for S-Function (PROBE): '<S260>/S-Function'
     ConfigureProbe(&ics, 0);
 
-    // Start for S-Function (PROBE): '<S259>/S-Function'
+    // Start for S-Function (PROBE): '<S262>/S-Function'
     ConfigureProbe(&iar_zref, 0);
 
-    // Start for S-Function (PROBE): '<S261>/S-Function'
+    // Start for S-Function (PROBE): '<S264>/S-Function'
     ConfigureProbe(&ibr_zref, 0);
 
-    // Start for S-Function (IRQ): '<S135>/S-Function' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (IRQ): '<S138>/S-Function' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     ConfigureMainInterrupt(SimulinkInterrupt, (tClock)
       imperix_M2C_NN_control_2024b_P.clk_id_Value, 0.5F, 0U);
     ConfigureReadTriggerDelayInNs(2000U);
     Adc_SetUserOversampling(0.0F);
 
-    // Start for S-Function (CLK): '<S137>/CLK1'
+    // Start for S-Function (CLK): '<S140>/CLK1'
     Clock_SetFrequency((tClock) 0, 6000.0F);
 
-    // Start for S-Function (TUNABLE_PARAM): '<S346>/S-Function'
+    // Start for S-Function (TUNABLE_PARAM): '<S349>/S-Function'
     w_ref = 31.415926F;                // Tunable parameter initialization
     ConfigureTunable(&w_ref, 0, 0);
 
-    // Start for Atomic SubSystem: '<S146>/generation'
+    // Start for Atomic SubSystem: '<S149>/generation'
 
-    // Start for S-Function (CB_PWM): '<S147>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S150>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 8, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4470,12 +4475,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 8, 1);
     CbPwm_Activate((tPwmOutput) 8, 1);
 
-    // End of Start for SubSystem: '<S146>/generation'
+    // End of Start for SubSystem: '<S149>/generation'
 
-    // Start for Atomic SubSystem: '<S266>/generation'
+    // Start for Atomic SubSystem: '<S269>/generation'
 
-    // Start for S-Function (CB_PWM): '<S267>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S270>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 0, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4488,12 +4493,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 0, 1);
     CbPwm_Activate((tPwmOutput) 0, 1);
 
-    // End of Start for SubSystem: '<S266>/generation'
+    // End of Start for SubSystem: '<S269>/generation'
 
-    // Start for Atomic SubSystem: '<S268>/generation'
+    // Start for Atomic SubSystem: '<S271>/generation'
 
-    // Start for S-Function (CB_PWM): '<S269>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S272>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 1, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4506,12 +4511,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 1, 1);
     CbPwm_Activate((tPwmOutput) 1, 1);
 
-    // End of Start for SubSystem: '<S268>/generation'
+    // End of Start for SubSystem: '<S271>/generation'
 
-    // Start for Atomic SubSystem: '<S270>/generation'
+    // Start for Atomic SubSystem: '<S273>/generation'
 
-    // Start for S-Function (CB_PWM): '<S271>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S274>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 2, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4524,12 +4529,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 2, 1);
     CbPwm_Activate((tPwmOutput) 2, 1);
 
-    // End of Start for SubSystem: '<S270>/generation'
+    // End of Start for SubSystem: '<S273>/generation'
 
-    // Start for Atomic SubSystem: '<S272>/generation'
+    // Start for Atomic SubSystem: '<S275>/generation'
 
-    // Start for S-Function (CB_PWM): '<S273>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S276>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 3, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4542,12 +4547,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 3, 1);
     CbPwm_Activate((tPwmOutput) 3, 1);
 
-    // End of Start for SubSystem: '<S272>/generation'
+    // End of Start for SubSystem: '<S275>/generation'
 
-    // Start for Atomic SubSystem: '<S278>/generation'
+    // Start for Atomic SubSystem: '<S281>/generation'
 
-    // Start for S-Function (CB_PWM): '<S279>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S282>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 8, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4560,12 +4565,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 8, 0);
     CbPwm_Activate((tPwmOutput) 8, 0);
 
-    // End of Start for SubSystem: '<S278>/generation'
+    // End of Start for SubSystem: '<S281>/generation'
 
-    // Start for Atomic SubSystem: '<S280>/generation'
+    // Start for Atomic SubSystem: '<S283>/generation'
 
-    // Start for S-Function (CB_PWM): '<S281>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S284>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 9, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4578,12 +4583,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 9, 0);
     CbPwm_Activate((tPwmOutput) 9, 0);
 
-    // End of Start for SubSystem: '<S280>/generation'
+    // End of Start for SubSystem: '<S283>/generation'
 
-    // Start for Atomic SubSystem: '<S282>/generation'
+    // Start for Atomic SubSystem: '<S285>/generation'
 
-    // Start for S-Function (CB_PWM): '<S283>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S286>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 10, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4596,12 +4601,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 10, 0);
     CbPwm_Activate((tPwmOutput) 10, 0);
 
-    // End of Start for SubSystem: '<S282>/generation'
+    // End of Start for SubSystem: '<S285>/generation'
 
-    // Start for Atomic SubSystem: '<S284>/generation'
+    // Start for Atomic SubSystem: '<S287>/generation'
 
-    // Start for S-Function (CB_PWM): '<S285>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S288>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 11, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4614,12 +4619,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 11, 0);
     CbPwm_Activate((tPwmOutput) 11, 0);
 
-    // End of Start for SubSystem: '<S284>/generation'
+    // End of Start for SubSystem: '<S287>/generation'
 
-    // Start for Atomic SubSystem: '<S290>/generation'
+    // Start for Atomic SubSystem: '<S293>/generation'
 
-    // Start for S-Function (CB_PWM): '<S291>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S294>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 4, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4632,12 +4637,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 4, 0);
     CbPwm_Activate((tPwmOutput) 4, 0);
 
-    // End of Start for SubSystem: '<S290>/generation'
+    // End of Start for SubSystem: '<S293>/generation'
 
-    // Start for Atomic SubSystem: '<S292>/generation'
+    // Start for Atomic SubSystem: '<S295>/generation'
 
-    // Start for S-Function (CB_PWM): '<S293>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S296>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 5, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4650,12 +4655,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 5, 0);
     CbPwm_Activate((tPwmOutput) 5, 0);
 
-    // End of Start for SubSystem: '<S292>/generation'
+    // End of Start for SubSystem: '<S295>/generation'
 
-    // Start for Atomic SubSystem: '<S294>/generation'
+    // Start for Atomic SubSystem: '<S297>/generation'
 
-    // Start for S-Function (CB_PWM): '<S295>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S298>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 6, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4668,12 +4673,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 6, 0);
     CbPwm_Activate((tPwmOutput) 6, 0);
 
-    // End of Start for SubSystem: '<S294>/generation'
+    // End of Start for SubSystem: '<S297>/generation'
 
-    // Start for Atomic SubSystem: '<S296>/generation'
+    // Start for Atomic SubSystem: '<S299>/generation'
 
-    // Start for S-Function (CB_PWM): '<S297>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S300>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 7, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4686,12 +4691,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 7, 0);
     CbPwm_Activate((tPwmOutput) 7, 0);
 
-    // End of Start for SubSystem: '<S296>/generation'
+    // End of Start for SubSystem: '<S299>/generation'
 
-    // Start for Atomic SubSystem: '<S302>/generation'
+    // Start for Atomic SubSystem: '<S305>/generation'
 
-    // Start for S-Function (CB_PWM): '<S303>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S306>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 4, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4704,12 +4709,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 4, 1);
     CbPwm_Activate((tPwmOutput) 4, 1);
 
-    // End of Start for SubSystem: '<S302>/generation'
+    // End of Start for SubSystem: '<S305>/generation'
 
-    // Start for Atomic SubSystem: '<S304>/generation'
+    // Start for Atomic SubSystem: '<S307>/generation'
 
-    // Start for S-Function (CB_PWM): '<S305>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S308>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 5, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4722,12 +4727,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 5, 1);
     CbPwm_Activate((tPwmOutput) 5, 1);
 
-    // End of Start for SubSystem: '<S304>/generation'
+    // End of Start for SubSystem: '<S307>/generation'
 
-    // Start for Atomic SubSystem: '<S306>/generation'
+    // Start for Atomic SubSystem: '<S309>/generation'
 
-    // Start for S-Function (CB_PWM): '<S307>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S310>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 6, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4740,12 +4745,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 6, 1);
     CbPwm_Activate((tPwmOutput) 6, 1);
 
-    // End of Start for SubSystem: '<S306>/generation'
+    // End of Start for SubSystem: '<S309>/generation'
 
-    // Start for Atomic SubSystem: '<S308>/generation'
+    // Start for Atomic SubSystem: '<S311>/generation'
 
-    // Start for S-Function (CB_PWM): '<S309>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S312>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 7, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 1);
@@ -4758,12 +4763,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 7, 1);
     CbPwm_Activate((tPwmOutput) 7, 1);
 
-    // End of Start for SubSystem: '<S308>/generation'
+    // End of Start for SubSystem: '<S311>/generation'
 
-    // Start for Atomic SubSystem: '<S314>/generation'
+    // Start for Atomic SubSystem: '<S317>/generation'
 
-    // Start for S-Function (CB_PWM): '<S315>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S318>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 12, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4776,12 +4781,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 12, 0);
     CbPwm_Activate((tPwmOutput) 12, 0);
 
-    // End of Start for SubSystem: '<S314>/generation'
+    // End of Start for SubSystem: '<S317>/generation'
 
-    // Start for Atomic SubSystem: '<S316>/generation'
+    // Start for Atomic SubSystem: '<S319>/generation'
 
-    // Start for S-Function (CB_PWM): '<S317>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S320>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 13, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4794,12 +4799,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 13, 0);
     CbPwm_Activate((tPwmOutput) 13, 0);
 
-    // End of Start for SubSystem: '<S316>/generation'
+    // End of Start for SubSystem: '<S319>/generation'
 
-    // Start for Atomic SubSystem: '<S318>/generation'
+    // Start for Atomic SubSystem: '<S321>/generation'
 
-    // Start for S-Function (CB_PWM): '<S319>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S322>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 14, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4812,12 +4817,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 14, 0);
     CbPwm_Activate((tPwmOutput) 14, 0);
 
-    // End of Start for SubSystem: '<S318>/generation'
+    // End of Start for SubSystem: '<S321>/generation'
 
-    // Start for Atomic SubSystem: '<S320>/generation'
+    // Start for Atomic SubSystem: '<S323>/generation'
 
-    // Start for S-Function (CB_PWM): '<S321>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S324>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 15, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4830,12 +4835,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 15, 0);
     CbPwm_Activate((tPwmOutput) 15, 0);
 
-    // End of Start for SubSystem: '<S320>/generation'
+    // End of Start for SubSystem: '<S323>/generation'
 
-    // Start for Atomic SubSystem: '<S327>/generation'
+    // Start for Atomic SubSystem: '<S330>/generation'
 
-    // Start for S-Function (CB_PWM): '<S328>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S331>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 0, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4848,12 +4853,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 0, 0);
     CbPwm_Activate((tPwmOutput) 0, 0);
 
-    // End of Start for SubSystem: '<S327>/generation'
+    // End of Start for SubSystem: '<S330>/generation'
 
-    // Start for Atomic SubSystem: '<S329>/generation'
+    // Start for Atomic SubSystem: '<S332>/generation'
 
-    // Start for S-Function (CB_PWM): '<S330>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S333>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 1, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4866,12 +4871,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 1, 0);
     CbPwm_Activate((tPwmOutput) 1, 0);
 
-    // End of Start for SubSystem: '<S329>/generation'
+    // End of Start for SubSystem: '<S332>/generation'
 
-    // Start for Atomic SubSystem: '<S331>/generation'
+    // Start for Atomic SubSystem: '<S334>/generation'
 
-    // Start for S-Function (CB_PWM): '<S332>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S335>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 2, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4884,12 +4889,12 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 2, 0);
     CbPwm_Activate((tPwmOutput) 2, 0);
 
-    // End of Start for SubSystem: '<S331>/generation'
+    // End of Start for SubSystem: '<S334>/generation'
 
-    // Start for Atomic SubSystem: '<S333>/generation'
+    // Start for Atomic SubSystem: '<S336>/generation'
 
-    // Start for S-Function (CB_PWM): '<S334>/PWM' incorporates:
-    //   Constant: '<S137>/clk_id'
+    // Start for S-Function (CB_PWM): '<S337>/PWM' incorporates:
+    //   Constant: '<S140>/clk_id'
 
     CbPwm_ConfigureClock((tPwmOutput) 3, (tClock)
                          imperix_M2C_NN_control_2024b_P.clk_id_Value, 0);
@@ -4902,15 +4907,19 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     CbPwm_ConfigureActivateAsRealTime((tPwmOutput) 3, 0);
     CbPwm_Activate((tPwmOutput) 3, 0);
 
-    // End of Start for SubSystem: '<S333>/generation'
+    // End of Start for SubSystem: '<S336>/generation'
 
-    // Start for S-Function (PROBE): '<S199>/S-Function'
+    // Start for S-Function (ADC): '<S109>/ADC'
+    Adc_ConfigureInput(0, 0.012207F, 0.0F, 2);
+    Adc_GetPointer(0, 2, &ix_raw_adc_ptr_0_2);
+
+    // Start for S-Function (PROBE): '<S202>/S-Function'
     ConfigureProbe(&vdc, 0);
 
-    // Start for S-Function (PROBE): '<S173>/S-Function'
+    // Start for S-Function (PROBE): '<S176>/S-Function'
     ConfigureProbe(&imq_ref, 0);
 
-    // InitializeConditions for DiscreteIntegrator: '<S138>/Integrator'
+    // InitializeConditions for DiscreteIntegrator: '<S141>/Integrator'
     imperix_M2C_NN_control_2024b_DW.Integrator_DSTATE =
       imperix_M2C_NN_control_2024b_P.IntegratorwithWrappedStateDis_g;
 
@@ -4922,7 +4931,7 @@ void imperix_M2C_NN_control_2024b_initialize(void)
     std::memcpy(&imperix_M2C_NN_control_2024b_DW.Tinv[0], &tmp[0], 36U * sizeof
                 (real_T));
 
-    // SystemInitialize for MATLAB Function: '<S95>/MATLAB Function1'
+    // SystemInitialize for MATLAB Function: '<S96>/MATLAB Function1'
     imperix_M2C_NN_control_2024b_DW.p1 = 1.0;
     imperix_M2C_NN_control_2024b_DW.p2 = 2.0;
     imperix_M2C_NN_control_2024b_DW.p3 = 3.0;
