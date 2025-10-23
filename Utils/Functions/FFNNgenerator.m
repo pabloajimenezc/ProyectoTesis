@@ -1,5 +1,5 @@
 function net = FFNNgenerator(args)
-%% Neural network generation arguments
+%% Feedforward Neural network generation arguments
 % Ninputs          % int > 0
 % Noutputs         % int > 0
 % Nlayers          % int > 0
@@ -12,28 +12,37 @@ function net = FFNNgenerator(args)
 % BatchNorm        % bool
 % TrainBias        % bool
 
-% Función de activación
+% Activation function
 function layer = actFcn(name)
     switch lower(name)
         case 'relu',    layer = reluLayer;
         case 'tanh',    layer = tanhLayer;
         case 'sigmoid', layer = sigmoidLayer;
-        case 'linear',  layer = [];  % Sin activación
+        case 'linear',  layer = [];  % Without activation
         otherwise, error("Unknown activation function: '%s'.", name);
     end
 end
 
-% Capa fully connected con o sin bias entrenable
-baseLayer = @(n) fullyConnectedLayer(n, ...
-    'WeightsInitializer', args.WinitFcn, ...
-    'BiasLearnRateFactor', double(~args.TrainBias), ...
-    'Bias', zeros(n, 1));
+% Base fully connected layer
+if args.TrainBias % Train bias, intizalize as specified
+    baseLayer = @(n) fullyConnectedLayer(n, ...
+        WeightsInitializer = args.WinitFcn, ...
+        WeightLearnRateFactor = 1, ...
+        BiasInitializer = args.BinitFcn, ...
+        BiasLearnRateFactor = 1);
+else % Don't train bias and set to 0
+    baseLayer = @(n) fullyConnectedLayer(n, ...
+        WeightsInitializer = "zeros", ...
+        WeightLearnRateFactor = 0, ...
+        Bias = zeros(n, 1, 'single'), ...
+        BiasLearnRateFactor = 0);
+end
 
-% Capas condicionales
+% Conditional layers
 dropout = @(d) conditionalLayer(d > 0, dropoutLayer(d));
 bn      = @(b) conditionalLayer(b, batchNormalizationLayer);
 
-% Capas de activación
+% Activation layers
 hiddenAct = actFcn(args.HiddenActivation);
 outputAct = actFcn(args.OutputActivation);
 
@@ -46,14 +55,11 @@ hiddenBlock = @(n) [baseLayer(n); ...
 % Construcción de capas
 hidden_layers = repmat(hiddenBlock(args.Nneurons), args.Nlayers, 1);
 output_layer  = [baseLayer(args.Noutputs); outputAct];
-if ~isempty(outputAct)
-    output_layer(1).Name = args.OutputActivation;
-end
+output_layer(2).Name = 'output';
 
 % Construcción final de la red
 layers = [featureInputLayer(args.Ninputs); hidden_layers; output_layer];
 net = dlnetwork(layers);
-net = dlupdate(@double, net);
 end
 
 % Función auxiliar para condicionales limpios
