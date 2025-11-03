@@ -1,4 +1,4 @@
-clear all
+% clear all
 % File: generate_summary_pdf_selected.m
 
 %% 1) Load data

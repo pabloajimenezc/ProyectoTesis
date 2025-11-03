@@ -1,4 +1,4 @@
-clear all
+% clear all
 % File: generate_summary_pdf.m
 % Reads summaryBCD.csv and summaryNN.csv, plots 6×2 panels with
 % MATLAB default line colors, dashed lines for *_ref series,
