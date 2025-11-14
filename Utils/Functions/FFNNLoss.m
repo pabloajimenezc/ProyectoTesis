@@ -38,6 +38,10 @@ loss = mean(loss, 'all');
 % end
 % loss = loss + L2Factor * L2;
 
+%% PINN regularization
+
+
+
 %% Gradients
 gradients = dlgradient(loss, net.Learnables);
 
