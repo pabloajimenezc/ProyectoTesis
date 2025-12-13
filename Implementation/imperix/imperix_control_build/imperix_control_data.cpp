@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.6
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Dec 12 16:36:29 2025
+// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
 //
 #include "imperix_control.h"
 
@@ -822,11 +822,6 @@ P_imperix_control_T imperix_control_P = {
     -1.0, -0.0, -0.0, -0.0, -1.0, -0.0, -0.0, -1.0, -0.0, -0.0, -0.0, -1.0, -0.0,
     -0.0, -1.0 },
 
-  // Expression: zeros(6, 1)
-  //  Referenced by: '<S1>/Constant3'
-
-  { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 },
-
   // Expression: 1
   //  Referenced by: '<S1>/Constant4'
 
@@ -998,10 +993,10 @@ P_imperix_control_T imperix_control_P = {
 
   0.0,
 
-  // Expression: 2/3*pi*0.5
+  // Expression: 2/3*pi*0
   //  Referenced by: '<S34>/IC'
 
-  1.0471975511965976,
+  0.0,
 
   // Expression: single(deadtime)
   //  Referenced by: '<S191>/PWM'
@@ -2701,7 +2696,7 @@ P_imperix_control_T imperix_control_P = {
   // Computed Parameter: SFunction_P1_p
   //  Referenced by: '<S503>/S-Function'
 
-  { 100U, 111U, 67U, 111U, 110U, 116U, 114U, 111U, 108U },
+  { 100U, 111U, 95U, 99U, 111U, 110U, 116U, 114U, 111U, 108U },
 
   // Expression: uint16(CAN_MB_ID)
   //  Referenced by: '<S503>/S-Function'
@@ -3318,7 +3313,7 @@ P_imperix_control_T imperix_control_P = {
 
   -1,
 
-  // Computed Parameter: Constant3_Value_i
+  // Computed Parameter: Constant3_Value
   //  Referenced by: '<S162>/Constant3'
 
   1,

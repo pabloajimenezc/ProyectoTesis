@@ -8,16 +8,14 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.6
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Dec 12 16:36:29 2025
+// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
 //
 #ifndef imperix_control_h_
 #define imperix_control_h_
 #include "rtwtypes.h"
-#include "coder_posix_time.h"
 #include "imperix_control_types.h"
-#include "coder_array.h"
 
 extern "C"
 {
@@ -75,7 +73,7 @@ struct B_imperix_control_T {
   real32_T SFunction;                  // '<S501>/S-Function'
   real32_T SFunction_k;                // '<S505>/S-Function'
   real32_T SFunction_kx;               // '<S503>/S-Function'
-  real32_T DataTypeConversion1_c;      // '<S27>/Data Type Conversion1'
+  real32_T DataTypeConversion1;        // '<S27>/Data Type Conversion1'
   real32_T DataTypeConversion2;        // '<S27>/Data Type Conversion2'
   real32_T DataTypeConversion3;        // '<S27>/Data Type Conversion3'
   real32_T DataTypeConversion1_n;      // '<S244>/Data Type Conversion1'
@@ -102,7 +100,7 @@ struct B_imperix_control_T {
   real32_T DataTypeConversion1_h;      // '<S443>/Data Type Conversion1'
   real32_T DataTypeConversion2_ht;     // '<S443>/Data Type Conversion2'
   real32_T DataTypeConversion3_b;      // '<S443>/Data Type Conversion3'
-  real32_T DataTypeConversion1_cb;     // '<S452>/Data Type Conversion1'
+  real32_T DataTypeConversion1_c;      // '<S452>/Data Type Conversion1'
   real32_T DataTypeConversion2_f;      // '<S452>/Data Type Conversion2'
   real32_T DataTypeConversion3_aq;     // '<S452>/Data Type Conversion3'
   real32_T DataTypeConversion1_m;      // '<S453>/Data Type Conversion1'
@@ -154,6 +152,10 @@ struct B_imperix_control_T {
 
 // Block states (default storage) for system '<Root>'
 struct DW_imperix_control_T {
+  mpcActiveSetOptions_imperix_c_T options_z;// '<S1>/Energy balance'
+  mpcActiveSetOptions_imperix_c_T options_o;// '<S1>/Energy balance'
+  mpcActiveSetOptions_imperix_c_T options;// '<S1>/LICCs control'
+  mpcActiveSetOptions_imperix_c_T SolverOpts;// '<S25>/Saturation'
   real_T SFunction_DSTATE;             // '<S501>/S-Function'
   real_T SFunction_DSTATE_e;           // '<S505>/S-Function'
   real_T SFunction_DSTATE_p;           // '<S503>/S-Function'
@@ -185,8 +187,8 @@ struct DW_imperix_control_T {
   real_T TmpRTBAtKalmanFilterInport3_Buf[2];// synthesized block
   real_T Ac[24];                       // '<S25>/Saturation'
   real_T Ix[4];                        // '<S25>/Saturation'
+  real_T Tol;                          // '<S25>/Saturation'
   real_T is_max;                       // '<S25>/Saturation'
-  real_T freq;                         // '<S25>/Saturation'
   real_T Ad[8];                        // '<S1>/LICCs control'
   real_T Bd[16];                       // '<S1>/LICCs control'
   real_T H[16];                        // '<S1>/LICCs control'
@@ -195,6 +197,7 @@ struct DW_imperix_control_T {
   real_T is_max2;                      // '<S1>/LICCs control'
   real_T Vc_ref2;                      // '<S1>/LICCs control'
   real_T pinvT[30];                    // '<S1>/LICCs control'
+  real_T u_prev[2];                    // '<S1>/LICCs control'
   real_T xt_est_apriori[6];            // '<S1>/Kalman Filter'
   real_T SIGt_apriori[36];             // '<S1>/Kalman Filter'
   real_T Q[36];                        // '<S1>/Kalman Filter'
@@ -213,15 +216,13 @@ struct DW_imperix_control_T {
   real_T Tabc2ab[6];                   // '<S1>/Energy balance'
   real_T A[30];                        // '<S1>/Energy balance'
   real_T pinvA[30];                    // '<S1>/Energy balance'
-  real_T n;                            // '<S1>/Energy balance'
-  real_T Np;                           // '<S1>/Energy balance'
   real_T K[324];                       // '<S1>/Energy balance'
   real_T MI[324];                      // '<S1>/Energy balance'
   real_T NN[108];                      // '<S1>/Energy balance'
   real_T ONE[54];                      // '<S1>/Energy balance'
   real_T Nl;                           // '<S1>/Energy balance'
-  real_T is_max_p;                     // '<S1>/Energy balance'
-  real_T is_max2_b;                    // '<S1>/Energy balance'
+  real_T is_max_h;                     // '<S1>/Energy balance'
+  real_T is_max2_o;                    // '<S1>/Energy balance'
   real_T vo_max2;                      // '<S1>/Energy balance'
   real_T Ec_ref2;                      // '<S1>/Energy balance'
   real_T Hu_z[36];                     // '<S1>/Energy balance'
@@ -231,18 +232,14 @@ struct DW_imperix_control_T {
   real_T Aineq_o[18];                  // '<S1>/Energy balance'
   real_T lambda_o;                     // '<S1>/Energy balance'
   real_T Ec_dev;                       // '<S1>/Energy balance'
-  coder::array<real_T,1> u_prev;       // '<S1>/LICCs control'
   boolean_T IC_FirstOutputTime;        // '<S34>/IC'
   boolean_T is_max_not_empty;          // '<S25>/White noise'
   boolean_T Ac_not_empty;              // '<S25>/Saturation'
-  boolean_T freq_not_empty;            // '<S25>/Saturation'
-  boolean_T savedTime_not_empty;       // '<S25>/Saturation'
   boolean_T Ec_ref_not_empty;          // '<S25>/Input format'
-  boolean_T nu_not_empty;              // '<S1>/LICCs control'
-  boolean_T iA[24];                    // '<S1>/LICCs control'
+  boolean_T Ad_not_empty;              // '<S1>/LICCs control'
   boolean_T xt_est_apriori_not_empty;  // '<S1>/Kalman Filter'
   boolean_T F_max_not_empty;           // '<S1>/IM references'
-  boolean_T p_not_empty;               // '<S1>/Energy balance'
+  boolean_T Ts_not_empty;              // '<S1>/Energy balance'
 };
 
 // Parameters for system: '<S257>/Subsystem - pi//2 delay'
@@ -550,9 +547,6 @@ struct P_imperix_control_T_ {
   real_T Gain2_Gain_k[30];             // Expression: M2C.A'
                                           //  Referenced by: '<S32>/Gain2'
 
-  real_T Constant3_Value[6];           // Expression: zeros(6, 1)
-                                          //  Referenced by: '<S1>/Constant3'
-
   real_T Constant4_Value;              // Expression: 1
                                           //  Referenced by: '<S1>/Constant4'
 
@@ -656,7 +650,7 @@ struct P_imperix_control_T_ {
   real_T phase_Value_nl;               // Expression: PHASE
                                           //  Referenced by: '<S491>/phase'
 
-  real_T IC_Value;                     // Expression: 2/3*pi*0.5
+  real_T IC_Value;                     // Expression: 2/3*pi*0
                                           //  Referenced by: '<S34>/IC'
 
   real32_T PWM_P2;                     // Expression: single(deadtime)
@@ -1676,7 +1670,7 @@ struct P_imperix_control_T_ {
   uint16_T SFunction_P15_e;            // Expression: uint16(ETH_PORT)
                                           //  Referenced by: '<S505>/S-Function'
 
-  uint16_T SFunction_P1_p[9];          // Computed Parameter: SFunction_P1_p
+  uint16_T SFunction_P1_p[10];         // Computed Parameter: SFunction_P1_p
                                           //  Referenced by: '<S503>/S-Function'
 
   uint16_T SFunction_P9_e;             // Expression: uint16(CAN_MB_ID)
@@ -2048,7 +2042,7 @@ struct P_imperix_control_T_ {
   int8_T Constant2_Value;              // Computed Parameter: Constant2_Value
                                           //  Referenced by: '<S162>/Constant2'
 
-  int8_T Constant3_Value_i;            // Computed Parameter: Constant3_Value_i
+  int8_T Constant3_Value;              // Computed Parameter: Constant3_Value
                                           //  Referenced by: '<S162>/Constant3'
 
   int8_T Constant4_Value_j;            // Computed Parameter: Constant4_Value_j

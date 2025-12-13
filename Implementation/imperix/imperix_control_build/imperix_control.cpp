@@ -8,14 +8,12 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.6
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Dec 12 16:36:29 2025
+// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
 //
 #include "imperix_control.h"
 #include "rtwtypes.h"
-#include "imperix_control_types.h"
-#include "coder_array.h"
 #include "imperix_control_private.h"
 #include <math.h>
 
@@ -27,7 +25,6 @@ extern "C"
 }
 
 #include <string.h>
-#include "coder_posix_time.h"
 #include "rt_defines.h"
 
 int16_T* ix_raw_adc_ptr_3_0;
@@ -45,7 +42,7 @@ int16_T* ix_raw_adc_ptr_1_0;
 int16_T* ix_raw_adc_ptr_7_0;
 real32_T F_ref;                        // Tunable parameter
 real32_T w_ref;                        // Tunable parameter
-real32_T doControl;                    // Tunable parameter
+real32_T do_control;                   // Tunable parameter
 unsigned char __attribute__ ((section ("devicescount"))) __attribute__((used))
   ____DEVICES_COUNT = (1U+1);
 
@@ -60,27 +57,25 @@ RT_MODEL_imperix_control_T imperix_control_M_ = RT_MODEL_imperix_control_T();
 RT_MODEL_imperix_control_T *const imperix_control_M = &imperix_control_M_;
 
 // Forward declaration for local functions
-static void imperix_control_timeKeeper(real_T newTime_tv_sec, real_T
-  newTime_tv_nsec, sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime);
-static void imperix_control_tic(sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime);
 static void imperix_control_trisolve_k(const real_T A[4], real_T B[4]);
 static real_T imperix_control_norm_k(const real_T x[2]);
+static real_T imperix_control_xnrm2_b(int32_T n, const real_T x[4], int32_T ix0);
 static void imperix_control_xgemv_e(int32_T m, int32_T n, const real_T A[4],
   int32_T ia0, const real_T x[4], int32_T ix0, real_T y[2]);
 static void imperix_control_xgerc_j(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[2], real_T A[4], int32_T ia0);
 static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
   iC[12], int32_T nA, const real_T Linv[4], real_T RLinv[4], real_T D[4], real_T
-  H[4]);
+  H[4], int32_T n);
+static void imperix_contro_DropConstraint_i(int32_T kDrop, boolean_T iA[12],
+  int32_T *nA, int32_T iC[12]);
 static void imperix_control_qpkwik_aq(const real_T Linv[4], const real_T Hinv[4],
   const real_T f[2], const real_T Ac[24], const real_T b[12], boolean_T iA[12],
-  real_T x[2], real_T lambda[12], int32_T *status);
-static void imperix_control_timeKeeper_n(sdAmwXbnJnEmimT0NaJRtAD_imper_T
-  *savedTime, real_T *outTime_tv_sec, real_T *outTime_tv_nsec);
-static real_T imperix_control_toc(sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime);
+  int32_T maxiter, real_T FeasTol, real_T x[2], real_T lambda[12], int32_T
+  *status);
 static void imperix_control_trisolve_j(const real_T A[16], real_T B[16]);
 static real_T imperix_control_norm_j(const real_T x[4]);
-static real_T imperix_control_maximum(const real_T x[4]);
+static real_T imperix_control_maximum_j(const real_T x[4]);
 static real_T imperix_control_xnrm2_d(int32_T n, const real_T x[16], int32_T ix0);
 static void imperix_control_xgemv_k(int32_T m, int32_T n, const real_T A[16],
   int32_T ia0, const real_T x[16], int32_T ix0, real_T y[4]);
@@ -88,22 +83,17 @@ static void imperix_control_xgerc_n(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[4], real_T A[16], int32_T ia0);
 static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
   iC[24], int32_T nA, const real_T Linv[16], real_T RLinv[16], real_T D[16],
-  real_T H[16]);
-static void imperix_control_DropConstraint(int32_T kDrop, boolean_T iA[24],
+  real_T H[16], int32_T n);
+static void imperix_contro_DropConstraint_o(int32_T kDrop, boolean_T iA[24],
   int32_T *nA, int32_T iC[24]);
 static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16],
   const real_T f[4], const real_T Ac[96], const real_T b[24], boolean_T iA[24],
-  real_T x[4], real_T lambda[24], int32_T *status);
-static int32_T imperix_contro_binary_expand_op(const real_T in1[16], const
-  real_T in2[16], real_T in3[4], const real_T in4[8], const
-  struct_04ti4QO3MEcLknQdotQIR *in5, const real_T in6[6], const real_T in7[5],
-  const coder::array<real_T, 1U> &in8, real_T in9, real_T in10, const coder::
-  array<real_T, 1U> &in11, real_T in12, const real_T in13[96], const real_T
-  in14[12], const real_T in15[12], boolean_T in16[24], real_T in17[24]);
-static void imperix_cont_binary_expand_op_2(coder::array<real_T, 1U> &in1, const
-  real_T in2_data[], const coder::array<real_T, 1U> &in3);
+  int32_T maxiter, real_T FeasTol, real_T x[4], real_T lambda[24], int32_T
+  *status);
+static void imperix_control_repmat(const real_T a[2], real_T b[4]);
 static void imperix_control_trisolve(const real_T A[36], real_T B[36]);
 static real_T imperix_control_norm(const real_T x[6]);
+static real_T imperix_control_maximum(const real_T x[6]);
 static real_T imperix_control_xnrm2(int32_T n, const real_T x[36], int32_T ix0);
 static void imperix_control_xgemv(int32_T m, int32_T n, const real_T A[36],
   int32_T ia0, const real_T x[36], int32_T ix0, real_T y[6]);
@@ -111,14 +101,20 @@ static void imperix_control_xgerc(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[6], real_T A[36], int32_T ia0);
 static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
   [36], int32_T nA, const real_T Linv[36], real_T RLinv[36], real_T D[36],
-  real_T H[36]);
+  real_T H[36], int32_T n);
+static void imperix_control_DropConstraint(int32_T kDrop, boolean_T iA[36],
+  int32_T *nA, int32_T iC[36]);
 static void imperix_control_qpkwik(const real_T Linv[36], const real_T Hinv[36],
   const real_T f[6], const real_T Ac[216], const real_T b[36], boolean_T iA[36],
-  real_T x[6], real_T lambda[36], int32_T *status);
+  int32_T maxiter, real_T FeasTol, real_T x[6], real_T lambda[36], int32_T
+  *status);
 static void imperix_cont_mpcActiveSetSolver(const real_T H[36], const real_T f[6],
-  const real_T A[216], const real_T b[36], real_T x[6], int32_T *exitflag);
+  const real_T A[216], const real_T b[36], int32_T options_MaxIterations, real_T
+  options_ConstraintTolerance, boolean_T options_UseHessianAsInput, real_T x[6],
+  int32_T *exitflag, boolean_T iA[36]);
 static void imperix_control_trisolve_a(const real_T A[9], real_T B[9]);
 static real_T imperix_control_norm_i(const real_T x[3]);
+static real_T imperix_control_maximum_c(const real_T x[3]);
 static real_T imperix_control_xnrm2_j(int32_T n, const real_T x[9], int32_T ix0);
 static void imperix_control_xgemv_j(int32_T m, int32_T n, const real_T A[9],
   int32_T ia0, const real_T x[9], int32_T ix0, real_T y[3]);
@@ -126,16 +122,17 @@ static void imperix_control_xgerc_c(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[3], real_T A[9], int32_T ia0);
 static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
   iC[6], int32_T nA, const real_T Linv[9], real_T RLinv[9], real_T D[9], real_T
-  H[9]);
+  H[9], int32_T n);
+static void imperix_contro_DropConstraint_n(int32_T kDrop, boolean_T iA[6],
+  int32_T *nA, int32_T iC[6]);
 static void imperix_control_qpkwik_n(const real_T Linv[9], const real_T Hinv[9],
   const real_T f[3], const real_T Ac[18], const real_T b[6], boolean_T iA[6],
-  real_T x[3], real_T lambda[6], int32_T *status);
+  int32_T maxiter, real_T FeasTol, real_T x[3], real_T lambda[6], int32_T
+  *status);
 static void imperix_co_mpcActiveSetSolver_i(const real_T H[9], const real_T f[3],
-  const real_T A[18], const real_T b[6], real_T x[3], int32_T *exitflag);
-static int32_T imperix_cont_binary_expand_op_1(const real_T in1[54], const
-  real_T in2[54], real_T in3, real_T in4, real_T in5, const real_T in6[9], const
-  real_T in7[18], const real_T in8_data[], const real_T in9_data[], real_T in10,
-  real_T in11, const real_T in13[18], real_T in14[3], const real_T in15[3]);
+  const real_T A[18], const real_T b[6], int32_T options_MaxIterations, real_T
+  options_ConstraintTolerance, boolean_T options_UseHessianAsInput, real_T x[3],
+  int32_T *exitflag, boolean_T iA[6]);
 static void imperix_control_predict(const real32_T inputsT_0_f1[14], real32_T
   outputs_0_f1[3]);
 int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator)
@@ -261,39 +258,6 @@ void imperix_control_Subsystem1(uint8_T rtu_Enable, real_T rtu_dq, real_T
 }
 
 // Function for MATLAB Function: '<S25>/Saturation'
-static void imperix_control_timeKeeper(real_T newTime_tv_sec, real_T
-  newTime_tv_nsec, sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime)
-{
-  coderTimespec origTimespec;
-  if (!imperix_control_DW.savedTime_not_empty) {
-    if (!imperix_control_DW.freq_not_empty) {
-      imperix_control_DW.freq_not_empty = true;
-      coderInitTimeFunctions(&imperix_control_DW.freq);
-    }
-
-    coderTimeClockGettimeMonotonic(&origTimespec, imperix_control_DW.freq);
-    imperix_control_DW.savedTime_not_empty = true;
-  }
-
-  savedTime->tv_sec = newTime_tv_sec;
-  savedTime->tv_nsec = newTime_tv_nsec;
-}
-
-// Function for MATLAB Function: '<S25>/Saturation'
-static void imperix_control_tic(sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime)
-{
-  coderTimespec origTimespec;
-  if (!imperix_control_DW.freq_not_empty) {
-    imperix_control_DW.freq_not_empty = true;
-    coderInitTimeFunctions(&imperix_control_DW.freq);
-  }
-
-  coderTimeClockGettimeMonotonic(&origTimespec, imperix_control_DW.freq);
-  imperix_control_timeKeeper(origTimespec.tv_sec, origTimespec.tv_nsec,
-    savedTime);
-}
-
-// Function for MATLAB Function: '<S25>/Saturation'
 static void imperix_control_trisolve_k(const real_T A[4], real_T B[4])
 {
   for (int32_T j = 0; j < 2; j++) {
@@ -346,6 +310,41 @@ static real_T imperix_control_norm_k(const real_T x[2])
   return scale * sqrt(y);
 }
 
+// Function for MATLAB Function: '<S25>/Saturation'
+static real_T imperix_control_xnrm2_b(int32_T n, const real_T x[4], int32_T ix0)
+{
+  real_T y;
+  y = 0.0;
+  if (n >= 1) {
+    if (n == 1) {
+      y = fabs(x[ix0 - 1]);
+    } else {
+      real_T scale;
+      int32_T kend;
+      scale = 3.3121686421112381E-170;
+      kend = ix0 + n;
+      for (int32_T k = ix0; k < kend; k++) {
+        real_T absxk;
+        absxk = fabs(x[k - 1]);
+        if (absxk > scale) {
+          real_T t;
+          t = scale / absxk;
+          y = y * t * t + 1.0;
+          scale = absxk;
+        } else {
+          real_T t;
+          t = absxk / scale;
+          y += t * t;
+        }
+      }
+
+      y = scale * sqrt(y);
+    }
+  }
+
+  return y;
+}
+
 real_T rt_hypotd_snf(real_T u0, real_T u1)
 {
   real_T a;
@@ -372,19 +371,24 @@ real_T rt_hypotd_snf(real_T u0, real_T u1)
 static void imperix_control_xgemv_e(int32_T m, int32_T n, const real_T A[4],
   int32_T ia0, const real_T x[4], int32_T ix0, real_T y[2])
 {
-  if (n != 0) {
-    y[0] = 0.0;
-    for (int32_T iac = ia0; iac <= ia0; iac += 2) {
+  if ((m != 0) && (n != 0)) {
+    int32_T b;
+    if (n - 1 >= 0) {
+      memset(&y[0], 0, static_cast<uint32_T>(n) * sizeof(real_T));
+    }
+
+    b = ((n - 1) << 1) + ia0;
+    for (int32_T b_iy = ia0; b_iy <= b; b_iy += 2) {
       real_T c;
-      int32_T b;
+      int32_T d;
       int32_T ia;
       c = 0.0;
-      b = iac + m;
-      for (ia = iac; ia < b; ia++) {
-        c += x[((ix0 + ia) - iac) - 1] * A[ia - 1];
+      d = b_iy + m;
+      for (ia = b_iy; ia < d; ia++) {
+        c += x[((ix0 + ia) - b_iy) - 1] * A[ia - 1];
       }
 
-      ia = (iac - ia0) >> 1;
+      ia = (b_iy - ia0) >> 1;
       y[ia] += c;
     }
   }
@@ -395,18 +399,16 @@ static void imperix_control_xgerc_j(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[2], real_T A[4], int32_T ia0)
 {
   if (!(alpha1 == 0.0)) {
-    int32_T b;
     int32_T jA;
     jA = ia0;
-    b = static_cast<uint8_T>(n);
-    for (int32_T j = 0; j < b; j++) {
+    for (int32_T j = 0; j < n; j++) {
       real_T temp;
       temp = y[j];
       if (temp != 0.0) {
-        int32_T c;
+        int32_T b;
         temp *= alpha1;
-        c = m + jA;
-        for (int32_T ijA = jA; ijA < c; ijA++) {
+        b = m + jA;
+        for (int32_T ijA = jA; ijA < b; ijA++) {
           A[ijA - 1] += A[((ix0 + ijA) - jA) - 1] * temp;
         }
       }
@@ -419,15 +421,14 @@ static void imperix_control_xgerc_j(int32_T m, int32_T n, real_T alpha1, int32_T
 // Function for MATLAB Function: '<S25>/Saturation'
 static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
   iC[12], int32_T nA, const real_T Linv[4], real_T RLinv[4], real_T D[4], real_T
-  H[4])
+  H[4], int32_T n)
 {
+  real_T A[4];
+  real_T Q[4];
   real_T R[4];
   real_T TL[4];
   real_T tau[2];
   real_T work[2];
-  real_T Linv_0;
-  real_T Linv_1;
-  real_T Q_idx_3;
   real_T RLinv_0;
   real_T RLinv_1;
   real_T Status;
@@ -436,50 +437,45 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
   int32_T c_lastc;
   int32_T exitg1;
   int32_T ii;
-  int32_T j_i;
+  int32_T k_i;
   int32_T knt;
   int32_T qY;
-  uint32_T tmp;
+  int32_T tmp;
   Status = 1.0;
   RLinv[0] = 0.0;
   RLinv[1] = 0.0;
   RLinv[2] = 0.0;
   RLinv[3] = 0.0;
-  tmp = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp = 2147483647U;
-  }
-
-  b_lastv = static_cast<int32_T>(tmp);
-  for (ii = 0; ii < b_lastv; ii++) {
-    j_i = iC[ii];
-    xnorm = Ac[j_i - 1];
+  for (ii = 0; ii < nA; ii++) {
+    k_i = iC[ii];
+    xnorm = Ac[k_i - 1];
     RLinv_0 = Linv[0] * xnorm;
     RLinv_1 = Linv[1] * xnorm;
-    xnorm = Ac[j_i + 11];
-    j_i = ii << 1;
-    RLinv[j_i] = Linv[2] * xnorm + RLinv_0;
-    RLinv[j_i + 1] = Linv[3] * xnorm + RLinv_1;
+    xnorm = Ac[k_i + 11];
+    k_i = ii << 1;
+    RLinv[k_i] = Linv[2] * xnorm + RLinv_0;
+    RLinv[k_i + 1] = Linv[3] * xnorm + RLinv_1;
   }
 
-  TL[0] = RLinv[0];
-  TL[1] = RLinv[1];
-  TL[2] = RLinv[2];
-  TL[3] = RLinv[3];
+  A[0] = RLinv[0];
+  A[1] = RLinv[1];
+  A[2] = RLinv[2];
+  A[3] = RLinv[3];
   tau[0] = 0.0;
   work[0] = 0.0;
   tau[1] = 0.0;
   work[1] = 0.0;
-  for (j_i = 0; j_i < 2; j_i++) {
-    ii = (j_i << 1) + j_i;
-    if (j_i + 1 < 2) {
-      RLinv_0 = TL[ii];
+  for (k_i = 0; k_i < 2; k_i++) {
+    ii = (k_i << 1) + k_i;
+    if (k_i + 1 < 2) {
+      RLinv_0 = A[ii];
       c_lastc = ii + 2;
       tau[0] = 0.0;
-      xnorm = fabs(TL[ii + 1]);
+      xnorm = imperix_control_xnrm2_b(1, A, ii + 2);
       if (xnorm != 0.0) {
-        xnorm = rt_hypotd_snf(RLinv_0, xnorm);
-        if (RLinv_0 >= 0.0) {
+        RLinv_1 = A[ii];
+        xnorm = rt_hypotd_snf(RLinv_1, xnorm);
+        if (RLinv_1 >= 0.0) {
           xnorm = -xnorm;
         }
 
@@ -488,14 +484,14 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
           do {
             knt++;
             for (b_lastv = c_lastc; b_lastv <= ii + 2; b_lastv++) {
-              TL[b_lastv - 1] *= 9.9792015476736E+291;
+              A[b_lastv - 1] *= 9.9792015476736E+291;
             }
 
             xnorm *= 9.9792015476736E+291;
             RLinv_0 *= 9.9792015476736E+291;
           } while ((fabs(xnorm) < 1.0020841800044864E-292) && (knt < 20));
 
-          xnorm = rt_hypotd_snf(RLinv_0, fabs(TL[ii + 1]));
+          xnorm = rt_hypotd_snf(RLinv_0, imperix_control_xnrm2_b(1, A, ii + 2));
           if (RLinv_0 >= 0.0) {
             xnorm = -xnorm;
           }
@@ -503,7 +499,7 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
           tau[0] = (xnorm - RLinv_0) / xnorm;
           RLinv_0 = 1.0 / (RLinv_0 - xnorm);
           for (b_lastv = c_lastc; b_lastv <= ii + 2; b_lastv++) {
-            TL[b_lastv - 1] *= RLinv_0;
+            A[b_lastv - 1] *= RLinv_0;
           }
 
           for (b_lastv = 0; b_lastv < knt; b_lastv++) {
@@ -512,78 +508,21 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
 
           RLinv_0 = xnorm;
         } else {
-          tau[0] = (xnorm - RLinv_0) / xnorm;
-          RLinv_0 = 1.0 / (RLinv_0 - xnorm);
+          tau[0] = (xnorm - RLinv_1) / xnorm;
+          RLinv_0 = 1.0 / (RLinv_1 - xnorm);
           for (b_lastv = c_lastc; b_lastv <= ii + 2; b_lastv++) {
-            TL[b_lastv - 1] *= RLinv_0;
+            A[b_lastv - 1] *= RLinv_0;
           }
 
           RLinv_0 = xnorm;
         }
       }
 
-      TL[ii] = 1.0;
+      A[ii] = 1.0;
       if (tau[0] != 0.0) {
         b_lastv = 2;
         c_lastc = ii + 1;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
-          b_lastv--;
-          c_lastc--;
-        }
-
-        c_lastc = 1;
-        knt = ii + 2;
-        do {
-          exitg1 = 0;
-          if (knt + 1 <= (ii + b_lastv) + 2) {
-            if (TL[knt] != 0.0) {
-              exitg1 = 1;
-            } else {
-              knt++;
-            }
-          } else {
-            c_lastc = 0;
-            exitg1 = 1;
-          }
-        } while (exitg1 == 0);
-      } else {
-        b_lastv = 0;
-        c_lastc = 0;
-      }
-
-      if (b_lastv > 0) {
-        imperix_control_xgemv_e(b_lastv, c_lastc, TL, ii + 3, TL, ii + 1, work);
-        imperix_control_xgerc_j(b_lastv, c_lastc, -tau[0], ii + 1, work, TL, ii
-          + 3);
-      }
-
-      TL[ii] = RLinv_0;
-    } else {
-      tau[1] = 0.0;
-    }
-  }
-
-  for (j_i = 0; j_i < 2; j_i++) {
-    for (ii = 0; ii <= j_i; ii++) {
-      b_lastv = j_i << 1;
-      R[ii + b_lastv] = TL[b_lastv + ii];
-    }
-
-    if (j_i <= 0) {
-      R[(j_i << 1) + 1] = 0.0;
-    }
-
-    work[j_i] = 0.0;
-  }
-
-  for (j_i = 1; j_i >= 0; j_i--) {
-    ii = ((j_i << 1) + j_i) + 2;
-    if (j_i + 1 < 2) {
-      TL[ii - 2] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 2;
-        c_lastc = ii;
-        while ((b_lastv > 0) && (TL[c_lastc - 1] == 0.0)) {
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
@@ -592,8 +531,8 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
         knt = ii;
         do {
           exitg1 = 0;
-          if (knt + 1 <= ii + b_lastv) {
-            if (TL[knt] != 0.0) {
+          if (knt + 3 <= (ii + b_lastv) + 2) {
+            if (A[knt + 2] != 0.0) {
               exitg1 = 1;
             } else {
               knt++;
@@ -609,48 +548,101 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv_e(b_lastv, c_lastc, TL, ii + 1, TL, ii - 1, work);
-        imperix_control_xgerc_j(b_lastv, c_lastc, -tau[j_i], ii - 1, work, TL,
-          ii + 1);
+        imperix_control_xgemv_e(b_lastv, c_lastc, A, ii + 3, A, ii + 1, work);
+        imperix_control_xgerc_j(b_lastv, c_lastc, -tau[0], ii + 1, work, A, ii +
+          3);
       }
 
-      for (b_lastv = ii; b_lastv <= ii; b_lastv++) {
-        TL[b_lastv - 1] *= -tau[j_i];
-      }
-    }
-
-    TL[ii - 2] = 1.0 - tau[j_i];
-    if (j_i - 1 >= 0) {
-      TL[ii - 3] = 0.0;
+      A[ii] = RLinv_0;
+    } else {
+      tau[1] = 0.0;
     }
   }
 
-  xnorm = TL[0];
-  RLinv_0 = TL[1];
-  RLinv_1 = TL[2];
-  Q_idx_3 = TL[3];
-  tmp = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp = 2147483647U;
+  for (k_i = 0; k_i < 2; k_i++) {
+    for (ii = 0; ii <= k_i; ii++) {
+      b_lastv = k_i << 1;
+      R[ii + b_lastv] = A[b_lastv + ii];
+    }
+
+    if (k_i <= 0) {
+      R[(k_i << 1) + 1] = 0.0;
+    }
+
+    work[k_i] = 0.0;
   }
 
-  j_i = 0;
+  for (k_i = 1; k_i >= 0; k_i--) {
+    ii = (k_i << 1) + k_i;
+    if (k_i + 1 < 2) {
+      A[ii] = 1.0;
+      if (tau[k_i] != 0.0) {
+        b_lastv = 2;
+        c_lastc = ii + 1;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
+          b_lastv--;
+          c_lastc--;
+        }
+
+        c_lastc = 1;
+        knt = ii;
+        do {
+          exitg1 = 0;
+          if (knt + 3 <= (ii + b_lastv) + 2) {
+            if (A[knt + 2] != 0.0) {
+              exitg1 = 1;
+            } else {
+              knt++;
+            }
+          } else {
+            c_lastc = 0;
+            exitg1 = 1;
+          }
+        } while (exitg1 == 0);
+      } else {
+        b_lastv = 0;
+        c_lastc = 0;
+      }
+
+      if (b_lastv > 0) {
+        imperix_control_xgemv_e(b_lastv, c_lastc, A, ii + 3, A, ii + 1, work);
+        imperix_control_xgerc_j(b_lastv, c_lastc, -tau[k_i], ii + 1, work, A, ii
+          + 3);
+      }
+
+      for (b_lastv = ii + 2; b_lastv <= ii + 2; b_lastv++) {
+        A[b_lastv - 1] *= -tau[k_i];
+      }
+    }
+
+    A[ii] = 1.0 - tau[k_i];
+    if (k_i - 1 >= 0) {
+      A[ii - 1] = 0.0;
+    }
+  }
+
+  Q[0] = A[0];
+  Q[1] = A[1];
+  Q[2] = A[2];
+  Q[3] = A[3];
+  k_i = 0;
   do {
     exitg1 = 0;
-    if (j_i <= static_cast<int32_T>(tmp) - 1) {
-      if (fabs(R[(j_i << 1) + j_i]) < 1.0E-12) {
+    if (k_i <= nA - 1) {
+      if (fabs(R[(k_i << 1) + k_i]) < 1.0E-12) {
         Status = -2.0;
         exitg1 = 1;
       } else {
-        j_i++;
+        k_i++;
       }
     } else {
-      for (j_i = 0; j_i < 2; j_i++) {
-        ii = j_i << 1;
-        Linv_0 = Linv[ii + 1];
-        Linv_1 = Linv[ii];
-        TL[j_i] = Linv_0 * RLinv_0 + Linv_1 * xnorm;
-        TL[j_i + 2] = Linv_0 * Q_idx_3 + Linv_1 * RLinv_1;
+      for (k_i = 0; k_i < n; k_i++) {
+        for (ii = 0; ii < n; ii++) {
+          b_lastv = k_i << 1;
+          c_lastc = ii << 1;
+          TL[k_i + c_lastc] = Linv[b_lastv + 1] * Q[c_lastc + 1] + Linv[b_lastv]
+            * Q[c_lastc];
+        }
       }
 
       RLinv[0] = 0.0;
@@ -658,52 +650,53 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
       RLinv[2] = 0.0;
       RLinv[3] = 0.0;
       for (b_lastv = nA; b_lastv >= 1; b_lastv--) {
-        j_i = (((b_lastv - 1) << 1) + b_lastv) - 1;
-        RLinv[j_i] = 1.0;
+        k_i = (b_lastv - 1) << 1;
+        ii = (b_lastv + k_i) - 1;
+        RLinv[ii] = 1.0;
         for (c_lastc = b_lastv; c_lastc <= nA; c_lastc++) {
-          ii = (((c_lastc - 1) << 1) + b_lastv) - 1;
-          RLinv[ii] /= R[j_i];
+          tmp = (((c_lastc - 1) << 1) + b_lastv) - 1;
+          RLinv[tmp] /= R[ii];
         }
 
         if (b_lastv > 1) {
-          for (j_i = 2; j_i <= nA; j_i++) {
-            RLinv[2] -= R[2] * RLinv[3];
+          for (c_lastc = 0; c_lastc <= b_lastv - 2; c_lastc++) {
+            for (knt = b_lastv; knt <= nA; knt++) {
+              ii = (knt - 1) << 1;
+              tmp = ii + c_lastc;
+              RLinv[tmp] -= RLinv[(ii + b_lastv) - 1] * R[k_i + c_lastc];
+            }
           }
         }
       }
 
-      if (nA > 2147483646) {
-        qY = MAX_int32_T;
-      } else {
-        qY = nA + 1;
-      }
+      for (b_lastv = 0; b_lastv < n; b_lastv++) {
+        if (b_lastv + 1 <= n) {
+          if (nA > 2147483646) {
+            qY = MAX_int32_T;
+          } else {
+            qY = nA + 1;
+          }
+        }
 
-      for (b_lastv = 0; b_lastv < 2; b_lastv++) {
-        for (c_lastc = b_lastv + 1; c_lastc < 3; c_lastc++) {
-          j_i = ((c_lastc - 1) << 1) + b_lastv;
-          H[j_i] = 0.0;
-          for (knt = qY; knt < 3; knt++) {
+        for (c_lastc = b_lastv + 1; c_lastc <= n; c_lastc++) {
+          k_i = ((c_lastc - 1) << 1) + b_lastv;
+          H[k_i] = 0.0;
+          for (knt = qY; knt <= n; knt++) {
             ii = (knt - 1) << 1;
-            H[j_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
+            H[k_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
           }
 
-          H[(c_lastc + (b_lastv << 1)) - 1] = H[j_i];
+          H[(c_lastc + (b_lastv << 1)) - 1] = H[k_i];
         }
       }
 
-      tmp = static_cast<uint32_T>(nA);
-      if (static_cast<uint32_T>(nA) > 2147483647U) {
-        tmp = 2147483647U;
-      }
-
-      qY = static_cast<int32_T>(tmp);
-      for (b_lastv = 0; b_lastv < qY; b_lastv++) {
-        for (c_lastc = 0; c_lastc < 2; c_lastc++) {
-          j_i = (b_lastv << 1) + c_lastc;
-          D[j_i] = 0.0;
-          for (knt = b_lastv + 1; knt <= nA; knt++) {
-            ii = (knt - 1) << 1;
-            D[j_i] += TL[ii + c_lastc] * RLinv[ii + b_lastv];
+      for (qY = 0; qY < nA; qY++) {
+        for (b_lastv = 0; b_lastv < n; b_lastv++) {
+          k_i = (qY << 1) + b_lastv;
+          D[k_i] = 0.0;
+          for (c_lastc = qY + 1; c_lastc <= nA; c_lastc++) {
+            ii = (c_lastc - 1) << 1;
+            D[k_i] += TL[ii + b_lastv] * RLinv[ii + qY];
           }
         }
       }
@@ -716,14 +709,48 @@ static real_T imperix_control_KWIKfactor_kk(const real_T Ac[24], const int32_T
 }
 
 // Function for MATLAB Function: '<S25>/Saturation'
+static void imperix_contro_DropConstraint_i(int32_T kDrop, boolean_T iA[12],
+  int32_T *nA, int32_T iC[12])
+{
+  if (kDrop > 0) {
+    iA[iC[kDrop - 1] - 1] = false;
+    if (kDrop < *nA) {
+      int32_T b;
+      int32_T i;
+      if (*nA < -2147483647) {
+        i = MIN_int32_T;
+      } else {
+        i = *nA - 1;
+      }
+
+      b = i + 1;
+      for (i = kDrop; i < b; i++) {
+        iC[i - 1] = iC[i];
+      }
+    }
+
+    iC[*nA - 1] = 0;
+    if (*nA < -2147483647) {
+      *nA = MIN_int32_T;
+    } else {
+      (*nA)--;
+    }
+  }
+}
+
+// Function for MATLAB Function: '<S25>/Saturation'
 static void imperix_control_qpkwik_aq(const real_T Linv[4], const real_T Hinv[4],
   const real_T f[2], const real_T Ac[24], const real_T b[12], boolean_T iA[12],
-  real_T x[2], real_T lambda[12], int32_T *status)
+  int32_T maxiter, real_T FeasTol, real_T x[2], real_T lambda[12], int32_T
+  *status)
 {
   real_T cTol[12];
   real_T D[4];
   real_T H[4];
+  real_T Opt[4];
   real_T RLinv[4];
+  real_T Rhs[4];
+  real_T U[4];
   real_T r[2];
   real_T Xnorm0;
   real_T cMin;
@@ -733,20 +760,27 @@ static void imperix_control_qpkwik_aq(const real_T Linv[4], const real_T Hinv[4]
   real_T t;
   real_T t1;
   int32_T iC[12];
-  int32_T d;
+  int32_T U_tmp;
+  int32_T U_tmp_0;
+  int32_T b_exponent;
   int32_T exitg1;
+  int32_T exitg3;
+  int32_T exponent;
   int32_T i;
-  int32_T iC_0;
   int32_T iSave;
+  int32_T kDrop;
   int32_T kNext;
   int32_T nA;
-  uint32_T tmp;
+  boolean_T ColdReset;
+  boolean_T DualFeasible;
   boolean_T cTolComputed;
   boolean_T exitg2;
-  boolean_T exitg3;
+  boolean_T exitg4;
   boolean_T guard1;
-  boolean_T isT1Inf;
-  boolean_T tempOK;
+  boolean_T guard2;
+  boolean_T guard3;
+  x[0] = 0.0;
+  x[1] = 0.0;
   *status = 1;
   r[0] = 0.0;
   r[1] = 0.0;
@@ -759,290 +793,403 @@ static void imperix_control_qpkwik_aq(const real_T Linv[4], const real_T Hinv[4]
   }
 
   nA = 0;
-  x[0] = -Hinv[0] * f[0] + -Hinv[2] * f[1];
-  x[1] = -Hinv[1] * f[0] + -Hinv[3] * f[1];
-  Xnorm0 = imperix_control_norm_k(x);
-  exitg2 = false;
-  while ((!exitg2) && (*status <= 100)) {
-    cMin = -0.001;
-    kNext = -1;
-    for (i = 0; i < 12; i++) {
-      if (!cTolComputed) {
-        cVal = fabs(Ac[i] * x[0]);
-        t1 = fabs(Ac[i + 12] * x[1]);
-        if (cVal < t1) {
-          cVal = t1;
-        } else if (rtIsNaN(cVal)) {
-          if (!rtIsNaN(t1)) {
-            cVal = t1;
-          } else {
-            cVal = (rtNaN);
-          }
-        }
-
-        if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
-        } else {
-          cTol[i] = cVal;
-        }
-      }
-
-      if (!iA[i]) {
-        cVal = ((Ac[i + 12] * x[1] + Ac[i] * x[0]) - b[i]) / cTol[i];
-        if (cVal < cMin) {
-          cMin = cVal;
-          kNext = i;
-        }
-      }
+  for (i = 0; i < 12; i++) {
+    if (iA[i]) {
+      nA++;
+      iC[nA - 1] = i + 1;
     }
+  }
 
-    cTolComputed = true;
-    if (kNext + 1 <= 0) {
-      exitg2 = true;
-    } else if (*status == 100) {
-      *status = 0;
-      exitg2 = true;
-    } else {
-      do {
-        exitg1 = 0;
-        if ((kNext + 1 > 0) && (*status <= 100)) {
-          guard1 = false;
-          if (nA == 0) {
-            t1 = Ac[kNext];
-            cMin = Hinv[0] * t1;
-            cVal = Hinv[1] * t1;
-            t1 = Ac[kNext + 12];
-            cMin += Hinv[2] * t1;
-            cVal += Hinv[3] * t1;
-            guard1 = true;
+  guard1 = false;
+  if (nA > 0) {
+    Opt[0] = 0.0;
+    Opt[1] = 0.0;
+    Opt[2] = 0.0;
+    Opt[3] = 0.0;
+    Rhs[0] = f[0];
+    Rhs[2] = 0.0;
+    Rhs[1] = f[1];
+    Rhs[3] = 0.0;
+    DualFeasible = false;
+    ColdReset = false;
+    do {
+      exitg3 = 0;
+      if ((!DualFeasible) && (nA > 0) && (*status <= maxiter)) {
+        Xnorm0 = imperix_control_KWIKfactor_kk(Ac, iC, nA, Linv, RLinv, D, H, 2);
+        if (Xnorm0 < 0.0) {
+          if (ColdReset) {
+            *status = -2;
+            exitg3 = 2;
           } else {
-            cMin = imperix_control_KWIKfactor_kk(Ac, iC, nA, Linv, RLinv, D, H);
-            if (cMin <= 0.0) {
-              *status = -2;
-              exitg1 = 1;
+            nA = 0;
+            for (i = 0; i < 12; i++) {
+              iA[i] = false;
+              iC[i] = 0;
+            }
+
+            ColdReset = true;
+          }
+        } else {
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483645) {
+              i = MAX_int32_T;
             } else {
-              t1 = Ac[kNext];
-              cMin = -H[0] * t1;
-              cVal = -H[1] * t1;
-              t1 = Ac[kNext + 12];
-              cMin += -H[2] * t1;
-              cVal += -H[3] * t1;
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
+              i = kDrop + 3;
+            }
+
+            Rhs[i - 1] = b[iC[kDrop] - 1];
+            for (i = kDrop + 1; i <= nA; i++) {
+              U_tmp_0 = ((kDrop << 1) + i) - 1;
+              U[U_tmp_0] = 0.0;
+              for (iSave = 0; iSave < nA; iSave++) {
+                U_tmp = iSave << 1;
+                U[U_tmp_0] += RLinv[(U_tmp + i) - 1] * RLinv[U_tmp + kDrop];
               }
 
-              d = static_cast<int32_T>(tmp);
-              for (i = 0; i < d; i++) {
-                iSave = i << 1;
-                r[i] = D[iSave + 1] * t1 + D[iSave] * Ac[kNext];
-              }
-
-              guard1 = true;
+              U[kDrop + ((i - 1) << 1)] = U[U_tmp_0];
             }
           }
 
-          if (guard1) {
-            i = 0;
-            t1 = 0.0;
-            isT1Inf = true;
-            tempOK = true;
-            if (nA > 0) {
-              d = 0;
-              exitg3 = false;
-              while ((!exitg3) && (d <= nA - 1)) {
-                if (r[d] >= 1.0E-12) {
-                  tempOK = false;
-                  exitg3 = true;
-                } else {
-                  d++;
-                }
-              }
-            }
-
-            if ((nA != 0) && (!tempOK)) {
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              iSave = static_cast<int32_T>(tmp);
-              for (d = 0; d < iSave; d++) {
-                rVal = r[d];
-                if (rVal > 1.0E-12) {
-                  rVal = lambda[iC[d] - 1] / rVal;
-                  if ((i == 0) || (rVal < rMin)) {
-                    rMin = rVal;
-                    i = d + 1;
-                  }
-                }
-              }
-
-              if (i > 0) {
-                t1 = rMin;
-                isT1Inf = false;
-              }
-            }
-
-            rVal = Ac[kNext + 12];
-            t = rVal * cVal + cMin * Ac[kNext];
-            if (t <= 0.0) {
-              rVal = 0.0;
-              tempOK = true;
-            } else {
-              rVal = (b[kNext] - (rVal * x[1] + Ac[kNext] * x[0])) / t;
-              tempOK = false;
-            }
-
-            if (isT1Inf && tempOK) {
-              *status = -1;
-              exitg1 = 1;
-            } else {
-              if (tempOK) {
-                t = t1;
-              } else if (isT1Inf) {
-                t = rVal;
-              } else if (t1 < rVal) {
-                t = t1;
+          for (kDrop = 0; kDrop < 2; kDrop++) {
+            Opt[kDrop] = H[kDrop + 2] * Rhs[1] + H[kDrop] * Rhs[0];
+            for (iSave = 0; iSave < nA; iSave++) {
+              if (iSave + 1 > 2147483645) {
+                i = MAX_int32_T;
               } else {
-                t = rVal;
+                i = iSave + 3;
               }
 
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
+              Opt[kDrop] += D[(iSave << 1) + kDrop] * Rhs[i - 1];
+            }
+          }
+
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483645) {
+              i = MAX_int32_T;
+            } else {
+              i = kDrop + 3;
+            }
+
+            iSave = kDrop << 1;
+            Opt[i - 1] = D[iSave + 1] * Rhs[1] + D[iSave] * Rhs[0];
+            if (kDrop + 1 > 2147483645) {
+              i = MAX_int32_T;
+              U_tmp_0 = MAX_int32_T;
+            } else {
+              i = kDrop + 3;
+              U_tmp_0 = kDrop + 3;
+            }
+
+            for (iSave = 0; iSave < nA; iSave++) {
+              if (iSave + 1 > 2147483645) {
+                U_tmp = MAX_int32_T;
+              } else {
+                U_tmp = iSave + 3;
               }
 
-              iSave = static_cast<int32_T>(tmp);
-              for (d = 0; d < iSave; d++) {
-                iC_0 = iC[d];
-                lambda[iC_0 - 1] -= t * r[d];
-                if (lambda[iC_0 - 1] < 0.0) {
-                  lambda[iC_0 - 1] = 0.0;
+              Opt[i - 1] = U[(iSave << 1) + kDrop] * Rhs[U_tmp - 1] +
+                Opt[U_tmp_0 - 1];
+            }
+          }
+
+          Xnorm0 = -1.0E-12;
+          kDrop = -1;
+          for (iSave = 0; iSave < nA; iSave++) {
+            if (iSave + 1 > 2147483645) {
+              i = MAX_int32_T;
+            } else {
+              i = iSave + 3;
+            }
+
+            lambda[iC[iSave] - 1] = Opt[i - 1];
+            if (iSave + 1 > 2147483645) {
+              // out-of-bounds matrix access would cause program termination and was eliminated 
+            } else {
+              kNext = iSave + 3;
+            }
+
+            if ((Opt[kNext - 1] < Xnorm0) && (iSave + 1 <= nA)) {
+              kDrop = iSave;
+              if (iSave + 1 > 2147483645) {
+                i = MAX_int32_T;
+              } else {
+                i = iSave + 3;
+              }
+
+              Xnorm0 = Opt[i - 1];
+            }
+          }
+
+          if (kDrop + 1 <= 0) {
+            DualFeasible = true;
+            x[0] = Opt[0];
+            x[1] = Opt[1];
+          } else {
+            if (*status > 2147483646) {
+              *status = MAX_int32_T;
+            } else {
+              (*status)++;
+            }
+
+            if (*status > 5) {
+              nA = 0;
+              for (i = 0; i < 12; i++) {
+                iA[i] = false;
+                iC[i] = 0;
+              }
+
+              ColdReset = true;
+            } else {
+              lambda[iC[kDrop] - 1] = 0.0;
+              imperix_contro_DropConstraint_i(kDrop + 1, iA, &nA, iC);
+            }
+          }
+        }
+      } else {
+        if (nA <= 0) {
+          memset(&lambda[0], 0, 12U * sizeof(real_T));
+          x[0] = -Hinv[0] * f[0] + -Hinv[2] * f[1];
+          x[1] = -Hinv[1] * f[0] + -Hinv[3] * f[1];
+        }
+
+        exitg3 = 1;
+      }
+    } while (exitg3 == 0);
+
+    if (exitg3 == 1) {
+      guard1 = true;
+    }
+  } else {
+    x[0] = -Hinv[0] * f[0] + -Hinv[2] * f[1];
+    x[1] = -Hinv[1] * f[0] + -Hinv[3] * f[1];
+    guard1 = true;
+  }
+
+  if (guard1) {
+    Xnorm0 = imperix_control_norm_k(x);
+    exitg2 = false;
+    while ((!exitg2) && (*status <= maxiter)) {
+      cMin = -FeasTol;
+      kNext = -1;
+      for (i = 0; i < 12; i++) {
+        if (!cTolComputed) {
+          cVal = fabs(Ac[i] * x[0]);
+          t1 = fabs(Ac[i + 12] * x[1]);
+          if (cVal < t1) {
+            cVal = t1;
+          } else if (rtIsNaN(cVal)) {
+            if (!rtIsNaN(t1)) {
+              cVal = t1;
+            } else {
+              cVal = (rtNaN);
+            }
+          }
+
+          if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
+          } else {
+            cTol[i] = cVal;
+          }
+        }
+
+        if (!iA[i]) {
+          cVal = ((Ac[i + 12] * x[1] + Ac[i] * x[0]) - b[i]) / cTol[i];
+          if (cVal < cMin) {
+            cMin = cVal;
+            kNext = i;
+          }
+        }
+      }
+
+      cTolComputed = true;
+      if (kNext + 1 <= 0) {
+        exitg2 = true;
+      } else if (*status == maxiter) {
+        *status = 0;
+        exitg2 = true;
+      } else {
+        do {
+          exitg1 = 0;
+          if ((kNext + 1 > 0) && (*status <= maxiter)) {
+            guard2 = false;
+            guard3 = false;
+            if (nA == 0) {
+              t1 = Ac[kNext];
+              cMin = Hinv[0] * t1;
+              cVal = Hinv[1] * t1;
+              t1 = Ac[kNext + 12];
+              cMin += Hinv[2] * t1;
+              cVal += Hinv[3] * t1;
+              guard3 = true;
+            } else {
+              cMin = imperix_control_KWIKfactor_kk(Ac, iC, nA, Linv, RLinv, D, H,
+                2);
+              if (cMin <= 0.0) {
+                *status = -2;
+                exitg1 = 1;
+              } else {
+                t1 = Ac[kNext];
+                cMin = -H[0] * t1;
+                cVal = -H[1] * t1;
+                t1 = Ac[kNext + 12];
+                cMin += -H[2] * t1;
+                cVal += -H[3] * t1;
+                for (i = 0; i < nA; i++) {
+                  kDrop = i << 1;
+                  r[i] = D[kDrop + 1] * t1 + D[kDrop] * Ac[kNext];
                 }
+
+                guard3 = true;
               }
+            }
 
-              lambda[kNext] += t;
-              if ((fabs(t - t1) < 2.2204460492503131E-16) && (i > 0)) {
-                iA[iC[i - 1] - 1] = false;
-                if (i < nA) {
-                  for (d = i; d < nA; d++) {
-                    iC[d - 1] = iC[d];
-                  }
-                }
-
-                iC[nA - 1] = 0;
-                if (nA < -2147483647) {
-                  nA = MIN_int32_T;
-                } else {
-                  nA--;
-                }
-              }
-
-              if (!tempOK) {
-                x[0] += t * cMin;
-                x[1] += t * cVal;
-                if (fabs(t - rVal) < 2.2204460492503131E-16) {
-                  if (nA == 2) {
-                    *status = -1;
-                    exitg1 = 1;
+            if (guard3) {
+              kDrop = 0;
+              t1 = 0.0;
+              DualFeasible = true;
+              ColdReset = true;
+              if (nA > 0) {
+                i = 0;
+                exitg4 = false;
+                while ((!exitg4) && (i <= nA - 1)) {
+                  if (r[i] >= 1.0E-12) {
+                    ColdReset = false;
+                    exitg4 = true;
                   } else {
-                    if (nA > 2147483646) {
-                      nA = MAX_int32_T;
+                    i++;
+                  }
+                }
+              }
+
+              if ((nA != 0) && (!ColdReset)) {
+                for (i = 0; i < nA; i++) {
+                  rVal = r[i];
+                  if (rVal > 1.0E-12) {
+                    rVal = lambda[iC[i] - 1] / rVal;
+                    if ((kDrop == 0) || (rVal < rMin)) {
+                      rMin = rVal;
+                      kDrop = i + 1;
+                    }
+                  }
+                }
+
+                if (kDrop > 0) {
+                  t1 = rMin;
+                  DualFeasible = false;
+                }
+              }
+
+              rVal = Ac[kNext + 12];
+              t = rVal * cVal + cMin * Ac[kNext];
+              if (t <= 0.0) {
+                rVal = 0.0;
+                ColdReset = true;
+              } else {
+                rVal = (b[kNext] - (rVal * x[1] + Ac[kNext] * x[0])) / t;
+                ColdReset = false;
+              }
+
+              if (DualFeasible && ColdReset) {
+                *status = -1;
+                exitg1 = 1;
+              } else {
+                if (ColdReset) {
+                  t = t1;
+                } else if (DualFeasible) {
+                  t = rVal;
+                } else if (t1 < rVal) {
+                  t = t1;
+                } else {
+                  t = rVal;
+                }
+
+                for (i = 0; i < nA; i++) {
+                  iSave = iC[i];
+                  lambda[iSave - 1] -= t * r[i];
+                  if ((iSave <= 12) && (lambda[iSave - 1] < 0.0)) {
+                    lambda[iSave - 1] = 0.0;
+                  }
+                }
+
+                lambda[kNext] += t;
+                frexp(1.0, &exponent);
+                if (fabs(t - t1) < 2.2204460492503131E-16) {
+                  imperix_contro_DropConstraint_i(kDrop, iA, &nA, iC);
+                }
+
+                if (!ColdReset) {
+                  x[0] += t * cMin;
+                  x[1] += t * cVal;
+                  frexp(1.0, &b_exponent);
+                  if (fabs(t - rVal) < 2.2204460492503131E-16) {
+                    if (nA == 2) {
+                      *status = -1;
+                      exitg1 = 1;
                     } else {
-                      nA++;
-                    }
-
-                    iC[nA - 1] = kNext + 1;
-                    i = nA - 1;
-                    exitg3 = false;
-                    while ((!exitg3) && (i + 1 > 1)) {
-                      d = iC[i - 1];
-                      if (iC[i] > d) {
-                        exitg3 = true;
+                      if (nA > 2147483646) {
+                        nA = MAX_int32_T;
                       } else {
-                        iSave = iC[i];
-                        iC[i] = d;
-                        iC[i - 1] = iSave;
-                        i--;
+                        nA++;
                       }
-                    }
 
-                    iA[kNext] = true;
-                    kNext = -1;
-                    (*status)++;
+                      iC[nA - 1] = kNext + 1;
+                      kDrop = nA - 1;
+                      exitg4 = false;
+                      while ((!exitg4) && (kDrop + 1 > 1)) {
+                        i = iC[kDrop - 1];
+                        if (iC[kDrop] > i) {
+                          exitg4 = true;
+                        } else {
+                          iSave = iC[kDrop];
+                          iC[kDrop] = i;
+                          iC[kDrop - 1] = iSave;
+                          kDrop--;
+                        }
+                      }
+
+                      iA[kNext] = true;
+                      kNext = -1;
+                      guard2 = true;
+                    }
+                  } else {
+                    guard2 = true;
                   }
                 } else {
-                  (*status)++;
+                  guard2 = true;
                 }
-              } else {
+              }
+            }
+
+            if (guard2) {
+              if (*status <= 2147483646) {
                 (*status)++;
               }
             }
-          }
-        } else {
-          cMin = imperix_control_norm_k(x);
-          if (fabs(cMin - Xnorm0) > 0.001) {
-            Xnorm0 = cMin;
-            for (kNext = 0; kNext < 12; kNext++) {
-              cMin = fabs(b[kNext]);
-              if (cMin >= 1.0) {
-                cTol[kNext] = cMin;
-              } else {
-                cTol[kNext] = 1.0;
+          } else {
+            cMin = imperix_control_norm_k(x);
+            if (fabs(cMin - Xnorm0) > 0.001) {
+              Xnorm0 = cMin;
+              for (kNext = 0; kNext < 12; kNext++) {
+                cMin = fabs(b[kNext]);
+                if (cMin >= 1.0) {
+                  cTol[kNext] = cMin;
+                } else {
+                  cTol[kNext] = 1.0;
+                }
               }
+
+              cTolComputed = false;
             }
 
-            cTolComputed = false;
+            exitg1 = 2;
           }
+        } while (exitg1 == 0);
 
-          exitg1 = 2;
+        if (exitg1 == 1) {
+          exitg2 = true;
         }
-      } while (exitg1 == 0);
-
-      if (exitg1 == 1) {
-        exitg2 = true;
       }
     }
   }
-}
-
-// Function for MATLAB Function: '<S25>/Saturation'
-static void imperix_control_timeKeeper_n(sdAmwXbnJnEmimT0NaJRtAD_imper_T
-  *savedTime, real_T *outTime_tv_sec, real_T *outTime_tv_nsec)
-{
-  coderTimespec origTimespec;
-  if (!imperix_control_DW.savedTime_not_empty) {
-    if (!imperix_control_DW.freq_not_empty) {
-      imperix_control_DW.freq_not_empty = true;
-      coderInitTimeFunctions(&imperix_control_DW.freq);
-    }
-
-    coderTimeClockGettimeMonotonic(&origTimespec, imperix_control_DW.freq);
-    savedTime->tv_sec = origTimespec.tv_sec;
-    savedTime->tv_nsec = origTimespec.tv_nsec;
-  }
-
-  *outTime_tv_sec = savedTime->tv_sec;
-  *outTime_tv_nsec = savedTime->tv_nsec;
-}
-
-// Function for MATLAB Function: '<S25>/Saturation'
-static real_T imperix_control_toc(sdAmwXbnJnEmimT0NaJRtAD_imper_T *savedTime)
-{
-  coderTimespec origTimespec;
-  real_T t;
-  real_T tstart_tv_nsec;
-  real_T tstart_tv_sec;
-  imperix_control_timeKeeper_n(savedTime, &tstart_tv_sec, &tstart_tv_nsec);
-  if (!imperix_control_DW.freq_not_empty) {
-    imperix_control_DW.freq_not_empty = true;
-    coderInitTimeFunctions(&imperix_control_DW.freq);
-  }
-
-  coderTimeClockGettimeMonotonic(&origTimespec, imperix_control_DW.freq);
-  t = (origTimespec.tv_nsec - tstart_tv_nsec) / 1.0E+9 + (origTimespec.tv_sec -
-    tstart_tv_sec);
-  return t;
 }
 
 // Function for MATLAB Function: '<S1>/LICCs control'
@@ -1139,7 +1286,7 @@ static real_T imperix_control_norm_j(const real_T x[4])
 }
 
 // Function for MATLAB Function: '<S1>/LICCs control'
-static real_T imperix_control_maximum(const real_T x[4])
+static real_T imperix_control_maximum_j(const real_T x[4])
 {
   real_T ex;
   int32_T idx;
@@ -1216,17 +1363,20 @@ static real_T imperix_control_xnrm2_d(int32_T n, const real_T x[16], int32_T ix0
 static void imperix_control_xgemv_k(int32_T m, int32_T n, const real_T A[16],
   int32_T ia0, const real_T x[16], int32_T ix0, real_T y[4])
 {
-  if (n != 0) {
+  if ((m != 0) && (n != 0)) {
     int32_T b;
-    memset(&y[0], 0, static_cast<uint8_T>(n) * sizeof(real_T));
+    if (n - 1 >= 0) {
+      memset(&y[0], 0, static_cast<uint32_T>(n) * sizeof(real_T));
+    }
+
     b = ((n - 1) << 2) + ia0;
     for (int32_T b_iy = ia0; b_iy <= b; b_iy += 4) {
       real_T c;
-      int32_T e;
+      int32_T d;
       int32_T ia;
       c = 0.0;
-      e = b_iy + m;
-      for (ia = b_iy; ia < e; ia++) {
+      d = b_iy + m;
+      for (ia = b_iy; ia < d; ia++) {
         c += x[((ix0 + ia) - b_iy) - 1] * A[ia - 1];
       }
 
@@ -1241,18 +1391,16 @@ static void imperix_control_xgerc_n(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[4], real_T A[16], int32_T ia0)
 {
   if (!(alpha1 == 0.0)) {
-    int32_T b;
     int32_T jA;
     jA = ia0;
-    b = static_cast<uint8_T>(n);
-    for (int32_T j = 0; j < b; j++) {
+    for (int32_T j = 0; j < n; j++) {
       real_T temp;
       temp = y[j];
       if (temp != 0.0) {
-        int32_T c;
+        int32_T b;
         temp *= alpha1;
-        c = m + jA;
-        for (int32_T ijA = jA; ijA < c; ijA++) {
+        b = m + jA;
+        for (int32_T ijA = jA; ijA < b; ijA++) {
           A[ijA - 1] += A[((ix0 + ijA) - jA) - 1] * temp;
         }
       }
@@ -1265,8 +1413,9 @@ static void imperix_control_xgerc_n(int32_T m, int32_T n, real_T alpha1, int32_T
 // Function for MATLAB Function: '<S1>/LICCs control'
 static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
   iC[24], int32_T nA, const real_T Linv[16], real_T RLinv[16], real_T D[16],
-  real_T H[16])
+  real_T H[16], int32_T n)
 {
+  real_T A[16];
   real_T Q[16];
   real_T R[16];
   real_T TL[16];
@@ -1280,45 +1429,38 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
   real_T xnorm;
   int32_T b_lastv;
   int32_T c_lastc;
-  int32_T d;
   int32_T exitg1;
+  int32_T f;
   int32_T ii;
-  int32_T j_i;
+  int32_T k_i;
   int32_T knt;
-  int32_T m;
-  uint32_T tmp_0;
+  int32_T qY;
   boolean_T exitg2;
   Status = 1.0;
   memset(&RLinv[0], 0, sizeof(real_T) << 4U);
-  tmp_0 = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp_0 = 2147483647U;
-  }
-
-  b_lastv = static_cast<int32_T>(tmp_0);
-  for (ii = 0; ii < b_lastv; ii++) {
-    c_lastc = iC[ii];
+  for (ii = 0; ii < nA; ii++) {
+    b_lastv = iC[ii];
     xnorm = 0.0;
     RLinv_0 = 0.0;
     RLinv_1 = 0.0;
     RLinv_2 = 0.0;
-    for (j_i = 0; j_i < 4; j_i++) {
-      tmp = Ac[(24 * j_i + c_lastc) - 1];
-      knt = j_i << 2;
-      xnorm += Linv[knt] * tmp;
-      RLinv_0 += Linv[knt + 1] * tmp;
-      RLinv_1 += Linv[knt + 2] * tmp;
-      RLinv_2 += Linv[knt + 3] * tmp;
+    for (k_i = 0; k_i < 4; k_i++) {
+      tmp = Ac[(24 * k_i + b_lastv) - 1];
+      c_lastc = k_i << 2;
+      xnorm += Linv[c_lastc] * tmp;
+      RLinv_0 += Linv[c_lastc + 1] * tmp;
+      RLinv_1 += Linv[c_lastc + 2] * tmp;
+      RLinv_2 += Linv[c_lastc + 3] * tmp;
     }
 
-    j_i = ii << 2;
-    RLinv[j_i + 3] = RLinv_2;
-    RLinv[j_i + 2] = RLinv_1;
-    RLinv[j_i + 1] = RLinv_0;
-    RLinv[j_i] = xnorm;
+    k_i = ii << 2;
+    RLinv[k_i + 3] = RLinv_2;
+    RLinv[k_i + 2] = RLinv_1;
+    RLinv[k_i + 1] = RLinv_0;
+    RLinv[k_i] = xnorm;
   }
 
-  memcpy(&TL[0], &RLinv[0], sizeof(real_T) << 4U);
+  memcpy(&A[0], &RLinv[0], sizeof(real_T) << 4U);
   tau[0] = 0.0;
   work[0] = 0.0;
   tau[1] = 0.0;
@@ -1327,15 +1469,15 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
   work[2] = 0.0;
   tau[3] = 0.0;
   work[3] = 0.0;
-  for (j_i = 0; j_i < 4; j_i++) {
-    ii = (j_i << 2) + j_i;
-    if (j_i + 1 < 4) {
-      RLinv_0 = TL[ii];
+  for (k_i = 0; k_i < 4; k_i++) {
+    ii = (k_i << 2) + k_i;
+    if (k_i + 1 < 4) {
+      RLinv_0 = A[ii];
       b_lastv = ii + 2;
-      tau[j_i] = 0.0;
-      xnorm = imperix_control_xnrm2_d(3 - j_i, TL, ii + 2);
+      tau[k_i] = 0.0;
+      xnorm = imperix_control_xnrm2_d(3 - k_i, A, ii + 2);
       if (xnorm != 0.0) {
-        RLinv_1 = TL[ii];
+        RLinv_1 = A[ii];
         xnorm = rt_hypotd_snf(RLinv_1, xnorm);
         if (RLinv_1 >= 0.0) {
           xnorm = -xnorm;
@@ -1343,27 +1485,27 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
 
         if (fabs(xnorm) < 1.0020841800044864E-292) {
           knt = 0;
-          m = (ii - j_i) + 4;
+          f = (ii - k_i) + 4;
           do {
             knt++;
-            for (c_lastc = b_lastv; c_lastc <= m; c_lastc++) {
-              TL[c_lastc - 1] *= 9.9792015476736E+291;
+            for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+              A[c_lastc - 1] *= 9.9792015476736E+291;
             }
 
             xnorm *= 9.9792015476736E+291;
             RLinv_0 *= 9.9792015476736E+291;
           } while ((fabs(xnorm) < 1.0020841800044864E-292) && (knt < 20));
 
-          xnorm = rt_hypotd_snf(RLinv_0, imperix_control_xnrm2_d(3 - j_i, TL, ii
+          xnorm = rt_hypotd_snf(RLinv_0, imperix_control_xnrm2_d(3 - k_i, A, ii
             + 2));
           if (RLinv_0 >= 0.0) {
             xnorm = -xnorm;
           }
 
-          tau[j_i] = (xnorm - RLinv_0) / xnorm;
+          tau[k_i] = (xnorm - RLinv_0) / xnorm;
           RLinv_0 = 1.0 / (RLinv_0 - xnorm);
-          for (c_lastc = b_lastv; c_lastc <= m; c_lastc++) {
-            TL[c_lastc - 1] *= RLinv_0;
+          for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+            A[c_lastc - 1] *= RLinv_0;
           }
 
           for (b_lastv = 0; b_lastv < knt; b_lastv++) {
@@ -1372,38 +1514,38 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
 
           RLinv_0 = xnorm;
         } else {
-          tau[j_i] = (xnorm - RLinv_1) / xnorm;
+          tau[k_i] = (xnorm - RLinv_1) / xnorm;
           RLinv_0 = 1.0 / (RLinv_1 - xnorm);
-          knt = (ii - j_i) + 4;
+          knt = (ii - k_i) + 4;
           for (c_lastc = b_lastv; c_lastc <= knt; c_lastc++) {
-            TL[c_lastc - 1] *= RLinv_0;
+            A[c_lastc - 1] *= RLinv_0;
           }
 
           RLinv_0 = xnorm;
         }
       }
 
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 4 - j_i;
-        c_lastc = (ii - j_i) + 3;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+      A[ii] = 1.0;
+      if (tau[k_i] != 0.0) {
+        b_lastv = 4 - k_i;
+        c_lastc = (ii - k_i) + 3;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 3 - j_i;
+        c_lastc = 3 - k_i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = (((c_lastc - 1) << 2) + ii) + 4;
-          m = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (m + 1 <= knt + b_lastv) {
-              if (TL[m] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                m++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -1421,54 +1563,54 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv_k(b_lastv, c_lastc, TL, ii + 5, TL, ii + 1, work);
-        imperix_control_xgerc_n(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL,
-          ii + 5);
+        imperix_control_xgemv_k(b_lastv, c_lastc, A, ii + 5, A, ii + 1, work);
+        imperix_control_xgerc_n(b_lastv, c_lastc, -tau[k_i], ii + 1, work, A, ii
+          + 5);
       }
 
-      TL[ii] = RLinv_0;
+      A[ii] = RLinv_0;
     } else {
       tau[3] = 0.0;
     }
   }
 
-  for (j_i = 0; j_i < 4; j_i++) {
-    for (ii = 0; ii <= j_i; ii++) {
-      b_lastv = j_i << 2;
-      R[ii + b_lastv] = TL[b_lastv + ii];
+  for (k_i = 0; k_i < 4; k_i++) {
+    for (ii = 0; ii <= k_i; ii++) {
+      b_lastv = k_i << 2;
+      R[ii + b_lastv] = A[b_lastv + ii];
     }
 
-    for (ii = j_i + 2; ii < 5; ii++) {
-      R[(ii + (j_i << 2)) - 1] = 0.0;
+    for (ii = k_i + 2; ii < 5; ii++) {
+      R[(ii + (k_i << 2)) - 1] = 0.0;
     }
 
-    work[j_i] = 0.0;
+    work[k_i] = 0.0;
   }
 
-  for (j_i = 3; j_i >= 0; j_i--) {
-    ii = (j_i << 2) + j_i;
-    if (j_i + 1 < 4) {
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 4 - j_i;
-        c_lastc = (ii - j_i) + 3;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+  for (k_i = 3; k_i >= 0; k_i--) {
+    ii = (k_i << 2) + k_i;
+    if (k_i + 1 < 4) {
+      A[ii] = 1.0;
+      if (tau[k_i] != 0.0) {
+        b_lastv = 4 - k_i;
+        c_lastc = (ii - k_i) + 3;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 3 - j_i;
+        c_lastc = 3 - k_i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = (((c_lastc - 1) << 2) + ii) + 4;
-          m = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (m + 1 <= knt + b_lastv) {
-              if (TL[m] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                m++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -1486,115 +1628,102 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv_k(b_lastv, c_lastc, TL, ii + 5, TL, ii + 1, work);
-        imperix_control_xgerc_n(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL,
-          ii + 5);
+        imperix_control_xgemv_k(b_lastv, c_lastc, A, ii + 5, A, ii + 1, work);
+        imperix_control_xgerc_n(b_lastv, c_lastc, -tau[k_i], ii + 1, work, A, ii
+          + 5);
       }
 
-      c_lastc = (ii - j_i) + 4;
+      c_lastc = (ii - k_i) + 4;
       for (b_lastv = ii + 2; b_lastv <= c_lastc; b_lastv++) {
-        TL[b_lastv - 1] *= -tau[j_i];
+        A[b_lastv - 1] *= -tau[k_i];
       }
     }
 
-    TL[ii] = 1.0 - tau[j_i];
-    for (b_lastv = 0; b_lastv < j_i; b_lastv++) {
-      TL[(ii - b_lastv) - 1] = 0.0;
+    A[ii] = 1.0 - tau[k_i];
+    for (b_lastv = 0; b_lastv < k_i; b_lastv++) {
+      A[(ii - b_lastv) - 1] = 0.0;
     }
   }
 
-  for (j_i = 0; j_i < 4; j_i++) {
-    ii = j_i << 2;
-    Q[ii] = TL[ii];
-    Q[ii + 1] = TL[ii + 1];
-    Q[ii + 2] = TL[ii + 2];
-    Q[ii + 3] = TL[ii + 3];
+  for (k_i = 0; k_i < 4; k_i++) {
+    ii = k_i << 2;
+    Q[ii] = A[ii];
+    Q[ii + 1] = A[ii + 1];
+    Q[ii + 2] = A[ii + 2];
+    Q[ii + 3] = A[ii + 3];
   }
 
-  tmp_0 = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp_0 = 2147483647U;
-  }
-
-  j_i = 0;
+  k_i = 0;
   do {
     exitg1 = 0;
-    if (j_i <= static_cast<int32_T>(tmp_0) - 1) {
-      if (fabs(R[(j_i << 2) + j_i]) < 1.0E-12) {
+    if (k_i <= nA - 1) {
+      if (fabs(R[(k_i << 2) + k_i]) < 1.0E-12) {
         Status = -2.0;
         exitg1 = 1;
       } else {
-        j_i++;
+        k_i++;
       }
     } else {
-      for (j_i = 0; j_i < 4; j_i++) {
-        ii = j_i << 2;
-        xnorm = Linv[ii + 1];
-        RLinv_0 = Linv[ii];
-        RLinv_1 = Linv[ii + 2];
-        RLinv_2 = Linv[ii + 3];
-        for (ii = 0; ii < 4; ii++) {
-          b_lastv = ii << 2;
-          TL[j_i + b_lastv] = ((Q[b_lastv + 1] * xnorm + RLinv_0 * Q[b_lastv]) +
-                               Q[b_lastv + 2] * RLinv_1) + Q[b_lastv + 3] *
-            RLinv_2;
+      for (k_i = 0; k_i < n; k_i++) {
+        for (ii = 0; ii < n; ii++) {
+          b_lastv = k_i << 2;
+          c_lastc = ii << 2;
+          TL[k_i + c_lastc] = ((Linv[b_lastv + 1] * Q[c_lastc + 1] +
+                                Linv[b_lastv] * Q[c_lastc]) + Linv[b_lastv + 2] *
+                               Q[c_lastc + 2]) + Linv[b_lastv + 3] * Q[c_lastc +
+            3];
         }
       }
 
       memset(&RLinv[0], 0, sizeof(real_T) << 4U);
       for (b_lastv = nA; b_lastv >= 1; b_lastv--) {
-        j_i = (b_lastv - 1) << 2;
-        ii = (b_lastv + j_i) - 1;
+        k_i = (b_lastv - 1) << 2;
+        ii = (b_lastv + k_i) - 1;
         RLinv[ii] = 1.0;
         for (c_lastc = b_lastv; c_lastc <= nA; c_lastc++) {
-          m = (((c_lastc - 1) << 2) + b_lastv) - 1;
-          RLinv[m] /= R[ii];
+          f = (((c_lastc - 1) << 2) + b_lastv) - 1;
+          RLinv[f] /= R[ii];
         }
 
         if (b_lastv > 1) {
-          d = static_cast<uint8_T>(b_lastv - 1);
-          for (c_lastc = 0; c_lastc < d; c_lastc++) {
+          for (c_lastc = 0; c_lastc <= b_lastv - 2; c_lastc++) {
             for (knt = b_lastv; knt <= nA; knt++) {
               ii = (knt - 1) << 2;
-              m = ii + c_lastc;
-              RLinv[m] -= RLinv[(ii + b_lastv) - 1] * R[j_i + c_lastc];
+              f = ii + c_lastc;
+              RLinv[f] -= RLinv[(ii + b_lastv) - 1] * R[k_i + c_lastc];
             }
           }
         }
       }
 
-      if (nA > 2147483646) {
-        m = MAX_int32_T;
-      } else {
-        m = nA + 1;
-      }
+      for (b_lastv = 0; b_lastv < n; b_lastv++) {
+        if (b_lastv + 1 <= n) {
+          if (nA > 2147483646) {
+            qY = MAX_int32_T;
+          } else {
+            qY = nA + 1;
+          }
+        }
 
-      for (b_lastv = 0; b_lastv < 4; b_lastv++) {
-        for (c_lastc = b_lastv + 1; c_lastc < 5; c_lastc++) {
-          j_i = ((c_lastc - 1) << 2) + b_lastv;
-          H[j_i] = 0.0;
-          for (knt = m; knt < 5; knt++) {
+        for (c_lastc = b_lastv + 1; c_lastc <= n; c_lastc++) {
+          k_i = ((c_lastc - 1) << 2) + b_lastv;
+          H[k_i] = 0.0;
+          for (knt = qY; knt <= n; knt++) {
             ii = (knt - 1) << 2;
-            H[j_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
+            H[k_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
           }
 
-          H[(c_lastc + (b_lastv << 2)) - 1] = H[j_i];
+          H[(c_lastc + (b_lastv << 2)) - 1] = H[k_i];
         }
       }
 
-      tmp_0 = static_cast<uint32_T>(nA);
-      if (static_cast<uint32_T>(nA) > 2147483647U) {
-        tmp_0 = 2147483647U;
-      }
-
-      m = static_cast<int32_T>(tmp_0);
-      for (b_lastv = 0; b_lastv < m; b_lastv++) {
-        for (c_lastc = 0; c_lastc < 4; c_lastc++) {
-          j_i = (b_lastv << 2) + c_lastc;
-          D[j_i] = 0.0;
-          for (knt = b_lastv + 1; knt <= nA; knt++) {
-            ii = (knt - 1) << 2;
-            D[j_i] += TL[ii + c_lastc] * RLinv[ii + b_lastv];
+      for (qY = 0; qY < nA; qY++) {
+        for (b_lastv = 0; b_lastv < n; b_lastv++) {
+          k_i = (qY << 2) + b_lastv;
+          D[k_i] = 0.0;
+          for (c_lastc = qY + 1; c_lastc <= nA; c_lastc++) {
+            ii = (c_lastc - 1) << 2;
+            D[k_i] += TL[ii + b_lastv] * RLinv[ii + qY];
           }
         }
       }
@@ -1607,7 +1736,7 @@ static real_T imperix_control_KWIKfactor_k(const real_T Ac[96], const int32_T
 }
 
 // Function for MATLAB Function: '<S1>/LICCs control'
-static void imperix_control_DropConstraint(int32_T kDrop, boolean_T iA[24],
+static void imperix_contro_DropConstraint_o(int32_T kDrop, boolean_T iA[24],
   int32_T *nA, int32_T iC[24])
 {
   if (kDrop > 0) {
@@ -1639,7 +1768,8 @@ static void imperix_control_DropConstraint(int32_T kDrop, boolean_T iA[24],
 // Function for MATLAB Function: '<S1>/LICCs control'
 static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16],
   const real_T f[4], const real_T Ac[96], const real_T b[24], boolean_T iA[24],
-  real_T x[4], real_T lambda[24], int32_T *status)
+  int32_T maxiter, real_T FeasTol, real_T x[4], real_T lambda[24], int32_T
+  *status)
 {
   real_T cTol[24];
   real_T D[16];
@@ -1664,15 +1794,16 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
   int32_T iC[24];
   int32_T U_tmp;
   int32_T U_tmp_0;
+  int32_T b_exponent;
   int32_T exitg1;
   int32_T exitg3;
+  int32_T exponent;
   int32_T i;
-  int32_T iC_0;
-  int32_T iSave;
-  int32_T n;
+  int32_T k;
+  int32_T kDrop;
   int32_T nA;
   int32_T tmp;
-  uint32_T tmp_0;
+  int32_T z_idx_0_tmp;
   boolean_T ColdReset;
   boolean_T DualFeasible;
   boolean_T cTolComputed;
@@ -1680,6 +1811,7 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
   boolean_T exitg4;
   boolean_T guard1;
   boolean_T guard2;
+  boolean_T guard3;
   x[0] = 0.0;
   x[1] = 0.0;
   x[2] = 0.0;
@@ -1721,88 +1853,144 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
     ColdReset = false;
     do {
       exitg3 = 0;
-      if ((!DualFeasible) && (nA > 0) && (*status <= 10)) {
-        Xnorm0 = imperix_control_KWIKfactor_k(Ac, iC, nA, Linv, RLinv, D, H);
+      if ((!DualFeasible) && (nA > 0) && (*status <= maxiter)) {
+        Xnorm0 = imperix_control_KWIKfactor_k(Ac, iC, nA, Linv, RLinv, D, H, 4);
         if (Xnorm0 < 0.0) {
           if (ColdReset) {
             *status = -2;
             exitg3 = 2;
           } else {
+            nA = 0;
             memset(&iC[0], 0, 24U * sizeof(int32_T));
             for (i = 0; i < 24; i++) {
               iA[i] = false;
             }
 
-            nA = 0;
             ColdReset = true;
           }
         } else {
-          n = static_cast<uint8_T>(nA);
-          for (i = 0; i < n; i++) {
-            Rhs[i + 4] = b[iC[i] - 1];
-            for (iSave = i + 1; iSave <= nA; iSave++) {
-              U_tmp_0 = ((i << 2) + iSave) - 1;
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483643) {
+              i = MAX_int32_T;
+            } else {
+              i = kDrop + 5;
+            }
+
+            Rhs[i - 1] = b[iC[kDrop] - 1];
+            for (i = kDrop + 1; i <= nA; i++) {
+              U_tmp_0 = ((kDrop << 2) + i) - 1;
               U[U_tmp_0] = 0.0;
-              for (iC_0 = 0; iC_0 < n; iC_0++) {
-                U_tmp = iC_0 << 2;
-                U[U_tmp_0] += RLinv[(U_tmp + iSave) - 1] * RLinv[U_tmp + i];
+              for (k = 0; k < nA; k++) {
+                U_tmp = k << 2;
+                U[U_tmp_0] += RLinv[(U_tmp + i) - 1] * RLinv[U_tmp + kDrop];
               }
 
-              U[i + ((iSave - 1) << 2)] = U[U_tmp_0];
+              U[kDrop + ((i - 1) << 2)] = U[U_tmp_0];
             }
           }
 
-          for (i = 0; i < 4; i++) {
-            Opt[i] = ((H[i + 4] * Rhs[1] + H[i] * Rhs[0]) + H[i + 8] * Rhs[2]) +
-              H[i + 12] * Rhs[3];
-            for (iSave = 0; iSave < n; iSave++) {
-              Opt[i] += D[(iSave << 2) + i] * Rhs[iSave + 4];
+          for (kDrop = 0; kDrop < 4; kDrop++) {
+            Opt[kDrop] = ((H[kDrop + 4] * Rhs[1] + H[kDrop] * Rhs[0]) + H[kDrop
+                          + 8] * Rhs[2]) + H[kDrop + 12] * Rhs[3];
+            for (k = 0; k < nA; k++) {
+              if (k + 1 > 2147483643) {
+                i = MAX_int32_T;
+              } else {
+                i = k + 5;
+              }
+
+              Opt[kDrop] += D[(k << 2) + kDrop] * Rhs[i - 1];
+            }
+          }
+
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483643) {
+              i = MAX_int32_T;
+            } else {
+              i = kDrop + 5;
+            }
+
+            k = kDrop << 2;
+            Opt[i - 1] = ((D[k + 1] * Rhs[1] + D[k] * Rhs[0]) + D[k + 2] * Rhs[2])
+              + D[k + 3] * Rhs[3];
+            if (kDrop + 1 > 2147483643) {
+              i = MAX_int32_T;
+              U_tmp_0 = MAX_int32_T;
+            } else {
+              i = kDrop + 5;
+              U_tmp_0 = kDrop + 5;
+            }
+
+            for (k = 0; k < nA; k++) {
+              if (k + 1 > 2147483643) {
+                U_tmp = MAX_int32_T;
+              } else {
+                U_tmp = k + 5;
+              }
+
+              Opt[i - 1] = U[(k << 2) + kDrop] * Rhs[U_tmp - 1] + Opt[U_tmp_0 -
+                1];
             }
           }
 
           Xnorm0 = -1.0E-12;
-          i = -1;
-          for (iSave = 0; iSave < n; iSave++) {
-            iC_0 = iSave << 2;
-            Opt[iSave + 4] = ((D[iC_0 + 1] * Rhs[1] + D[iC_0] * Rhs[0]) + D[iC_0
-                              + 2] * Rhs[2]) + D[iC_0 + 3] * Rhs[3];
-            for (iC_0 = 0; iC_0 < n; iC_0++) {
-              Opt[iSave + 4] += U[(iC_0 << 2) + iSave] * Rhs[iC_0 + 4];
+          kDrop = -1;
+          for (k = 0; k < nA; k++) {
+            if (k + 1 > 2147483643) {
+              i = MAX_int32_T;
+            } else {
+              i = k + 5;
             }
 
-            cMin = Opt[iSave + 4];
-            lambda[iC[iSave] - 1] = cMin;
-            if ((cMin < Xnorm0) && (iSave + 1 <= nA)) {
-              i = iSave;
-              Xnorm0 = cMin;
+            lambda[iC[k] - 1] = Opt[i - 1];
+            if (k + 1 > 2147483643) {
+              // out-of-bounds matrix access would cause program termination and was eliminated 
+            } else {
+              z_idx_0_tmp = k + 5;
+            }
+
+            if ((Opt[z_idx_0_tmp - 1] < Xnorm0) && (k + 1 <= nA)) {
+              kDrop = k;
+              if (k + 1 > 2147483643) {
+                i = MAX_int32_T;
+              } else {
+                i = k + 5;
+              }
+
+              Xnorm0 = Opt[i - 1];
             }
           }
 
-          if (i + 1 <= 0) {
+          if (kDrop + 1 <= 0) {
             DualFeasible = true;
             x[0] = Opt[0];
             x[1] = Opt[1];
             x[2] = Opt[2];
             x[3] = Opt[3];
           } else {
-            (*status)++;
-            if (tmp <= 5) {
-              n = 5;
+            if (*status > 2147483646) {
+              *status = MAX_int32_T;
             } else {
-              n = tmp;
+              (*status)++;
             }
 
-            if (*status > n) {
+            if (tmp <= 5) {
+              i = 5;
+            } else {
+              i = tmp;
+            }
+
+            if (*status > i) {
+              nA = 0;
               memset(&iC[0], 0, 24U * sizeof(int32_T));
               for (i = 0; i < 24; i++) {
                 iA[i] = false;
               }
 
-              nA = 0;
               ColdReset = true;
             } else {
-              lambda[iC[i] - 1] = 0.0;
-              imperix_control_DropConstraint(i + 1, iA, &nA, iC);
+              lambda[iC[kDrop] - 1] = 0.0;
+              imperix_contro_DropConstraint_o(kDrop + 1, iA, &nA, iC);
             }
           }
         }
@@ -1842,8 +2030,8 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
   if (guard1) {
     Xnorm0 = imperix_control_norm_j(x);
     exitg2 = false;
-    while ((!exitg2) && (*status <= 10)) {
-      cMin = -1.0E-5;
+    while ((!exitg2) && (*status <= maxiter)) {
+      cMin = -FeasTol;
       tmp = -1;
       for (i = 0; i < 24; i++) {
         if (!cTolComputed) {
@@ -1851,7 +2039,7 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
           varargin_1[1] = fabs(Ac[i + 24] * x[1]);
           varargin_1[2] = fabs(Ac[i + 48] * x[2]);
           varargin_1[3] = fabs(Ac[i + 72] * x[3]);
-          cVal = imperix_control_maximum(varargin_1);
+          cVal = imperix_control_maximum_j(varargin_1);
           if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
           } else {
             cTol[i] = cVal;
@@ -1871,106 +2059,96 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
       cTolComputed = true;
       if (tmp + 1 <= 0) {
         exitg2 = true;
-      } else if (*status == 10) {
+      } else if (*status == maxiter) {
         *status = 0;
         exitg2 = true;
       } else {
         do {
           exitg1 = 0;
-          if ((tmp + 1 > 0) && (*status <= 10)) {
+          if ((tmp + 1 > 0) && (*status <= maxiter)) {
             guard2 = false;
+            guard3 = false;
             if (nA == 0) {
               cMin = 0.0;
               cVal = 0.0;
               z_idx_2 = 0.0;
               z_idx_3 = 0.0;
-              for (n = 0; n < 4; n++) {
-                t1 = Ac[24 * n + tmp];
-                i = n << 2;
-                cMin += Hinv[i] * t1;
-                cVal += Hinv[i + 1] * t1;
-                z_idx_2 += Hinv[i + 2] * t1;
-                z_idx_3 += Hinv[i + 3] * t1;
+              for (i = 0; i < 4; i++) {
+                t1 = Ac[24 * i + tmp];
+                z_idx_0_tmp = i << 2;
+                cMin += Hinv[z_idx_0_tmp] * t1;
+                cVal += Hinv[z_idx_0_tmp + 1] * t1;
+                z_idx_2 += Hinv[z_idx_0_tmp + 2] * t1;
+                z_idx_3 += Hinv[z_idx_0_tmp + 3] * t1;
               }
 
-              guard2 = true;
+              guard3 = true;
             } else {
-              cMin = imperix_control_KWIKfactor_k(Ac, iC, nA, Linv, RLinv, D, H);
+              cMin = imperix_control_KWIKfactor_k(Ac, iC, nA, Linv, RLinv, D, H,
+                4);
               if (cMin <= 0.0) {
                 *status = -2;
                 exitg1 = 1;
               } else {
-                for (n = 0; n < 16; n++) {
-                  U[n] = -H[n];
+                for (i = 0; i < 16; i++) {
+                  U[i] = -H[i];
                 }
 
                 cMin = 0.0;
                 cVal = 0.0;
                 z_idx_2 = 0.0;
                 z_idx_3 = 0.0;
-                for (n = 0; n < 4; n++) {
-                  t1 = Ac[24 * n + tmp];
-                  i = n << 2;
-                  cMin += U[i] * t1;
-                  cVal += U[i + 1] * t1;
-                  z_idx_2 += U[i + 2] * t1;
-                  z_idx_3 += U[i + 3] * t1;
+                for (i = 0; i < 4; i++) {
+                  t1 = Ac[24 * i + tmp];
+                  z_idx_0_tmp = i << 2;
+                  cMin += U[z_idx_0_tmp] * t1;
+                  cVal += U[z_idx_0_tmp + 1] * t1;
+                  z_idx_2 += U[z_idx_0_tmp + 2] * t1;
+                  z_idx_3 += U[z_idx_0_tmp + 3] * t1;
                 }
 
-                tmp_0 = static_cast<uint32_T>(nA);
-                if (static_cast<uint32_T>(nA) > 2147483647U) {
-                  tmp_0 = 2147483647U;
+                for (i = 0; i < nA; i++) {
+                  z_idx_0_tmp = i << 2;
+                  r[i] = ((D[z_idx_0_tmp + 1] * Ac[tmp + 24] + D[z_idx_0_tmp] *
+                           Ac[tmp]) + D[z_idx_0_tmp + 2] * Ac[tmp + 48]) +
+                    D[z_idx_0_tmp + 3] * Ac[tmp + 72];
                 }
 
-                n = static_cast<int32_T>(tmp_0);
-                for (i = 0; i < n; i++) {
-                  iSave = i << 2;
-                  r[i] = ((D[iSave + 1] * Ac[tmp + 24] + D[iSave] * Ac[tmp]) +
-                          D[iSave + 2] * Ac[tmp + 48]) + D[iSave + 3] * Ac[tmp +
-                    72];
-                }
-
-                guard2 = true;
+                guard3 = true;
               }
             }
 
-            if (guard2) {
-              i = 0;
+            if (guard3) {
+              kDrop = 0;
               t1 = 0.0;
               DualFeasible = true;
               ColdReset = true;
               if (nA > 0) {
-                n = 0;
+                i = 0;
                 exitg4 = false;
-                while ((!exitg4) && (n <= nA - 1)) {
-                  if (r[n] >= 1.0E-12) {
+                while ((!exitg4) && (i <= nA - 1)) {
+                  if (r[i] >= 1.0E-12) {
                     ColdReset = false;
                     exitg4 = true;
                   } else {
-                    n++;
+                    i++;
                   }
                 }
               }
 
               if ((nA != 0) && (!ColdReset)) {
-                tmp_0 = static_cast<uint32_T>(nA);
-                if (static_cast<uint32_T>(nA) > 2147483647U) {
-                  tmp_0 = 2147483647U;
-                }
-
-                iSave = static_cast<int32_T>(tmp_0);
-                for (n = 0; n < iSave; n++) {
-                  rVal = r[n];
+                for (i = 0; i < nA; i++) {
+                  rVal = r[i];
                   if (rVal > 1.0E-12) {
-                    rVal = lambda[iC[n] - 1] / rVal;
-                    if ((i == 0) || (rVal < rMin)) {
+                    rVal = lambda[iC[i] - 1] / rVal;
+                    if ((kDrop == 0) || (rVal < rMin)) {
                       rMin = rVal;
-                      i = n + 1;
+                      kDrop = i + 1;
                     }
                   }
                 }
 
-                if (i > 0) {
+                if (kDrop > 0) {
                   t1 = rMin;
                   DualFeasible = false;
                 }
@@ -2004,23 +2182,18 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
                   t = rVal;
                 }
 
-                tmp_0 = static_cast<uint32_T>(nA);
-                if (static_cast<uint32_T>(nA) > 2147483647U) {
-                  tmp_0 = 2147483647U;
-                }
-
-                iSave = static_cast<int32_T>(tmp_0);
-                for (n = 0; n < iSave; n++) {
-                  iC_0 = iC[n];
-                  lambda[iC_0 - 1] -= t * r[n];
-                  if (lambda[iC_0 - 1] < 0.0) {
-                    lambda[iC_0 - 1] = 0.0;
+                for (i = 0; i < nA; i++) {
+                  z_idx_0_tmp = iC[i];
+                  lambda[z_idx_0_tmp - 1] -= t * r[i];
+                  if ((z_idx_0_tmp <= 24) && (lambda[z_idx_0_tmp - 1] < 0.0)) {
+                    lambda[z_idx_0_tmp - 1] = 0.0;
                   }
                 }
 
                 lambda[tmp] += t;
+                frexp(1.0, &exponent);
                 if (fabs(t - t1) < 2.2204460492503131E-16) {
-                  imperix_control_DropConstraint(i, iA, &nA, iC);
+                  imperix_contro_DropConstraint_o(kDrop, iA, &nA, iC);
                 }
 
                 if (!ColdReset) {
@@ -2028,6 +2201,7 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
                   x[1] += t * cVal;
                   x[2] += t * z_idx_2;
                   x[3] += t * z_idx_3;
+                  frexp(1.0, &b_exponent);
                   if (fabs(t - rVal) < 2.2204460492503131E-16) {
                     if (nA == 4) {
                       *status = -1;
@@ -2040,30 +2214,36 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
                       }
 
                       iC[nA - 1] = tmp + 1;
-                      i = nA - 1;
+                      z_idx_0_tmp = nA - 1;
                       exitg4 = false;
-                      while ((!exitg4) && (i + 1 > 1)) {
-                        n = iC[i - 1];
-                        if (iC[i] > n) {
+                      while ((!exitg4) && (z_idx_0_tmp + 1 > 1)) {
+                        i = iC[z_idx_0_tmp - 1];
+                        if (iC[z_idx_0_tmp] > i) {
                           exitg4 = true;
                         } else {
-                          iSave = iC[i];
-                          iC[i] = n;
-                          iC[i - 1] = iSave;
-                          i--;
+                          kDrop = iC[z_idx_0_tmp];
+                          iC[z_idx_0_tmp] = i;
+                          iC[z_idx_0_tmp - 1] = kDrop;
+                          z_idx_0_tmp--;
                         }
                       }
 
                       iA[tmp] = true;
                       tmp = -1;
-                      (*status)++;
+                      guard2 = true;
                     }
                   } else {
-                    (*status)++;
+                    guard2 = true;
                   }
                 } else {
-                  (*status)++;
+                  guard2 = true;
                 }
+              }
+            }
+
+            if (guard2) {
+              if (*status <= 2147483646) {
+                (*status)++;
               }
             }
           } else {
@@ -2094,118 +2274,13 @@ static void imperix_control_qpkwik_a(const real_T Linv[16], const real_T Hinv[16
   }
 }
 
-static int32_T imperix_contro_binary_expand_op(const real_T in1[16], const
-  real_T in2[16], real_T in3[4], const real_T in4[8], const
-  struct_04ti4QO3MEcLknQdotQIR *in5, const real_T in6[6], const real_T in7[5],
-  const coder::array<real_T, 1U> &in8, real_T in9, real_T in10, const coder::
-  array<real_T, 1U> &in11, real_T in12, const real_T in13[96], const real_T
-  in14[12], const real_T in15[12], boolean_T in16[24], real_T in17[24])
+// Function for MATLAB Function: '<S1>/Energy balance'
+static void imperix_control_repmat(const real_T a[2], real_T b[4])
 {
-  real_T in13_0[96];
-  real_T in14_0[24];
-  real_T in1_0[16];
-  real_T in3_0[4];
-  real_T tmp[4];
-  real_T in5_idx_0;
-  real_T in5_idx_1;
-  real_T in6_0;
-  int32_T i;
-  int32_T in1_tmp;
-  int32_T in5_idx_0_tmp;
-  int32_T out1;
-  int32_T stride_0_0;
-  int32_T tmp_0;
-  int32_T tmp_1;
-
-  // Gain: '<S42>/Gain4'
-  in5_idx_0 = 0.0;
-  in5_idx_1 = 0.0;
-  for (i = 0; i < 6; i++) {
-    // Sum: '<S42>/Sum3' incorporates:
-    //   Gain: '<S42>/Gain3'
-
-    in6_0 = 0.0;
-    for (in5_idx_0_tmp = 0; in5_idx_0_tmp < 5; in5_idx_0_tmp++) {
-      in6_0 += in5->pinvA[6 * in5_idx_0_tmp + i] * in7[in5_idx_0_tmp];
-    }
-
-    in6_0 = in6[i] - in6_0;
-
-    // End of Sum: '<S42>/Sum3'
-
-    // Gain: '<S42>/Gain4'
-    in5_idx_0_tmp = i << 1;
-    in5_idx_0 += in5->pinvN[in5_idx_0_tmp] * in6_0;
-    in5_idx_1 += in5->pinvN[in5_idx_0_tmp + 1] * in6_0;
-  }
-
-  // MATLAB Function: '<S1>/LICCs control'
-  in6_0 = (in4[0] * in5_idx_0 + in4[4] * in5_idx_1) + (in2[0] * in8[0] + in8[1] *
-    in2[4]);
-  in5_idx_0 = (in4[1] * in5_idx_0 + in4[5] * in5_idx_1) + (in8[0] * in2[1] +
-    in8[1] * in2[5]);
-  for (i = 0; i < 4; i++) {
-    in3_0[i] = (in4[i + 4] * in5_idx_0 + in4[i] * in6_0) - in3[i];
-  }
-
-  stride_0_0 = (in11.size(0) != 1);
-  for (i = 0; i < 4; i++) {
-    in6_0 = 0.0;
-    for (in5_idx_0_tmp = 0; in5_idx_0_tmp < 4; in5_idx_0_tmp++) {
-      tmp_0 = i << 2;
-      tmp_1 = tmp_0 + in5_idx_0_tmp;
-      in6_0 += in2[tmp_1] * 2.0 * in3_0[in5_idx_0_tmp];
-      in1_tmp = in5_idx_0_tmp << 2;
-      in1_0[tmp_1] = ((in1[in1_tmp + 1] * in1[tmp_0 + 1] + in1[in1_tmp] *
-                       in1[tmp_0]) + in1[in1_tmp + 2] * in1[tmp_0 + 2]) +
-        in1[in1_tmp + 3] * in1[tmp_0 + 3];
-    }
-
-    tmp[i] = in11[i * stride_0_0] * 2.0 / in12 * in10 + in6_0 / in9;
-  }
-
-  for (i = 0; i < 96; i++) {
-    in13_0[i] = -in13[i];
-  }
-
-  for (i = 0; i < 12; i++) {
-    in14_0[i] = -in14[i];
-    in14_0[i + 12] = in15[i];
-  }
-
-  imperix_control_qpkwik_a(in1, in1_0, tmp, in13_0, in14_0, in16, in3, in17,
-    &out1);
-
-  // End of MATLAB Function: '<S1>/LICCs control'
-  return out1;
-}
-
-static void imperix_cont_binary_expand_op_2(coder::array<real_T, 1U> &in1, const
-  real_T in2_data[], const coder::array<real_T, 1U> &in3)
-{
-  real_T in2[18];
-  int32_T aux_0_1;
-  int32_T stride_0_1;
-
-  // MATLAB Function: '<S1>/Energy balance'
-  stride_0_1 = (in3.size(0) != 1);
-  aux_0_1 = 0;
-  for (int32_T i_0 = 0; i_0 < 3; i_0++) {
-    for (int32_T i = 0; i < 6; i++) {
-      int32_T in2_tmp;
-      in2_tmp = 6 * i_0 + i;
-      in2[in2_tmp] = in2_data[in2_tmp] + in3[aux_0_1];
-    }
-
-    aux_0_1 += stride_0_1;
-  }
-
-  in1.set_size(18);
-  for (int32_T i_0 = 0; i_0 < 18; i_0++) {
-    in1[i_0] = in2[i_0];
-  }
-
-  // End of MATLAB Function: '<S1>/Energy balance'
+  b[0] = a[0];
+  b[1] = a[1];
+  b[2] = a[0];
+  b[3] = a[1];
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
@@ -2259,6 +2334,45 @@ static real_T imperix_control_norm(const real_T x[6])
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
+static real_T imperix_control_maximum(const real_T x[6])
+{
+  real_T ex;
+  int32_T idx;
+  int32_T k;
+  if (!rtIsNaN(x[0])) {
+    idx = 1;
+  } else {
+    boolean_T exitg1;
+    idx = 0;
+    k = 2;
+    exitg1 = false;
+    while ((!exitg1) && (k < 7)) {
+      if (!rtIsNaN(x[k - 1])) {
+        idx = k;
+        exitg1 = true;
+      } else {
+        k++;
+      }
+    }
+  }
+
+  if (idx == 0) {
+    ex = x[0];
+  } else {
+    ex = x[idx - 1];
+    for (k = idx + 1; k < 7; k++) {
+      real_T x_0;
+      x_0 = x[k - 1];
+      if (ex < x_0) {
+        ex = x_0;
+      }
+    }
+  }
+
+  return ex;
+}
+
+// Function for MATLAB Function: '<S1>/Energy balance'
 static real_T imperix_control_xnrm2(int32_T n, const real_T x[36], int32_T ix0)
 {
   real_T y;
@@ -2297,17 +2411,20 @@ static real_T imperix_control_xnrm2(int32_T n, const real_T x[36], int32_T ix0)
 static void imperix_control_xgemv(int32_T m, int32_T n, const real_T A[36],
   int32_T ia0, const real_T x[36], int32_T ix0, real_T y[6])
 {
-  if (n != 0) {
+  if ((m != 0) && (n != 0)) {
     int32_T b;
-    memset(&y[0], 0, static_cast<uint8_T>(n) * sizeof(real_T));
+    if (n - 1 >= 0) {
+      memset(&y[0], 0, static_cast<uint32_T>(n) * sizeof(real_T));
+    }
+
     b = (n - 1) * 6 + ia0;
     for (int32_T b_iy = ia0; b_iy <= b; b_iy += 6) {
       real_T c;
-      int32_T e;
+      int32_T d;
       int32_T ia;
       c = 0.0;
-      e = b_iy + m;
-      for (ia = b_iy; ia < e; ia++) {
+      d = b_iy + m;
+      for (ia = b_iy; ia < d; ia++) {
         c += x[((ix0 + ia) - b_iy) - 1] * A[ia - 1];
       }
 
@@ -2322,18 +2439,16 @@ static void imperix_control_xgerc(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[6], real_T A[36], int32_T ia0)
 {
   if (!(alpha1 == 0.0)) {
-    int32_T b;
     int32_T jA;
     jA = ia0;
-    b = static_cast<uint8_T>(n);
-    for (int32_T j = 0; j < b; j++) {
+    for (int32_T j = 0; j < n; j++) {
       real_T temp;
       temp = y[j];
       if (temp != 0.0) {
-        int32_T c;
+        int32_T b;
         temp *= alpha1;
-        c = m + jA;
-        for (int32_T ijA = jA; ijA < c; ijA++) {
+        b = m + jA;
+        for (int32_T ijA = jA; ijA < b; ijA++) {
           A[ijA - 1] += A[((ix0 + ijA) - jA) - 1] * temp;
         }
       }
@@ -2346,92 +2461,85 @@ static void imperix_control_xgerc(int32_T m, int32_T n, real_T alpha1, int32_T
 // Function for MATLAB Function: '<S1>/Energy balance'
 static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
   [36], int32_T nA, const real_T Linv[36], real_T RLinv[36], real_T D[36],
-  real_T H[36])
+  real_T H[36], int32_T n)
 {
-  real_T Q[36];
+  real_T A[36];
   real_T R[36];
   real_T TL[36];
   real_T tau[6];
   real_T work[6];
+  real_T A_0;
   real_T Status;
-  real_T TL_0;
   real_T atmp;
   real_T xnorm;
   int32_T b_lastv;
   int32_T c_lastc;
-  int32_T d;
   int32_T exitg1;
-  int32_T iC_0;
+  int32_T f;
+  int32_T i;
   int32_T ii;
-  int32_T j_i;
   int32_T knt;
-  uint32_T tmp;
+  int32_T qY;
   boolean_T exitg2;
   Status = 1.0;
   memset(&RLinv[0], 0, 36U * sizeof(real_T));
-  tmp = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp = 2147483647U;
-  }
-
-  knt = static_cast<int32_T>(tmp);
-  for (c_lastc = 0; c_lastc < knt; c_lastc++) {
-    iC_0 = iC[c_lastc];
-    for (j_i = 0; j_i < 6; j_i++) {
-      RLinv[j_i + 6 * c_lastc] = 0.0;
+  for (b_lastv = 0; b_lastv < nA; b_lastv++) {
+    knt = iC[b_lastv];
+    for (i = 0; i < 6; i++) {
+      RLinv[i + 6 * b_lastv] = 0.0;
     }
 
-    for (j_i = 0; j_i < 6; j_i++) {
-      xnorm = Ac[(36 * j_i + iC_0) - 1];
+    for (i = 0; i < 6; i++) {
+      xnorm = Ac[(36 * i + knt) - 1];
       for (ii = 0; ii < 6; ii++) {
-        b_lastv = 6 * c_lastc + ii;
-        RLinv[b_lastv] += Linv[6 * j_i + ii] * xnorm;
+        c_lastc = 6 * b_lastv + ii;
+        RLinv[c_lastc] += Linv[6 * i + ii] * xnorm;
       }
     }
   }
 
-  memcpy(&TL[0], &RLinv[0], 36U * sizeof(real_T));
-  for (c_lastc = 0; c_lastc < 6; c_lastc++) {
-    tau[c_lastc] = 0.0;
-    work[c_lastc] = 0.0;
+  memcpy(&A[0], &RLinv[0], 36U * sizeof(real_T));
+  for (i = 0; i < 6; i++) {
+    tau[i] = 0.0;
+    work[i] = 0.0;
   }
 
-  for (j_i = 0; j_i < 6; j_i++) {
-    ii = j_i * 6 + j_i;
-    if (j_i + 1 < 6) {
-      atmp = TL[ii];
+  for (i = 0; i < 6; i++) {
+    ii = i * 6 + i;
+    if (i + 1 < 6) {
+      atmp = A[ii];
       b_lastv = ii + 2;
-      tau[j_i] = 0.0;
-      xnorm = imperix_control_xnrm2(5 - j_i, TL, ii + 2);
+      tau[i] = 0.0;
+      xnorm = imperix_control_xnrm2(5 - i, A, ii + 2);
       if (xnorm != 0.0) {
-        TL_0 = TL[ii];
-        xnorm = rt_hypotd_snf(TL_0, xnorm);
-        if (TL_0 >= 0.0) {
+        A_0 = A[ii];
+        xnorm = rt_hypotd_snf(A_0, xnorm);
+        if (A_0 >= 0.0) {
           xnorm = -xnorm;
         }
 
         if (fabs(xnorm) < 1.0020841800044864E-292) {
           knt = 0;
-          iC_0 = (ii - j_i) + 6;
+          f = (ii - i) + 6;
           do {
             knt++;
-            for (c_lastc = b_lastv; c_lastc <= iC_0; c_lastc++) {
-              TL[c_lastc - 1] *= 9.9792015476736E+291;
+            for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+              A[c_lastc - 1] *= 9.9792015476736E+291;
             }
 
             xnorm *= 9.9792015476736E+291;
             atmp *= 9.9792015476736E+291;
           } while ((fabs(xnorm) < 1.0020841800044864E-292) && (knt < 20));
 
-          xnorm = rt_hypotd_snf(atmp, imperix_control_xnrm2(5 - j_i, TL, ii + 2));
+          xnorm = rt_hypotd_snf(atmp, imperix_control_xnrm2(5 - i, A, ii + 2));
           if (atmp >= 0.0) {
             xnorm = -xnorm;
           }
 
-          tau[j_i] = (xnorm - atmp) / xnorm;
+          tau[i] = (xnorm - atmp) / xnorm;
           atmp = 1.0 / (atmp - xnorm);
-          for (c_lastc = b_lastv; c_lastc <= iC_0; c_lastc++) {
-            TL[c_lastc - 1] *= atmp;
+          for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+            A[c_lastc - 1] *= atmp;
           }
 
           for (b_lastv = 0; b_lastv < knt; b_lastv++) {
@@ -2440,38 +2548,38 @@ static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
 
           atmp = xnorm;
         } else {
-          tau[j_i] = (xnorm - TL_0) / xnorm;
-          atmp = 1.0 / (TL_0 - xnorm);
-          knt = (ii - j_i) + 6;
+          tau[i] = (xnorm - A_0) / xnorm;
+          atmp = 1.0 / (A_0 - xnorm);
+          knt = (ii - i) + 6;
           for (c_lastc = b_lastv; c_lastc <= knt; c_lastc++) {
-            TL[c_lastc - 1] *= atmp;
+            A[c_lastc - 1] *= atmp;
           }
 
           atmp = xnorm;
         }
       }
 
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 6 - j_i;
-        c_lastc = (ii - j_i) + 5;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+      A[ii] = 1.0;
+      if (tau[i] != 0.0) {
+        b_lastv = 6 - i;
+        c_lastc = (ii - i) + 5;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 5 - j_i;
+        c_lastc = 5 - i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = ((c_lastc - 1) * 6 + ii) + 6;
-          iC_0 = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (iC_0 + 1 <= knt + b_lastv) {
-              if (TL[iC_0] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                iC_0++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -2489,53 +2597,52 @@ static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv(b_lastv, c_lastc, TL, ii + 7, TL, ii + 1, work);
-        imperix_control_xgerc(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL, ii
-                              + 7);
+        imperix_control_xgemv(b_lastv, c_lastc, A, ii + 7, A, ii + 1, work);
+        imperix_control_xgerc(b_lastv, c_lastc, -tau[i], ii + 1, work, A, ii + 7);
       }
 
-      TL[ii] = atmp;
+      A[ii] = atmp;
     } else {
       tau[5] = 0.0;
     }
   }
 
-  for (j_i = 0; j_i < 6; j_i++) {
-    for (ii = 0; ii <= j_i; ii++) {
-      R[ii + 6 * j_i] = TL[6 * j_i + ii];
+  for (i = 0; i < 6; i++) {
+    for (ii = 0; ii <= i; ii++) {
+      R[ii + 6 * i] = A[6 * i + ii];
     }
 
-    for (ii = j_i + 2; ii < 7; ii++) {
-      R[(ii + 6 * j_i) - 1] = 0.0;
+    for (ii = i + 2; ii < 7; ii++) {
+      R[(ii + 6 * i) - 1] = 0.0;
     }
 
-    work[j_i] = 0.0;
+    work[i] = 0.0;
   }
 
-  for (j_i = 5; j_i >= 0; j_i--) {
-    ii = j_i * 6 + j_i;
-    if (j_i + 1 < 6) {
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 6 - j_i;
-        c_lastc = (ii - j_i) + 5;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+  for (i = 5; i >= 0; i--) {
+    ii = i * 6 + i;
+    if (i + 1 < 6) {
+      A[ii] = 1.0;
+      if (tau[i] != 0.0) {
+        b_lastv = 6 - i;
+        c_lastc = (ii - i) + 5;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 5 - j_i;
+        c_lastc = 5 - i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = ((c_lastc - 1) * 6 + ii) + 6;
-          iC_0 = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (iC_0 + 1 <= knt + b_lastv) {
-              if (TL[iC_0] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                iC_0++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -2553,45 +2660,38 @@ static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv(b_lastv, c_lastc, TL, ii + 7, TL, ii + 1, work);
-        imperix_control_xgerc(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL, ii
-                              + 7);
+        imperix_control_xgemv(b_lastv, c_lastc, A, ii + 7, A, ii + 1, work);
+        imperix_control_xgerc(b_lastv, c_lastc, -tau[i], ii + 1, work, A, ii + 7);
       }
 
-      c_lastc = (ii - j_i) + 6;
+      c_lastc = (ii - i) + 6;
       for (b_lastv = ii + 2; b_lastv <= c_lastc; b_lastv++) {
-        TL[b_lastv - 1] *= -tau[j_i];
+        A[b_lastv - 1] *= -tau[i];
       }
     }
 
-    TL[ii] = 1.0 - tau[j_i];
-    for (b_lastv = 0; b_lastv < j_i; b_lastv++) {
-      TL[(ii - b_lastv) - 1] = 0.0;
+    A[ii] = 1.0 - tau[i];
+    for (b_lastv = 0; b_lastv < i; b_lastv++) {
+      A[(ii - b_lastv) - 1] = 0.0;
     }
   }
 
-  memcpy(&Q[0], &TL[0], 36U * sizeof(real_T));
-  tmp = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp = 2147483647U;
-  }
-
-  j_i = 0;
+  i = 0;
   do {
     exitg1 = 0;
-    if (j_i <= static_cast<int32_T>(tmp) - 1) {
-      if (fabs(R[6 * j_i + j_i]) < 1.0E-12) {
+    if (i <= nA - 1) {
+      if (fabs(R[6 * i + i]) < 1.0E-12) {
         Status = -2.0;
         exitg1 = 1;
       } else {
-        j_i++;
+        i++;
       }
     } else {
-      for (ii = 0; ii < 6; ii++) {
-        for (b_lastv = 0; b_lastv < 6; b_lastv++) {
+      for (ii = 0; ii < n; ii++) {
+        for (b_lastv = 0; b_lastv < n; b_lastv++) {
           xnorm = 0.0;
-          for (j_i = 0; j_i < 6; j_i++) {
-            xnorm += Linv[6 * ii + j_i] * Q[6 * b_lastv + j_i];
+          for (i = 0; i < 6; i++) {
+            xnorm += Linv[6 * ii + i] * A[6 * b_lastv + i];
           }
 
           TL[ii + 6 * b_lastv] = xnorm;
@@ -2599,59 +2699,54 @@ static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
       }
 
       memset(&RLinv[0], 0, 36U * sizeof(real_T));
-      for (c_lastc = nA; c_lastc >= 1; c_lastc--) {
-        j_i = (c_lastc - 1) * 6;
-        ii = (c_lastc + j_i) - 1;
+      for (b_lastv = nA; b_lastv >= 1; b_lastv--) {
+        i = (b_lastv - 1) * 6;
+        ii = (b_lastv + i) - 1;
         RLinv[ii] = 1.0;
-        for (knt = c_lastc; knt <= nA; knt++) {
-          b_lastv = ((knt - 1) * 6 + c_lastc) - 1;
-          RLinv[b_lastv] /= R[ii];
+        for (knt = b_lastv; knt <= nA; knt++) {
+          c_lastc = ((knt - 1) * 6 + b_lastv) - 1;
+          RLinv[c_lastc] /= R[ii];
         }
 
-        if (c_lastc > 1) {
-          d = static_cast<uint8_T>(c_lastc - 1);
-          for (knt = 0; knt < d; knt++) {
-            for (iC_0 = c_lastc; iC_0 <= nA; iC_0++) {
-              ii = (iC_0 - 1) * 6;
-              b_lastv = ii + knt;
-              RLinv[b_lastv] -= RLinv[(ii + c_lastc) - 1] * R[j_i + knt];
+        if (b_lastv > 1) {
+          for (knt = 0; knt <= b_lastv - 2; knt++) {
+            for (f = b_lastv; f <= nA; f++) {
+              ii = (f - 1) * 6;
+              c_lastc = ii + knt;
+              RLinv[c_lastc] -= RLinv[(ii + b_lastv) - 1] * R[i + knt];
             }
           }
         }
       }
 
-      if (nA > 2147483646) {
-        iC_0 = MAX_int32_T;
-      } else {
-        iC_0 = nA + 1;
-      }
+      for (b_lastv = 0; b_lastv < n; b_lastv++) {
+        if (b_lastv + 1 <= n) {
+          if (nA > 2147483646) {
+            qY = MAX_int32_T;
+          } else {
+            qY = nA + 1;
+          }
+        }
 
-      for (b_lastv = 0; b_lastv < 6; b_lastv++) {
-        for (c_lastc = b_lastv + 1; c_lastc < 7; c_lastc++) {
-          j_i = (c_lastc - 1) * 6 + b_lastv;
-          H[j_i] = 0.0;
-          for (knt = iC_0; knt < 7; knt++) {
+        for (c_lastc = b_lastv + 1; c_lastc <= n; c_lastc++) {
+          i = (c_lastc - 1) * 6 + b_lastv;
+          H[i] = 0.0;
+          for (knt = qY; knt <= n; knt++) {
             ii = (knt - 1) * 6;
-            H[j_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
+            H[i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
           }
 
-          H[(c_lastc + 6 * b_lastv) - 1] = H[j_i];
+          H[(c_lastc + 6 * b_lastv) - 1] = H[i];
         }
       }
 
-      tmp = static_cast<uint32_T>(nA);
-      if (static_cast<uint32_T>(nA) > 2147483647U) {
-        tmp = 2147483647U;
-      }
-
-      iC_0 = static_cast<int32_T>(tmp);
-      for (b_lastv = 0; b_lastv < iC_0; b_lastv++) {
-        for (c_lastc = 0; c_lastc < 6; c_lastc++) {
-          j_i = 6 * b_lastv + c_lastc;
-          D[j_i] = 0.0;
-          for (knt = b_lastv + 1; knt <= nA; knt++) {
-            ii = (knt - 1) * 6;
-            D[j_i] += TL[ii + c_lastc] * RLinv[ii + b_lastv];
+      for (qY = 0; qY < nA; qY++) {
+        for (b_lastv = 0; b_lastv < n; b_lastv++) {
+          i = 6 * qY + b_lastv;
+          D[i] = 0.0;
+          for (c_lastc = qY + 1; c_lastc <= nA; c_lastc++) {
+            ii = (c_lastc - 1) * 6;
+            D[i] += TL[ii + b_lastv] * RLinv[ii + qY];
           }
         }
       }
@@ -2664,15 +2759,48 @@ static real_T imperix_control_KWIKfactor(const real_T Ac[216], const int32_T iC
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
+static void imperix_control_DropConstraint(int32_T kDrop, boolean_T iA[36],
+  int32_T *nA, int32_T iC[36])
+{
+  if (kDrop > 0) {
+    iA[iC[kDrop - 1] - 1] = false;
+    if (kDrop < *nA) {
+      int32_T b;
+      int32_T i;
+      if (*nA < -2147483647) {
+        i = MIN_int32_T;
+      } else {
+        i = *nA - 1;
+      }
+
+      b = i + 1;
+      for (i = kDrop; i < b; i++) {
+        iC[i - 1] = iC[i];
+      }
+    }
+
+    iC[*nA - 1] = 0;
+    if (*nA < -2147483647) {
+      *nA = MIN_int32_T;
+    } else {
+      (*nA)--;
+    }
+  }
+}
+
+// Function for MATLAB Function: '<S1>/Energy balance'
 static void imperix_control_qpkwik(const real_T Linv[36], const real_T Hinv[36],
   const real_T f[6], const real_T Ac[216], const real_T b[36], boolean_T iA[36],
-  real_T x[6], real_T lambda[36], int32_T *status)
+  int32_T maxiter, real_T FeasTol, real_T x[6], real_T lambda[36], int32_T
+  *status)
 {
   real_T D[36];
   real_T H[36];
-  real_T H_0[36];
   real_T RLinv[36];
+  real_T U[36];
   real_T cTol[36];
+  real_T Opt[12];
+  real_T Rhs[12];
   real_T r[6];
   real_T z[6];
   real_T Xnorm0;
@@ -2681,20 +2809,30 @@ static void imperix_control_qpkwik(const real_T Linv[36], const real_T Hinv[36],
   real_T rMin;
   real_T t;
   int32_T iC[36];
+  int32_T U_tmp;
+  int32_T b_exponent;
   int32_T exitg1;
+  int32_T exitg3;
+  int32_T exponent;
+  int32_T f_i;
   int32_T i;
-  int32_T iC_0;
-  int32_T iSave;
-  int32_T idx;
-  int32_T kNext;
+  int32_T k;
+  int32_T kDrop;
   int32_T nA;
-  uint32_T tmp;
+  int32_T tmp;
+  int32_T tmp_0;
+  boolean_T ColdReset;
+  boolean_T DualFeasible;
   boolean_T cTolComputed;
   boolean_T exitg2;
-  boolean_T exitg3;
+  boolean_T exitg4;
   boolean_T guard1;
-  boolean_T isT1Inf;
-  boolean_T tempOK;
+  boolean_T guard2;
+  boolean_T guard3;
+  for (i = 0; i < 6; i++) {
+    x[i] = 0.0;
+  }
+
   memset(&lambda[0], 0, 36U * sizeof(real_T));
   *status = 1;
   for (i = 0; i < 6; i++) {
@@ -2709,309 +2847,452 @@ static void imperix_control_qpkwik(const real_T Linv[36], const real_T Hinv[36],
   }
 
   nA = 0;
-  for (kNext = 0; kNext < 6; kNext++) {
-    Xnorm0 = 0.0;
-    for (idx = 0; idx < 6; idx++) {
-      Xnorm0 += -Hinv[6 * idx + kNext] * f[idx];
+  for (i = 0; i < 36; i++) {
+    if (iA[i]) {
+      nA++;
+      iC[nA - 1] = i + 1;
     }
-
-    x[kNext] = Xnorm0;
   }
 
-  Xnorm0 = imperix_control_norm(x);
-  exitg2 = false;
-  while ((!exitg2) && (*status <= 20)) {
-    cMin = -0.0001;
-    kNext = -1;
-    for (i = 0; i < 36; i++) {
-      if (!cTolComputed) {
-        for (idx = 0; idx < 6; idx++) {
-          z[idx] = fabs(Ac[36 * idx + i] * x[idx]);
-        }
-
-        if (!rtIsNaN(z[0])) {
-          idx = 1;
-        } else {
-          idx = 0;
-          iSave = 2;
-          exitg3 = false;
-          while ((!exitg3) && (iSave <= 6)) {
-            if (!rtIsNaN(z[iSave - 1])) {
-              idx = iSave;
-              exitg3 = true;
-            } else {
-              iSave++;
-            }
-          }
-        }
-
-        if (idx == 0) {
-          cVal = z[0];
-        } else {
-          cVal = z[idx - 1];
-          for (iSave = idx + 1; iSave < 7; iSave++) {
-            t = z[iSave - 1];
-            if (cVal < t) {
-              cVal = t;
-            }
-          }
-        }
-
-        if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
-        } else {
-          cTol[i] = cVal;
-        }
-      }
-
-      if (!iA[i]) {
-        cVal = 0.0;
-        for (idx = 0; idx < 6; idx++) {
-          cVal += Ac[36 * idx + i] * x[idx];
-        }
-
-        cVal = (cVal - b[i]) / cTol[i];
-        if (cVal < cMin) {
-          cMin = cVal;
-          kNext = i;
-        }
-      }
+  guard1 = false;
+  if (nA > 0) {
+    memset(&Opt[0], 0, 12U * sizeof(real_T));
+    for (i = 0; i < 6; i++) {
+      Rhs[i] = f[i];
+      Rhs[i + 6] = 0.0;
     }
 
-    cTolComputed = true;
-    if (kNext + 1 <= 0) {
-      exitg2 = true;
-    } else if (*status == 20) {
-      *status = 0;
-      exitg2 = true;
-    } else {
-      do {
-        exitg1 = 0;
-        if ((kNext + 1 > 0) && (*status <= 20)) {
-          guard1 = false;
-          if (nA == 0) {
-            for (idx = 0; idx < 6; idx++) {
-              z[idx] = 0.0;
-            }
-
-            for (idx = 0; idx < 6; idx++) {
-              cMin = Ac[36 * idx + kNext];
-              for (i = 0; i < 6; i++) {
-                z[i] += Hinv[6 * idx + i] * cMin;
-              }
-            }
-
-            guard1 = true;
+    DualFeasible = false;
+    tmp = static_cast<int32_T>(rt_roundd_snf(0.3 * static_cast<real_T>(nA)));
+    ColdReset = false;
+    do {
+      exitg3 = 0;
+      if ((!DualFeasible) && (nA > 0) && (*status <= maxiter)) {
+        Xnorm0 = imperix_control_KWIKfactor(Ac, iC, nA, Linv, RLinv, D, H, 6);
+        if (Xnorm0 < 0.0) {
+          if (ColdReset) {
+            *status = -2;
+            exitg3 = 2;
           } else {
-            cMin = imperix_control_KWIKfactor(Ac, iC, nA, Linv, RLinv, D, H);
-            if (cMin <= 0.0) {
-              *status = -2;
-              exitg1 = 1;
+            nA = 0;
+            memset(&iC[0], 0, 36U * sizeof(int32_T));
+            for (i = 0; i < 36; i++) {
+              iA[i] = false;
+            }
+
+            ColdReset = true;
+          }
+        } else {
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483641) {
+              i = MAX_int32_T;
             } else {
-              for (idx = 0; idx < 36; idx++) {
-                H_0[idx] = -H[idx];
+              i = kDrop + 7;
+            }
+
+            Rhs[i - 1] = b[iC[kDrop] - 1];
+            for (i = kDrop + 1; i <= nA; i++) {
+              U_tmp = (6 * kDrop + i) - 1;
+              U[U_tmp] = 0.0;
+              for (k = 0; k < nA; k++) {
+                U[U_tmp] += RLinv[(6 * k + i) - 1] * RLinv[6 * k + kDrop];
               }
 
-              for (idx = 0; idx < 6; idx++) {
-                z[idx] = 0.0;
-              }
-
-              for (idx = 0; idx < 6; idx++) {
-                cMin = Ac[36 * idx + kNext];
-                for (i = 0; i < 6; i++) {
-                  z[i] += H_0[6 * idx + i] * cMin;
-                }
-              }
-
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              iSave = static_cast<int32_T>(tmp);
-              for (i = 0; i < iSave; i++) {
-                cVal = 0.0;
-                for (idx = 0; idx < 6; idx++) {
-                  cVal += Ac[36 * idx + kNext] * D[6 * i + idx];
-                }
-
-                r[i] = cVal;
-              }
-
-              guard1 = true;
+              U[kDrop + 6 * (i - 1)] = U[U_tmp];
             }
           }
 
-          if (guard1) {
-            i = 0;
-            cMin = 0.0;
-            isT1Inf = true;
-            tempOK = true;
-            if (nA > 0) {
-              idx = 0;
-              exitg3 = false;
-              while ((!exitg3) && (idx <= nA - 1)) {
-                if (r[idx] >= 1.0E-12) {
-                  tempOK = false;
-                  exitg3 = true;
-                } else {
-                  idx++;
-                }
-              }
+          for (kDrop = 0; kDrop < 6; kDrop++) {
+            Xnorm0 = 0.0;
+            for (i = 0; i < 6; i++) {
+              Xnorm0 += H[6 * i + kDrop] * Rhs[i];
             }
 
-            if ((nA != 0) && (!tempOK)) {
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              iSave = static_cast<int32_T>(tmp);
-              for (idx = 0; idx < iSave; idx++) {
-                cVal = r[idx];
-                if (cVal > 1.0E-12) {
-                  cVal = lambda[iC[idx] - 1] / cVal;
-                  if ((i == 0) || (cVal < rMin)) {
-                    rMin = cVal;
-                    i = idx + 1;
-                  }
-                }
-              }
-
-              if (i > 0) {
-                cMin = rMin;
-                isT1Inf = false;
-              }
-            }
-
-            t = 0.0;
-            for (idx = 0; idx < 6; idx++) {
-              t += Ac[36 * idx + kNext] * z[idx];
-            }
-
-            if (t <= 0.0) {
-              cVal = 0.0;
-              tempOK = true;
-            } else {
-              cVal = 0.0;
-              for (idx = 0; idx < 6; idx++) {
-                cVal += Ac[36 * idx + kNext] * x[idx];
-              }
-
-              cVal = (b[kNext] - cVal) / t;
-              tempOK = false;
-            }
-
-            if (isT1Inf && tempOK) {
-              *status = -1;
-              exitg1 = 1;
-            } else {
-              if (tempOK) {
-                t = cMin;
-              } else if (isT1Inf) {
-                t = cVal;
-              } else if (cMin < cVal) {
-                t = cMin;
+            Opt[kDrop] = Xnorm0;
+            for (k = 0; k < nA; k++) {
+              if (k + 1 > 2147483641) {
+                i = MAX_int32_T;
               } else {
-                t = cVal;
+                i = k + 7;
               }
 
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
+              Opt[kDrop] += D[6 * k + kDrop] * Rhs[i - 1];
+            }
+          }
+
+          for (k = 0; k < nA; k++) {
+            Xnorm0 = 0.0;
+            for (i = 0; i < 6; i++) {
+              Xnorm0 += D[6 * k + i] * Rhs[i];
+            }
+
+            if (k + 1 > 2147483641) {
+              i = MAX_int32_T;
+            } else {
+              i = k + 7;
+            }
+
+            Opt[i - 1] = Xnorm0;
+            if (k + 1 > 2147483641) {
+              i = MAX_int32_T;
+              kDrop = MAX_int32_T;
+            } else {
+              i = k + 7;
+              kDrop = k + 7;
+            }
+
+            for (U_tmp = 0; U_tmp < nA; U_tmp++) {
+              if (U_tmp + 1 > 2147483641) {
+                tmp_0 = MAX_int32_T;
+              } else {
+                tmp_0 = U_tmp + 7;
               }
 
-              iSave = static_cast<int32_T>(tmp);
-              for (idx = 0; idx < iSave; idx++) {
-                iC_0 = iC[idx];
-                lambda[iC_0 - 1] -= t * r[idx];
-                if (lambda[iC_0 - 1] < 0.0) {
-                  lambda[iC_0 - 1] = 0.0;
+              Opt[i - 1] = U[6 * U_tmp + k] * Rhs[tmp_0 - 1] + Opt[kDrop - 1];
+            }
+          }
+
+          Xnorm0 = -1.0E-12;
+          kDrop = -1;
+          for (k = 0; k < nA; k++) {
+            if (k + 1 > 2147483641) {
+              i = MAX_int32_T;
+            } else {
+              i = k + 7;
+            }
+
+            lambda[iC[k] - 1] = Opt[i - 1];
+            if (k + 1 > 2147483641) {
+              // out-of-bounds matrix access would cause program termination and was eliminated 
+            } else {
+              f_i = k + 7;
+            }
+
+            if ((Opt[f_i - 1] < Xnorm0) && (k + 1 <= nA)) {
+              kDrop = k;
+              if (k + 1 > 2147483641) {
+                i = MAX_int32_T;
+              } else {
+                i = k + 7;
+              }
+
+              Xnorm0 = Opt[i - 1];
+            }
+          }
+
+          if (kDrop + 1 <= 0) {
+            DualFeasible = true;
+            for (i = 0; i < 6; i++) {
+              x[i] = Opt[i];
+            }
+          } else {
+            if (*status > 2147483646) {
+              *status = MAX_int32_T;
+            } else {
+              (*status)++;
+            }
+
+            if (tmp <= 5) {
+              i = 5;
+            } else {
+              i = tmp;
+            }
+
+            if (*status > i) {
+              nA = 0;
+              memset(&iC[0], 0, 36U * sizeof(int32_T));
+              for (i = 0; i < 36; i++) {
+                iA[i] = false;
+              }
+
+              ColdReset = true;
+            } else {
+              lambda[iC[kDrop] - 1] = 0.0;
+              imperix_control_DropConstraint(kDrop + 1, iA, &nA, iC);
+            }
+          }
+        }
+      } else {
+        if (nA <= 0) {
+          memset(&lambda[0], 0, 36U * sizeof(real_T));
+          for (tmp = 0; tmp < 6; tmp++) {
+            Xnorm0 = 0.0;
+            for (i = 0; i < 6; i++) {
+              Xnorm0 += -Hinv[6 * i + tmp] * f[i];
+            }
+
+            x[tmp] = Xnorm0;
+          }
+        }
+
+        exitg3 = 1;
+      }
+    } while (exitg3 == 0);
+
+    if (exitg3 == 1) {
+      guard1 = true;
+    }
+  } else {
+    for (tmp = 0; tmp < 6; tmp++) {
+      Xnorm0 = 0.0;
+      for (i = 0; i < 6; i++) {
+        Xnorm0 += -Hinv[6 * i + tmp] * f[i];
+      }
+
+      x[tmp] = Xnorm0;
+    }
+
+    guard1 = true;
+  }
+
+  if (guard1) {
+    Xnorm0 = imperix_control_norm(x);
+    exitg2 = false;
+    while ((!exitg2) && (*status <= maxiter)) {
+      cMin = -FeasTol;
+      tmp = -1;
+      for (f_i = 0; f_i < 36; f_i++) {
+        if (!cTolComputed) {
+          for (i = 0; i < 6; i++) {
+            z[i] = fabs(Ac[36 * i + f_i] * x[i]);
+          }
+
+          cVal = imperix_control_maximum(z);
+          if ((cTol[f_i] >= cVal) || rtIsNaN(cVal)) {
+          } else {
+            cTol[f_i] = cVal;
+          }
+        }
+
+        if (!iA[f_i]) {
+          cVal = 0.0;
+          for (i = 0; i < 6; i++) {
+            cVal += Ac[36 * i + f_i] * x[i];
+          }
+
+          cVal = (cVal - b[f_i]) / cTol[f_i];
+          if (cVal < cMin) {
+            cMin = cVal;
+            tmp = f_i;
+          }
+        }
+      }
+
+      cTolComputed = true;
+      if (tmp + 1 <= 0) {
+        exitg2 = true;
+      } else if (*status == maxiter) {
+        *status = 0;
+        exitg2 = true;
+      } else {
+        do {
+          exitg1 = 0;
+          if ((tmp + 1 > 0) && (*status <= maxiter)) {
+            guard2 = false;
+            guard3 = false;
+            if (nA == 0) {
+              for (i = 0; i < 6; i++) {
+                z[i] = 0.0;
+              }
+
+              for (i = 0; i < 6; i++) {
+                cMin = Ac[36 * i + tmp];
+                for (kDrop = 0; kDrop < 6; kDrop++) {
+                  z[kDrop] += Hinv[6 * i + kDrop] * cMin;
                 }
               }
 
-              lambda[kNext] += t;
-              if ((fabs(t - cMin) < 2.2204460492503131E-16) && (i > 0)) {
-                iA[iC[i - 1] - 1] = false;
-                if (i < nA) {
-                  for (idx = i; idx < nA; idx++) {
-                    iC[idx - 1] = iC[idx];
+              guard3 = true;
+            } else {
+              cMin = imperix_control_KWIKfactor(Ac, iC, nA, Linv, RLinv, D, H, 6);
+              if (cMin <= 0.0) {
+                *status = -2;
+                exitg1 = 1;
+              } else {
+                for (i = 0; i < 36; i++) {
+                  U[i] = -H[i];
+                }
+
+                for (i = 0; i < 6; i++) {
+                  z[i] = 0.0;
+                }
+
+                for (i = 0; i < 6; i++) {
+                  cMin = Ac[36 * i + tmp];
+                  for (kDrop = 0; kDrop < 6; kDrop++) {
+                    z[kDrop] += U[6 * i + kDrop] * cMin;
                   }
                 }
 
-                iC[nA - 1] = 0;
-                if (nA < -2147483647) {
-                  nA = MIN_int32_T;
-                } else {
-                  nA--;
+                for (f_i = 0; f_i < nA; f_i++) {
+                  cVal = 0.0;
+                  for (i = 0; i < 6; i++) {
+                    cVal += Ac[36 * i + tmp] * D[6 * f_i + i];
+                  }
+
+                  r[f_i] = cVal;
                 }
+
+                guard3 = true;
               }
+            }
 
-              if (!tempOK) {
-                for (idx = 0; idx < 6; idx++) {
-                  x[idx] += t * z[idx];
-                }
-
-                if (fabs(t - cVal) < 2.2204460492503131E-16) {
-                  if (nA == 6) {
-                    *status = -1;
-                    exitg1 = 1;
+            if (guard3) {
+              kDrop = 0;
+              cMin = 0.0;
+              DualFeasible = true;
+              ColdReset = true;
+              if (nA > 0) {
+                i = 0;
+                exitg4 = false;
+                while ((!exitg4) && (i <= nA - 1)) {
+                  if (r[i] >= 1.0E-12) {
+                    ColdReset = false;
+                    exitg4 = true;
                   } else {
-                    if (nA > 2147483646) {
-                      nA = MAX_int32_T;
+                    i++;
+                  }
+                }
+              }
+
+              if ((nA != 0) && (!ColdReset)) {
+                for (i = 0; i < nA; i++) {
+                  cVal = r[i];
+                  if (cVal > 1.0E-12) {
+                    cVal = lambda[iC[i] - 1] / cVal;
+                    if ((kDrop == 0) || (cVal < rMin)) {
+                      rMin = cVal;
+                      kDrop = i + 1;
+                    }
+                  }
+                }
+
+                if (kDrop > 0) {
+                  cMin = rMin;
+                  DualFeasible = false;
+                }
+              }
+
+              t = 0.0;
+              for (i = 0; i < 6; i++) {
+                t += Ac[36 * i + tmp] * z[i];
+              }
+
+              if (t <= 0.0) {
+                cVal = 0.0;
+                ColdReset = true;
+              } else {
+                cVal = 0.0;
+                for (i = 0; i < 6; i++) {
+                  cVal += Ac[36 * i + tmp] * x[i];
+                }
+
+                cVal = (b[tmp] - cVal) / t;
+                ColdReset = false;
+              }
+
+              if (DualFeasible && ColdReset) {
+                *status = -1;
+                exitg1 = 1;
+              } else {
+                if (ColdReset) {
+                  t = cMin;
+                } else if (DualFeasible) {
+                  t = cVal;
+                } else if (cMin < cVal) {
+                  t = cMin;
+                } else {
+                  t = cVal;
+                }
+
+                for (i = 0; i < nA; i++) {
+                  f_i = iC[i];
+                  lambda[f_i - 1] -= t * r[i];
+                  if ((f_i <= 36) && (lambda[f_i - 1] < 0.0)) {
+                    lambda[f_i - 1] = 0.0;
+                  }
+                }
+
+                lambda[tmp] += t;
+                frexp(1.0, &exponent);
+                if (fabs(t - cMin) < 2.2204460492503131E-16) {
+                  imperix_control_DropConstraint(kDrop, iA, &nA, iC);
+                }
+
+                if (!ColdReset) {
+                  for (i = 0; i < 6; i++) {
+                    x[i] += t * z[i];
+                  }
+
+                  frexp(1.0, &b_exponent);
+                  if (fabs(t - cVal) < 2.2204460492503131E-16) {
+                    if (nA == 6) {
+                      *status = -1;
+                      exitg1 = 1;
                     } else {
-                      nA++;
-                    }
-
-                    iC[nA - 1] = kNext + 1;
-                    i = nA - 1;
-                    exitg3 = false;
-                    while ((!exitg3) && (i + 1 > 1)) {
-                      idx = iC[i - 1];
-                      if (iC[i] > idx) {
-                        exitg3 = true;
+                      if (nA > 2147483646) {
+                        nA = MAX_int32_T;
                       } else {
-                        iSave = iC[i];
-                        iC[i] = idx;
-                        iC[i - 1] = iSave;
-                        i--;
+                        nA++;
                       }
-                    }
 
-                    iA[kNext] = true;
-                    kNext = -1;
-                    (*status)++;
+                      iC[nA - 1] = tmp + 1;
+                      f_i = nA - 1;
+                      exitg4 = false;
+                      while ((!exitg4) && (f_i + 1 > 1)) {
+                        i = iC[f_i - 1];
+                        if (iC[f_i] > i) {
+                          exitg4 = true;
+                        } else {
+                          kDrop = iC[f_i];
+                          iC[f_i] = i;
+                          iC[f_i - 1] = kDrop;
+                          f_i--;
+                        }
+                      }
+
+                      iA[tmp] = true;
+                      tmp = -1;
+                      guard2 = true;
+                    }
+                  } else {
+                    guard2 = true;
                   }
                 } else {
-                  (*status)++;
+                  guard2 = true;
                 }
-              } else {
+              }
+            }
+
+            if (guard2) {
+              if (*status <= 2147483646) {
                 (*status)++;
               }
             }
-          }
-        } else {
-          cMin = imperix_control_norm(x);
-          if (fabs(cMin - Xnorm0) > 0.001) {
-            Xnorm0 = cMin;
-            for (kNext = 0; kNext < 36; kNext++) {
-              cMin = fabs(b[kNext]);
-              RLinv[kNext] = cMin;
-              if (cMin >= 1.0) {
-                cTol[kNext] = cMin;
-              } else {
-                cTol[kNext] = 1.0;
+          } else {
+            cMin = imperix_control_norm(x);
+            if (fabs(cMin - Xnorm0) > 0.001) {
+              Xnorm0 = cMin;
+              for (i = 0; i < 36; i++) {
+                cMin = fabs(b[i]);
+                RLinv[i] = cMin;
+                if (cMin >= 1.0) {
+                  cTol[i] = cMin;
+                } else {
+                  cTol[i] = 1.0;
+                }
               }
+
+              cTolComputed = false;
             }
 
-            cTolComputed = false;
+            exitg1 = 2;
           }
+        } while (exitg1 == 0);
 
-          exitg1 = 2;
+        if (exitg1 == 1) {
+          exitg2 = true;
         }
-      } while (exitg1 == 0);
-
-      if (exitg1 == 1) {
-        exitg2 = true;
       }
     }
   }
@@ -3019,7 +3300,9 @@ static void imperix_control_qpkwik(const real_T Linv[36], const real_T Hinv[36],
 
 // Function for MATLAB Function: '<S1>/Energy balance'
 static void imperix_cont_mpcActiveSetSolver(const real_T H[36], const real_T f[6],
-  const real_T A[216], const real_T b[36], real_T x[6], int32_T *exitflag)
+  const real_T A[216], const real_T b[36], int32_T options_MaxIterations, real_T
+  options_ConstraintTolerance, boolean_T options_UseHessianAsInput, real_T x[6],
+  int32_T *exitflag, boolean_T iA[36])
 {
   real_T A_0[216];
   real_T Linv[36];
@@ -3036,74 +3319,81 @@ static void imperix_cont_mpcActiveSetSolver(const real_T H[36], const real_T f[6
   int32_T iac;
   int32_T idxAjj;
   int32_T jmax;
-  boolean_T iA1[36];
   static const int8_T B[36] = { 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
     0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1 };
 
   boolean_T exitg1;
-  memcpy(&b_A[0], &H[0], 36U * sizeof(real_T));
-  jmax = 0;
-  c_j = 0;
-  exitg1 = false;
-  while ((!exitg1) && (c_j < 6)) {
-    idxAjj = c_j * 6 + c_j;
-    ssq = 0.0;
-    if (c_j >= 1) {
-      for (b_k = 0; b_k < c_j; b_k++) {
-        b_c = b_A[b_k * 6 + c_j];
-        ssq += b_c * b_c;
+  if (options_UseHessianAsInput) {
+    memcpy(&b_A[0], &H[0], 36U * sizeof(real_T));
+    jmax = 0;
+    c_j = 0;
+    exitg1 = false;
+    while ((!exitg1) && (c_j < 6)) {
+      idxAjj = c_j * 6 + c_j;
+      ssq = 0.0;
+      if (c_j >= 1) {
+        for (b_k = 0; b_k < c_j; b_k++) {
+          b_c = b_A[b_k * 6 + c_j];
+          ssq += b_c * b_c;
+        }
       }
-    }
 
-    ssq = b_A[idxAjj] - ssq;
-    if (ssq > 0.0) {
-      ssq = sqrt(ssq);
-      b_A[idxAjj] = ssq;
-      if (c_j + 1 < 6) {
-        if (c_j != 0) {
-          b_k = ((c_j - 1) * 6 + c_j) + 2;
-          for (iac = c_j + 2; iac <= b_k; iac += 6) {
-            b_c_tmp = iac - c_j;
-            b_c = -b_A[div_nde_s32_floor(b_c_tmp - 2, 6) * 6 + c_j];
-            b_c_tmp += 4;
-            for (ia = iac; ia <= b_c_tmp; ia++) {
-              b_A_tmp = ((idxAjj + ia) - iac) + 1;
-              b_A[b_A_tmp] += b_A[ia - 1] * b_c;
+      ssq = b_A[idxAjj] - ssq;
+      if (ssq > 0.0) {
+        ssq = sqrt(ssq);
+        b_A[idxAjj] = ssq;
+        if (c_j + 1 < 6) {
+          if (c_j != 0) {
+            b_k = ((c_j - 1) * 6 + c_j) + 2;
+            for (iac = c_j + 2; iac <= b_k; iac += 6) {
+              b_c_tmp = iac - c_j;
+              b_c = -b_A[div_nde_s32_floor(b_c_tmp - 2, 6) * 6 + c_j];
+              b_c_tmp += 4;
+              for (ia = iac; ia <= b_c_tmp; ia++) {
+                b_A_tmp = ((idxAjj + ia) - iac) + 1;
+                b_A[b_A_tmp] += b_A[ia - 1] * b_c;
+              }
             }
+          }
+
+          ssq = 1.0 / ssq;
+          b_k = (idxAjj - c_j) + 6;
+          for (iac = idxAjj + 2; iac <= b_k; iac++) {
+            b_A[iac - 1] *= ssq;
           }
         }
 
-        ssq = 1.0 / ssq;
-        b_k = (idxAjj - c_j) + 6;
-        for (iac = idxAjj + 2; iac <= b_k; iac++) {
-          b_A[iac - 1] *= ssq;
-        }
+        c_j++;
+      } else {
+        b_A[idxAjj] = ssq;
+        jmax = c_j + 1;
+        exitg1 = true;
       }
-
-      c_j++;
-    } else {
-      b_A[idxAjj] = ssq;
-      jmax = c_j + 1;
-      exitg1 = true;
     }
-  }
 
-  if (jmax == 0) {
-    jmax = 7;
-  }
-
-  for (c_j = 2; c_j < jmax; c_j++) {
-    for (idxAjj = 0; idxAjj <= c_j - 2; idxAjj++) {
-      b_A[idxAjj + 6 * (c_j - 1)] = 0.0;
+    if (jmax == 0) {
+      jmax = 7;
     }
+
+    for (c_j = 2; c_j < jmax; c_j++) {
+      for (idxAjj = 0; idxAjj <= c_j - 2; idxAjj++) {
+        b_A[idxAjj + 6 * (c_j - 1)] = 0.0;
+      }
+    }
+
+    for (jmax = 0; jmax < 36; jmax++) {
+      Linv[jmax] = B[jmax];
+    }
+
+    imperix_control_trisolve(b_A, Linv);
+  } else {
+    memcpy(&Linv[0], &H[0], 36U * sizeof(real_T));
   }
 
   for (idxAjj = 0; idxAjj < 36; idxAjj++) {
-    Linv[idxAjj] = B[idxAjj];
-    iA1[idxAjj] = false;
+    iA[idxAjj] = false;
   }
 
-  imperix_control_trisolve(b_A, Linv);
   for (jmax = 0; jmax < 6; jmax++) {
     for (c_j = 0; c_j < 6; c_j++) {
       ssq = 0.0;
@@ -3123,7 +3413,8 @@ static void imperix_cont_mpcActiveSetSolver(const real_T H[36], const real_T f[6
     b_0[jmax] = -b[jmax];
   }
 
-  imperix_control_qpkwik(Linv, Linv_0, f, A_0, b_0, iA1, x, b_A, exitflag);
+  imperix_control_qpkwik(Linv, Linv_0, f, A_0, b_0, iA, options_MaxIterations,
+    options_ConstraintTolerance, x, b_A, exitflag);
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
@@ -3192,6 +3483,45 @@ static real_T imperix_control_norm_i(const real_T x[3])
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
+static real_T imperix_control_maximum_c(const real_T x[3])
+{
+  real_T ex;
+  int32_T idx;
+  int32_T k;
+  if (!rtIsNaN(x[0])) {
+    idx = 1;
+  } else {
+    boolean_T exitg1;
+    idx = 0;
+    k = 2;
+    exitg1 = false;
+    while ((!exitg1) && (k < 4)) {
+      if (!rtIsNaN(x[k - 1])) {
+        idx = k;
+        exitg1 = true;
+      } else {
+        k++;
+      }
+    }
+  }
+
+  if (idx == 0) {
+    ex = x[0];
+  } else {
+    ex = x[idx - 1];
+    for (k = idx + 1; k < 4; k++) {
+      real_T x_0;
+      x_0 = x[k - 1];
+      if (ex < x_0) {
+        ex = x_0;
+      }
+    }
+  }
+
+  return ex;
+}
+
+// Function for MATLAB Function: '<S1>/Energy balance'
 static real_T imperix_control_xnrm2_j(int32_T n, const real_T x[9], int32_T ix0)
 {
   real_T y;
@@ -3201,8 +3531,10 @@ static real_T imperix_control_xnrm2_j(int32_T n, const real_T x[9], int32_T ix0)
       y = fabs(x[ix0 - 1]);
     } else {
       real_T scale;
+      int32_T kend;
       scale = 3.3121686421112381E-170;
-      for (int32_T k = ix0; k <= ix0 + 1; k++) {
+      kend = ix0 + n;
+      for (int32_T k = ix0; k < kend; k++) {
         real_T absxk;
         absxk = fabs(x[k - 1]);
         if (absxk > scale) {
@@ -3228,17 +3560,20 @@ static real_T imperix_control_xnrm2_j(int32_T n, const real_T x[9], int32_T ix0)
 static void imperix_control_xgemv_j(int32_T m, int32_T n, const real_T A[9],
   int32_T ia0, const real_T x[9], int32_T ix0, real_T y[3])
 {
-  if (n != 0) {
+  if ((m != 0) && (n != 0)) {
     int32_T b;
-    memset(&y[0], 0, static_cast<uint8_T>(n) * sizeof(real_T));
+    if (n - 1 >= 0) {
+      memset(&y[0], 0, static_cast<uint32_T>(n) * sizeof(real_T));
+    }
+
     b = (n - 1) * 3 + ia0;
     for (int32_T b_iy = ia0; b_iy <= b; b_iy += 3) {
       real_T c;
-      int32_T e;
+      int32_T d;
       int32_T ia;
       c = 0.0;
-      e = b_iy + m;
-      for (ia = b_iy; ia < e; ia++) {
+      d = b_iy + m;
+      for (ia = b_iy; ia < d; ia++) {
         c += x[((ix0 + ia) - b_iy) - 1] * A[ia - 1];
       }
 
@@ -3253,18 +3588,16 @@ static void imperix_control_xgerc_c(int32_T m, int32_T n, real_T alpha1, int32_T
   ix0, const real_T y[3], real_T A[9], int32_T ia0)
 {
   if (!(alpha1 == 0.0)) {
-    int32_T b;
     int32_T jA;
     jA = ia0;
-    b = static_cast<uint8_T>(n);
-    for (int32_T j = 0; j < b; j++) {
+    for (int32_T j = 0; j < n; j++) {
       real_T temp;
       temp = y[j];
       if (temp != 0.0) {
-        int32_T c;
+        int32_T b;
         temp *= alpha1;
-        c = m + jA;
-        for (int32_T ijA = jA; ijA < c; ijA++) {
+        b = m + jA;
+        for (int32_T ijA = jA; ijA < b; ijA++) {
           A[ijA - 1] += A[((ix0 + ijA) - jA) - 1] * temp;
         }
       }
@@ -3277,8 +3610,9 @@ static void imperix_control_xgerc_c(int32_T m, int32_T n, real_T alpha1, int32_T
 // Function for MATLAB Function: '<S1>/Energy balance'
 static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
   iC[6], int32_T nA, const real_T Linv[9], real_T RLinv[9], real_T D[9], real_T
-  H[9])
+  H[9], int32_T n)
 {
+  real_T A[9];
   real_T Q[9];
   real_T R[9];
   real_T TL[9];
@@ -3291,32 +3625,25 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
   real_T xnorm;
   int32_T b_lastv;
   int32_T c_lastc;
-  int32_T d;
   int32_T exitg1;
+  int32_T f;
   int32_T ii;
-  int32_T j_i;
+  int32_T k_i;
   int32_T knt;
-  int32_T m;
-  uint32_T tmp_0;
+  int32_T qY;
   boolean_T exitg2;
   Status = 1.0;
   memset(&RLinv[0], 0, 9U * sizeof(real_T));
-  tmp_0 = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp_0 = 2147483647U;
-  }
-
-  b_lastv = static_cast<int32_T>(tmp_0);
-  for (ii = 0; ii < b_lastv; ii++) {
-    c_lastc = iC[ii];
+  for (ii = 0; ii < nA; ii++) {
+    b_lastv = iC[ii];
     xnorm = 0.0;
     RLinv_0 = 0.0;
     RLinv_1 = 0.0;
-    for (j_i = 0; j_i < 3; j_i++) {
-      tmp = Ac[(6 * j_i + c_lastc) - 1];
-      xnorm += Linv[3 * j_i] * tmp;
-      RLinv_0 += Linv[3 * j_i + 1] * tmp;
-      RLinv_1 += Linv[3 * j_i + 2] * tmp;
+    for (k_i = 0; k_i < 3; k_i++) {
+      tmp = Ac[(6 * k_i + b_lastv) - 1];
+      xnorm += Linv[3 * k_i] * tmp;
+      RLinv_0 += Linv[3 * k_i + 1] * tmp;
+      RLinv_1 += Linv[3 * k_i + 2] * tmp;
     }
 
     RLinv[3 * ii + 2] = RLinv_1;
@@ -3324,22 +3651,22 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
     RLinv[3 * ii] = xnorm;
   }
 
-  memcpy(&TL[0], &RLinv[0], 9U * sizeof(real_T));
+  memcpy(&A[0], &RLinv[0], 9U * sizeof(real_T));
   tau[0] = 0.0;
   work[0] = 0.0;
   tau[1] = 0.0;
   work[1] = 0.0;
   tau[2] = 0.0;
   work[2] = 0.0;
-  for (j_i = 0; j_i < 3; j_i++) {
-    ii = j_i * 3 + j_i;
-    if (j_i + 1 < 3) {
-      RLinv_0 = TL[ii];
+  for (k_i = 0; k_i < 3; k_i++) {
+    ii = k_i * 3 + k_i;
+    if (k_i + 1 < 3) {
+      RLinv_0 = A[ii];
       b_lastv = ii + 2;
-      tau[j_i] = 0.0;
-      xnorm = imperix_control_xnrm2_j(2 - j_i, TL, ii + 2);
+      tau[k_i] = 0.0;
+      xnorm = imperix_control_xnrm2_j(2 - k_i, A, ii + 2);
       if (xnorm != 0.0) {
-        RLinv_1 = TL[ii];
+        RLinv_1 = A[ii];
         xnorm = rt_hypotd_snf(RLinv_1, xnorm);
         if (RLinv_1 >= 0.0) {
           xnorm = -xnorm;
@@ -3347,27 +3674,27 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
 
         if (fabs(xnorm) < 1.0020841800044864E-292) {
           knt = 0;
-          m = (ii - j_i) + 3;
+          f = (ii - k_i) + 3;
           do {
             knt++;
-            for (c_lastc = b_lastv; c_lastc <= m; c_lastc++) {
-              TL[c_lastc - 1] *= 9.9792015476736E+291;
+            for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+              A[c_lastc - 1] *= 9.9792015476736E+291;
             }
 
             xnorm *= 9.9792015476736E+291;
             RLinv_0 *= 9.9792015476736E+291;
           } while ((fabs(xnorm) < 1.0020841800044864E-292) && (knt < 20));
 
-          xnorm = rt_hypotd_snf(RLinv_0, imperix_control_xnrm2_j(2 - j_i, TL, ii
+          xnorm = rt_hypotd_snf(RLinv_0, imperix_control_xnrm2_j(2 - k_i, A, ii
             + 2));
           if (RLinv_0 >= 0.0) {
             xnorm = -xnorm;
           }
 
-          tau[j_i] = (xnorm - RLinv_0) / xnorm;
+          tau[k_i] = (xnorm - RLinv_0) / xnorm;
           RLinv_0 = 1.0 / (RLinv_0 - xnorm);
-          for (c_lastc = b_lastv; c_lastc <= m; c_lastc++) {
-            TL[c_lastc - 1] *= RLinv_0;
+          for (c_lastc = b_lastv; c_lastc <= f; c_lastc++) {
+            A[c_lastc - 1] *= RLinv_0;
           }
 
           for (b_lastv = 0; b_lastv < knt; b_lastv++) {
@@ -3376,38 +3703,38 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
 
           RLinv_0 = xnorm;
         } else {
-          tau[j_i] = (xnorm - RLinv_1) / xnorm;
+          tau[k_i] = (xnorm - RLinv_1) / xnorm;
           RLinv_0 = 1.0 / (RLinv_1 - xnorm);
-          knt = (ii - j_i) + 3;
+          knt = (ii - k_i) + 3;
           for (c_lastc = b_lastv; c_lastc <= knt; c_lastc++) {
-            TL[c_lastc - 1] *= RLinv_0;
+            A[c_lastc - 1] *= RLinv_0;
           }
 
           RLinv_0 = xnorm;
         }
       }
 
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 3 - j_i;
-        c_lastc = (ii - j_i) + 2;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+      A[ii] = 1.0;
+      if (tau[k_i] != 0.0) {
+        b_lastv = 3 - k_i;
+        c_lastc = (ii - k_i) + 2;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 2 - j_i;
+        c_lastc = 2 - k_i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = ((c_lastc - 1) * 3 + ii) + 3;
-          m = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (m + 1 <= knt + b_lastv) {
-              if (TL[m] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                m++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -3425,53 +3752,53 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv_j(b_lastv, c_lastc, TL, ii + 4, TL, ii + 1, work);
-        imperix_control_xgerc_c(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL,
-          ii + 4);
+        imperix_control_xgemv_j(b_lastv, c_lastc, A, ii + 4, A, ii + 1, work);
+        imperix_control_xgerc_c(b_lastv, c_lastc, -tau[k_i], ii + 1, work, A, ii
+          + 4);
       }
 
-      TL[ii] = RLinv_0;
+      A[ii] = RLinv_0;
     } else {
       tau[2] = 0.0;
     }
   }
 
-  for (j_i = 0; j_i < 3; j_i++) {
-    for (ii = 0; ii <= j_i; ii++) {
-      R[ii + 3 * j_i] = TL[3 * j_i + ii];
+  for (k_i = 0; k_i < 3; k_i++) {
+    for (ii = 0; ii <= k_i; ii++) {
+      R[ii + 3 * k_i] = A[3 * k_i + ii];
     }
 
-    for (ii = j_i + 2; ii < 4; ii++) {
-      R[(ii + 3 * j_i) - 1] = 0.0;
+    for (ii = k_i + 2; ii < 4; ii++) {
+      R[(ii + 3 * k_i) - 1] = 0.0;
     }
 
-    work[j_i] = 0.0;
+    work[k_i] = 0.0;
   }
 
-  for (j_i = 2; j_i >= 0; j_i--) {
-    ii = j_i * 3 + j_i;
-    if (j_i + 1 < 3) {
-      TL[ii] = 1.0;
-      if (tau[j_i] != 0.0) {
-        b_lastv = 3 - j_i;
-        c_lastc = (ii - j_i) + 2;
-        while ((b_lastv > 0) && (TL[c_lastc] == 0.0)) {
+  for (k_i = 2; k_i >= 0; k_i--) {
+    ii = k_i * 3 + k_i;
+    if (k_i + 1 < 3) {
+      A[ii] = 1.0;
+      if (tau[k_i] != 0.0) {
+        b_lastv = 3 - k_i;
+        c_lastc = (ii - k_i) + 2;
+        while ((b_lastv > 0) && (A[c_lastc] == 0.0)) {
           b_lastv--;
           c_lastc--;
         }
 
-        c_lastc = 2 - j_i;
+        c_lastc = 2 - k_i;
         exitg2 = false;
         while ((!exitg2) && (c_lastc > 0)) {
           knt = ((c_lastc - 1) * 3 + ii) + 3;
-          m = knt;
+          f = knt;
           do {
             exitg1 = 0;
-            if (m + 1 <= knt + b_lastv) {
-              if (TL[m] != 0.0) {
+            if (f + 1 <= knt + b_lastv) {
+              if (A[f] != 0.0) {
                 exitg1 = 1;
               } else {
-                m++;
+                f++;
               }
             } else {
               c_lastc--;
@@ -3489,111 +3816,98 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
       }
 
       if (b_lastv > 0) {
-        imperix_control_xgemv_j(b_lastv, c_lastc, TL, ii + 4, TL, ii + 1, work);
-        imperix_control_xgerc_c(b_lastv, c_lastc, -tau[j_i], ii + 1, work, TL,
-          ii + 4);
+        imperix_control_xgemv_j(b_lastv, c_lastc, A, ii + 4, A, ii + 1, work);
+        imperix_control_xgerc_c(b_lastv, c_lastc, -tau[k_i], ii + 1, work, A, ii
+          + 4);
       }
 
-      c_lastc = (ii - j_i) + 3;
+      c_lastc = (ii - k_i) + 3;
       for (b_lastv = ii + 2; b_lastv <= c_lastc; b_lastv++) {
-        TL[b_lastv - 1] *= -tau[j_i];
+        A[b_lastv - 1] *= -tau[k_i];
       }
     }
 
-    TL[ii] = 1.0 - tau[j_i];
-    for (b_lastv = 0; b_lastv < j_i; b_lastv++) {
-      TL[(ii - b_lastv) - 1] = 0.0;
+    A[ii] = 1.0 - tau[k_i];
+    for (b_lastv = 0; b_lastv < k_i; b_lastv++) {
+      A[(ii - b_lastv) - 1] = 0.0;
     }
   }
 
-  for (j_i = 0; j_i < 3; j_i++) {
-    Q[3 * j_i] = TL[3 * j_i];
-    ii = 3 * j_i + 1;
-    Q[ii] = TL[ii];
-    ii = 3 * j_i + 2;
-    Q[ii] = TL[ii];
+  for (k_i = 0; k_i < 3; k_i++) {
+    Q[3 * k_i] = A[3 * k_i];
+    ii = 3 * k_i + 1;
+    Q[ii] = A[ii];
+    ii = 3 * k_i + 2;
+    Q[ii] = A[ii];
   }
 
-  tmp_0 = static_cast<uint32_T>(nA);
-  if (static_cast<uint32_T>(nA) > 2147483647U) {
-    tmp_0 = 2147483647U;
-  }
-
-  j_i = 0;
+  k_i = 0;
   do {
     exitg1 = 0;
-    if (j_i <= static_cast<int32_T>(tmp_0) - 1) {
-      if (fabs(R[3 * j_i + j_i]) < 1.0E-12) {
+    if (k_i <= nA - 1) {
+      if (fabs(R[3 * k_i + k_i]) < 1.0E-12) {
         Status = -2.0;
         exitg1 = 1;
       } else {
-        j_i++;
+        k_i++;
       }
     } else {
-      for (j_i = 0; j_i < 3; j_i++) {
-        xnorm = Linv[3 * j_i + 1];
-        RLinv_0 = Linv[3 * j_i];
-        RLinv_1 = Linv[3 * j_i + 2];
-        for (ii = 0; ii < 3; ii++) {
-          TL[j_i + 3 * ii] = (Q[3 * ii + 1] * xnorm + Q[3 * ii] * RLinv_0) + Q[3
-            * ii + 2] * RLinv_1;
+      for (k_i = 0; k_i < n; k_i++) {
+        for (ii = 0; ii < n; ii++) {
+          TL[k_i + 3 * ii] = (Linv[3 * k_i + 1] * Q[3 * ii + 1] + Linv[3 * k_i] *
+                              Q[3 * ii]) + Linv[3 * k_i + 2] * Q[3 * ii + 2];
         }
       }
 
       memset(&RLinv[0], 0, 9U * sizeof(real_T));
       for (b_lastv = nA; b_lastv >= 1; b_lastv--) {
-        j_i = (b_lastv - 1) * 3;
-        ii = (b_lastv + j_i) - 1;
+        k_i = (b_lastv - 1) * 3;
+        ii = (b_lastv + k_i) - 1;
         RLinv[ii] = 1.0;
         for (c_lastc = b_lastv; c_lastc <= nA; c_lastc++) {
-          m = ((c_lastc - 1) * 3 + b_lastv) - 1;
-          RLinv[m] /= R[ii];
+          f = ((c_lastc - 1) * 3 + b_lastv) - 1;
+          RLinv[f] /= R[ii];
         }
 
         if (b_lastv > 1) {
-          d = static_cast<uint8_T>(b_lastv - 1);
-          for (c_lastc = 0; c_lastc < d; c_lastc++) {
+          for (c_lastc = 0; c_lastc <= b_lastv - 2; c_lastc++) {
             for (knt = b_lastv; knt <= nA; knt++) {
               ii = (knt - 1) * 3;
-              m = ii + c_lastc;
-              RLinv[m] -= RLinv[(ii + b_lastv) - 1] * R[j_i + c_lastc];
+              f = ii + c_lastc;
+              RLinv[f] -= RLinv[(ii + b_lastv) - 1] * R[k_i + c_lastc];
             }
           }
         }
       }
 
-      if (nA > 2147483646) {
-        m = MAX_int32_T;
-      } else {
-        m = nA + 1;
-      }
+      for (b_lastv = 0; b_lastv < n; b_lastv++) {
+        if (b_lastv + 1 <= n) {
+          if (nA > 2147483646) {
+            qY = MAX_int32_T;
+          } else {
+            qY = nA + 1;
+          }
+        }
 
-      for (b_lastv = 0; b_lastv < 3; b_lastv++) {
-        for (c_lastc = b_lastv + 1; c_lastc < 4; c_lastc++) {
-          j_i = (c_lastc - 1) * 3 + b_lastv;
-          H[j_i] = 0.0;
-          for (knt = m; knt < 4; knt++) {
+        for (c_lastc = b_lastv + 1; c_lastc <= n; c_lastc++) {
+          k_i = (c_lastc - 1) * 3 + b_lastv;
+          H[k_i] = 0.0;
+          for (knt = qY; knt <= n; knt++) {
             ii = (knt - 1) * 3;
-            H[j_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
+            H[k_i] -= TL[(ii + c_lastc) - 1] * TL[ii + b_lastv];
           }
 
-          H[(c_lastc + 3 * b_lastv) - 1] = H[j_i];
+          H[(c_lastc + 3 * b_lastv) - 1] = H[k_i];
         }
       }
 
-      tmp_0 = static_cast<uint32_T>(nA);
-      if (static_cast<uint32_T>(nA) > 2147483647U) {
-        tmp_0 = 2147483647U;
-      }
-
-      m = static_cast<int32_T>(tmp_0);
-      for (b_lastv = 0; b_lastv < m; b_lastv++) {
-        for (c_lastc = 0; c_lastc < 3; c_lastc++) {
-          j_i = 3 * b_lastv + c_lastc;
-          D[j_i] = 0.0;
-          for (knt = b_lastv + 1; knt <= nA; knt++) {
-            ii = (knt - 1) * 3;
-            D[j_i] += TL[ii + c_lastc] * RLinv[ii + b_lastv];
+      for (qY = 0; qY < nA; qY++) {
+        for (b_lastv = 0; b_lastv < n; b_lastv++) {
+          k_i = 3 * qY + b_lastv;
+          D[k_i] = 0.0;
+          for (c_lastc = qY + 1; c_lastc <= nA; c_lastc++) {
+            ii = (c_lastc - 1) * 3;
+            D[k_i] += TL[ii + b_lastv] * RLinv[ii + qY];
           }
         }
       }
@@ -3606,14 +3920,47 @@ static real_T imperix_control_KWIKfactor_b(const real_T Ac[18], const int32_T
 }
 
 // Function for MATLAB Function: '<S1>/Energy balance'
+static void imperix_contro_DropConstraint_n(int32_T kDrop, boolean_T iA[6],
+  int32_T *nA, int32_T iC[6])
+{
+  if (kDrop > 0) {
+    iA[iC[kDrop - 1] - 1] = false;
+    if (kDrop < *nA) {
+      int32_T b;
+      int32_T i;
+      if (*nA < -2147483647) {
+        i = MIN_int32_T;
+      } else {
+        i = *nA - 1;
+      }
+
+      b = i + 1;
+      for (i = kDrop; i < b; i++) {
+        iC[i - 1] = iC[i];
+      }
+    }
+
+    iC[*nA - 1] = 0;
+    if (*nA < -2147483647) {
+      *nA = MIN_int32_T;
+    } else {
+      (*nA)--;
+    }
+  }
+}
+
+// Function for MATLAB Function: '<S1>/Energy balance'
 static void imperix_control_qpkwik_n(const real_T Linv[9], const real_T Hinv[9],
   const real_T f[3], const real_T Ac[18], const real_T b[6], boolean_T iA[6],
-  real_T x[3], real_T lambda[6], int32_T *status)
+  int32_T maxiter, real_T FeasTol, real_T x[3], real_T lambda[6], int32_T
+  *status)
 {
   real_T D[9];
   real_T H[9];
-  real_T H_0[9];
   real_T RLinv[9];
+  real_T U[9];
+  real_T Opt[6];
+  real_T Rhs[6];
   real_T cTol[6];
   real_T r[3];
   real_T varargin_1[3];
@@ -3627,20 +3974,28 @@ static void imperix_control_qpkwik_n(const real_T Linv[9], const real_T Hinv[9],
   real_T z;
   real_T z_idx_2;
   int32_T iC[6];
+  int32_T U_tmp;
+  int32_T b_exponent;
   int32_T exitg1;
+  int32_T exitg3;
+  int32_T exponent;
   int32_T i;
-  int32_T iC_0;
   int32_T iSave;
-  int32_T idx;
+  int32_T kDrop;
   int32_T kNext;
   int32_T nA;
-  uint32_T tmp;
+  int32_T tmp;
+  boolean_T ColdReset;
+  boolean_T DualFeasible;
   boolean_T cTolComputed;
   boolean_T exitg2;
-  boolean_T exitg3;
+  boolean_T exitg4;
   boolean_T guard1;
-  boolean_T isT1Inf;
-  boolean_T tempOK;
+  boolean_T guard2;
+  boolean_T guard3;
+  x[0] = 0.0;
+  x[1] = 0.0;
+  x[2] = 0.0;
   *status = 1;
   r[0] = 0.0;
   r[1] = 0.0;
@@ -3654,289 +4009,423 @@ static void imperix_control_qpkwik_n(const real_T Linv[9], const real_T Hinv[9],
   }
 
   nA = 0;
-  Xnorm0 = f[1];
-  cMin = f[0];
-  cVal = f[2];
-  for (kNext = 0; kNext < 3; kNext++) {
-    x[kNext] = (-Hinv[kNext + 3] * Xnorm0 + -Hinv[kNext] * cMin) + -Hinv[kNext +
-      6] * cVal;
+  for (i = 0; i < 6; i++) {
+    if (iA[i]) {
+      nA++;
+      iC[nA - 1] = i + 1;
+    }
   }
 
-  Xnorm0 = imperix_control_norm_i(x);
-  exitg2 = false;
-  while ((!exitg2) && (*status <= 10)) {
-    cMin = -0.0001;
-    kNext = -1;
+  guard1 = false;
+  if (nA > 0) {
     for (i = 0; i < 6; i++) {
-      if (!cTolComputed) {
-        varargin_1[0] = fabs(Ac[i] * x[0]);
-        varargin_1[1] = fabs(Ac[i + 6] * x[1]);
-        varargin_1[2] = fabs(Ac[i + 12] * x[2]);
-        if (!rtIsNaN(varargin_1[0])) {
-          idx = 1;
-        } else {
-          idx = 0;
-          iSave = 2;
-          exitg3 = false;
-          while ((!exitg3) && (iSave <= 3)) {
-            if (!rtIsNaN(varargin_1[iSave - 1])) {
-              idx = iSave;
-              exitg3 = true;
-            } else {
-              iSave++;
-            }
-          }
-        }
-
-        if (idx == 0) {
-          cVal = varargin_1[0];
-        } else {
-          cVal = varargin_1[idx - 1];
-          for (iSave = idx + 1; iSave < 4; iSave++) {
-            z_idx_2 = varargin_1[iSave - 1];
-            if (cVal < z_idx_2) {
-              cVal = z_idx_2;
-            }
-          }
-        }
-
-        if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
-        } else {
-          cTol[i] = cVal;
-        }
-      }
-
-      if (!iA[i]) {
-        cVal = (((Ac[i + 6] * x[1] + Ac[i] * x[0]) + Ac[i + 12] * x[2]) - b[i]) /
-          cTol[i];
-        if (cVal < cMin) {
-          cMin = cVal;
-          kNext = i;
-        }
-      }
+      Opt[i] = 0.0;
     }
 
-    cTolComputed = true;
-    if (kNext + 1 <= 0) {
-      exitg2 = true;
-    } else if (*status == 10) {
-      *status = 0;
-      exitg2 = true;
-    } else {
-      do {
-        exitg1 = 0;
-        if ((kNext + 1 > 0) && (*status <= 10)) {
-          guard1 = false;
-          if (nA == 0) {
-            cMin = 0.0;
-            cVal = 0.0;
-            z_idx_2 = 0.0;
-            for (i = 0; i < 3; i++) {
-              t1 = Ac[6 * i + kNext];
-              cMin += Hinv[3 * i] * t1;
-              cVal += Hinv[3 * i + 1] * t1;
-              z_idx_2 += Hinv[3 * i + 2] * t1;
+    Rhs[0] = f[0];
+    Rhs[3] = 0.0;
+    Rhs[1] = f[1];
+    Rhs[4] = 0.0;
+    Rhs[2] = f[2];
+    Rhs[5] = 0.0;
+    DualFeasible = false;
+    ColdReset = false;
+    do {
+      exitg3 = 0;
+      if ((!DualFeasible) && (nA > 0) && (*status <= maxiter)) {
+        Xnorm0 = imperix_control_KWIKfactor_b(Ac, iC, nA, Linv, RLinv, D, H, 3);
+        if (Xnorm0 < 0.0) {
+          if (ColdReset) {
+            *status = -2;
+            exitg3 = 2;
+          } else {
+            nA = 0;
+            for (i = 0; i < 6; i++) {
+              iA[i] = false;
+              iC[i] = 0;
             }
 
-            guard1 = true;
-          } else {
-            cMin = imperix_control_KWIKfactor_b(Ac, iC, nA, Linv, RLinv, D, H);
-            if (cMin <= 0.0) {
-              *status = -2;
-              exitg1 = 1;
+            ColdReset = true;
+          }
+        } else {
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483644) {
+              i = MAX_int32_T;
             } else {
-              for (i = 0; i < 9; i++) {
-                H_0[i] = -H[i];
+              i = kDrop + 4;
+            }
+
+            Rhs[i - 1] = b[iC[kDrop] - 1];
+            for (i = kDrop + 1; i <= nA; i++) {
+              U_tmp = (3 * kDrop + i) - 1;
+              U[U_tmp] = 0.0;
+              for (iSave = 0; iSave < nA; iSave++) {
+                U[U_tmp] += RLinv[(3 * iSave + i) - 1] * RLinv[3 * iSave + kDrop];
               }
 
+              U[kDrop + 3 * (i - 1)] = U[U_tmp];
+            }
+          }
+
+          for (kDrop = 0; kDrop < 3; kDrop++) {
+            Opt[kDrop] = (H[kDrop + 3] * Rhs[1] + H[kDrop] * Rhs[0]) + H[kDrop +
+              6] * Rhs[2];
+            for (iSave = 0; iSave < nA; iSave++) {
+              if (iSave + 1 > 2147483644) {
+                i = MAX_int32_T;
+              } else {
+                i = iSave + 4;
+              }
+
+              Opt[kDrop] += D[3 * iSave + kDrop] * Rhs[i - 1];
+            }
+          }
+
+          for (kDrop = 0; kDrop < nA; kDrop++) {
+            if (kDrop + 1 > 2147483644) {
+              i = MAX_int32_T;
+            } else {
+              i = kDrop + 4;
+            }
+
+            Opt[i - 1] = (D[3 * kDrop + 1] * Rhs[1] + D[3 * kDrop] * Rhs[0]) +
+              D[3 * kDrop + 2] * Rhs[2];
+            if (kDrop + 1 > 2147483644) {
+              i = MAX_int32_T;
+              U_tmp = MAX_int32_T;
+            } else {
+              i = kDrop + 4;
+              U_tmp = kDrop + 4;
+            }
+
+            for (iSave = 0; iSave < nA; iSave++) {
+              if (iSave + 1 > 2147483644) {
+                tmp = MAX_int32_T;
+              } else {
+                tmp = iSave + 4;
+              }
+
+              Opt[i - 1] = U[3 * iSave + kDrop] * Rhs[tmp - 1] + Opt[U_tmp - 1];
+            }
+          }
+
+          Xnorm0 = -1.0E-12;
+          kDrop = -1;
+          for (iSave = 0; iSave < nA; iSave++) {
+            if (iSave + 1 > 2147483644) {
+              i = MAX_int32_T;
+            } else {
+              i = iSave + 4;
+            }
+
+            lambda[iC[iSave] - 1] = Opt[i - 1];
+            if (iSave + 1 > 2147483644) {
+              // out-of-bounds matrix access would cause program termination and was eliminated 
+            } else {
+              kNext = iSave + 4;
+            }
+
+            if ((Opt[kNext - 1] < Xnorm0) && (iSave + 1 <= nA)) {
+              kDrop = iSave;
+              if (iSave + 1 > 2147483644) {
+                i = MAX_int32_T;
+              } else {
+                i = iSave + 4;
+              }
+
+              Xnorm0 = Opt[i - 1];
+            }
+          }
+
+          if (kDrop + 1 <= 0) {
+            DualFeasible = true;
+            x[0] = Opt[0];
+            x[1] = Opt[1];
+            x[2] = Opt[2];
+          } else {
+            if (*status > 2147483646) {
+              *status = MAX_int32_T;
+            } else {
+              (*status)++;
+            }
+
+            if (*status > 5) {
+              nA = 0;
+              for (i = 0; i < 6; i++) {
+                iA[i] = false;
+                iC[i] = 0;
+              }
+
+              ColdReset = true;
+            } else {
+              lambda[iC[kDrop] - 1] = 0.0;
+              imperix_contro_DropConstraint_n(kDrop + 1, iA, &nA, iC);
+            }
+          }
+        }
+      } else {
+        if (nA <= 0) {
+          for (i = 0; i < 6; i++) {
+            lambda[i] = 0.0;
+          }
+
+          Xnorm0 = f[1];
+          cMin = f[0];
+          cVal = f[2];
+          for (i = 0; i < 3; i++) {
+            x[i] = (-Hinv[i + 3] * Xnorm0 + -Hinv[i] * cMin) + -Hinv[i + 6] *
+              cVal;
+          }
+        }
+
+        exitg3 = 1;
+      }
+    } while (exitg3 == 0);
+
+    if (exitg3 == 1) {
+      guard1 = true;
+    }
+  } else {
+    Xnorm0 = f[1];
+    cMin = f[0];
+    cVal = f[2];
+    for (i = 0; i < 3; i++) {
+      x[i] = (-Hinv[i + 3] * Xnorm0 + -Hinv[i] * cMin) + -Hinv[i + 6] * cVal;
+    }
+
+    guard1 = true;
+  }
+
+  if (guard1) {
+    Xnorm0 = imperix_control_norm_i(x);
+    exitg2 = false;
+    while ((!exitg2) && (*status <= maxiter)) {
+      cMin = -FeasTol;
+      kNext = -1;
+      for (i = 0; i < 6; i++) {
+        if (!cTolComputed) {
+          varargin_1[0] = fabs(Ac[i] * x[0]);
+          varargin_1[1] = fabs(Ac[i + 6] * x[1]);
+          varargin_1[2] = fabs(Ac[i + 12] * x[2]);
+          cVal = imperix_control_maximum_c(varargin_1);
+          if ((cTol[i] >= cVal) || rtIsNaN(cVal)) {
+          } else {
+            cTol[i] = cVal;
+          }
+        }
+
+        if (!iA[i]) {
+          cVal = (((Ac[i + 6] * x[1] + Ac[i] * x[0]) + Ac[i + 12] * x[2]) - b[i])
+            / cTol[i];
+          if (cVal < cMin) {
+            cMin = cVal;
+            kNext = i;
+          }
+        }
+      }
+
+      cTolComputed = true;
+      if (kNext + 1 <= 0) {
+        exitg2 = true;
+      } else if (*status == maxiter) {
+        *status = 0;
+        exitg2 = true;
+      } else {
+        do {
+          exitg1 = 0;
+          if ((kNext + 1 > 0) && (*status <= maxiter)) {
+            guard2 = false;
+            guard3 = false;
+            if (nA == 0) {
               cMin = 0.0;
               cVal = 0.0;
               z_idx_2 = 0.0;
               for (i = 0; i < 3; i++) {
                 t1 = Ac[6 * i + kNext];
-                cMin += H_0[3 * i] * t1;
-                cVal += H_0[3 * i + 1] * t1;
-                z_idx_2 += H_0[3 * i + 2] * t1;
+                cMin += Hinv[3 * i] * t1;
+                cVal += Hinv[3 * i + 1] * t1;
+                z_idx_2 += Hinv[3 * i + 2] * t1;
               }
 
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              idx = static_cast<int32_T>(tmp);
-              for (i = 0; i < idx; i++) {
-                r[i] = (D[3 * i + 1] * Ac[kNext + 6] + D[3 * i] * Ac[kNext]) +
-                  D[3 * i + 2] * Ac[kNext + 12];
-              }
-
-              guard1 = true;
-            }
-          }
-
-          if (guard1) {
-            i = 0;
-            t1 = 0.0;
-            isT1Inf = true;
-            tempOK = true;
-            if (nA > 0) {
-              idx = 0;
-              exitg3 = false;
-              while ((!exitg3) && (idx <= nA - 1)) {
-                if (r[idx] >= 1.0E-12) {
-                  tempOK = false;
-                  exitg3 = true;
-                } else {
-                  idx++;
-                }
-              }
-            }
-
-            if ((nA != 0) && (!tempOK)) {
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              iSave = static_cast<int32_T>(tmp);
-              for (idx = 0; idx < iSave; idx++) {
-                rVal = r[idx];
-                if (rVal > 1.0E-12) {
-                  rVal = lambda[iC[idx] - 1] / rVal;
-                  if ((i == 0) || (rVal < rMin)) {
-                    rMin = rVal;
-                    i = idx + 1;
-                  }
-                }
-              }
-
-              if (i > 0) {
-                t1 = rMin;
-                isT1Inf = false;
-              }
-            }
-
-            rVal = Ac[kNext + 6];
-            t = Ac[kNext + 12];
-            z = (rVal * cVal + cMin * Ac[kNext]) + t * z_idx_2;
-            if (z <= 0.0) {
-              rVal = 0.0;
-              tempOK = true;
+              guard3 = true;
             } else {
-              rVal = (b[kNext] - ((rVal * x[1] + Ac[kNext] * x[0]) + t * x[2])) /
-                z;
-              tempOK = false;
-            }
-
-            if (isT1Inf && tempOK) {
-              *status = -1;
-              exitg1 = 1;
-            } else {
-              if (tempOK) {
-                t = t1;
-              } else if (isT1Inf) {
-                t = rVal;
-              } else if (t1 < rVal) {
-                t = t1;
+              cMin = imperix_control_KWIKfactor_b(Ac, iC, nA, Linv, RLinv, D, H,
+                3);
+              if (cMin <= 0.0) {
+                *status = -2;
+                exitg1 = 1;
               } else {
-                t = rVal;
-              }
-
-              tmp = static_cast<uint32_T>(nA);
-              if (static_cast<uint32_T>(nA) > 2147483647U) {
-                tmp = 2147483647U;
-              }
-
-              iSave = static_cast<int32_T>(tmp);
-              for (idx = 0; idx < iSave; idx++) {
-                iC_0 = iC[idx];
-                lambda[iC_0 - 1] -= t * r[idx];
-                if (lambda[iC_0 - 1] < 0.0) {
-                  lambda[iC_0 - 1] = 0.0;
-                }
-              }
-
-              lambda[kNext] += t;
-              if ((fabs(t - t1) < 2.2204460492503131E-16) && (i > 0)) {
-                iA[iC[i - 1] - 1] = false;
-                if (i < nA) {
-                  for (idx = i; idx < nA; idx++) {
-                    iC[idx - 1] = iC[idx];
-                  }
+                for (i = 0; i < 9; i++) {
+                  U[i] = -H[i];
                 }
 
-                iC[nA - 1] = 0;
-                if (nA < -2147483647) {
-                  nA = MIN_int32_T;
-                } else {
-                  nA--;
+                cMin = 0.0;
+                cVal = 0.0;
+                z_idx_2 = 0.0;
+                for (i = 0; i < 3; i++) {
+                  t1 = Ac[6 * i + kNext];
+                  cMin += U[3 * i] * t1;
+                  cVal += U[3 * i + 1] * t1;
+                  z_idx_2 += U[3 * i + 2] * t1;
                 }
-              }
 
-              if (!tempOK) {
-                x[0] += t * cMin;
-                x[1] += t * cVal;
-                x[2] += t * z_idx_2;
-                if (fabs(t - rVal) < 2.2204460492503131E-16) {
-                  if (nA == 3) {
-                    *status = -1;
-                    exitg1 = 1;
+                for (i = 0; i < nA; i++) {
+                  r[i] = (D[3 * i + 1] * Ac[kNext + 6] + D[3 * i] * Ac[kNext]) +
+                    D[3 * i + 2] * Ac[kNext + 12];
+                }
+
+                guard3 = true;
+              }
+            }
+
+            if (guard3) {
+              kDrop = 0;
+              t1 = 0.0;
+              DualFeasible = true;
+              ColdReset = true;
+              if (nA > 0) {
+                i = 0;
+                exitg4 = false;
+                while ((!exitg4) && (i <= nA - 1)) {
+                  if (r[i] >= 1.0E-12) {
+                    ColdReset = false;
+                    exitg4 = true;
                   } else {
-                    if (nA > 2147483646) {
-                      nA = MAX_int32_T;
+                    i++;
+                  }
+                }
+              }
+
+              if ((nA != 0) && (!ColdReset)) {
+                for (i = 0; i < nA; i++) {
+                  rVal = r[i];
+                  if (rVal > 1.0E-12) {
+                    rVal = lambda[iC[i] - 1] / rVal;
+                    if ((kDrop == 0) || (rVal < rMin)) {
+                      rMin = rVal;
+                      kDrop = i + 1;
+                    }
+                  }
+                }
+
+                if (kDrop > 0) {
+                  t1 = rMin;
+                  DualFeasible = false;
+                }
+              }
+
+              rVal = Ac[kNext + 6];
+              t = Ac[kNext + 12];
+              z = (rVal * cVal + cMin * Ac[kNext]) + t * z_idx_2;
+              if (z <= 0.0) {
+                rVal = 0.0;
+                ColdReset = true;
+              } else {
+                rVal = (b[kNext] - ((rVal * x[1] + Ac[kNext] * x[0]) + t * x[2]))
+                  / z;
+                ColdReset = false;
+              }
+
+              if (DualFeasible && ColdReset) {
+                *status = -1;
+                exitg1 = 1;
+              } else {
+                if (ColdReset) {
+                  t = t1;
+                } else if (DualFeasible) {
+                  t = rVal;
+                } else if (t1 < rVal) {
+                  t = t1;
+                } else {
+                  t = rVal;
+                }
+
+                for (i = 0; i < nA; i++) {
+                  iSave = iC[i];
+                  lambda[iSave - 1] -= t * r[i];
+                  if ((iSave <= 6) && (lambda[iSave - 1] < 0.0)) {
+                    lambda[iSave - 1] = 0.0;
+                  }
+                }
+
+                lambda[kNext] += t;
+                frexp(1.0, &exponent);
+                if (fabs(t - t1) < 2.2204460492503131E-16) {
+                  imperix_contro_DropConstraint_n(kDrop, iA, &nA, iC);
+                }
+
+                if (!ColdReset) {
+                  x[0] += t * cMin;
+                  x[1] += t * cVal;
+                  x[2] += t * z_idx_2;
+                  frexp(1.0, &b_exponent);
+                  if (fabs(t - rVal) < 2.2204460492503131E-16) {
+                    if (nA == 3) {
+                      *status = -1;
+                      exitg1 = 1;
                     } else {
-                      nA++;
-                    }
-
-                    iC[nA - 1] = kNext + 1;
-                    idx = nA - 1;
-                    exitg3 = false;
-                    while ((!exitg3) && (idx + 1 > 1)) {
-                      i = iC[idx - 1];
-                      if (iC[idx] > i) {
-                        exitg3 = true;
+                      if (nA > 2147483646) {
+                        nA = MAX_int32_T;
                       } else {
-                        iSave = iC[idx];
-                        iC[idx] = i;
-                        iC[idx - 1] = iSave;
-                        idx--;
+                        nA++;
                       }
-                    }
 
-                    iA[kNext] = true;
-                    kNext = -1;
-                    (*status)++;
+                      iC[nA - 1] = kNext + 1;
+                      kDrop = nA - 1;
+                      exitg4 = false;
+                      while ((!exitg4) && (kDrop + 1 > 1)) {
+                        i = iC[kDrop - 1];
+                        if (iC[kDrop] > i) {
+                          exitg4 = true;
+                        } else {
+                          iSave = iC[kDrop];
+                          iC[kDrop] = i;
+                          iC[kDrop - 1] = iSave;
+                          kDrop--;
+                        }
+                      }
+
+                      iA[kNext] = true;
+                      kNext = -1;
+                      guard2 = true;
+                    }
+                  } else {
+                    guard2 = true;
                   }
                 } else {
-                  (*status)++;
+                  guard2 = true;
                 }
-              } else {
+              }
+            }
+
+            if (guard2) {
+              if (*status <= 2147483646) {
                 (*status)++;
               }
             }
-          }
-        } else {
-          cMin = imperix_control_norm_i(x);
-          if (fabs(cMin - Xnorm0) > 0.001) {
-            Xnorm0 = cMin;
-            for (kNext = 0; kNext < 6; kNext++) {
-              cMin = fabs(b[kNext]);
-              if (cMin >= 1.0) {
-                cTol[kNext] = cMin;
-              } else {
-                cTol[kNext] = 1.0;
+          } else {
+            cMin = imperix_control_norm_i(x);
+            if (fabs(cMin - Xnorm0) > 0.001) {
+              Xnorm0 = cMin;
+              for (i = 0; i < 6; i++) {
+                cMin = fabs(b[i]);
+                if (cMin >= 1.0) {
+                  cTol[i] = cMin;
+                } else {
+                  cTol[i] = 1.0;
+                }
               }
+
+              cTolComputed = false;
             }
 
-            cTolComputed = false;
+            exitg1 = 2;
           }
+        } while (exitg1 == 0);
 
-          exitg1 = 2;
+        if (exitg1 == 1) {
+          exitg2 = true;
         }
-      } while (exitg1 == 0);
-
-      if (exitg1 == 1) {
-        exitg2 = true;
       }
     }
   }
@@ -3944,7 +4433,9 @@ static void imperix_control_qpkwik_n(const real_T Linv[9], const real_T Hinv[9],
 
 // Function for MATLAB Function: '<S1>/Energy balance'
 static void imperix_co_mpcActiveSetSolver_i(const real_T H[9], const real_T f[3],
-  const real_T A[18], const real_T b[6], real_T x[3], int32_T *exitflag)
+  const real_T A[18], const real_T b[6], int32_T options_MaxIterations, real_T
+  options_ConstraintTolerance, boolean_T options_UseHessianAsInput, real_T x[3],
+  int32_T *exitflag, boolean_T iA[6])
 {
   real_T A_0[18];
   real_T Linv[9];
@@ -3961,78 +4452,82 @@ static void imperix_co_mpcActiveSetSolver_i(const real_T H[9], const real_T f[3]
   int32_T iac;
   int32_T idxAjj;
   int32_T jmax;
-  boolean_T iA1[6];
   static const int8_T B[9] = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 
   boolean_T exitg1;
-  memcpy(&b_A[0], &H[0], 9U * sizeof(real_T));
-  jmax = 0;
-  c_j = 0;
-  exitg1 = false;
-  while ((!exitg1) && (c_j < 3)) {
-    idxAjj = c_j * 3 + c_j;
-    ssq = 0.0;
-    if (c_j >= 1) {
-      for (b_k = 0; b_k < c_j; b_k++) {
-        b_c = b_A[b_k * 3 + c_j];
-        ssq += b_c * b_c;
+  if (options_UseHessianAsInput) {
+    memcpy(&b_A[0], &H[0], 9U * sizeof(real_T));
+    jmax = 0;
+    c_j = 0;
+    exitg1 = false;
+    while ((!exitg1) && (c_j < 3)) {
+      idxAjj = c_j * 3 + c_j;
+      ssq = 0.0;
+      if (c_j >= 1) {
+        for (b_k = 0; b_k < c_j; b_k++) {
+          b_c = b_A[b_k * 3 + c_j];
+          ssq += b_c * b_c;
+        }
       }
-    }
 
-    ssq = b_A[idxAjj] - ssq;
-    if (ssq > 0.0) {
-      ssq = sqrt(ssq);
-      b_A[idxAjj] = ssq;
-      if (c_j + 1 < 3) {
-        if (c_j != 0) {
-          b_k = ((c_j - 1) * 3 + c_j) + 2;
-          for (iac = c_j + 2; iac <= b_k; iac += 3) {
-            b_c_tmp = iac - c_j;
-            b_c = -b_A[div_nde_s32_floor(b_c_tmp - 2, 3) * 3 + c_j];
-            b_c_tmp++;
-            for (ia = iac; ia <= b_c_tmp; ia++) {
-              b_A_tmp = ((idxAjj + ia) - iac) + 1;
-              b_A[b_A_tmp] += b_A[ia - 1] * b_c;
+      ssq = b_A[idxAjj] - ssq;
+      if (ssq > 0.0) {
+        ssq = sqrt(ssq);
+        b_A[idxAjj] = ssq;
+        if (c_j + 1 < 3) {
+          if (c_j != 0) {
+            b_k = ((c_j - 1) * 3 + c_j) + 2;
+            for (iac = c_j + 2; iac <= b_k; iac += 3) {
+              b_c_tmp = iac - c_j;
+              b_c = -b_A[div_nde_s32_floor(b_c_tmp - 2, 3) * 3 + c_j];
+              b_c_tmp++;
+              for (ia = iac; ia <= b_c_tmp; ia++) {
+                b_A_tmp = ((idxAjj + ia) - iac) + 1;
+                b_A[b_A_tmp] += b_A[ia - 1] * b_c;
+              }
             }
+          }
+
+          ssq = 1.0 / ssq;
+          b_k = (idxAjj - c_j) + 3;
+          for (iac = idxAjj + 2; iac <= b_k; iac++) {
+            b_A[iac - 1] *= ssq;
           }
         }
 
-        ssq = 1.0 / ssq;
-        b_k = (idxAjj - c_j) + 3;
-        for (iac = idxAjj + 2; iac <= b_k; iac++) {
-          b_A[iac - 1] *= ssq;
-        }
+        c_j++;
+      } else {
+        b_A[idxAjj] = ssq;
+        jmax = c_j + 1;
+        exitg1 = true;
       }
-
-      c_j++;
-    } else {
-      b_A[idxAjj] = ssq;
-      jmax = c_j + 1;
-      exitg1 = true;
     }
-  }
 
-  if (jmax == 0) {
-    jmax = 4;
-  }
-
-  for (c_j = 2; c_j < jmax; c_j++) {
-    for (idxAjj = 0; idxAjj <= c_j - 2; idxAjj++) {
-      b_A[idxAjj + 3 * (c_j - 1)] = 0.0;
+    if (jmax == 0) {
+      jmax = 4;
     }
+
+    for (c_j = 2; c_j < jmax; c_j++) {
+      for (idxAjj = 0; idxAjj <= c_j - 2; idxAjj++) {
+        b_A[idxAjj + 3 * (c_j - 1)] = 0.0;
+      }
+    }
+
+    for (jmax = 0; jmax < 3; jmax++) {
+      Linv[3 * jmax] = B[3 * jmax];
+      c_j = 3 * jmax + 1;
+      Linv[c_j] = B[c_j];
+      c_j = 3 * jmax + 2;
+      Linv[c_j] = B[c_j];
+    }
+
+    imperix_control_trisolve_a(b_A, Linv);
+  } else {
+    memcpy(&Linv[0], &H[0], 9U * sizeof(real_T));
   }
 
-  for (jmax = 0; jmax < 3; jmax++) {
-    Linv[3 * jmax] = B[3 * jmax];
-    c_j = 3 * jmax + 1;
-    Linv[c_j] = B[c_j];
-    c_j = 3 * jmax + 2;
-    Linv[c_j] = B[c_j];
-  }
-
-  imperix_control_trisolve_a(b_A, Linv);
   for (idxAjj = 0; idxAjj < 6; idxAjj++) {
-    iA1[idxAjj] = false;
+    iA[idxAjj] = false;
   }
 
   for (jmax = 0; jmax < 3; jmax++) {
@@ -4050,67 +4545,11 @@ static void imperix_co_mpcActiveSetSolver_i(const real_T H[9], const real_T f[3]
     b_0[jmax] = -b[jmax];
   }
 
-  imperix_control_qpkwik_n(Linv, b_A, f, A_0, b_0, iA1, x, lam, exitflag);
+  imperix_control_qpkwik_n(Linv, b_A, f, A_0, b_0, iA, options_MaxIterations,
+    options_ConstraintTolerance, x, lam, exitflag);
 }
 
-static int32_T imperix_cont_binary_expand_op_1(const real_T in1[54], const
-  real_T in2[54], real_T in3, real_T in4, real_T in5, const real_T in6[9], const
-  real_T in7[18], const real_T in8_data[], const real_T in9_data[], real_T in10,
-  real_T in11, const real_T in13[18], real_T in14[3], const real_T in15[3])
-{
-  real_T in7_0[18];
-  real_T in1_0[9];
-  real_T in14_0[6];
-  real_T in1_1[3];
-  real_T in3_0;
-  real_T in3_1;
-  real_T tmp;
-  real_T tmp_0;
-  int32_T i;
-  int32_T i_0;
-  int32_T in1_tmp;
-  int32_T out1;
-
-  // MATLAB Function: '<S1>/Energy balance'
-  in3_0 = in3 * in4;
-  for (i = 0; i < 18; i++) {
-    tmp = 0.0;
-    for (i_0 = 0; i_0 < 18; i_0++) {
-      tmp += in8_data[18 * i_0 + i] * in9_data[i_0];
-    }
-
-    in7_0[i] = in7[i] + tmp;
-  }
-
-  in3_1 = in3 * in10;
-  for (i = 0; i < 3; i++) {
-    tmp = 0.0;
-    for (i_0 = 0; i_0 < 18; i_0++) {
-      tmp += in1[3 * i_0 + i] * in7_0[i_0];
-    }
-
-    for (i_0 = 0; i_0 < 3; i_0++) {
-      tmp_0 = 0.0;
-      for (in1_tmp = 0; in1_tmp < 18; in1_tmp++) {
-        tmp_0 += in1[3 * in1_tmp + i] * in2[18 * i_0 + in1_tmp];
-      }
-
-      in1_tmp = 3 * i_0 + i;
-      in1_0[in1_tmp] = in6[in1_tmp] * in5 + tmp_0 / in3_0;
-    }
-
-    in1_1[i] = 0.0 / in11 * in5 + tmp / in3_1;
-    in14_0[i] = in14[i];
-    in14_0[i + 3] = -in15[i];
-  }
-
-  imperix_co_mpcActiveSetSolver_i(in1_0, in1_1, in13, in14_0, in14, &out1);
-
-  // End of MATLAB Function: '<S1>/Energy balance'
-  return out1;
-}
-
-void microKernel15776890522568734084(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel13908861584278004767(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -4128,7 +4567,7 @@ void microKernel15776890522568734084(int32_T K, const real32_T *A, int32_T LDA,
   C[0] = c;
 }
 
-void microKernel18199218617277158190(int32_T K, const real32_T *A, int32_T LDA,
+void microKernel11158300190833245152(int32_T K, const real32_T *A, int32_T LDA,
   const real32_T *B, real32_T *C)
 {
   int32_T idxA;
@@ -4172,7 +4611,7 @@ void microKernel18199218617277158190(int32_T K, const real32_T *A, int32_T LDA,
   C[6] = c_5;
 }
 
-void macroKernel10414776869222701819(int32_T M, int32_T K, int32_T N, const
+void macroKernel6179689394702347033(int32_T M, int32_T K, int32_T N, const
   real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C, int32_T
   LDC)
 {
@@ -4188,14 +4627,14 @@ void macroKernel10414776869222701819(int32_T M, int32_T K, int32_T N, const
     i = 0;
     idxA = 0;
     while (i <= M - 7) {
-      microKernel18199218617277158190(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel11158300190833245152(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA += 7;
       idxC += 7;
       i += 7;
     }
 
     while (i <= M - 1) {
-      microKernel15776890522568734084(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
+      microKernel13908861584278004767(K, &A[idxA], LDA, &B[idxB], &C[idxC]);
       idxA++;
       idxC++;
       i++;
@@ -4206,7 +4645,7 @@ void macroKernel10414776869222701819(int32_T M, int32_T K, int32_T N, const
   }
 }
 
-void matrixMultiply10414776869222701819(int32_T M, int32_T K, int32_T N, int32_T
+void matrixMultiply6179689394702347033(int32_T M, int32_T K, int32_T N, int32_T
   blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A, const
   real32_T *B, real32_T *C)
 {
@@ -4261,7 +4700,7 @@ void matrixMultiply10414776869222701819(int32_T M, int32_T K, int32_T N, int32_T
           tmp = blockSizeM;
         }
 
-        macroKernel10414776869222701819(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
+        macroKernel6179689394702347033(tmp, K2, N2, &A[i + M * k], M, &B[k + K *
           j1], K, &C[i + M * j1], M);
       }
     }
@@ -6527,7 +6966,7 @@ static void imperix_control_predict(const real32_T inputsT_0_f1[14], real32_T
     -0.0908551F, -0.185799614F, -0.297011405F, -0.0939965695F, -0.572619677F,
     -0.136740908F, -0.0739596635F, 0.438300371F };
 
-  matrixMultiply10414776869222701819(70, 14, 1, 64, 64, 64, &(&tmp_0[0])[0],
+  matrixMultiply6179689394702347033(70, 14, 1, 64, 64, 64, &(&tmp_0[0])[0],
     &inputsT_0_f1[0], &outT_f7_0_f1[0]);
   for (c_dim1 = 0; c_dim1 < 70; c_dim1++) {
     outT_f7_0_f1_0 = outT_f7_0_f1[c_dim1] + b[c_dim1];
@@ -6538,7 +6977,7 @@ static void imperix_control_predict(const real32_T inputsT_0_f1[14], real32_T
     }
   }
 
-  matrixMultiply10414776869222701819(70, 70, 1, 64, 64, 64, &(&tmp_1[0])[0],
+  matrixMultiply6179689394702347033(70, 70, 1, 64, 64, 64, &(&tmp_1[0])[0],
     &outT_f7_0_f1[0], &outT_f5_0_f1[0]);
   for (c_dim1 = 0; c_dim1 < 70; c_dim1++) {
     outT_f7_0_f1_0 = outT_f5_0_f1[c_dim1] + c[c_dim1];
@@ -6549,7 +6988,7 @@ static void imperix_control_predict(const real32_T inputsT_0_f1[14], real32_T
     }
   }
 
-  matrixMultiply10414776869222701819(70, 70, 1, 64, 64, 64, &(&tmp_2[0])[0],
+  matrixMultiply6179689394702347033(70, 70, 1, 64, 64, 64, &(&tmp_2[0])[0],
     &outT_f5_0_f1[0], &tmp[0]);
   for (c_dim1 = 0; c_dim1 < 70; c_dim1++) {
     outT_f7_0_f1_0 = tmp[c_dim1] + d[c_dim1];
@@ -6560,7 +6999,7 @@ static void imperix_control_predict(const real32_T inputsT_0_f1[14], real32_T
     }
   }
 
-  matrixMultiply10414776869222701819(3, 70, 1, 64, 64, 64, &(&tmp_3[0])[0],
+  matrixMultiply6179689394702347033(3, 70, 1, 64, 64, 64, &(&tmp_3[0])[0],
     &outT_f7_0_f1[0], &outputs_0_f1[0]);
   outputs_0_f1[0] = static_cast<real32_T>(tanh(static_cast<real_T>(outputs_0_f1
     [0] - 0.00562550034F)));
@@ -6609,36 +7048,36 @@ real_T rt_atan2d_snf(real_T u0, real_T u1)
 // Model step function for TID0
 void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 {
-  coder::array<real_T, 1U> b;
-  sdAmwXbnJnEmimT0NaJRtAD_imper_T savedTime;
   real_T tmp_0[96];
-  real_T bc_0[24];
+  real_T bc_1[24];
   real_T lam[24];
-  real_T A[16];
+  real_T A_0[16];
   real_T Linv_0[16];
-  real_T b_x_data[12];
   real_T bc[12];
+  real_T bc_0[12];
   real_T lb[12];
-  real_T DataTypeConversion1[6];
-  real_T Gain7[6];
+  real_T rtb_DataTypeConversion1[6];
   real_T rtb_DataTypeConversion2[6];
+  real_T rtb_Gain7[6];
   real_T rtb_Gain_m[6];
   real_T rtb_Gain1_g[5];
   real_T rtb_TmpSignalConversionAtGain2I[5];
+  real_T rtb_VectorConcatenate[5];
+  real_T A[4];
   real_T Linv[4];
-  real_T ie_ref[4];
+  real_T Linv_1[4];
+  real_T rtb_Switch[3];
   real_T rtb_Switch_h_0[3];
-  real_T ie[2];
-  real_T ie_0[2];
-  real_T ie_sat[2];
-  real_T rtb_Gain1_f[2];
+  real_T rtb_Switch_1[2];
   real_T rtb_Switch_f[2];
+  real_T rtb_ie_sat[2];
   real_T Mean_AccVal;
   real_T a;
-  real_T rtb_CastToDouble2;
   real_T rtb_DeadZone;
   real_T rtb_DeadZone_g;
   real_T rtb_F;
+  real_T rtb_Gain1_c_0;
+  real_T rtb_Gain1_c_idx_0;
   real_T rtb_Gain1_e_idx_0;
   real_T rtb_Gain1_e_idx_1;
   real_T rtb_Gain2_d;
@@ -6660,21 +7099,21 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   real_T rtb_Sum_p;
   real_T rtb_Switch_h_idx_0;
   real_T rtb_Switch_h_idx_1;
-  real_T rtb_TmpSignalConversionAtGain_0;
   real_T ssq;
   real_T tmp_1;
   real_T tmp_2;
   int32_T A_tmp;
   int32_T b_c_tmp;
-  int32_T b_ibcol;
   int32_T d;
   int32_T e;
   int32_T i;
   int32_T idx;
-  int32_T nrows;
+  int32_T info;
+  int32_T jmax;
   int8_T tmp_3;
   int8_T tmp_4;
   uint8_T rtb_Compare;
+  boolean_T iA1_0[24];
   boolean_T iA1[12];
   boolean_T tmp;
   static const int8_T B[16] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
@@ -6737,7 +7176,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   DataTypeConversion: '<S1>/Cast To Double'
   //   DataTypeConversion: '<S1>/Cast To Double1'
 
-  rtb_CastToDouble2 = imperix_control_B.SFunction;
+  Mean_AccVal = imperix_control_B.SFunction;
   rtb_Sum4 = imperix_control_B.SFunction_k;
 
   // MATLAB Function 'Closed_loop_control/IM references': '<S20>:1'
@@ -6763,49 +7202,46 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
       imperix_control_DW.dF) {
     // '<S20>:1:21'
     // '<S20>:1:22'
-    Mean_AccVal = imperix_control_B.SFunction - imperix_control_DW.F_prev;
-    if (rtIsNaN(Mean_AccVal)) {
+    rtb_DeadZone = imperix_control_B.SFunction - imperix_control_DW.F_prev;
+    if (rtIsNaN(rtb_DeadZone)) {
       ssq = (rtNaN);
-    } else if (Mean_AccVal < 0.0) {
+    } else if (rtb_DeadZone < 0.0) {
       ssq = -1.0;
     } else {
-      ssq = (Mean_AccVal > 0.0);
+      ssq = (rtb_DeadZone > 0.0);
     }
 
-    rtb_CastToDouble2 = ssq * imperix_control_DW.dF + imperix_control_DW.F_prev;
+    Mean_AccVal = ssq * imperix_control_DW.dF + imperix_control_DW.F_prev;
   }
 
   if (fabs(imperix_control_B.SFunction_k - imperix_control_DW.w_prev) >
       imperix_control_DW.dw) {
     // '<S20>:1:25'
     // '<S20>:1:26'
-    Mean_AccVal = imperix_control_B.SFunction_k - imperix_control_DW.w_prev;
-    if (rtIsNaN(Mean_AccVal)) {
+    rtb_DeadZone = imperix_control_B.SFunction_k - imperix_control_DW.w_prev;
+    if (rtIsNaN(rtb_DeadZone)) {
       ssq = (rtNaN);
-    } else if (Mean_AccVal < 0.0) {
+    } else if (rtb_DeadZone < 0.0) {
       ssq = -1.0;
     } else {
-      ssq = (Mean_AccVal > 0.0);
+      ssq = (rtb_DeadZone > 0.0);
     }
 
     rtb_Sum4 = ssq * imperix_control_DW.dw + imperix_control_DW.w_prev;
   }
 
   // '<S20>:1:29'
-  imperix_control_DW.F_prev = rtb_CastToDouble2;
+  imperix_control_DW.F_prev = Mean_AccVal;
 
   // '<S20>:1:30'
   imperix_control_DW.w_prev = rtb_Sum4;
 
   // '<S20>:1:32'
-  rtb_F = imperix_control_DW.F_max * rtb_CastToDouble2;
+  rtb_F = imperix_control_DW.F_max * Mean_AccVal;
 
   // S-Function (TUNABLE_PARAM): '<S503>/S-Function'
   // '<S20>:1:33'
-  imperix_control_B.SFunction_kx = doControl;
-
-  // DataTypeConversion: '<S1>/Cast To Double2'
-  rtb_CastToDouble2 = imperix_control_B.SFunction_kx;
+  imperix_control_B.SFunction_kx = do_control;
 
   // RateTransition generated from: '<S1>/Sum7' incorporates:
   //   RateTransition generated from: '<S1>/Energy balance'
@@ -6825,19 +7261,19 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of RateTransition generated from: '<S1>/Sum7'
 
   // DataTypeConversion: '<S1>/Data Type Conversion1'
-  DataTypeConversion1[0] = imperix_control_B.ADC_b;
-  DataTypeConversion1[1] = imperix_control_B.ADC_n;
-  DataTypeConversion1[2] = imperix_control_B.ADC_c;
-  DataTypeConversion1[3] = imperix_control_B.ADC_g;
-  DataTypeConversion1[4] = imperix_control_B.ADC_p;
-  DataTypeConversion1[5] = imperix_control_B.ADC_h;
+  rtb_DataTypeConversion1[0] = imperix_control_B.ADC_b;
+  rtb_DataTypeConversion1[1] = imperix_control_B.ADC_n;
+  rtb_DataTypeConversion1[2] = imperix_control_B.ADC_c;
+  rtb_DataTypeConversion1[3] = imperix_control_B.ADC_g;
+  rtb_DataTypeConversion1[4] = imperix_control_B.ADC_p;
+  rtb_DataTypeConversion1[5] = imperix_control_B.ADC_h;
 
   // S-Function (sdspstatfcns): '<S36>/Mean' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion1'
 
   Mean_AccVal = imperix_control_B.ADC_b;
   for (i = 4; i >= 0; i--) {
-    Mean_AccVal += DataTypeConversion1[5 - i];
+    Mean_AccVal += rtb_DataTypeConversion1[5 - i];
   }
 
   // Sum: '<S23>/Sum' incorporates:
@@ -6920,6 +7356,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   Saturate: '<S423>/Saturation'
 
   rtb_Sum13 = ssq - 1.5 * imperix_control_P.M2C.Vdc;
+
+  // SignalConversion generated from: '<S16>/Vector Concatenate'
+  rtb_VectorConcatenate[0] = rtb_Sum13;
 
   // Sum: '<S1>/Sum4' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion36'
@@ -7162,20 +7601,21 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Switch: '<S265>/Switch'
 
   // Gain: '<S33>/Gain1'
-  rtb_Gain1_f[0] = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_0;
+  rtb_Gain1_c_0 = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_0;
+  rtb_Gain1_c_idx_0 = rtb_Gain1_c_0;
 
-  // Gain: '<S132>/Gain1' incorporates:
-  //   UnitDelay: '<S132>/Unit Delay1'
+  // SignalConversion generated from: '<S16>/Vector Concatenate' incorporates:
+  //   Gain: '<S33>/Gain1'
 
-  imperix_control_DW.UnitDelay1_DSTATE_a[0] *= imperix_control_P.CCMPC.alpha;
+  rtb_VectorConcatenate[1] = rtb_Gain1_c_0;
 
   // Gain: '<S33>/Gain1'
-  rtb_Gain1_f[1] = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_1;
+  rtb_Gain1_c_0 = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_1;
 
-  // Gain: '<S132>/Gain1' incorporates:
-  //   UnitDelay: '<S132>/Unit Delay1'
+  // SignalConversion generated from: '<S16>/Vector Concatenate' incorporates:
+  //   Gain: '<S33>/Gain1'
 
-  imperix_control_DW.UnitDelay1_DSTATE_a[1] *= imperix_control_P.CCMPC.alpha;
+  rtb_VectorConcatenate[2] = rtb_Gain1_c_0;
 
   // RateTransition generated from: '<S25>/Switch'
   if (tmp) {
@@ -7193,7 +7633,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   rtb_MaxofElements = imperix_control_B.ADC_b;
   for (i = 4; i >= 0; i--) {
-    rtb_MaxofElements += DataTypeConversion1[5 - i];
+    rtb_MaxofElements += rtb_DataTypeConversion1[5 - i];
   }
 
   rtb_MaxofElements /= 6.0;
@@ -7204,7 +7644,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   Sum: '<S25>/Sum'
 
   for (i = 0; i < 6; i++) {
-    rtb_Gain_m[i] = fabs(DataTypeConversion1[i] - rtb_MaxofElements);
+    rtb_Gain_m[i] = fabs(rtb_DataTypeConversion1[i] - rtb_MaxofElements);
   }
 
   // End of Abs: '<S25>/Abs'
@@ -7231,23 +7671,16 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // Switch: '<S25>/Switch' incorporates:
   //   MinMax: '<S25>/Max of Elements'
-
+  //   RateTransition generated from: '<S25>/Switch'
+  //
   if (rtb_MaxofElements >= imperix_control_P.Switch_Threshold) {
-    // MATLAB Function: '<S25>/Saturation' incorporates:
-    //   RateTransition generated from: '<S25>/Switch'
-    //   Switch: '<S25>/Switch'
-
-    ie[0] = imperix_control_B.TmpRTBAtSwitchInport1[0];
-    ie[1] = imperix_control_B.TmpRTBAtSwitchInport1[1];
-    rtb_MaxofElements = imperix_control_B.TmpRTBAtSwitchInport1[2];
+    rtb_Switch[0] = imperix_control_B.TmpRTBAtSwitchInport1[0];
+    rtb_Switch[1] = imperix_control_B.TmpRTBAtSwitchInport1[1];
+    rtb_Switch[2] = imperix_control_B.TmpRTBAtSwitchInport1[2];
   } else {
-    // MATLAB Function: '<S25>/Saturation' incorporates:
-    //   RateTransition generated from: '<S25>/Switch'
-    //   Switch: '<S25>/Switch'
-
-    ie[0] = imperix_control_B.TmpRTBAtSwitchInport3[0];
-    ie[1] = imperix_control_B.TmpRTBAtSwitchInport3[1];
-    rtb_MaxofElements = imperix_control_B.TmpRTBAtSwitchInport3[2];
+    rtb_Switch[0] = imperix_control_B.TmpRTBAtSwitchInport3[0];
+    rtb_Switch[1] = imperix_control_B.TmpRTBAtSwitchInport3[1];
+    rtb_Switch[2] = imperix_control_B.TmpRTBAtSwitchInport3[2];
   }
 
   // End of Switch: '<S25>/Switch'
@@ -7301,31 +7734,31 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     rtb_Gain_m[i] = -imperix_control_P.RFT.ab2abc[i];
   }
 
+  rtb_MaxofElements = 0.0;
   tmp_1 = 0.0;
   tmp_2 = 0.0;
-  rtb_TmpSignalConversionAtGain_0 = 0.0;
   for (i = 0; i < 2; i++) {
     ssq = rtb_Switch_f[i];
-    tmp_1 += rtb_Gain_m[3 * i] * ssq;
-    tmp_2 += rtb_Gain_m[3 * i + 1] * ssq;
-    rtb_TmpSignalConversionAtGain_0 += rtb_Gain_m[3 * i + 2] * ssq;
+    rtb_MaxofElements += rtb_Gain_m[3 * i] * ssq;
+    tmp_1 += rtb_Gain_m[3 * i + 1] * ssq;
+    tmp_2 += rtb_Gain_m[3 * i + 2] * ssq;
   }
 
-  rtb_TmpSignalConversionAtGain2I[4] = rtb_TmpSignalConversionAtGain_0;
-  rtb_TmpSignalConversionAtGain2I[3] = tmp_2;
-  rtb_TmpSignalConversionAtGain2I[2] = tmp_1;
+  rtb_TmpSignalConversionAtGain2I[4] = tmp_2;
+  rtb_TmpSignalConversionAtGain2I[3] = tmp_1;
+  rtb_TmpSignalConversionAtGain2I[2] = rtb_MaxofElements;
 
   // End of Gain: '<S25>/Gain5'
 
   // Gain: '<S25>/Gain7'
   for (i = 0; i < 6; i++) {
-    Gain7[i] = 0.0;
+    rtb_Gain7[i] = 0.0;
   }
 
   for (i = 0; i < 5; i++) {
     ssq = rtb_TmpSignalConversionAtGain2I[i];
     for (idx = 0; idx < 6; idx++) {
-      Gain7[idx] += imperix_control_P.M2C.pinvA[6 * i + idx] * ssq;
+      rtb_Gain7[idx] += imperix_control_P.M2C.pinvA[6 * i + idx] * ssq;
     }
   }
 
@@ -7344,13 +7777,12 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // Gain: '<S262>/Gain3'
   tmp_1 = 0.0;
   tmp_2 = 0.0;
-  rtb_TmpSignalConversionAtGain_0 = 0.0;
+  rtb_MaxofElements = 0.0;
   for (i = 0; i < 3; i++) {
     ssq = rtb_Switch_h_0[i];
     tmp_1 += imperix_control_P.Gain3_Gain_o[3 * i] * ssq;
     tmp_2 += imperix_control_P.Gain3_Gain_o[3 * i + 1] * ssq;
-    rtb_TmpSignalConversionAtGain_0 += imperix_control_P.Gain3_Gain_o[3 * i + 2]
-      * ssq;
+    rtb_MaxofElements += imperix_control_P.Gain3_Gain_o[3 * i + 2] * ssq;
   }
 
   // End of Gain: '<S262>/Gain3'
@@ -7362,7 +7794,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   rtb_TmpSignalConversionAtGain2I[1] = -a;
   rtb_TmpSignalConversionAtGain2I[2] = tmp_1;
   rtb_TmpSignalConversionAtGain2I[3] = tmp_2;
-  rtb_TmpSignalConversionAtGain2I[4] = rtb_TmpSignalConversionAtGain_0;
+  rtb_TmpSignalConversionAtGain2I[4] = rtb_MaxofElements;
 
   // Gain: '<S32>/Gain2'
   for (i = 0; i < 6; i++) {
@@ -7378,21 +7810,23 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Gain: '<S32>/Gain2'
 
-  // MATLAB Function: '<S25>/Saturation'
+  // MATLAB Function: '<S25>/Saturation' incorporates:
+  //   DataTypeConversion: '<S1>/Data Type Conversion1'
+
   // MATLAB Function 'Closed_loop_control/NN CEC/Saturation': '<S133>:1'
-  // '<S133>:1:48'
+  // '<S133>:1:49'
   // '<S133>:1:4'
   // '<S133>:1:5'
   if (!imperix_control_DW.Ac_not_empty) {
     // '<S133>:1:10'
     // '<S133>:1:11'
     for (i = 0; i < 6; i++) {
-      ssq = imperix_control_P.M2C.N[i];
-      imperix_control_DW.Ac[i] = ssq;
-      imperix_control_DW.Ac[i + 6] = -ssq;
-      ssq = imperix_control_P.M2C.N[i + 6];
-      imperix_control_DW.Ac[i + 12] = ssq;
-      imperix_control_DW.Ac[i + 18] = -ssq;
+      rtb_MaxofElements = imperix_control_P.M2C.N[i];
+      imperix_control_DW.Ac[i] = rtb_MaxofElements;
+      imperix_control_DW.Ac[i + 6] = -rtb_MaxofElements;
+      rtb_MaxofElements = imperix_control_P.M2C.N[i + 6];
+      imperix_control_DW.Ac[i + 12] = rtb_MaxofElements;
+      imperix_control_DW.Ac[i + 18] = -rtb_MaxofElements;
     }
 
     imperix_control_DW.Ac_not_empty = true;
@@ -7402,36 +7836,35 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     imperix_control_DW.is_max = imperix_control_P.M2C.is_max;
 
     // '<S133>:1:18'
+    imperix_control_DW.SolverOpts.UseHessianAsInput = true;
+    imperix_control_DW.SolverOpts.IntegrityChecks = true;
+    imperix_control_DW.SolverOpts.MaxIterations = 100;
+    imperix_control_DW.SolverOpts.ConstraintTolerance = imperix_control_DW.Tol;
   }
 
   // '<S133>:1:23'
   for (i = 0; i < 6; i++) {
-    tmp_1 = Gain7[i];
-    bc[i] = imperix_control_DW.is_max - tmp_1;
-    bc[i + 6] = imperix_control_DW.is_max + tmp_1;
+    rtb_MaxofElements = rtb_Gain7[i];
+    bc[i] = imperix_control_DW.is_max - rtb_MaxofElements;
+    bc[i + 6] = imperix_control_DW.is_max + rtb_MaxofElements;
   }
-
-  // '<S133>:1:27'
-  imperix_control_tic(&savedTime);
 
   // '<S133>:1:30'
-  ssq = ie[0];
-  tmp_1 = ie[1];
+  rtb_MaxofElements = rtb_Switch[1];
+  ssq = rtb_Switch[0];
   for (i = 0; i < 12; i++) {
-    tmp_2 = (imperix_control_DW.Ac[i + 12] * tmp_1 + imperix_control_DW.Ac[i] *
-             ssq) - bc[i];
-    lb[i] = tmp_2;
-    b_x_data[i] = tmp_2;
+    lb[i] = (imperix_control_DW.Ac[i + 12] * rtb_MaxofElements +
+             imperix_control_DW.Ac[i] * ssq) - bc[i];
   }
 
-  if (!rtIsNaN(b_x_data[0])) {
+  if (!rtIsNaN(lb[0])) {
     idx = 1;
   } else {
     idx = 0;
     i = 2;
     exitg1 = false;
-    while ((!exitg1) && (i <= 12)) {
-      if (!rtIsNaN(b_x_data[i - 1])) {
+    while ((!exitg1) && (i < 13)) {
+      if (!rtIsNaN(lb[i - 1])) {
         idx = i;
         exitg1 = true;
       } else {
@@ -7441,156 +7874,156 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   }
 
   if (idx == 0) {
-    ssq = lb[0];
+    rtb_MaxofElements = lb[0];
   } else {
-    ssq = lb[idx - 1];
+    rtb_MaxofElements = lb[idx - 1];
     for (i = idx + 1; i < 13; i++) {
-      tmp_1 = lb[i - 1];
-      if (ssq < tmp_1) {
-        ssq = tmp_1;
+      ssq = lb[i - 1];
+      if (rtb_MaxofElements < ssq) {
+        rtb_MaxofElements = ssq;
       }
     }
   }
 
-  if (ssq > 0.001) {
+  if (imperix_control_DW.Tol < rtb_MaxofElements) {
     // '<S133>:1:31'
     // '<S133>:1:33'
-    ie_ref[0] = imperix_control_DW.Ix[0];
-    ie_ref[1] = imperix_control_DW.Ix[1];
-    ie_ref[2] = imperix_control_DW.Ix[2];
-    ie_ref[3] = imperix_control_DW.Ix[3];
-    b_ibcol = 0;
-    i = 0;
-    exitg1 = false;
-    while ((!exitg1) && (i < 2)) {
-      idx = (i << 1) + i;
-      ssq = 0.0;
-      if (i >= 1) {
-        ssq = ie_ref[1] * ie_ref[1];
-      }
-
-      ssq = ie_ref[idx] - ssq;
-      if (ssq > 0.0) {
-        ssq = sqrt(ssq);
-        ie_ref[idx] = ssq;
-        if (i + 1 < 2) {
-          a = 1.0 / ssq;
-          for (nrows = idx + 2; nrows <= idx + 2; nrows++) {
-            ie_ref[nrows - 1] *= a;
+    if (imperix_control_DW.SolverOpts.UseHessianAsInput) {
+      A[0] = imperix_control_DW.Ix[0];
+      A[1] = imperix_control_DW.Ix[1];
+      A[2] = imperix_control_DW.Ix[2];
+      A[3] = imperix_control_DW.Ix[3];
+      info = 0;
+      i = 0;
+      exitg1 = false;
+      while ((!exitg1) && (i < 2)) {
+        idx = (i << 1) + i;
+        ssq = 0.0;
+        if (i >= 1) {
+          for (jmax = 0; jmax < 1; jmax++) {
+            ssq += A[1] * A[1];
           }
         }
 
-        i++;
-      } else {
-        ie_ref[idx] = ssq;
-        b_ibcol = i + 1;
-        exitg1 = true;
+        ssq = A[idx] - ssq;
+        if (ssq > 0.0) {
+          ssq = sqrt(ssq);
+          A[idx] = ssq;
+          if (i + 1 < 2) {
+            a = 1.0 / ssq;
+            for (jmax = idx + 2; jmax <= idx + 2; jmax++) {
+              A[jmax - 1] *= a;
+            }
+          }
+
+          i++;
+        } else {
+          A[idx] = ssq;
+          info = i + 1;
+          exitg1 = true;
+        }
       }
+
+      if (info == 0) {
+        A[2] = 0.0;
+      }
+
+      Linv[0] = 1.0;
+      Linv[1] = 0.0;
+      Linv[2] = 0.0;
+      Linv[3] = 1.0;
+      imperix_control_trisolve_k(A, Linv);
+    } else {
+      Linv[0] = imperix_control_DW.Ix[0];
+      Linv[1] = imperix_control_DW.Ix[1];
+      Linv[2] = imperix_control_DW.Ix[2];
+      Linv[3] = imperix_control_DW.Ix[3];
     }
 
-    if (b_ibcol == 0) {
-      ie_ref[2] = 0.0;
-    }
-
-    Linv[0] = 1.0;
-    Linv[1] = 0.0;
-    Linv[2] = 0.0;
-    Linv[3] = 1.0;
-    imperix_control_trisolve_k(ie_ref, Linv);
     for (i = 0; i < 12; i++) {
       iA1[i] = false;
     }
 
     for (i = 0; i < 2; i++) {
-      nrows = i << 1;
-      ssq = Linv[nrows + 1];
-      tmp_1 = Linv[nrows];
-      ie_ref[nrows] = ssq * Linv[1] + tmp_1 * Linv[0];
-      ie_ref[nrows + 1] = ssq * Linv[3] + tmp_1 * Linv[2];
-      ie_0[i] = -ie[i];
+      jmax = i << 1;
+      rtb_MaxofElements = Linv[jmax + 1];
+      ssq = Linv[jmax];
+      Linv_1[jmax] = rtb_MaxofElements * Linv[1] + ssq * Linv[0];
+      Linv_1[jmax + 1] = rtb_MaxofElements * Linv[3] + ssq * Linv[2];
+      rtb_Switch_1[i] = -rtb_Switch[i];
     }
 
     for (i = 0; i < 24; i++) {
-      lam[i] = -imperix_control_DW.Ac[i];
+      bc_1[i] = -imperix_control_DW.Ac[i];
     }
 
     for (i = 0; i < 12; i++) {
-      b_x_data[i] = -bc[i];
+      bc_0[i] = -bc[i];
     }
 
-    imperix_control_qpkwik_aq(Linv, ie_ref, ie_0, lam, b_x_data, iA1, ie_sat, lb,
-      &i);
+    imperix_control_qpkwik_aq(Linv, Linv_1, rtb_Switch_1, bc_1, bc_0, iA1,
+      imperix_control_DW.SolverOpts.MaxIterations,
+      imperix_control_DW.SolverOpts.ConstraintTolerance, rtb_ie_sat, lb, &i);
 
     // '<S133>:1:33'
     // '<S133>:1:34'
   } else {
     // '<S133>:1:36'
-    ie_sat[0] = ie[0];
-    ie_sat[1] = ie[1];
+    rtb_ie_sat[0] = rtb_Switch[0];
+    rtb_ie_sat[1] = rtb_Switch[1];
   }
 
-  // '<S133>:1:39'
-  imperix_control_toc(&savedTime);
-
-  // '<S133>:1:48'
-  Gain7[0] = DataTypeConversion1[0] - rtb_Gain_m[0];
-  Gain7[3] = -rtb_Gain_m[3];
-  Gain7[1] = DataTypeConversion1[1] - rtb_Gain_m[1];
-  Gain7[4] = -rtb_Gain_m[4];
-  Gain7[2] = DataTypeConversion1[2] - rtb_Gain_m[2];
-  Gain7[5] = -rtb_Gain_m[5];
-  if (!rtIsNaN(Gain7[0])) {
+  // '<S133>:1:40'
+  // '<S133>:1:49'
+  rtb_Gain7[0] = imperix_control_B.ADC_b - rtb_Gain_m[0];
+  rtb_Gain7[3] = -rtb_Gain_m[3];
+  rtb_Gain7[1] = imperix_control_B.ADC_n - rtb_Gain_m[1];
+  rtb_Gain7[4] = -rtb_Gain_m[4];
+  rtb_Gain7[2] = imperix_control_B.ADC_c - rtb_Gain_m[2];
+  rtb_Gain7[5] = -rtb_Gain_m[5];
+  if (!rtIsNaN(rtb_Gain7[0])) {
     i = 1;
   } else {
     i = 0;
-    b_ibcol = 2;
+    info = 2;
     exitg1 = false;
-    while ((!exitg1) && (b_ibcol <= 6)) {
-      if (!rtIsNaN(Gain7[b_ibcol - 1])) {
-        i = b_ibcol;
+    while ((!exitg1) && (info < 7)) {
+      if (!rtIsNaN(rtb_Gain7[info - 1])) {
+        i = info;
         exitg1 = true;
       } else {
-        b_ibcol++;
+        info++;
       }
     }
   }
 
   if (i == 0) {
-    ssq = Gain7[0];
+    tmp_1 = rtb_Gain7[0];
   } else {
-    ssq = Gain7[i - 1];
-    for (b_ibcol = i + 1; b_ibcol < 7; b_ibcol++) {
-      tmp_1 = Gain7[b_ibcol - 1];
-      if (ssq > tmp_1) {
-        ssq = tmp_1;
+    tmp_1 = rtb_Gain7[i - 1];
+    for (info = i + 1; info < 7; info++) {
+      rtb_MaxofElements = rtb_Gain7[info - 1];
+      if (tmp_1 > rtb_MaxofElements) {
+        tmp_1 = rtb_MaxofElements;
       }
     }
   }
 
-  // '<S133>:1:49'
-  Gain7[0] = -rtb_Gain_m[0];
-  tmp_1 = -DataTypeConversion1[3] - rtb_Gain_m[3];
-  Gain7[3] = tmp_1;
-  b_x_data[0] = -rtb_Gain_m[0];
-  b_x_data[3] = tmp_1;
-  Gain7[1] = -rtb_Gain_m[1];
-  tmp_1 = -DataTypeConversion1[4] - rtb_Gain_m[4];
-  Gain7[4] = tmp_1;
-  b_x_data[1] = -rtb_Gain_m[1];
-  b_x_data[4] = tmp_1;
-  Gain7[2] = -rtb_Gain_m[2];
-  tmp_1 = -DataTypeConversion1[5] - rtb_Gain_m[5];
-  Gain7[5] = tmp_1;
-  b_x_data[2] = -rtb_Gain_m[2];
-  b_x_data[5] = tmp_1;
+  // '<S133>:1:50'
+  rtb_Gain7[0] = -rtb_Gain_m[0];
+  rtb_Gain7[3] = -static_cast<real_T>(imperix_control_B.ADC_g) - rtb_Gain_m[3];
+  rtb_Gain7[1] = -rtb_Gain_m[1];
+  rtb_Gain7[4] = -static_cast<real_T>(imperix_control_B.ADC_p) - rtb_Gain_m[4];
+  rtb_Gain7[2] = -rtb_Gain_m[2];
+  rtb_Gain7[5] = -static_cast<real_T>(imperix_control_B.ADC_h) - rtb_Gain_m[5];
   if (!rtIsNaN(-rtb_Gain_m[0])) {
     i = 1;
   } else {
     i = 0;
     idx = 2;
     exitg1 = false;
-    while ((!exitg1) && (idx <= 6)) {
-      if (!rtIsNaN(b_x_data[idx - 1])) {
+    while ((!exitg1) && (idx < 7)) {
+      if (!rtIsNaN(rtb_Gain7[idx - 1])) {
         i = idx;
         exitg1 = true;
       } else {
@@ -7600,57 +8033,62 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   }
 
   if (i == 0) {
-    tmp_2 = -rtb_Gain_m[0];
+    ssq = -rtb_Gain_m[0];
   } else {
-    tmp_2 = Gain7[i - 1];
+    ssq = rtb_Gain7[i - 1];
     for (idx = i + 1; idx < 7; idx++) {
-      tmp_1 = Gain7[idx - 1];
-      if (tmp_2 < tmp_1) {
-        tmp_2 = tmp_1;
+      rtb_MaxofElements = rtb_Gain7[idx - 1];
+      if (ssq < rtb_MaxofElements) {
+        ssq = rtb_MaxofElements;
       }
     }
   }
 
-  // '<S133>:1:50'
-  if (rtb_MaxofElements > ssq - 1.0) {
-    rtb_MaxofElements = ssq - 1.0;
-  } else if (rtIsNaN(rtb_MaxofElements)) {
-    if (!rtIsNaN(ssq - 1.0)) {
-      rtb_MaxofElements = ssq - 1.0;
+  // '<S133>:1:51'
+  if (rtb_Switch[2] > tmp_1 - 1.0) {
+    rtb_MaxofElements = tmp_1 - 1.0;
+  } else if (rtIsNaN(rtb_Switch[2])) {
+    if (!rtIsNaN(tmp_1 - 1.0)) {
+      rtb_MaxofElements = tmp_1 - 1.0;
     } else {
       rtb_MaxofElements = (rtNaN);
     }
+  } else {
+    rtb_MaxofElements = rtb_Switch[2];
   }
 
-  if ((!(rtb_MaxofElements >= tmp_2 + 1.0)) && (!rtIsNaN(tmp_2 + 1.0))) {
-    rtb_MaxofElements = tmp_2 + 1.0;
+  if ((!(rtb_MaxofElements >= ssq + 1.0)) && (!rtIsNaN(ssq + 1.0))) {
+    rtb_MaxofElements = ssq + 1.0;
   }
+
+  // End of MATLAB Function: '<S25>/Saturation'
 
   // Sum: '<S132>/Sum' incorporates:
   //   Gain: '<S132>/Gain1'
   //   Gain: '<S132>/Gain2'
   //   UnitDelay: '<S132>/Unit Delay1'
 
-  imperix_control_DW.UnitDelay1_DSTATE_a[0] += (1.0 -
-    imperix_control_P.CCMPC.alpha) * ie_sat[0];
-  imperix_control_DW.UnitDelay1_DSTATE_a[1] += (1.0 -
-    imperix_control_P.CCMPC.alpha) * ie_sat[1];
+  imperix_control_DW.UnitDelay1_DSTATE_a[0] = (1.0 -
+    imperix_control_P.CCMPC.alpha) * rtb_ie_sat[0] +
+    imperix_control_P.CCMPC.alpha * imperix_control_DW.UnitDelay1_DSTATE_a[0];
+  imperix_control_DW.UnitDelay1_DSTATE_a[1] = (1.0 -
+    imperix_control_P.CCMPC.alpha) * rtb_ie_sat[1] +
+    imperix_control_P.CCMPC.alpha * imperix_control_DW.UnitDelay1_DSTATE_a[1];
 
   // MATLAB Function: '<S1>/LICCs control' incorporates:
+  //   DataTypeConversion: '<S1>/Data Type Conversion1'
   //   Gain: '<S33>/Gain1'
   //   Sum: '<S132>/Sum'
   //   UnitDelay: '<S132>/Unit Delay1'
 
   // MATLAB Function 'Closed_loop_control/LICCs control': '<S22>:1'
-  // '<S22>:1:46'
-  if (!imperix_control_DW.nu_not_empty) {
+  // '<S22>:1:48'
+  if (!imperix_control_DW.Ad_not_empty) {
     // '<S22>:1:5'
-    // '<S22>:1:6'
-    imperix_control_DW.nu_not_empty = true;
-
     // '<S22>:1:7'
     memcpy(&imperix_control_DW.Ad[0], &imperix_control_P.CCMPC.Ad[0], sizeof
            (real_T) << 3U);
+    imperix_control_DW.Ad_not_empty = true;
 
     // '<S22>:1:8'
     // '<S22>:1:9'
@@ -7682,238 +8120,259 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     memcpy(&imperix_control_DW.pinvT[0], &imperix_control_P.CCMPC.pinvT[0], 30U *
            sizeof(real_T));
 
-    // '<S22>:1:19'
-    imperix_control_DW.u_prev.set_size(static_cast<int32_T>
-      (imperix_control_P.CCMPC.nu));
-    idx = static_cast<int32_T>(imperix_control_P.CCMPC.nu);
-    for (i = 0; i < idx; i++) {
-      imperix_control_DW.u_prev[i] = 0.0;
-    }
-
-    // '<S22>:1:23'
+    // '<S22>:1:25'
+    imperix_control_DW.options.UseHessianAsInput = true;
+    imperix_control_DW.options.IntegrityChecks = true;
+    imperix_control_DW.options.MaxIterations = 10;
+    imperix_control_DW.options.ConstraintTolerance = 1.0E-5;
   }
 
-  // '<S22>:1:31'
-  // '<S22>:1:34'
-  // '<S22>:1:37'
-  // '<S22>:1:40'
-  b.set_size(imperix_control_DW.u_prev.size(0) << 1);
-  nrows = imperix_control_DW.u_prev.size(0);
-
-  // '<S22>:1:43'
-  // '<S22>:1:46'
-  rtb_Switch_h_0[0] = rtb_Sum13;
-  for (idx = 0; idx < 2; idx++) {
-    i = idx << 1;
-    ie_ref[i] = imperix_control_DW.UnitDelay1_DSTATE_a[0];
-    ie_ref[i + 1] = imperix_control_DW.UnitDelay1_DSTATE_a[1];
-    b_ibcol = idx * nrows;
-    for (i = 0; i < nrows; i++) {
-      b[b_ibcol + i] = imperix_control_DW.u_prev[i];
-    }
-
-    rtb_Switch_h_0[idx + 1] = rtb_Gain1_f[idx];
-  }
-
-  rtb_Sum13 = rtb_Switch_h_0[1];
-  ssq = rtb_Switch_h_0[0];
-  tmp_1 = rtb_Switch_h_0[2];
+  // '<S22>:1:33'
+  // '<S22>:1:36'
+  // '<S22>:1:39'
+  // '<S22>:1:42'
+  // '<S22>:1:45'
+  // '<S22>:1:48'
+  Linv[0] = imperix_control_DW.UnitDelay1_DSTATE_a[0];
+  A[0] = imperix_control_DW.u_prev[0];
+  Linv[1] = imperix_control_DW.UnitDelay1_DSTATE_a[1];
+  A[1] = imperix_control_DW.u_prev[1];
+  Linv[2] = imperix_control_DW.UnitDelay1_DSTATE_a[0];
+  A[2] = imperix_control_DW.u_prev[0];
+  Linv[3] = imperix_control_DW.UnitDelay1_DSTATE_a[1];
+  A[3] = imperix_control_DW.u_prev[1];
   for (i = 0; i < 6; i++) {
-    rtb_Gain_m[i] = ((imperix_control_DW.pinvT[i + 6] * rtb_Sum13 +
-                      imperix_control_DW.pinvT[i] * ssq) +
-                     imperix_control_DW.pinvT[i + 12] * tmp_1) +
+    rtb_Gain_m[i] = ((imperix_control_DW.pinvT[i + 6] * rtb_Gain1_c_idx_0 +
+                      imperix_control_DW.pinvT[i] * rtb_Sum13) +
+                     imperix_control_DW.pinvT[i + 12] * rtb_Gain1_c_0) +
       rtb_MaxofElements;
   }
 
-  // '<S22>:1:47'
-  Gain7[0] = DataTypeConversion1[0] - rtb_Gain_m[0];
-  Gain7[1] = DataTypeConversion1[1] - rtb_Gain_m[1];
-  Gain7[2] = DataTypeConversion1[2] - rtb_Gain_m[2];
-  Gain7[3] = 0.0 - rtb_Gain_m[3];
-  Gain7[4] = 0.0 - rtb_Gain_m[4];
-  Gain7[5] = 0.0 - rtb_Gain_m[5];
+  // '<S22>:1:49'
+  rtb_Gain7[0] = imperix_control_B.ADC_b - rtb_Gain_m[0];
+  rtb_Gain7[1] = imperix_control_B.ADC_n - rtb_Gain_m[1];
+  rtb_Gain7[2] = imperix_control_B.ADC_c - rtb_Gain_m[2];
+  rtb_Gain7[3] = 0.0 - rtb_Gain_m[3];
+  rtb_Gain7[4] = 0.0 - rtb_Gain_m[4];
+  rtb_Gain7[5] = 0.0 - rtb_Gain_m[5];
   for (i = 0; i < 2; i++) {
     idx = i * 6;
-    for (nrows = 0; nrows < 6; nrows++) {
-      bc[idx + nrows] = Gain7[nrows];
+    for (jmax = 0; jmax < 6; jmax++) {
+      bc[idx + jmax] = rtb_Gain7[jmax];
     }
   }
 
-  // '<S22>:1:48'
-  Gain7[0] = 0.0 - rtb_Gain_m[0];
-  Gain7[1] = 0.0 - rtb_Gain_m[1];
-  Gain7[2] = 0.0 - rtb_Gain_m[2];
-  Gain7[3] = -DataTypeConversion1[3] - rtb_Gain_m[3];
-  Gain7[4] = -DataTypeConversion1[4] - rtb_Gain_m[4];
-  Gain7[5] = -DataTypeConversion1[5] - rtb_Gain_m[5];
+  // '<S22>:1:50'
+  rtb_Gain7[0] = 0.0 - rtb_Gain_m[0];
+  rtb_Gain7[1] = 0.0 - rtb_Gain_m[1];
+  rtb_Gain7[2] = 0.0 - rtb_Gain_m[2];
+  rtb_Gain7[3] = -static_cast<real_T>(imperix_control_B.ADC_g) - rtb_Gain_m[3];
+  rtb_Gain7[4] = -static_cast<real_T>(imperix_control_B.ADC_p) - rtb_Gain_m[4];
+  rtb_Gain7[5] = -static_cast<real_T>(imperix_control_B.ADC_h) - rtb_Gain_m[5];
   for (i = 0; i < 2; i++) {
-    nrows = i * 6;
-    for (idx = 0; idx < 6; idx++) {
-      lb[nrows + idx] = Gain7[idx];
+    idx = i * 6;
+    for (jmax = 0; jmax < 6; jmax++) {
+      lb[idx + jmax] = rtb_Gain7[jmax];
     }
   }
 
-  // '<S22>:1:49'
-  // '<S22>:1:53'
-  memcpy(&A[0], &imperix_control_DW.H[0], sizeof(real_T) << 4U);
-  nrows = 0;
-  i = 0;
-  exitg1 = false;
-  while ((!exitg1) && (i < 4)) {
-    idx = (i << 2) + i;
-    ssq = 0.0;
-    if (i >= 1) {
-      for (b_ibcol = 0; b_ibcol < i; b_ibcol++) {
-        rtb_Sum13 = A[(b_ibcol << 2) + i];
-        ssq += rtb_Sum13 * rtb_Sum13;
+  // '<S22>:1:51'
+  // '<S22>:1:56'
+  if (imperix_control_DW.options.UseHessianAsInput) {
+    memcpy(&A_0[0], &imperix_control_DW.H[0], sizeof(real_T) << 4U);
+    jmax = 0;
+    i = 0;
+    exitg1 = false;
+    while ((!exitg1) && (i < 4)) {
+      idx = (i << 2) + i;
+      ssq = 0.0;
+      if (i >= 1) {
+        for (info = 0; info < i; info++) {
+          rtb_Sum13 = A_0[(info << 2) + i];
+          ssq += rtb_Sum13 * rtb_Sum13;
+        }
       }
-    }
 
-    ssq = A[idx] - ssq;
-    if (ssq > 0.0) {
-      ssq = sqrt(ssq);
-      A[idx] = ssq;
-      if (i + 1 < 4) {
-        if (i != 0) {
-          d = (((i - 1) << 2) + i) + 2;
-          for (b_ibcol = i + 2; b_ibcol <= d; b_ibcol += 4) {
-            b_c_tmp = b_ibcol - i;
-            rtb_Sum13 = -A[(((b_c_tmp - 2) >> 2) << 2) + i];
-            e = b_c_tmp + 2;
-            for (b_c_tmp = b_ibcol; b_c_tmp <= e; b_c_tmp++) {
-              A_tmp = ((idx + b_c_tmp) - b_ibcol) + 1;
-              A[A_tmp] += A[b_c_tmp - 1] * rtb_Sum13;
+      ssq = A_0[idx] - ssq;
+      if (ssq > 0.0) {
+        ssq = sqrt(ssq);
+        A_0[idx] = ssq;
+        if (i + 1 < 4) {
+          if (i != 0) {
+            d = (((i - 1) << 2) + i) + 2;
+            for (info = i + 2; info <= d; info += 4) {
+              b_c_tmp = info - i;
+              rtb_Sum13 = -A_0[(((b_c_tmp - 2) >> 2) << 2) + i];
+              e = b_c_tmp + 2;
+              for (b_c_tmp = info; b_c_tmp <= e; b_c_tmp++) {
+                A_tmp = ((idx + b_c_tmp) - info) + 1;
+                A_0[A_tmp] += A_0[b_c_tmp - 1] * rtb_Sum13;
+              }
             }
+          }
+
+          rtb_Sum13 = 1.0 / ssq;
+          d = (idx - i) + 4;
+          for (info = idx + 2; info <= d; info++) {
+            A_0[info - 1] *= rtb_Sum13;
           }
         }
 
-        rtb_Sum13 = 1.0 / ssq;
-        d = (idx - i) + 4;
-        for (b_ibcol = idx + 2; b_ibcol <= d; b_ibcol++) {
-          A[b_ibcol - 1] *= rtb_Sum13;
-        }
+        i++;
+      } else {
+        A_0[idx] = ssq;
+        jmax = i + 1;
+        exitg1 = true;
       }
-
-      i++;
-    } else {
-      A[idx] = ssq;
-      nrows = i + 1;
-      exitg1 = true;
     }
-  }
 
-  if (nrows == 0) {
-    nrows = 5;
-  }
-
-  for (idx = 2; idx < nrows; idx++) {
-    for (i = 0; i <= idx - 2; i++) {
-      A[i + ((idx - 1) << 2)] = 0.0;
+    if (jmax == 0) {
+      jmax = 5;
     }
-  }
 
-  for (i = 0; i < 4; i++) {
-    nrows = i << 2;
-    Linv_0[nrows] = B[nrows];
-    Linv_0[nrows + 1] = B[nrows + 1];
-    Linv_0[nrows + 2] = B[nrows + 2];
-    Linv_0[nrows + 3] = B[nrows + 3];
-  }
-
-  imperix_control_trisolve_j(A, Linv_0);
-  if (b.size(0) == 4) {
-    // Gain: '<S42>/Gain4'
-    tmp_1 = 0.0;
-    tmp_2 = 0.0;
-    for (i = 0; i < 6; i++) {
-      // Sum: '<S42>/Sum3' incorporates:
-      //   Gain: '<S42>/Gain3'
-
-      ssq = 0.0;
-      for (idx = 0; idx < 5; idx++) {
-        ssq += imperix_control_P.M2C.pinvA[6 * idx + i] * rtb_Gain1_g[idx];
+    for (idx = 2; idx < jmax; idx++) {
+      for (i = 0; i <= idx - 2; i++) {
+        A_0[i + ((idx - 1) << 2)] = 0.0;
       }
-
-      rtb_Sum13 = rtb_DataTypeConversion2[i] - ssq;
-
-      // End of Sum: '<S42>/Sum3'
-
-      // Gain: '<S42>/Gain4'
-      idx = i << 1;
-      tmp_1 += imperix_control_P.M2C.pinvN[idx] * rtb_Sum13;
-      tmp_2 += imperix_control_P.M2C.pinvN[idx + 1] * rtb_Sum13;
     }
 
-    rtb_Sum13 = (imperix_control_DW.Ad[0] * tmp_1 + imperix_control_DW.Ad[4] *
-                 tmp_2) + (imperix_control_DW.Bd[0] * imperix_control_DW.u_prev
-      [0] + imperix_control_DW.u_prev[1] * imperix_control_DW.Bd[4]);
-    tmp_2 = (imperix_control_DW.Ad[1] * tmp_1 + imperix_control_DW.Ad[5] * tmp_2)
-      + (imperix_control_DW.u_prev[0] * imperix_control_DW.Bd[1] +
-         imperix_control_DW.u_prev[1] * imperix_control_DW.Bd[5]);
     for (i = 0; i < 4; i++) {
-      Linv[i] = (imperix_control_DW.Ad[i + 4] * tmp_2 + imperix_control_DW.Ad[i]
-                 * rtb_Sum13) - ie_ref[i];
-      for (idx = 0; idx < 4; idx++) {
-        nrows = idx << 2;
-        b_ibcol = i << 2;
-        A[idx + b_ibcol] = ((Linv_0[nrows + 1] * Linv_0[b_ibcol + 1] +
-                             Linv_0[nrows] * Linv_0[b_ibcol]) + Linv_0[nrows + 2]
-                            * Linv_0[b_ibcol + 2]) + Linv_0[nrows + 3] *
-          Linv_0[b_ibcol + 3];
-      }
+      jmax = i << 2;
+      Linv_0[jmax] = B[jmax];
+      Linv_0[jmax + 1] = B[jmax + 1];
+      Linv_0[jmax + 2] = B[jmax + 2];
+      Linv_0[jmax + 3] = B[jmax + 3];
     }
 
-    rtb_Sum13 = Linv[1];
-    rtb_MaxofElements = Linv[0];
-    ssq = Linv[2];
-    tmp_1 = Linv[3];
-    for (i = 0; i < 4; i++) {
-      idx = i << 2;
-      Linv[i] = (((imperix_control_DW.Bd[idx + 1] * 2.0 * rtb_Sum13 +
-                   imperix_control_DW.Bd[idx] * 2.0 * rtb_MaxofElements) +
-                  imperix_control_DW.Bd[idx + 2] * 2.0 * ssq) +
-                 imperix_control_DW.Bd[idx + 3] * 2.0 * tmp_1) /
-        imperix_control_DW.is_max2 + 2.0 * b[i] / imperix_control_DW.Vc_ref2 *
-        imperix_control_DW.lambda;
-    }
-
-    for (i = 0; i < 96; i++) {
-      tmp_0[i] = -imperix_control_DW.Aineq[i];
-    }
-
-    for (i = 0; i < 12; i++) {
-      bc_0[i] = -bc[i];
-      bc_0[i + 12] = lb[i];
-    }
-
-    imperix_control_qpkwik_a(Linv_0, A, Linv, tmp_0, bc_0, imperix_control_DW.iA,
-      ie_ref, lam, &i);
+    imperix_control_trisolve_j(A_0, Linv_0);
   } else {
-    imperix_contro_binary_expand_op(Linv_0, imperix_control_DW.Bd, ie_ref,
-      imperix_control_DW.Ad, &imperix_control_P.M2C, rtb_DataTypeConversion2,
-      rtb_Gain1_g, imperix_control_DW.u_prev, imperix_control_DW.is_max2,
-      imperix_control_DW.lambda, b, imperix_control_DW.Vc_ref2,
-      imperix_control_DW.Aineq, bc, lb, imperix_control_DW.iA, lam);
+    memcpy(&Linv_0[0], &imperix_control_DW.H[0], sizeof(real_T) << 4U);
   }
 
-  // '<S22>:1:53'
-  // '<S22>:1:55'
-  // '<S22>:1:59'
-  // '<S22>:1:60'
-  // '<S22>:1:61'
+  for (i = 0; i < 24; i++) {
+    iA1_0[i] = false;
+  }
+
+  // Gain: '<S42>/Gain4'
+  tmp_1 = 0.0;
+  tmp_2 = 0.0;
+  for (i = 0; i < 6; i++) {
+    // Sum: '<S42>/Sum3' incorporates:
+    //   Gain: '<S42>/Gain3'
+
+    ssq = 0.0;
+    for (idx = 0; idx < 5; idx++) {
+      ssq += imperix_control_P.M2C.pinvA[6 * idx + i] * rtb_Gain1_g[idx];
+    }
+
+    rtb_Sum13 = rtb_DataTypeConversion2[i] - ssq;
+
+    // End of Sum: '<S42>/Sum3'
+
+    // Gain: '<S42>/Gain4'
+    idx = i << 1;
+    tmp_1 += imperix_control_P.M2C.pinvN[idx] * rtb_Sum13;
+    tmp_2 += imperix_control_P.M2C.pinvN[idx + 1] * rtb_Sum13;
+  }
+
+  // MATLAB Function: '<S1>/LICCs control'
+  rtb_Sum13 = (imperix_control_DW.Ad[0] * tmp_1 + imperix_control_DW.Ad[4] *
+               tmp_2) + (imperix_control_DW.Bd[0] * imperix_control_DW.u_prev[0]
+    + imperix_control_DW.u_prev[1] * imperix_control_DW.Bd[4]);
+  tmp_2 = (imperix_control_DW.Ad[1] * tmp_1 + imperix_control_DW.Ad[5] * tmp_2)
+    + (imperix_control_DW.u_prev[0] * imperix_control_DW.Bd[1] +
+       imperix_control_DW.u_prev[1] * imperix_control_DW.Bd[5]);
+  for (i = 0; i < 4; i++) {
+    Linv_1[i] = (imperix_control_DW.Ad[i + 4] * tmp_2 + imperix_control_DW.Ad[i]
+                 * rtb_Sum13) - Linv[i];
+    for (idx = 0; idx < 4; idx++) {
+      jmax = idx << 2;
+      info = i << 2;
+      A_0[idx + info] = ((Linv_0[jmax + 1] * Linv_0[info + 1] + Linv_0[jmax] *
+                          Linv_0[info]) + Linv_0[jmax + 2] * Linv_0[info + 2]) +
+        Linv_0[jmax + 3] * Linv_0[info + 3];
+    }
+  }
+
+  rtb_Sum13 = Linv_1[1];
+  rtb_Gain1_c_0 = Linv_1[0];
+  rtb_Gain1_c_idx_0 = Linv_1[2];
+  ssq = Linv_1[3];
+  for (i = 0; i < 4; i++) {
+    idx = i << 2;
+    Linv_1[i] = (((imperix_control_DW.Bd[idx + 1] * 2.0 * rtb_Sum13 +
+                   imperix_control_DW.Bd[idx] * 2.0 * rtb_Gain1_c_0) +
+                  imperix_control_DW.Bd[idx + 2] * 2.0 * rtb_Gain1_c_idx_0) +
+                 imperix_control_DW.Bd[idx + 3] * 2.0 * ssq) /
+      imperix_control_DW.is_max2 + 2.0 * A[i] / imperix_control_DW.Vc_ref2 *
+      imperix_control_DW.lambda;
+  }
+
+  for (i = 0; i < 96; i++) {
+    tmp_0[i] = -imperix_control_DW.Aineq[i];
+  }
+
+  for (i = 0; i < 12; i++) {
+    bc_1[i] = -bc[i];
+    bc_1[i + 12] = lb[i];
+  }
+
+  imperix_control_qpkwik_a(Linv_0, A_0, Linv_1, tmp_0, bc_1, iA1_0,
+    imperix_control_DW.options.MaxIterations,
+    imperix_control_DW.options.ConstraintTolerance, Linv, lam, &i);
+
+  // '<S22>:1:56'
+  // '<S22>:1:58'
   // '<S22>:1:62'
   // '<S22>:1:63'
   // '<S22>:1:64'
+  // '<S22>:1:65'
   // '<S22>:1:66'
-  imperix_control_DW.u_prev.set_size(2);
-  imperix_control_DW.u_prev[0] = ie_ref[0];
-  imperix_control_DW.u_prev[1] = ie_ref[1];
+  // '<S22>:1:67'
+  // '<S22>:1:69'
+  rtb_VectorConcatenate[3] = Linv[0];
+  imperix_control_DW.u_prev[0] = Linv[0];
+  rtb_VectorConcatenate[4] = Linv[1];
+  imperix_control_DW.u_prev[1] = Linv[1];
 
-  // End of MATLAB Function: '<S1>/LICCs control'
-  // RateTransition generated from: '<S25>/Input format'
+  // Sum: '<S16>/Sum11' incorporates:
+  //   Gain: '<S16>/Gain'
+
+  for (i = 0; i < 6; i++) {
+    ssq = 0.0;
+    for (idx = 0; idx < 5; idx++) {
+      ssq += imperix_control_P.CCMPC.pinvT[6 * idx + i] *
+        rtb_VectorConcatenate[idx];
+    }
+
+    rtb_DataTypeConversion2[i] = ssq + rtb_MaxofElements;
+  }
+
+  // End of Sum: '<S16>/Sum11'
+  // MATLAB Function: '<S1>/Modulation index'
   // MATLAB Function 'Closed_loop_control/Modulation index': '<S24>:1'
   // '<S24>:1:4'
+  rtb_DataTypeConversion2[3] = -rtb_DataTypeConversion2[3];
+  rtb_DataTypeConversion2[4] = -rtb_DataTypeConversion2[4];
+  rtb_DataTypeConversion2[5] = -rtb_DataTypeConversion2[5];
+
   // '<S24>:1:8'
+  for (i = 0; i < 6; i++) {
+    rtb_Sum13 = rtb_DataTypeConversion2[i] / rtb_DataTypeConversion1[i];
+    if (!(rtb_Sum13 >= 0.0)) {
+      rtb_Sum13 = 0.0;
+    }
+
+    if (rtb_Sum13 <= 1.0) {
+      rtb_DataTypeConversion2[i] = rtb_Sum13;
+    } else {
+      rtb_DataTypeConversion2[i] = 1.0;
+    }
+  }
+
+  // End of MATLAB Function: '<S1>/Modulation index'
+
+  // RateTransition generated from: '<S25>/Input format'
   if (tmp) {
     imperix_control_DW.TmpRTBAtInputformatInport2_Buff = rtb_Saturation_gb;
 
@@ -7946,7 +8405,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // DataTypeConversion: '<S27>/Data Type Conversion1' incorporates:
   //   Constant: '<S1>/Constant4'
 
-  imperix_control_B.DataTypeConversion1_c = static_cast<real32_T>
+  imperix_control_B.DataTypeConversion1 = static_cast<real32_T>
     (imperix_control_P.Constant4_Value);
 
   // DataTypeConversion: '<S27>/Data Type Conversion2' incorporates:
@@ -7955,9 +8414,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   imperix_control_B.DataTypeConversion2 = static_cast<real32_T>
     (imperix_control_P.phase_Value);
 
-  // DataTypeConversion: '<S27>/Data Type Conversion3'
-  imperix_control_B.DataTypeConversion3 = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  // DataTypeConversion: '<S27>/Data Type Conversion3' incorporates:
+  //   DataTypeConversion: '<S1>/Cast To Double2'
+
+  imperix_control_B.DataTypeConversion3 = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S190>/generation'
   // S-Function (CB_PWM): '<S191>/PWM' incorporates:
@@ -7969,15 +8429,13 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     CbPwm_Deactivate((tPwmOutput) 8, 1);
   }
 
-  CbPwm_SetDutyCycle((tPwmOutput) 8, imperix_control_B.DataTypeConversion1_c, 1);
+  CbPwm_SetDutyCycle((tPwmOutput) 8, imperix_control_B.DataTypeConversion1, 1);
 
   // End of Outputs for SubSystem: '<S190>/generation'
 
-  // DataTypeConversion: '<S244>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
-
+  // DataTypeConversion: '<S244>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_n = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S244>/Data Type Conversion2' incorporates:
   //   Constant: '<S244>/phase'
@@ -7986,10 +8444,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_a);
 
   // DataTypeConversion: '<S244>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_o = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_o = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S248>/generation'
   // S-Function (CB_PWM): '<S249>/PWM' incorporates:
@@ -8006,10 +8463,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S248>/generation'
 
   // DataTypeConversion: '<S245>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S244>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_i = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S245>/Data Type Conversion2' incorporates:
   //   Constant: '<S245>/phase'
@@ -8018,10 +8475,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_p);
 
   // DataTypeConversion: '<S245>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_e = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_e = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S250>/generation'
   // S-Function (CB_PWM): '<S251>/PWM' incorporates:
@@ -8038,10 +8494,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S250>/generation'
 
   // DataTypeConversion: '<S246>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S244>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_nb = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S246>/Data Type Conversion2' incorporates:
   //   Constant: '<S246>/phase'
@@ -8050,10 +8506,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_m);
 
   // DataTypeConversion: '<S246>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_n = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_n = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S252>/generation'
   // S-Function (CB_PWM): '<S253>/PWM' incorporates:
@@ -8070,10 +8525,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S252>/generation'
 
   // DataTypeConversion: '<S247>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S244>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_k = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S247>/Data Type Conversion2' incorporates:
   //   Constant: '<S247>/phase'
@@ -8082,10 +8537,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_n);
 
   // DataTypeConversion: '<S247>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_p = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_p = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S254>/generation'
   // S-Function (CB_PWM): '<S255>/PWM' incorporates:
@@ -8130,17 +8584,15 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   if (tmp) {
     for (i = 0; i < 6; i++) {
       // Math: '<S36>/Square'
-      rtb_Gain3 = DataTypeConversion1[i];
+      rtb_Gain3 = rtb_DataTypeConversion1[i];
       imperix_control_DW.TmpRTBAtGainOutport1_Buffer[i] = rtb_Gain3 * rtb_Gain3 *
         ssq;
     }
   }
 
-  // DataTypeConversion: '<S440>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
-
+  // DataTypeConversion: '<S440>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_e = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S440>/Data Type Conversion2' incorporates:
   //   Constant: '<S440>/phase'
@@ -8149,10 +8601,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_c);
 
   // DataTypeConversion: '<S440>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_k = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_k = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S444>/generation'
   // S-Function (CB_PWM): '<S445>/PWM' incorporates:
@@ -8169,10 +8620,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S444>/generation'
 
   // DataTypeConversion: '<S441>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S440>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_ii = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S441>/Data Type Conversion2' incorporates:
   //   Constant: '<S441>/phase'
@@ -8181,10 +8632,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_cq);
 
   // DataTypeConversion: '<S441>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_a = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_a = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S446>/generation'
   // S-Function (CB_PWM): '<S447>/PWM' incorporates:
@@ -8201,10 +8651,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S446>/generation'
 
   // DataTypeConversion: '<S442>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S440>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_d = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S442>/Data Type Conversion2' incorporates:
   //   Constant: '<S442>/phase'
@@ -8213,10 +8663,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_a4);
 
   // DataTypeConversion: '<S442>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_na = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_na = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S448>/generation'
   // S-Function (CB_PWM): '<S449>/PWM' incorporates:
@@ -8233,10 +8682,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S448>/generation'
 
   // DataTypeConversion: '<S443>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S440>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_h = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S443>/Data Type Conversion2' incorporates:
   //   Constant: '<S443>/phase'
@@ -8245,10 +8694,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_n4);
 
   // DataTypeConversion: '<S443>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_b = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_b = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S450>/generation'
   // S-Function (CB_PWM): '<S451>/PWM' incorporates:
@@ -8264,14 +8712,11 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S450>/generation'
 
-  // Gain: '<S39>/Gain1' incorporates:
-  //   Constant: '<S1>/Constant3'
-
-  rtb_Gain3 = imperix_control_P.Gain1_Gain_p0 *
-    imperix_control_P.Constant3_Value[3];
+  // Gain: '<S39>/Gain1'
+  rtb_Gain3 = imperix_control_P.Gain1_Gain_p0 * rtb_DataTypeConversion2[3];
 
   // DataTypeConversion: '<S452>/Data Type Conversion1'
-  imperix_control_B.DataTypeConversion1_cb = static_cast<real32_T>(rtb_Gain3);
+  imperix_control_B.DataTypeConversion1_c = static_cast<real32_T>(rtb_Gain3);
 
   // DataTypeConversion: '<S452>/Data Type Conversion2' incorporates:
   //   Constant: '<S452>/phase'
@@ -8280,10 +8725,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_c0);
 
   // DataTypeConversion: '<S452>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_aq = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_aq = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S456>/generation'
   // S-Function (CB_PWM): '<S457>/PWM' incorporates:
@@ -8295,7 +8739,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     CbPwm_Deactivate((tPwmOutput) 4, 0);
   }
 
-  CbPwm_SetDutyCycle((tPwmOutput) 4, imperix_control_B.DataTypeConversion1_cb, 0);
+  CbPwm_SetDutyCycle((tPwmOutput) 4, imperix_control_B.DataTypeConversion1_c, 0);
 
   // End of Outputs for SubSystem: '<S456>/generation'
 
@@ -8311,10 +8755,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_i);
 
   // DataTypeConversion: '<S453>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_pq = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_pq = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S458>/generation'
   // S-Function (CB_PWM): '<S459>/PWM' incorporates:
@@ -8342,10 +8785,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_md);
 
   // DataTypeConversion: '<S454>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_g = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_g = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S460>/generation'
   // S-Function (CB_PWM): '<S461>/PWM' incorporates:
@@ -8373,10 +8815,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_ab);
 
   // DataTypeConversion: '<S455>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_nh = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_nh = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S462>/generation'
   // S-Function (CB_PWM): '<S463>/PWM' incorporates:
@@ -8392,11 +8833,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S462>/generation'
 
-  // Gain: '<S40>/Gain3' incorporates:
-  //   Constant: '<S1>/Constant3'
-
-  rtb_Gain3 = imperix_control_P.Gain3_Gain_l *
-    imperix_control_P.Constant3_Value[4];
+  // Gain: '<S40>/Gain3'
+  rtb_Gain3 = imperix_control_P.Gain3_Gain_l * rtb_DataTypeConversion2[4];
 
   // DataTypeConversion: '<S464>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_eq = static_cast<real32_T>(rtb_Gain3);
@@ -8408,10 +8846,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_j);
 
   // DataTypeConversion: '<S464>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_h = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_h = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S468>/generation'
   // S-Function (CB_PWM): '<S469>/PWM' incorporates:
@@ -8439,10 +8876,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_f);
 
   // DataTypeConversion: '<S465>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_e3 = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_e3 = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S470>/generation'
   // S-Function (CB_PWM): '<S471>/PWM' incorporates:
@@ -8470,10 +8906,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_o);
 
   // DataTypeConversion: '<S466>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_j = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_j = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S472>/generation'
   // S-Function (CB_PWM): '<S473>/PWM' incorporates:
@@ -8501,10 +8936,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_nf);
 
   // DataTypeConversion: '<S467>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_f = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_f = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S474>/generation'
   // S-Function (CB_PWM): '<S475>/PWM' incorporates:
@@ -8520,11 +8954,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S474>/generation'
 
-  // Gain: '<S41>/Gain3' incorporates:
-  //   Constant: '<S1>/Constant3'
-
-  rtb_Gain3 = imperix_control_P.Gain3_Gain_k *
-    imperix_control_P.Constant3_Value[5];
+  // Gain: '<S41>/Gain3'
+  rtb_Gain3 = imperix_control_P.Gain3_Gain_k * rtb_DataTypeConversion2[5];
 
   // DataTypeConversion: '<S476>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_hk = static_cast<real32_T>(rtb_Gain3);
@@ -8536,10 +8967,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_b);
 
   // DataTypeConversion: '<S476>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_a1 = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_a1 = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S480>/generation'
   // S-Function (CB_PWM): '<S481>/PWM' incorporates:
@@ -8568,10 +8998,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_jt);
 
   // DataTypeConversion: '<S477>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_i = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_i = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S482>/generation'
   // S-Function (CB_PWM): '<S483>/PWM' incorporates:
@@ -8600,10 +9029,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_o0);
 
   // DataTypeConversion: '<S478>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_l = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_l = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S484>/generation'
   // S-Function (CB_PWM): '<S485>/PWM' incorporates:
@@ -8632,10 +9060,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_jo);
 
   // DataTypeConversion: '<S479>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_o4 = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_o4 = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S486>/generation'
   // S-Function (CB_PWM): '<S487>/PWM' incorporates:
@@ -8652,11 +9079,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S486>/generation'
 
-  // DataTypeConversion: '<S488>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
-
+  // DataTypeConversion: '<S488>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_iz = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S488>/Data Type Conversion2' incorporates:
   //   Constant: '<S488>/phase'
@@ -8665,10 +9090,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_jb);
 
   // DataTypeConversion: '<S488>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_ax = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_ax = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S492>/generation'
   // S-Function (CB_PWM): '<S493>/PWM' incorporates:
@@ -8685,10 +9109,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S492>/generation'
 
   // DataTypeConversion: '<S489>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S488>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_b = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S489>/Data Type Conversion2' incorporates:
   //   Constant: '<S489>/phase'
@@ -8697,10 +9121,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_l);
 
   // DataTypeConversion: '<S489>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_p3 = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_p3 = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S494>/generation'
   // S-Function (CB_PWM): '<S495>/PWM' incorporates:
@@ -8717,10 +9140,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S494>/generation'
 
   // DataTypeConversion: '<S490>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S488>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_kz = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S490>/Data Type Conversion2' incorporates:
   //   Constant: '<S490>/phase'
@@ -8729,10 +9152,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_lk);
 
   // DataTypeConversion: '<S490>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_c = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_c = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S496>/generation'
   // S-Function (CB_PWM): '<S497>/PWM' incorporates:
@@ -8749,10 +9171,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S496>/generation'
 
   // DataTypeConversion: '<S491>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant3'
+  //   DataTypeConversion: '<S488>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_h3 = static_cast<real32_T>
-    (imperix_control_P.Constant3_Value[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S491>/Data Type Conversion2' incorporates:
   //   Constant: '<S491>/phase'
@@ -8761,10 +9183,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     (imperix_control_P.phase_Value_nl);
 
   // DataTypeConversion: '<S491>/Data Type Conversion3' incorporates:
-  //   DataTypeConversion: '<S27>/Data Type Conversion3'
+  //   DataTypeConversion: '<S1>/Cast To Double2'
 
-  imperix_control_B.DataTypeConversion3_bc = static_cast<real32_T>
-    (rtb_CastToDouble2);
+  imperix_control_B.DataTypeConversion3_bc = imperix_control_B.SFunction_kx;
 
   // Outputs for Atomic SubSystem: '<S498>/generation'
   // S-Function (CB_PWM): '<S499>/PWM' incorporates:
@@ -8784,7 +9205,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   if (tmp) {
     for (i = 0; i < 6; i++) {
       imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[i] =
-        DataTypeConversion1[i];
+        rtb_DataTypeConversion1[i];
     }
 
     // RateTransition generated from: '<S1>/Energy balance'
@@ -8796,20 +9217,19 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     // End of RateTransition generated from: '<S1>/Energy balance'
 
     // SignalConversion generated from: '<S256>/Gain3'
-    rtb_Switch_h_0[0] = rtb_Switch_f[0];
-    rtb_Switch_h_0[1] = rtb_Switch_f[1];
-    rtb_Switch_h_0[2] = 0.0;
+    rtb_Switch[0] = rtb_Switch_f[0];
+    rtb_Switch[1] = rtb_Switch_f[1];
+    rtb_Switch[2] = 0.0;
 
     // Gain: '<S256>/Gain3'
     tmp_1 = 0.0;
     tmp_2 = 0.0;
-    rtb_TmpSignalConversionAtGain_0 = 0.0;
+    rtb_MaxofElements = 0.0;
     for (i = 0; i < 3; i++) {
-      ssq = rtb_Switch_h_0[i];
+      ssq = rtb_Switch[i];
       tmp_1 += imperix_control_P.Gain3_Gain_d[3 * i] * ssq;
       tmp_2 += imperix_control_P.Gain3_Gain_d[3 * i + 1] * ssq;
-      rtb_TmpSignalConversionAtGain_0 += imperix_control_P.Gain3_Gain_d[3 * i +
-        2] * ssq;
+      rtb_MaxofElements += imperix_control_P.Gain3_Gain_d[3 * i + 2] * ssq;
     }
 
     // End of Gain: '<S256>/Gain3'
@@ -8826,7 +9246,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[3] =
       imperix_control_P.Gain_Gain * tmp_2;
     imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[4] =
-      imperix_control_P.Gain_Gain * rtb_TmpSignalConversionAtGain_0;
+      imperix_control_P.Gain_Gain * rtb_MaxofElements;
 
     // RateTransition generated from: '<S1>/Energy balance'
     imperix_control_DW.TmpRTBAtEnergybalanceInport5_Bu = rtb_Sum3;
@@ -8862,7 +9282,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   RelationalOperator: '<S162>/fix for DT propagation issue1'
 
   if (Mean_AccVal > imperix_control_P.Clamping_zero_Value) {
-    tmp_4 = imperix_control_P.Constant3_Value_i;
+    tmp_4 = imperix_control_P.Constant3_Value;
   } else {
     tmp_4 = imperix_control_P.Constant4_Value_j;
   }
@@ -8972,11 +9392,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 // Model step function for TID1
 void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
 {
-  coder::array<real_T, 1U> ie_ref_temp;
-  coder::array<real_T, 1U> vo_ref_temp;
-  real_T E_data[324];
+  real_T E[324];
   real_T E_tmp[324];
-  real_T d_b_data[324];
+  real_T c_b[324];
   real_T B[108];
   real_T tmp[108];
   real_T b_B[54];
@@ -8984,45 +9402,44 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
   real_T Ad[36];
   real_T Adt[36];
   real_T Adt_0[36];
-  real_T tmp_1[36];
+  real_T tmp_3[36];
   real_T Ec_pred[18];
-  real_T IB_data[18];
-  real_T Kt[18];
-  real_T VB_data[18];
-  real_T c_b_data[15];
-  real_T y_data[15];
+  real_T IB[18];
+  real_T VB[18];
+  real_T is_temp[18];
+  real_T tmp_2[15];
   real_T rtb_obs[14];
-  real_T y_tmp[12];
+  real_T VB_tmp[12];
   real_T A[9];
   real_T cos_vals[8];
   real_T Ad_0[6];
+  real_T ie_ref_temp[6];
   real_T rtb_VectorConcatenate5_0[6];
   real_T xt_est[6];
-  real_T IX[4];
-  real_T VX[4];
-  real_T y_tmp_0[4];
-  real_T rtb_Gain4_c[3];
+  real_T VB_tmp_0[4];
+  real_T tmp_1[4];
   real_T rtb_VectorConcatenate4[3];
   real_T rtb_VectorConcatenate5[3];
-  real_T tmp_2[3];
-  real_T a21 = 0.0;
+  real_T tmp_4[3];
+  real_T vo_ref_temp[3];
+  real_T VB_tmp_1;
+  real_T VB_tmp_2;
+  real_T a21;
   real_T angles;
-  real_T b_b;
   real_T cos_vals_0;
-  real_T d_c = 0.0;
   real_T maxval;
   real_T rtb_Constant5;
-  real_T y_tmp_1;
-  real_T y_tmp_2;
-  int32_T B_tmp;
-  int32_T Kt_tmp;
-  int32_T h_k;
+  int32_T E_tmp_0;
+  int32_T IB_tmp;
+  int32_T flag_z;
   int32_T i;
   int32_T ibcol;
-  int32_T r2;
-  int32_T r3;
-  real32_T tmp_3[14];
-  real32_T tmp_4[3];
+  int32_T r1;
+  int32_T rtemp;
+  real32_T tmp_5[14];
+  real32_T tmp_6[3];
+  boolean_T x[36];
+  boolean_T b_x[6];
   boolean_T p;
 
   // Constant: '<S1>/Constant5'
@@ -9033,13 +9450,11 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
   //   RateTransition generated from: '<S36>/Gain'
   //
   // MATLAB Function 'Closed_loop_control/Energy balance': '<S18>:1'
-  if (!imperix_control_DW.p_not_empty) {
+  if (!imperix_control_DW.Ts_not_empty) {
     // '<S18>:1:5'
-    // '<S18>:1:6'
-    imperix_control_DW.p_not_empty = true;
-
-    // '<S18>:1:7'
     // '<S18>:1:8'
+    imperix_control_DW.Ts_not_empty = true;
+
     // '<S18>:1:9'
     // '<S18>:1:10'
     for (i = 0; i < 6; i++) {
@@ -9056,13 +9471,6 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
 
     // '<S18>:1:13'
     imperix_control_DW.Ts = imperix_control_P.CEMPC.Ts;
-
-    // '<S18>:1:14'
-    // '<S18>:1:15'
-    imperix_control_DW.n = imperix_control_P.M2C.n;
-
-    // '<S18>:1:16'
-    imperix_control_DW.Np = imperix_control_P.CEMPC.Np;
 
     // '<S18>:1:17'
     // '<S18>:1:18'
@@ -9083,11 +9491,11 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
     imperix_control_DW.Nl = imperix_control_P.CEMPC.Nl;
 
     // '<S18>:1:22'
-    imperix_control_DW.is_max_p = imperix_control_P.M2C.is_max;
+    imperix_control_DW.is_max_h = imperix_control_P.M2C.is_max;
 
     // '<S18>:1:23'
-    imperix_control_DW.is_max2_b = imperix_control_DW.is_max_p *
-      imperix_control_DW.is_max_p;
+    imperix_control_DW.is_max2_o = imperix_control_DW.is_max_h *
+      imperix_control_DW.is_max_h;
 
     // '<S18>:1:24'
     imperix_control_DW.vo_max2 = imperix_control_P.M2C.vo_max *
@@ -9123,545 +9531,504 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
     imperix_control_DW.Ec_dev = imperix_control_P.M2C.Ec_dev;
 
     // '<S18>:1:37'
+    imperix_control_DW.options_z.UseHessianAsInput = true;
+    imperix_control_DW.options_z.IntegrityChecks = true;
+    imperix_control_DW.options_z.MaxIterations = 20;
+    imperix_control_DW.options_z.ConstraintTolerance = 0.0001;
+
     // '<S18>:1:40'
+    imperix_control_DW.options_o.UseHessianAsInput = true;
+    imperix_control_DW.options_o.IntegrityChecks = true;
+    imperix_control_DW.options_o.MaxIterations = 10;
+    imperix_control_DW.options_o.ConstraintTolerance = 0.0001;
   }
 
-  if (imperix_control_DW.Np > 1.0) {
-    // '<S18>:1:53'
-    // '<S18>:1:58'
-    // '<S18>:1:59'
-    // '<S18>:1:64'
-    b_b = imperix_control_DW.TmpRTBAtEnergybalanceInport5_Bu *
-      imperix_control_DW.Ts;
+  // '<S18>:1:53'
+  // '<S18>:1:54'
+  // '<S18>:1:62'
+  // '<S18>:1:63'
+  // '<S18>:1:67'
+  a21 = imperix_control_DW.TmpRTBAtEnergybalanceInport5_Bu *
+    imperix_control_DW.Ts;
 
-    // '<S18>:1:65'
-    // '<S18>:1:66'
-    // '<S18>:1:68'
-    // '<S18>:1:73'
-    // '<S18>:1:74'
-    // '<S18>:1:79'
-    // '<S18>:1:80'
-    // '<S18>:1:83'
-    VX[0] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[0];
-    IX[0] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[0];
-    VX[1] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[1];
-    IX[1] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[1];
-    cos_vals_0 = cos(b_b);
-    angles = sin(b_b);
-    cos_vals[0] = cos_vals_0;
-    cos_vals[1] = -angles;
-    cos_vals[2] = angles;
-    cos_vals[3] = cos_vals_0;
-    VX[2] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[0];
-    IX[2] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[0];
-    VX[3] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[1];
-    IX[3] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[1];
-    angles = 2.0 * b_b;
-    cos_vals_0 = cos(angles);
-    angles = sin(angles);
-    cos_vals[4] = cos_vals_0;
-    cos_vals[5] = -angles;
-    cos_vals[6] = angles;
-    cos_vals[7] = cos_vals_0;
-    for (i = 0; i < 3; i++) {
-      r2 = i << 1;
-      b_b = imperix_control_DW.Tabc2ab[r2 + 1];
-      cos_vals_0 = imperix_control_DW.Tabc2ab[r2];
-      for (ibcol = 0; ibcol < 4; ibcol++) {
-        r2 = ibcol << 1;
-        y_tmp[ibcol + (i << 2)] = cos_vals[r2 + 1] * b_b + cos_vals[r2] *
-          cos_vals_0;
-      }
-    }
-
-    cos_vals_0 = 0.0;
-    angles = 0.0;
-    y_tmp_1 = 0.0;
-    y_tmp_2 = 0.0;
-    for (i = 0; i < 3; i++) {
-      b_b = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[i + 2];
-      r2 = i << 2;
-      cos_vals_0 += y_tmp[r2] * b_b;
-      angles += y_tmp[r2 + 1] * b_b;
-      y_tmp_1 += y_tmp[r2 + 2] * b_b;
-      y_tmp_2 += y_tmp[r2 + 3] * b_b;
-    }
-
-    y_tmp_0[3] = y_tmp_2;
-    y_tmp_0[2] = y_tmp_1;
-    y_tmp_0[1] = angles;
-    y_tmp_0[0] = cos_vals_0;
-    for (i = 0; i < 2; i++) {
-      b_b = 0.0;
-      cos_vals_0 = 0.0;
-      angles = 0.0;
-      for (ibcol = 0; ibcol < 2; ibcol++) {
-        y_tmp_1 = y_tmp_0[(i << 1) + ibcol];
-        b_b += imperix_control_DW.Tab2abc[3 * ibcol] * y_tmp_1;
-        cos_vals_0 += imperix_control_DW.Tab2abc[3 * ibcol + 1] * y_tmp_1;
-        angles += imperix_control_DW.Tab2abc[3 * ibcol + 2] * y_tmp_1;
-      }
-
-      rtb_VectorConcatenate5_0[3 * i + 2] = angles;
-      rtb_VectorConcatenate5_0[3 * i + 1] = cos_vals_0;
-      rtb_VectorConcatenate5_0[3 * i] = b_b;
-    }
-
-    r3 = 3;
-    for (i = 0; i < 5; i++) {
-      y_data[i] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[i];
-    }
-
-    for (i = 0; i < 2; i++) {
-      r2 = i << 1;
-      ibcol = (i + 1) * 5;
-      y_data[ibcol] = VX[r2];
-      y_data[1 + ibcol] = VX[r2 + 1];
-      y_data[2 + ibcol] = rtb_VectorConcatenate5_0[3 * i];
-      y_data[3 + ibcol] = rtb_VectorConcatenate5_0[3 * i + 1];
-      y_data[4 + ibcol] = rtb_VectorConcatenate5_0[3 * i + 2];
-    }
-
-    // '<S18>:1:84'
-    cos_vals_0 = 0.0;
-    angles = 0.0;
-    y_tmp_1 = 0.0;
-    y_tmp_2 = 0.0;
-    for (i = 0; i < 3; i++) {
-      b_b = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[i + 2];
-      r2 = i << 2;
-      cos_vals_0 += y_tmp[r2] * b_b;
-      angles += y_tmp[r2 + 1] * b_b;
-      y_tmp_1 += y_tmp[r2 + 2] * b_b;
-      y_tmp_2 += y_tmp[r2 + 3] * b_b;
-    }
-
-    y_tmp_0[3] = y_tmp_2;
-    y_tmp_0[2] = y_tmp_1;
-    y_tmp_0[1] = angles;
-    y_tmp_0[0] = cos_vals_0;
-    for (i = 0; i < 2; i++) {
-      b_b = 0.0;
-      cos_vals_0 = 0.0;
-      angles = 0.0;
-      for (ibcol = 0; ibcol < 2; ibcol++) {
-        y_tmp_1 = y_tmp_0[(i << 1) + ibcol];
-        b_b += imperix_control_DW.Tab2abc[3 * ibcol] * y_tmp_1;
-        cos_vals_0 += imperix_control_DW.Tab2abc[3 * ibcol + 1] * y_tmp_1;
-        angles += imperix_control_DW.Tab2abc[3 * ibcol + 2] * y_tmp_1;
-      }
-
-      rtb_VectorConcatenate5_0[3 * i + 2] = angles;
-      rtb_VectorConcatenate5_0[3 * i + 1] = cos_vals_0;
-      rtb_VectorConcatenate5_0[3 * i] = b_b;
-    }
-
-    for (i = 0; i < 5; i++) {
-      c_b_data[i] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[i];
-    }
-
-    for (i = 0; i < 2; i++) {
-      r2 = i << 1;
-      ibcol = (i + 1) * 5;
-      c_b_data[ibcol] = IX[r2];
-      c_b_data[1 + ibcol] = IX[r2 + 1];
-      c_b_data[2 + ibcol] = rtb_VectorConcatenate5_0[3 * i];
-      c_b_data[3 + ibcol] = rtb_VectorConcatenate5_0[3 * i + 1];
-      c_b_data[4 + ibcol] = rtb_VectorConcatenate5_0[3 * i + 2];
-    }
-  } else {
-    // '<S18>:1:86'
-    r3 = 1;
-
-    // '<S18>:1:87'
-    for (i = 0; i < 5; i++) {
-      y_data[i] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[i];
-      c_b_data[i] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[i];
-    }
-  }
-
+  // '<S18>:1:68'
+  // '<S18>:1:69'
+  // '<S18>:1:70'
+  // '<S18>:1:73'
+  // '<S18>:1:74'
+  // '<S18>:1:79'
+  // '<S18>:1:80'
+  // '<S18>:1:83'
+  // '<S18>:1:84'
   // '<S18>:1:90'
-  for (ibcol = 0; ibcol < r3; ibcol++) {
-    for (h_k = 0; h_k < 6; h_k++) {
-      b_b = 0.0;
-      for (B_tmp = 0; B_tmp < 5; B_tmp++) {
-        b_b += imperix_control_DW.A[5 * h_k + B_tmp] * y_data[5 * ibcol + B_tmp];
-      }
+  cos_vals_0 = cos(a21);
+  angles = sin(a21);
+  cos_vals[0] = cos_vals_0;
+  cos_vals[1] = -angles;
+  cos_vals[2] = angles;
+  cos_vals[3] = cos_vals_0;
+  angles = 2.0 * a21;
+  cos_vals_0 = cos(angles);
+  angles = sin(angles);
+  cos_vals[4] = cos_vals_0;
+  cos_vals[5] = -angles;
+  cos_vals[6] = angles;
+  cos_vals[7] = cos_vals_0;
+  for (flag_z = 0; flag_z < 3; flag_z++) {
+    rtemp = flag_z << 1;
+    a21 = imperix_control_DW.Tabc2ab[rtemp + 1];
+    cos_vals_0 = imperix_control_DW.Tabc2ab[rtemp];
+    for (ibcol = 0; ibcol < 4; ibcol++) {
+      rtemp = ibcol << 1;
+      VB_tmp[ibcol + (flag_z << 2)] = cos_vals[rtemp + 1] * a21 + cos_vals[rtemp]
+        * cos_vals_0;
+    }
+  }
 
-      i = 6 * ibcol + h_k;
-      VB_data[i] = b_b;
-      IB_data[i] = 0.0;
+  imperix_control_repmat(&imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[0],
+    tmp_1);
+  cos_vals_0 = 0.0;
+  angles = 0.0;
+  VB_tmp_1 = 0.0;
+  VB_tmp_2 = 0.0;
+  for (flag_z = 0; flag_z < 3; flag_z++) {
+    a21 = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[flag_z + 2];
+    rtemp = flag_z << 2;
+    cos_vals_0 += VB_tmp[rtemp] * a21;
+    angles += VB_tmp[rtemp + 1] * a21;
+    VB_tmp_1 += VB_tmp[rtemp + 2] * a21;
+    VB_tmp_2 += VB_tmp[rtemp + 3] * a21;
+  }
+
+  VB_tmp_0[3] = VB_tmp_2;
+  VB_tmp_0[2] = VB_tmp_1;
+  VB_tmp_0[1] = angles;
+  VB_tmp_0[0] = cos_vals_0;
+  for (flag_z = 0; flag_z < 2; flag_z++) {
+    a21 = 0.0;
+    cos_vals_0 = 0.0;
+    angles = 0.0;
+    for (ibcol = 0; ibcol < 2; ibcol++) {
+      VB_tmp_1 = VB_tmp_0[(flag_z << 1) + ibcol];
+      a21 += imperix_control_DW.Tab2abc[3 * ibcol] * VB_tmp_1;
+      cos_vals_0 += imperix_control_DW.Tab2abc[3 * ibcol + 1] * VB_tmp_1;
+      angles += imperix_control_DW.Tab2abc[3 * ibcol + 2] * VB_tmp_1;
     }
 
-    for (h_k = 0; h_k < 5; h_k++) {
-      b_b = c_b_data[5 * ibcol + h_k];
-      for (B_tmp = 0; B_tmp < 6; B_tmp++) {
-        i = 6 * ibcol + B_tmp;
-        IB_data[i] += imperix_control_DW.pinvA[6 * h_k + B_tmp] * b_b;
-      }
-    }
+    rtb_VectorConcatenate5_0[3 * flag_z + 2] = angles;
+    rtb_VectorConcatenate5_0[3 * flag_z + 1] = cos_vals_0;
+    rtb_VectorConcatenate5_0[3 * flag_z] = a21;
+  }
+
+  for (flag_z = 0; flag_z < 5; flag_z++) {
+    tmp_2[flag_z] = imperix_control_DW.TmpRTBAtEnergybalanceInport3_Bu[flag_z];
+  }
+
+  for (flag_z = 0; flag_z < 2; flag_z++) {
+    ibcol = flag_z << 1;
+    i = (flag_z + 1) * 5;
+    tmp_2[i] = tmp_1[ibcol];
+    tmp_2[i + 1] = tmp_1[ibcol + 1];
+    tmp_2[i + 2] = rtb_VectorConcatenate5_0[3 * flag_z];
+    tmp_2[i + 3] = rtb_VectorConcatenate5_0[3 * flag_z + 1];
+    tmp_2[i + 4] = rtb_VectorConcatenate5_0[3 * flag_z + 2];
   }
 
   // '<S18>:1:91'
+  imperix_control_repmat(&imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[0],
+    tmp_1);
+  VB_tmp_0[0] = 0.0;
+  VB_tmp_0[1] = 0.0;
+  VB_tmp_0[2] = 0.0;
+  VB_tmp_0[3] = 0.0;
+  for (flag_z = 0; flag_z < 3; flag_z++) {
+    for (ibcol = 0; ibcol < 6; ibcol++) {
+      a21 = 0.0;
+      for (i = 0; i < 5; i++) {
+        a21 += imperix_control_DW.A[5 * ibcol + i] * tmp_2[5 * flag_z + i];
+      }
+
+      VB[ibcol + 6 * flag_z] = a21;
+    }
+
+    a21 = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[flag_z + 2];
+    rtemp = flag_z << 2;
+    VB_tmp_0[0] += VB_tmp[rtemp] * a21;
+    VB_tmp_0[1] += VB_tmp[rtemp + 1] * a21;
+    VB_tmp_0[2] += VB_tmp[rtemp + 2] * a21;
+    VB_tmp_0[3] += VB_tmp[rtemp + 3] * a21;
+  }
+
+  for (flag_z = 0; flag_z < 2; flag_z++) {
+    a21 = 0.0;
+    cos_vals_0 = 0.0;
+    angles = 0.0;
+    for (ibcol = 0; ibcol < 2; ibcol++) {
+      VB_tmp_1 = VB_tmp_0[(flag_z << 1) + ibcol];
+      a21 += imperix_control_DW.Tab2abc[3 * ibcol] * VB_tmp_1;
+      cos_vals_0 += imperix_control_DW.Tab2abc[3 * ibcol + 1] * VB_tmp_1;
+      angles += imperix_control_DW.Tab2abc[3 * ibcol + 2] * VB_tmp_1;
+    }
+
+    rtb_VectorConcatenate5_0[3 * flag_z + 2] = angles;
+    rtb_VectorConcatenate5_0[3 * flag_z + 1] = cos_vals_0;
+    rtb_VectorConcatenate5_0[3 * flag_z] = a21;
+  }
+
+  for (flag_z = 0; flag_z < 5; flag_z++) {
+    tmp_2[flag_z] = imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[flag_z];
+  }
+
+  for (flag_z = 0; flag_z < 2; flag_z++) {
+    ibcol = flag_z << 1;
+    i = (flag_z + 1) * 5;
+    tmp_2[i] = tmp_1[ibcol];
+    tmp_2[i + 1] = tmp_1[ibcol + 1];
+    tmp_2[i + 2] = rtb_VectorConcatenate5_0[3 * flag_z];
+    tmp_2[i + 3] = rtb_VectorConcatenate5_0[3 * flag_z + 1];
+    tmp_2[i + 4] = rtb_VectorConcatenate5_0[3 * flag_z + 2];
+  }
+
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    IB[flag_z] = 0.0;
+    IB[flag_z + 6] = 0.0;
+    IB[flag_z + 12] = 0.0;
+  }
+
+  // '<S18>:1:94'
   // '<S18>:1:100'
-  r2 = static_cast<int32_T>(imperix_control_DW.Np);
-  vo_ref_temp.set_size(static_cast<int32_T>(imperix_control_DW.Np));
-  for (i = 0; i < r2; i++) {
+  for (i = 0; i < 3; i++) {
+    for (flag_z = 0; flag_z < 5; flag_z++) {
+      a21 = tmp_2[5 * i + flag_z];
+      for (ibcol = 0; ibcol < 6; ibcol++) {
+        rtemp = 6 * i + ibcol;
+        IB[rtemp] += imperix_control_DW.pinvA[6 * flag_z + ibcol] * a21;
+      }
+    }
+
     vo_ref_temp[i] = 0.0;
   }
 
   // '<S18>:1:101'
-  r2 = static_cast<int32_T>(imperix_control_DW.n * imperix_control_DW.Np);
-  ie_ref_temp.set_size(r2);
-  for (i = 0; i < r2; i++) {
+  for (i = 0; i < 6; i++) {
     ie_ref_temp[i] = 0.0;
   }
 
   // '<S18>:1:102'
   // '<S18>:1:103'
   // '<S18>:1:105'
-  r2 = static_cast<int32_T>(imperix_control_DW.Nl);
+  rtemp = static_cast<int32_T>(imperix_control_DW.Nl);
 
   // '<S18>:1:107'
   if (static_cast<int32_T>(imperix_control_DW.Nl) - 1 >= 0) {
-    a21 = imperix_control_DW.Ec_dev * imperix_control_DW.Ec_dev;
-    maxval = a21 * imperix_control_DW.Ec_ref2;
-    d_c = a21;
-    Ad_0[0] = 0.0;
-    Ad_0[1] = 0.0;
-    Ad_0[2] = 0.0;
-    Ad_0[3] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[3];
-    Ad_0[4] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[4];
-    Ad_0[5] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[5];
-    for (i = 0; i < 324; i++) {
-      E_tmp[i] = imperix_control_DW.Ts * imperix_control_DW.K[i];
+    maxval = imperix_control_DW.Ec_dev * imperix_control_DW.Ec_dev *
+      imperix_control_DW.Ec_ref2;
+    xt_est[0] = 0.0;
+    xt_est[1] = 0.0;
+    xt_est[2] = 0.0;
+    xt_est[3] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[3];
+    xt_est[4] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[4];
+    xt_est[5] = -imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[5];
+    for (flag_z = 0; flag_z < 324; flag_z++) {
+      E_tmp[flag_z] = imperix_control_DW.Ts * imperix_control_DW.K[flag_z];
     }
 
-    for (i = 0; i < 18; i++) {
-      Ad[i] = imperix_control_DW.is_max_p - IB_data[i];
-      Ad[i + 18] = -(-imperix_control_DW.is_max_p - IB_data[i]);
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      a21 = IB[flag_z];
+      Ad[flag_z] = imperix_control_DW.is_max_h - a21;
+      Ad[flag_z + 18] = -(-imperix_control_DW.is_max_h - a21);
     }
   }
 
-  for (r3 = 0; r3 < r2; r3++) {
-    // '<S18>:1:112'
-    // '<S18>:1:113'
-    if (vo_ref_temp.size(0) == 3) {
-      for (i = 0; i < 3; i++) {
-        for (ibcol = 0; ibcol < 6; ibcol++) {
-          h_k = 6 * i + ibcol;
-          Ec_pred[h_k] = VB_data[h_k] + vo_ref_temp[i];
+  for (r1 = 0; r1 < rtemp; r1++) {
+    // '<S18>:1:111'
+    a21 = vo_ref_temp[1];
+    cos_vals_0 = vo_ref_temp[0];
+    angles = vo_ref_temp[2];
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      is_temp[flag_z] = ((imperix_control_DW.ONE[flag_z + 18] * a21 +
+                          imperix_control_DW.ONE[flag_z] * cos_vals_0) +
+                         imperix_control_DW.ONE[flag_z + 36] * angles) +
+        VB[flag_z];
+    }
+
+    // '<S18>:1:114'
+    memset(&c_b[0], 0, 324U * sizeof(real_T));
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      c_b[flag_z + 18 * flag_z] = is_temp[flag_z];
+    }
+
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      memset(&E[flag_z * 18], 0, 18U * sizeof(real_T));
+      for (ibcol = 0; ibcol < 18; ibcol++) {
+        a21 = c_b[18 * flag_z + ibcol];
+        for (i = 0; i < 18; i++) {
+          E_tmp_0 = 18 * flag_z + i;
+          E[E_tmp_0] += E_tmp[18 * ibcol + i] * a21;
         }
       }
+    }
 
-      ie_ref_temp.set_size(18);
-      for (i = 0; i < 18; i++) {
-        ie_ref_temp[i] = Ec_pred[i];
+    // '<S18>:1:115'
+    for (flag_z = 0; flag_z < 6; flag_z++) {
+      memset(&B[flag_z * 18], 0, 18U * sizeof(real_T));
+      for (ibcol = 0; ibcol < 18; ibcol++) {
+        a21 = imperix_control_DW.NN[18 * flag_z + ibcol];
+        for (i = 0; i < 18; i++) {
+          E_tmp_0 = 18 * flag_z + i;
+          B[E_tmp_0] += E[18 * ibcol + i] * a21;
+        }
       }
-    } else {
-      imperix_cont_binary_expand_op_2(ie_ref_temp, VB_data, vo_ref_temp);
     }
 
     // '<S18>:1:116'
-    memset(&d_b_data[0], 0, 324U * sizeof(real_T));
-    for (i = 0; i < 18; i++) {
-      d_b_data[i + 18 * i] = ie_ref_temp[i];
-    }
-
-    for (i = 0; i < 18; i++) {
-      memset(&E_data[i * 18], 0, 18U * sizeof(real_T));
-      for (ibcol = 0; ibcol < 18; ibcol++) {
-        b_b = d_b_data[18 * i + ibcol];
-        for (h_k = 0; h_k < 18; h_k++) {
-          B_tmp = 18 * i + h_k;
-          E_data[B_tmp] += E_tmp[18 * ibcol + h_k] * b_b;
-        }
-      }
-    }
-
-    // '<S18>:1:117'
-    for (i = 0; i < 6; i++) {
-      memset(&B[i * 18], 0, 18U * sizeof(real_T));
-      for (ibcol = 0; ibcol < 18; ibcol++) {
-        b_b = imperix_control_DW.NN[18 * i + ibcol];
-        for (h_k = 0; h_k < 18; h_k++) {
-          B_tmp = 18 * i + h_k;
-          B[B_tmp] += E_data[18 * ibcol + h_k] * b_b;
-        }
-      }
-    }
-
-    // '<S18>:1:118'
+    // '<S18>:1:119'
     // '<S18>:1:121'
-    // '<S18>:1:123'
-    for (i = 0; i < 3; i++) {
-      ibcol = i * 6;
-      for (h_k = 0; h_k < 6; h_k++) {
-        Ec_pred[ibcol + h_k] =
-          imperix_control_DW.TmpRTBAtGainOutport1_Buffer[h_k];
+    for (flag_z = 0; flag_z < 3; flag_z++) {
+      ibcol = flag_z * 6;
+      for (i = 0; i < 6; i++) {
+        is_temp[ibcol + i] = imperix_control_DW.TmpRTBAtGainOutport1_Buffer[i];
       }
     }
 
-    // '<S18>:1:126'
-    // '<S18>:1:129'
-    // '<S18>:1:130'
+    // '<S18>:1:124'
+    // '<S18>:1:127'
+    // '<S18>:1:128'
+    // '<S18>:1:131'
+    // '<S18>:1:132'
     // '<S18>:1:133'
-    // '<S18>:1:134'
-    // '<S18>:1:135'
-    // '<S18>:1:139'
-    for (i = 0; i < 18; i++) {
+    // '<S18>:1:140'
+    for (flag_z = 0; flag_z < 18; flag_z++) {
       for (ibcol = 0; ibcol < 6; ibcol++) {
-        tmp[ibcol + 6 * i] = 0.0;
+        tmp[ibcol + 6 * flag_z] = 0.0;
       }
 
-      b_b = 0.0;
+      a21 = 0.0;
       for (ibcol = 0; ibcol < 18; ibcol++) {
-        cos_vals_0 = imperix_control_DW.MI[18 * i + ibcol];
-        for (h_k = 0; h_k < 6; h_k++) {
-          B_tmp = 6 * i + h_k;
-          tmp[B_tmp] += B[18 * h_k + ibcol] * 2.0 * cos_vals_0;
+        cos_vals_0 = imperix_control_DW.MI[18 * flag_z + ibcol];
+        for (i = 0; i < 6; i++) {
+          E_tmp_0 = 6 * flag_z + i;
+          tmp[E_tmp_0] += B[18 * i + ibcol] * 2.0 * cos_vals_0;
         }
 
-        b_b += E_data[18 * ibcol + i] * IB_data[ibcol];
+        a21 += E[18 * ibcol + flag_z] * IB[ibcol];
       }
 
-      Kt[i] = Ec_pred[i] + b_b;
+      Ec_pred[flag_z] = is_temp[flag_z] + a21;
     }
 
-    for (i = 0; i < 6; i++) {
-      b_b = 0.0;
+    for (flag_z = 0; flag_z < 6; flag_z++) {
+      a21 = 0.0;
       for (ibcol = 0; ibcol < 18; ibcol++) {
-        b_b += imperix_control_DW.NN[18 * i + ibcol] * 2.0 * IB_data[ibcol];
+        a21 += imperix_control_DW.NN[18 * flag_z + ibcol] * 2.0 * IB[ibcol];
       }
 
       for (ibcol = 0; ibcol < 6; ibcol++) {
         cos_vals_0 = 0.0;
-        for (h_k = 0; h_k < 18; h_k++) {
-          cos_vals_0 += tmp[6 * h_k + i] * B[18 * ibcol + h_k];
+        for (i = 0; i < 18; i++) {
+          cos_vals_0 += tmp[6 * i + flag_z] * B[18 * ibcol + i];
         }
 
-        h_k = 6 * ibcol + i;
-        tmp_1[h_k] = imperix_control_DW.Hu_z[h_k] * imperix_control_DW.lambda_z
-          + cos_vals_0 / maxval;
+        i = 6 * ibcol + flag_z;
+        tmp_3[i] = imperix_control_DW.Hu_z[i] * imperix_control_DW.lambda_z +
+          cos_vals_0 / maxval;
       }
 
       cos_vals_0 = 0.0;
       for (ibcol = 0; ibcol < 18; ibcol++) {
-        cos_vals_0 += tmp[6 * ibcol + i] * Kt[ibcol];
+        cos_vals_0 += tmp[6 * ibcol + flag_z] * Ec_pred[ibcol];
       }
 
-      rtb_VectorConcatenate5_0[i] = b_b / imperix_control_DW.is_max2_b *
+      rtb_VectorConcatenate5_0[flag_z] = a21 / imperix_control_DW.is_max2_o *
         imperix_control_DW.lambda_z + cos_vals_0 / maxval;
     }
 
-    imperix_cont_mpcActiveSetSolver(tmp_1, rtb_VectorConcatenate5_0,
-      imperix_control_DW.Aineq_z, Ad, xt_est, &i);
+    imperix_cont_mpcActiveSetSolver(tmp_3, rtb_VectorConcatenate5_0,
+      imperix_control_DW.Aineq_z, Ad, imperix_control_DW.options_z.MaxIterations,
+      imperix_control_DW.options_z.ConstraintTolerance,
+      imperix_control_DW.options_z.UseHessianAsInput, ie_ref_temp, &flag_z, x);
 
-    // '<S18>:1:139'
-    ie_ref_temp.set_size(6);
-    for (i = 0; i < 6; i++) {
-      ie_ref_temp[i] = xt_est[i];
-    }
-
-    // '<S18>:1:139'
-    // '<S18>:1:144'
-    vo_ref_temp.set_size(18);
-    for (i = 0; i < 18; i++) {
-      b_b = 0.0;
+    // '<S18>:1:140'
+    // '<S18>:1:145'
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      a21 = 0.0;
       for (ibcol = 0; ibcol < 6; ibcol++) {
-        b_b += imperix_control_DW.NN[18 * ibcol + i] * xt_est[ibcol];
+        a21 += imperix_control_DW.NN[18 * ibcol + flag_z] * ie_ref_temp[ibcol];
       }
 
-      vo_ref_temp[i] = IB_data[i] + b_b;
+      is_temp[flag_z] = IB[flag_z] + a21;
     }
 
-    // '<S18>:1:147'
-    memset(&d_b_data[0], 0, 324U * sizeof(real_T));
+    // '<S18>:1:148'
+    memset(&c_b[0], 0, 324U * sizeof(real_T));
     for (ibcol = 0; ibcol < 18; ibcol++) {
-      d_b_data[ibcol + 18 * ibcol] = vo_ref_temp[ibcol];
-      memset(&E_data[ibcol * 18], 0, 18U * sizeof(real_T));
+      c_b[ibcol + 18 * ibcol] = is_temp[ibcol];
+      memset(&E[ibcol * 18], 0, 18U * sizeof(real_T));
     }
 
-    for (i = 0; i < 18; i++) {
+    for (flag_z = 0; flag_z < 18; flag_z++) {
       for (ibcol = 0; ibcol < 18; ibcol++) {
-        b_b = d_b_data[18 * i + ibcol];
-        for (h_k = 0; h_k < 18; h_k++) {
-          B_tmp = 18 * i + h_k;
-          E_data[B_tmp] += E_tmp[18 * ibcol + h_k] * b_b;
+        a21 = c_b[18 * flag_z + ibcol];
+        for (i = 0; i < 18; i++) {
+          E_tmp_0 = 18 * flag_z + i;
+          E[E_tmp_0] += E_tmp[18 * ibcol + i] * a21;
         }
       }
     }
 
-    // '<S18>:1:148'
     // '<S18>:1:149'
-    // '<S18>:1:152'
+    // '<S18>:1:150'
+    // '<S18>:1:153'
     // '<S18>:1:154'
     // '<S18>:1:157'
     // '<S18>:1:160'
     // '<S18>:1:161'
     // '<S18>:1:164'
-    for (h_k = 0; h_k < 3; h_k++) {
-      memset(&b_B[h_k * 18], 0, 18U * sizeof(real_T));
-      for (i = 0; i < 18; i++) {
-        b_b = imperix_control_DW.ONE[18 * h_k + i];
+    for (i = 0; i < 3; i++) {
+      memset(&b_B[i * 18], 0, 18U * sizeof(real_T));
+      for (flag_z = 0; flag_z < 18; flag_z++) {
+        a21 = imperix_control_DW.ONE[18 * i + flag_z];
         for (ibcol = 0; ibcol < 18; ibcol++) {
-          B_tmp = 18 * h_k + ibcol;
-          b_B[B_tmp] += E_data[18 * i + ibcol] * b_b;
+          E_tmp_0 = 18 * i + ibcol;
+          b_B[E_tmp_0] += E[18 * flag_z + ibcol] * a21;
         }
       }
 
-      i = h_k * 6;
+      flag_z = i * 6;
       for (ibcol = 0; ibcol < 6; ibcol++) {
-        Ec_pred[i + ibcol] =
+        is_temp[flag_z + ibcol] =
           imperix_control_DW.TmpRTBAtGainOutport1_Buffer[ibcol];
       }
 
-      rtb_VectorConcatenate5_0[h_k] =
-        imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[h_k];
+      rtb_VectorConcatenate5_0[i] =
+        imperix_control_DW.TmpRTBAtEnergybalanceInport2_Bu[i];
     }
 
     rtb_VectorConcatenate5_0[3] = 0.0;
     rtb_VectorConcatenate5_0[4] = 0.0;
     rtb_VectorConcatenate5_0[5] = 0.0;
     for (ibcol = 0; ibcol < 3; ibcol++) {
-      for (i = 0; i < 6; i++) {
-        Kt_tmp = 6 * ibcol + i;
-        Kt[Kt_tmp] = rtb_VectorConcatenate5_0[i] - VB_data[Kt_tmp];
+      for (flag_z = 0; flag_z < 6; flag_z++) {
+        i = 6 * ibcol + flag_z;
+        Ec_pred[i] = rtb_VectorConcatenate5_0[flag_z] - VB[i];
       }
 
-      rtb_VectorConcatenate5[ibcol] = Kt[6 * ibcol];
+      rtb_VectorConcatenate5[ibcol] = Ec_pred[6 * ibcol];
       for (i = 0; i < 5; i++) {
-        b_b = Kt[(6 * ibcol + i) + 1];
-        if (rtIsNaN(b_b)) {
+        cos_vals_0 = Ec_pred[(6 * ibcol + i) + 1];
+        if (rtIsNaN(cos_vals_0)) {
           p = false;
         } else {
-          cos_vals_0 = rtb_VectorConcatenate5[ibcol];
-          if (rtIsNaN(cos_vals_0)) {
+          a21 = rtb_VectorConcatenate5[ibcol];
+          if (rtIsNaN(a21)) {
             p = true;
           } else {
-            p = (cos_vals_0 > b_b);
+            p = (a21 > cos_vals_0);
           }
         }
 
         if (p) {
-          rtb_VectorConcatenate5[ibcol] = b_b;
+          rtb_VectorConcatenate5[ibcol] = cos_vals_0;
         }
       }
     }
 
     // '<S18>:1:165'
     for (ibcol = 0; ibcol < 3; ibcol++) {
-      for (i = 0; i < 6; i++) {
-        Kt_tmp = 6 * ibcol + i;
-        Kt[Kt_tmp] = Ad_0[i] - VB_data[Kt_tmp];
+      for (flag_z = 0; flag_z < 6; flag_z++) {
+        i = 6 * ibcol + flag_z;
+        Ec_pred[i] = xt_est[flag_z] - VB[i];
       }
 
-      rtb_Gain4_c[ibcol] = Kt[6 * ibcol];
-      for (i = 0; i < 5; i++) {
-        b_b = Kt[(6 * ibcol + i) + 1];
-        if (rtIsNaN(b_b)) {
+      vo_ref_temp[ibcol] = Ec_pred[6 * ibcol];
+      for (flag_z = 0; flag_z < 5; flag_z++) {
+        cos_vals_0 = Ec_pred[(6 * ibcol + flag_z) + 1];
+        if (rtIsNaN(cos_vals_0)) {
           p = false;
         } else {
-          cos_vals_0 = rtb_Gain4_c[ibcol];
-          if (rtIsNaN(cos_vals_0)) {
+          a21 = vo_ref_temp[ibcol];
+          if (rtIsNaN(a21)) {
             p = true;
           } else {
-            p = (cos_vals_0 < b_b);
+            p = (a21 < cos_vals_0);
           }
         }
 
         if (p) {
-          rtb_Gain4_c[ibcol] = b_b;
+          vo_ref_temp[ibcol] = cos_vals_0;
         }
       }
     }
 
     // '<S18>:1:166'
-    // '<S18>:1:170'
-    for (i = 0; i < 18; i++) {
-      b_b = 0.0;
+    // '<S18>:1:171'
+    for (flag_z = 0; flag_z < 18; flag_z++) {
+      a21 = 0.0;
       cos_vals_0 = 0.0;
       angles = 0.0;
+      VB_tmp_1 = 0.0;
       for (ibcol = 0; ibcol < 18; ibcol++) {
-        y_tmp_1 = imperix_control_DW.MI[18 * i + ibcol];
-        b_b += 2.0 * b_B[ibcol] * y_tmp_1;
-        cos_vals_0 += b_B[ibcol + 18] * 2.0 * y_tmp_1;
-        angles += b_B[ibcol + 36] * 2.0 * y_tmp_1;
+        VB_tmp_2 = imperix_control_DW.MI[18 * flag_z + ibcol];
+        cos_vals_0 += 2.0 * b_B[ibcol] * VB_tmp_2;
+        angles += b_B[ibcol + 18] * 2.0 * VB_tmp_2;
+        VB_tmp_1 += b_B[ibcol + 36] * 2.0 * VB_tmp_2;
+        a21 += E[18 * ibcol + flag_z] * VB[ibcol];
       }
 
-      tmp_0[3 * i + 2] = angles;
-      tmp_0[3 * i + 1] = cos_vals_0;
-      tmp_0[3 * i] = b_b;
+      tmp_0[3 * flag_z + 2] = VB_tmp_1;
+      tmp_0[3 * flag_z + 1] = angles;
+      tmp_0[3 * flag_z] = cos_vals_0;
+      Ec_pred[flag_z] = is_temp[flag_z] + a21;
     }
 
-    if (static_cast<int32_T>(imperix_control_DW.Np) == 3) {
-      b_b = imperix_control_DW.Ec_ref2 * a21;
-      for (i = 0; i < 18; i++) {
-        cos_vals_0 = 0.0;
-        for (ibcol = 0; ibcol < 18; ibcol++) {
-          cos_vals_0 += E_data[18 * ibcol + i] * VB_data[ibcol];
+    for (flag_z = 0; flag_z < 3; flag_z++) {
+      for (ibcol = 0; ibcol < 3; ibcol++) {
+        a21 = 0.0;
+        for (i = 0; i < 18; i++) {
+          a21 += tmp_0[3 * i + flag_z] * b_B[18 * ibcol + i];
         }
 
-        Kt[i] = Ec_pred[i] + cos_vals_0;
+        i = 3 * ibcol + flag_z;
+        A[i] = imperix_control_DW.Hu_o[i] * imperix_control_DW.lambda_o + a21 /
+          maxval;
       }
 
-      for (i = 0; i < 3; i++) {
-        for (ibcol = 0; ibcol < 3; ibcol++) {
-          cos_vals_0 = 0.0;
-          for (h_k = 0; h_k < 18; h_k++) {
-            cos_vals_0 += tmp_0[3 * h_k + i] * b_B[18 * ibcol + h_k];
-          }
-
-          h_k = 3 * ibcol + i;
-          A[h_k] = imperix_control_DW.Hu_o[h_k] * imperix_control_DW.lambda_o +
-            cos_vals_0 / b_b;
-        }
-
-        cos_vals_0 = 0.0;
-        for (ibcol = 0; ibcol < 18; ibcol++) {
-          cos_vals_0 += tmp_0[3 * ibcol + i] * Kt[ibcol];
-        }
-
-        tmp_2[i] = 0.0 / imperix_control_DW.vo_max2 *
-          imperix_control_DW.lambda_o + cos_vals_0 / b_b;
-        rtb_VectorConcatenate5_0[i] = rtb_VectorConcatenate5[i];
-        rtb_VectorConcatenate5_0[i + 3] = -rtb_Gain4_c[i];
+      a21 = 0.0;
+      for (ibcol = 0; ibcol < 18; ibcol++) {
+        a21 += tmp_0[3 * ibcol + flag_z] * Ec_pred[ibcol];
       }
 
-      imperix_co_mpcActiveSetSolver_i(A, tmp_2, imperix_control_DW.Aineq_o,
-        rtb_VectorConcatenate5_0, rtb_VectorConcatenate5, &i);
-    } else {
-      imperix_cont_binary_expand_op_1(tmp_0, b_B, imperix_control_DW.Ec_ref2,
-        a21, imperix_control_DW.lambda_o, imperix_control_DW.Hu_o, Ec_pred,
-        E_data, VB_data, d_c, imperix_control_DW.vo_max2,
-        imperix_control_DW.Aineq_o, rtb_VectorConcatenate5, rtb_Gain4_c);
+      tmp_4[flag_z] = 0.0 / imperix_control_DW.vo_max2 *
+        imperix_control_DW.lambda_o + a21 / maxval;
+      rtb_VectorConcatenate5_0[flag_z] = rtb_VectorConcatenate5[flag_z];
+      rtb_VectorConcatenate5_0[flag_z + 3] = -vo_ref_temp[flag_z];
     }
 
-    // '<S18>:1:170'
-    vo_ref_temp.set_size(3);
-    vo_ref_temp[0] = rtb_VectorConcatenate5[0];
-    vo_ref_temp[1] = rtb_VectorConcatenate5[1];
-    vo_ref_temp[2] = rtb_VectorConcatenate5[2];
+    imperix_co_mpcActiveSetSolver_i(A, tmp_4, imperix_control_DW.Aineq_o,
+      rtb_VectorConcatenate5_0, imperix_control_DW.options_o.MaxIterations,
+      imperix_control_DW.options_o.ConstraintTolerance,
+      imperix_control_DW.options_o.UseHessianAsInput, vo_ref_temp, &flag_z, b_x);
 
-    // '<S18>:1:170'
+    // '<S18>:1:171'
   }
 
   // MATLAB Function: '<S1>/Kalman Filter' incorporates:
   //   RateTransition generated from: '<S1>/Kalman Filter'
   //
-  // '<S18>:1:174'
-  // '<S18>:1:175'
-  // '<S18>:1:183'
-  // '<S18>:1:185'
-  // '<S18>:1:186'
+  // '<S18>:1:178'
+  // '<S18>:1:179'
   // '<S18>:1:187'
   // '<S18>:1:188'
   // '<S18>:1:189'
   // '<S18>:1:190'
+  // '<S18>:1:191'
+  // '<S18>:1:192'
   // '<S18>:1:193'
-  // '<S18>:1:194'
-  // '<S18>:1:195'
-  // '<S18>:1:200'
+  // '<S18>:1:196'
+  // '<S18>:1:197'
+  // '<S18>:1:198'
+  // '<S18>:1:201'
+  // '<S18>:1:203'
   // MATLAB Function 'Closed_loop_control/Kalman Filter': '<S21>:1'
   if (!imperix_control_DW.xt_est_apriori_not_empty) {
     // '<S21>:1:5'
@@ -9697,115 +10064,117 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
 
   // '<S21>:1:20'
   // '<S21>:1:28'
-  for (i = 0; i < 6; i++) {
-    Kt[i] = imperix_control_DW.C[3 * i];
-    Ec_pred[i] = 0.0;
-    Kt[i + 6] = imperix_control_DW.C[3 * i + 1];
-    Ec_pred[i + 6] = 0.0;
-    Kt[i + 12] = imperix_control_DW.C[3 * i + 2];
-    Ec_pred[i + 12] = 0.0;
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    IB[flag_z] = imperix_control_DW.C[3 * flag_z];
+    VB[flag_z] = 0.0;
+    IB[flag_z + 6] = imperix_control_DW.C[3 * flag_z + 1];
+    VB[flag_z + 6] = 0.0;
+    IB[flag_z + 12] = imperix_control_DW.C[3 * flag_z + 2];
+    VB[flag_z + 12] = 0.0;
   }
 
-  for (i = 0; i < 3; i++) {
+  for (flag_z = 0; flag_z < 3; flag_z++) {
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      b_b = Kt[6 * i + ibcol];
-      for (h_k = 0; h_k < 6; h_k++) {
-        r2 = 6 * i + h_k;
-        Ec_pred[r2] += imperix_control_DW.SIGt_apriori[6 * ibcol + h_k] * b_b;
+      a21 = IB[6 * flag_z + ibcol];
+      for (i = 0; i < 6; i++) {
+        rtemp = 6 * flag_z + i;
+        VB[rtemp] += imperix_control_DW.SIGt_apriori[6 * ibcol + i] * a21;
       }
     }
   }
 
-  for (i = 0; i < 6; i++) {
-    b_b = 0.0;
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    a21 = 0.0;
     cos_vals_0 = 0.0;
     angles = 0.0;
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      y_tmp_1 = imperix_control_DW.SIGt_apriori[6 * i + ibcol];
-      b_b += imperix_control_DW.C[3 * ibcol] * y_tmp_1;
-      cos_vals_0 += imperix_control_DW.C[3 * ibcol + 1] * y_tmp_1;
-      angles += imperix_control_DW.C[3 * ibcol + 2] * y_tmp_1;
+      VB_tmp_1 = imperix_control_DW.SIGt_apriori[6 * flag_z + ibcol];
+      a21 += imperix_control_DW.C[3 * ibcol] * VB_tmp_1;
+      cos_vals_0 += imperix_control_DW.C[3 * ibcol + 1] * VB_tmp_1;
+      angles += imperix_control_DW.C[3 * ibcol + 2] * VB_tmp_1;
     }
 
-    VB_data[3 * i + 2] = angles;
-    VB_data[3 * i + 1] = cos_vals_0;
-    VB_data[3 * i] = b_b;
+    is_temp[3 * flag_z + 2] = angles;
+    is_temp[3 * flag_z + 1] = cos_vals_0;
+    is_temp[3 * flag_z] = a21;
   }
 
-  for (i = 0; i < 3; i++) {
+  for (flag_z = 0; flag_z < 3; flag_z++) {
     for (ibcol = 0; ibcol < 3; ibcol++) {
-      b_b = 0.0;
-      for (h_k = 0; h_k < 6; h_k++) {
-        b_b += VB_data[3 * h_k + i] * Kt[6 * ibcol + h_k];
+      a21 = 0.0;
+      for (i = 0; i < 6; i++) {
+        a21 += is_temp[3 * i + flag_z] * IB[6 * ibcol + i];
       }
 
-      r2 = 3 * ibcol + i;
-      A[r2] = imperix_control_DW.R[r2] + b_b;
+      rtemp = 3 * ibcol + flag_z;
+      A[rtemp] = imperix_control_DW.R[rtemp] + a21;
     }
   }
 
-  i = 0;
-  r2 = 1;
-  r3 = 2;
+  r1 = 0;
+  flag_z = 1;
+  ibcol = 2;
   maxval = fabs(A[0]);
   a21 = fabs(A[1]);
   if (a21 > maxval) {
     maxval = a21;
-    i = 1;
-    r2 = 0;
+    r1 = 1;
+    flag_z = 0;
   }
 
   if (fabs(A[2]) > maxval) {
-    i = 2;
-    r2 = 1;
-    r3 = 0;
+    r1 = 2;
+    flag_z = 1;
+    ibcol = 0;
   }
 
-  A[r2] /= A[i];
-  A[r3] /= A[i];
-  A[r2 + 3] -= A[i + 3] * A[r2];
-  A[r3 + 3] -= A[i + 3] * A[r3];
-  A[r2 + 6] -= A[i + 6] * A[r2];
-  A[r3 + 6] -= A[i + 6] * A[r3];
-  if (fabs(A[r3 + 3]) > fabs(A[r2 + 3])) {
-    ibcol = r2;
-    r2 = r3;
-    r3 = ibcol;
+  A[flag_z] /= A[r1];
+  A[ibcol] /= A[r1];
+  A[flag_z + 3] -= A[r1 + 3] * A[flag_z];
+  A[ibcol + 3] -= A[r1 + 3] * A[ibcol];
+  A[flag_z + 6] -= A[r1 + 6] * A[flag_z];
+  A[ibcol + 6] -= A[r1 + 6] * A[ibcol];
+  if (fabs(A[ibcol + 3]) > fabs(A[flag_z + 3])) {
+    rtemp = flag_z;
+    flag_z = ibcol;
+    ibcol = rtemp;
   }
 
-  A[r3 + 3] /= A[r2 + 3];
-  A[r3 + 6] -= A[r3 + 3] * A[r2 + 6];
+  A[ibcol + 3] /= A[flag_z + 3];
+  A[ibcol + 6] -= A[ibcol + 3] * A[flag_z + 6];
 
   // '<S21>:1:29'
   // '<S21>:1:30'
   maxval = 0.0;
-  a21 = 0.0;
-  d_c = 0.0;
-  for (ibcol = 0; ibcol < 6; ibcol++) {
-    h_k = 6 * i + ibcol;
-    Kt[h_k] = Ec_pred[ibcol] / A[i];
-    B_tmp = 6 * r2 + ibcol;
-    Kt[B_tmp] = Ec_pred[ibcol + 6] - A[i + 3] * Kt[h_k];
-    Kt_tmp = 6 * r3 + ibcol;
-    Kt[Kt_tmp] = Ec_pred[ibcol + 12] - A[i + 6] * Kt[h_k];
-    Kt[B_tmp] /= A[r2 + 3];
-    Kt[Kt_tmp] -= A[r2 + 6] * Kt[B_tmp];
-    Kt[Kt_tmp] /= A[r3 + 6];
-    Kt[B_tmp] -= A[r3 + 3] * Kt[Kt_tmp];
-    Kt[h_k] -= Kt[Kt_tmp] * A[r3];
-    Kt[h_k] -= Kt[B_tmp] * A[r2];
-    b_b = imperix_control_DW.xt_est_apriori[ibcol];
-    maxval += imperix_control_DW.C[3 * ibcol] * b_b;
-    a21 += imperix_control_DW.C[3 * ibcol + 1] * b_b;
-    d_c += imperix_control_DW.C[3 * ibcol + 2] * b_b;
+  cos_vals_0 = 0.0;
+  angles = 0.0;
+  for (i = 0; i < 6; i++) {
+    rtemp = 6 * r1 + i;
+    IB[rtemp] = VB[i] / A[r1];
+    E_tmp_0 = 6 * flag_z + i;
+    IB[E_tmp_0] = VB[i + 6] - A[r1 + 3] * IB[rtemp];
+    IB_tmp = 6 * ibcol + i;
+    IB[IB_tmp] = VB[i + 12] - A[r1 + 6] * IB[rtemp];
+    IB[E_tmp_0] /= A[flag_z + 3];
+    IB[IB_tmp] -= A[flag_z + 6] * IB[E_tmp_0];
+    IB[IB_tmp] /= A[ibcol + 6];
+    IB[E_tmp_0] -= A[ibcol + 3] * IB[IB_tmp];
+    IB[rtemp] -= IB[IB_tmp] * A[ibcol];
+    IB[rtemp] -= IB[E_tmp_0] * A[flag_z];
+    a21 = imperix_control_DW.xt_est_apriori[i];
+    maxval += imperix_control_DW.C[3 * i] * a21;
+    cos_vals_0 += imperix_control_DW.C[3 * i + 1] * a21;
+    angles += imperix_control_DW.C[3 * i + 2] * a21;
   }
 
   maxval = imperix_control_DW.TmpRTBAtKalmanFilterInport1_Buf[0] - maxval;
-  a21 = imperix_control_DW.TmpRTBAtKalmanFilterInport1_Buf[1] - a21;
-  d_c = imperix_control_DW.TmpRTBAtKalmanFilterInport2_Buf - d_c;
-  for (i = 0; i < 6; i++) {
-    xt_est[i] = ((Kt[i + 6] * a21 + Kt[i] * maxval) + Kt[i + 12] * d_c) +
-      imperix_control_DW.xt_est_apriori[i];
+  cos_vals_0 = imperix_control_DW.TmpRTBAtKalmanFilterInport1_Buf[1] -
+    cos_vals_0;
+  angles = imperix_control_DW.TmpRTBAtKalmanFilterInport2_Buf - angles;
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    xt_est[flag_z] = ((IB[flag_z + 6] * cos_vals_0 + IB[flag_z] * maxval) +
+                      IB[flag_z + 12] * angles) +
+      imperix_control_DW.xt_est_apriori[flag_z];
   }
 
   // '<S21>:1:31'
@@ -9868,74 +10237,75 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
   Adt[22] = xt_est[0] * imperix_control_P.KF.Adt[22];
 
   // '<S21>:1:66'
-  for (i = 0; i < 6; i++) {
-    Ad_0[i] = 0.0;
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    Ad_0[flag_z] = 0.0;
   }
 
-  for (i = 0; i < 6; i++) {
-    b_b = xt_est[i];
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    a21 = xt_est[flag_z];
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      Ad_0[ibcol] += Ad[6 * i + ibcol] * b_b;
+      Ad_0[ibcol] += Ad[6 * flag_z + ibcol] * a21;
     }
 
-    rtb_VectorConcatenate5_0[i] = 0.0;
+    rtb_VectorConcatenate5_0[flag_z] = 0.0;
   }
 
-  for (i = 0; i < 2; i++) {
-    b_b = imperix_control_DW.TmpRTBAtKalmanFilterInport3_Buf[i];
+  for (flag_z = 0; flag_z < 2; flag_z++) {
+    a21 = imperix_control_DW.TmpRTBAtKalmanFilterInport3_Buf[flag_z];
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      rtb_VectorConcatenate5_0[ibcol] += imperix_control_DW.Bd_m[6 * i + ibcol] *
-        b_b;
+      rtb_VectorConcatenate5_0[ibcol] += imperix_control_DW.Bd_m[6 * flag_z +
+        ibcol] * a21;
     }
   }
 
   // '<S21>:1:68'
-  for (i = 0; i < 6; i++) {
-    imperix_control_DW.xt_est_apriori[i] = Ad_0[i] + rtb_VectorConcatenate5_0[i];
+  for (flag_z = 0; flag_z < 6; flag_z++) {
+    imperix_control_DW.xt_est_apriori[flag_z] = Ad_0[flag_z] +
+      rtb_VectorConcatenate5_0[flag_z];
   }
 
   for (ibcol = 0; ibcol < 6; ibcol++) {
     maxval = imperix_control_DW.C[3 * ibcol + 1];
     a21 = imperix_control_DW.C[3 * ibcol];
-    d_c = imperix_control_DW.C[3 * ibcol + 2];
-    for (i = 0; i < 6; i++) {
-      h_k = 6 * ibcol + i;
-      Ad[h_k] = imperix_control_DW.Inx[h_k] - ((Kt[i + 6] * maxval + a21 * Kt[i])
-        + Kt[i + 12] * d_c);
-      tmp_1[ibcol + 6 * i] = 0.0;
+    cos_vals_0 = imperix_control_DW.C[3 * ibcol + 2];
+    for (flag_z = 0; flag_z < 6; flag_z++) {
+      i = 6 * ibcol + flag_z;
+      Ad[i] = imperix_control_DW.Inx[i] - ((IB[flag_z + 6] * maxval + a21 *
+        IB[flag_z]) + IB[flag_z + 12] * cos_vals_0);
+      tmp_3[ibcol + 6 * flag_z] = 0.0;
     }
   }
 
-  for (i = 0; i < 6; i++) {
+  for (flag_z = 0; flag_z < 6; flag_z++) {
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      h_k = 6 * i + ibcol;
-      b_b = imperix_control_DW.SIGt_apriori[h_k];
-      for (B_tmp = 0; B_tmp < 6; B_tmp++) {
-        r2 = 6 * i + B_tmp;
-        tmp_1[r2] += Ad[6 * ibcol + B_tmp] * b_b;
+      i = 6 * flag_z + ibcol;
+      a21 = imperix_control_DW.SIGt_apriori[i];
+      for (E_tmp_0 = 0; E_tmp_0 < 6; E_tmp_0++) {
+        rtemp = 6 * flag_z + E_tmp_0;
+        tmp_3[rtemp] += Ad[6 * ibcol + E_tmp_0] * a21;
       }
 
-      Adt_0[h_k] = 0.0;
+      Adt_0[i] = 0.0;
     }
 
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      b_b = tmp_1[6 * i + ibcol];
-      for (h_k = 0; h_k < 6; h_k++) {
-        r2 = 6 * i + h_k;
-        Adt_0[r2] += Adt[6 * ibcol + h_k] * b_b;
+      a21 = tmp_3[6 * flag_z + ibcol];
+      for (i = 0; i < 6; i++) {
+        rtemp = 6 * flag_z + i;
+        Adt_0[rtemp] += Adt[6 * ibcol + i] * a21;
       }
     }
   }
 
-  for (i = 0; i < 6; i++) {
+  for (flag_z = 0; flag_z < 6; flag_z++) {
     for (ibcol = 0; ibcol < 6; ibcol++) {
-      b_b = 0.0;
-      for (h_k = 0; h_k < 6; h_k++) {
-        b_b += Adt_0[6 * h_k + i] * Adt[6 * h_k + ibcol];
+      a21 = 0.0;
+      for (i = 0; i < 6; i++) {
+        a21 += Adt_0[6 * i + flag_z] * Adt[6 * i + ibcol];
       }
 
-      r2 = 6 * ibcol + i;
-      imperix_control_DW.SIGt_apriori[r2] = imperix_control_DW.Q[r2] + b_b;
+      rtemp = 6 * ibcol + flag_z;
+      imperix_control_DW.SIGt_apriori[rtemp] = imperix_control_DW.Q[rtemp] + a21;
     }
   }
 
@@ -9968,8 +10338,8 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
 
   // '<S131>:1:19'
   maxval = imperix_control_DW.TmpRTBAtGainOutport1_Buffer[0];
-  for (ibcol = 0; ibcol < 5; ibcol++) {
-    maxval += imperix_control_DW.TmpRTBAtGainOutport1_Buffer[ibcol + 1];
+  for (i = 0; i < 5; i++) {
+    maxval += imperix_control_DW.TmpRTBAtGainOutport1_Buffer[i + 1];
   }
 
   maxval /= 6.0;
@@ -10007,28 +10377,29 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
 
   // MATLAB Function 'Closed_loop_control/NN CEC/FFNN/MLFB': '<S135>:1'
   // '<S135>:1:5'
-  for (i = 0; i < 14; i++) {
-    tmp_3[i] = static_cast<real32_T>(1.0 / imperix_control_P.Xmax[i] * rtb_obs[i]);
+  for (flag_z = 0; flag_z < 14; flag_z++) {
+    tmp_5[flag_z] = static_cast<real32_T>(1.0 / imperix_control_P.Xmax[flag_z] *
+      rtb_obs[flag_z]);
   }
 
   // End of DataTypeConversion: '<S25>/Cast To Double'
 
   // MATLAB Function: '<S130>/MLFB'
-  imperix_control_predict(tmp_3, tmp_4);
+  imperix_control_predict(tmp_5, tmp_6);
 
   // SignalConversion generated from: '<S25>/Vector Concatenate5' incorporates:
   //   DataTypeConversion: '<S25>/Cast To Double1'
   //   Gain: '<S25>/Gain4'
   //   MATLAB Function: '<S130>/MLFB'
 
-  rtb_VectorConcatenate5[2] = imperix_control_P.Ymax[2] * tmp_4[2];
+  rtb_VectorConcatenate5[2] = imperix_control_P.Ymax[2] * tmp_6[2];
 
   // SignalConversion generated from: '<S25>/Vector Concatenate5' incorporates:
   //   DataTypeConversion: '<S25>/Cast To Double1'
   //   Gain: '<S25>/Gain4'
   //   MATLAB Function: '<S130>/MLFB'
 
-  rtb_VectorConcatenate5[0] = imperix_control_P.Ymax[0] * tmp_4[0];
+  rtb_VectorConcatenate5[0] = imperix_control_P.Ymax[0] * tmp_6[0];
 
   // MATLAB Function: '<S25>/White noise' incorporates:
   //   MATLAB Function: '<S1>/Energy balance'
@@ -10040,7 +10411,7 @@ void imperix_control_step1(void)       // Sample time: [0.00166667s, 0.0s]
   //   Gain: '<S25>/Gain4'
   //   MATLAB Function: '<S130>/MLFB'
 
-  rtb_VectorConcatenate5[1] = imperix_control_P.Ymax[1] * tmp_4[1];
+  rtb_VectorConcatenate5[1] = imperix_control_P.Ymax[1] * tmp_6[1];
 
   // MATLAB Function: '<S25>/White noise' incorporates:
   //   MATLAB Function: '<S1>/Energy balance'
@@ -10179,8 +10550,8 @@ void imperix_control_initialize(void)
     ConfigureTunable(&w_ref, 0, 0, -1.0F, 1.0F);
 
     // Start for S-Function (TUNABLE_PARAM): '<S503>/S-Function'
-    doControl = 0.0F;                  // Tunable parameter initialization
-    ConfigureTunable(&doControl, 0, 0);
+    do_control = 0.0F;                 // Tunable parameter initialization
+    ConfigureTunable(&do_control, 0, 0);
 
     // Start for RateTransition generated from: '<S1>/Sum7'
     imperix_control_B.TmpRTBAtSum7Inport1 =
@@ -10696,9 +11067,7 @@ void imperix_control_initialize(void)
     imperix_control_DW.Integrator_DSTATE_k =
       imperix_control_P.MCCPIq_InitialConditionForInteg;
 
-    // InitializeConditions for UnitDelay: '<S132>/Unit Delay1' incorporates:
-    //   Gain: '<S132>/Gain1'
-
+    // InitializeConditions for UnitDelay: '<S132>/Unit Delay1'
     imperix_control_DW.UnitDelay1_DSTATE_a[0] =
       imperix_control_P.UnitDelay1_InitialCondition;
     imperix_control_DW.UnitDelay1_DSTATE_a[1] =
@@ -10741,6 +11110,7 @@ void imperix_control_initialize(void)
     imperix_control_DW.Ix[2] = 0.0;
     imperix_control_DW.Ix[0] = 1.0;
     imperix_control_DW.Ix[3] = 1.0;
+    imperix_control_DW.Tol = 0.001;
 
     // SystemInitialize for Enabled SubSystem: '<S257>/Subsystem - pi//2 delay'
     impe_Subsystempi2delay_Init(&imperix_control_B.Fcn_h,

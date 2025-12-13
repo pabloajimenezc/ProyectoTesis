@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.6
+// Model version                  : 19.10
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Dec 12 16:36:29 2025
+// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
 //
 #ifndef imperix_control_private_h_
 #define imperix_control_private_h_
@@ -23,14 +23,14 @@ tUserSafe SimulinkInterrupt(void);
 void ConfigureReadTriggerDelayInNs(int);
 extern real_T rt_hypotd_snf(real_T u0, real_T u1);
 extern real_T rt_roundd_snf(real_T u);
-extern void microKernel15776890522568734084(int32_T K, const real32_T *A,
+extern void microKernel13908861584278004767(int32_T K, const real32_T *A,
   int32_T LDA, const real32_T *B, real32_T *C);
-extern void microKernel18199218617277158190(int32_T K, const real32_T *A,
+extern void microKernel11158300190833245152(int32_T K, const real32_T *A,
   int32_T LDA, const real32_T *B, real32_T *C);
-extern void macroKernel10414776869222701819(int32_T M, int32_T K, int32_T N,
+extern void macroKernel6179689394702347033(int32_T M, int32_T K, int32_T N,
   const real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C,
   int32_T LDC);
-extern void matrixMultiply10414776869222701819(int32_T M, int32_T K, int32_T N,
+extern void matrixMultiply6179689394702347033(int32_T M, int32_T K, int32_T N,
   int32_T blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A,
   const real32_T *B, real32_T *C);
 extern real_T rt_atan2d_snf(real_T u0, real_T u1);
