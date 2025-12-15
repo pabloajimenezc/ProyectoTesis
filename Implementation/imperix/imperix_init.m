@@ -220,14 +220,6 @@ CEMPC.lambda_o  = 0.4 * 3;
 
 % CEMPC.lambda_z  = 0.2 * 20;
 % CEMPC.lambda_o  = 0.4 * 20;
-%% 
-% 300 Hz
-
-% CEMPC.lambda_z  = 0.1;
-% CEMPC.lambda_o  = 1;
-
-% CEMPC.lambda_z  = 0.5 * 10;
-% CEMPC.lambda_o  = 1 * 10;
 %% Circulating Current MPC (CMPC)
 
 CCMPC = struct();

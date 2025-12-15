@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.10
+// Model version                  : 19.14
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
+// C/C++ source code generated on : Mon Dec 15 16:19:02 2025
 //
 #include "imperix_control.h"
 
@@ -148,9 +148,9 @@ P_imperix_control_T imperix_control_P = {
   // Variable: CCMPC
   //  Referenced by:
   //    '<S1>/LICCs control'
-  //    '<S16>/Gain'
-  //    '<S132>/Gain1'
-  //    '<S132>/Gain2'
+  //    '<S17>/Gain'
+  //    '<S148>/Gain1'
+  //    '<S148>/Gain2'
 
   {
     { -0.5, -0.66666666666666663, -0.0, -0.16666666666666669,
@@ -232,17 +232,17 @@ P_imperix_control_T imperix_control_P = {
   //    '<S1>/Energy balance'
   //    '<S1>/LICCs control'
   //    '<S1>/Constant5'
-  //    '<S23>/Unit Delay1'
-  //    '<S25>/Input format'
-  //    '<S25>/Saturation'
-  //    '<S25>/White noise'
-  //    '<S25>/Gain7'
-  //    '<S32>/vx'
-  //    '<S35>/Constant1'
-  //    '<S36>/Gain'
-  //    '<S42>/Gain1'
-  //    '<S42>/Gain3'
-  //    '<S42>/Gain4'
+  //    '<S24>/Unit Delay1'
+  //    '<S26>/Input format'
+  //    '<S26>/Saturation'
+  //    '<S26>/White noise'
+  //    '<S26>/Gain7'
+  //    '<S46>/vx'
+  //    '<S49>/Constant1'
+  //    '<S50>/Gain'
+  //    '<S56>/Gain1'
+  //    '<S56>/Gain3'
+  //    '<S56>/Gain4'
 
   {
     { 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0 },
@@ -360,7 +360,7 @@ P_imperix_control_T imperix_control_P = {
   //    '<S1>/Kalman Filter'
   //    '<S1>/Gain2'
   //    '<S1>/Gain4'
-  //    '<S33>/Gain'
+  //    '<S47>/Gain'
 
   {
     380.0,
@@ -398,8 +398,8 @@ P_imperix_control_T imperix_control_P = {
   // Variable: RFT
   //  Referenced by:
   //    '<S1>/Energy balance'
-  //    '<S25>/Input format'
-  //    '<S25>/Gain5'
+  //    '<S26>/Input format'
+  //    '<S26>/Gain5'
 
   {
     { 0.66666666666666663, 0.0, -0.33333333333333331, 0.57735026918962573,
@@ -413,14 +413,14 @@ P_imperix_control_T imperix_control_P = {
   // Variable: FOC
   //  Referenced by:
   //    '<S1>/IM references'
-  //    '<S104>/Kb'
-  //    '<S109>/Integral Gain'
-  //    '<S117>/Proportional Gain'
-  //    '<S119>/Saturation'
-  //    '<S218>/Kb'
-  //    '<S223>/Integral Gain'
-  //    '<S231>/Proportional Gain'
-  //    '<S233>/Saturation'
+  //    '<S120>/Kb'
+  //    '<S125>/Integral Gain'
+  //    '<S133>/Proportional Gain'
+  //    '<S135>/Saturation'
+  //    '<S260>/Kb'
+  //    '<S265>/Integral Gain'
+  //    '<S273>/Proportional Gain'
+  //    '<S275>/Saturation'
 
   {
     0.00016666666666666666,
@@ -436,14 +436,14 @@ P_imperix_control_T imperix_control_P = {
 
   // Variable: MCC
   //  Referenced by:
-  //    '<S292>/Kb'
-  //    '<S297>/Integral Gain'
-  //    '<S305>/Proportional Gain'
-  //    '<S307>/Saturation'
-  //    '<S344>/Kb'
-  //    '<S349>/Integral Gain'
-  //    '<S357>/Proportional Gain'
-  //    '<S359>/Saturation'
+  //    '<S334>/Kb'
+  //    '<S339>/Integral Gain'
+  //    '<S347>/Proportional Gain'
+  //    '<S349>/Saturation'
+  //    '<S386>/Kb'
+  //    '<S391>/Integral Gain'
+  //    '<S399>/Proportional Gain'
+  //    '<S401>/Saturation'
 
   {
     0.00016666666666666666,
@@ -459,10 +459,10 @@ P_imperix_control_T imperix_control_P = {
 
   // Variable: PCC
   //  Referenced by:
-  //    '<S413>/Integral Gain'
-  //    '<S421>/Proportional Gain'
-  //    '<S423>/Saturation'
-  //    '<S408>/DeadZone'
+  //    '<S455>/Integral Gain'
+  //    '<S463>/Proportional Gain'
+  //    '<S465>/Saturation'
+  //    '<S450>/DeadZone'
 
   {
     0.00016666666666666666,
@@ -478,12 +478,12 @@ P_imperix_control_T imperix_control_P = {
 
   // Variable: TEB
   //  Referenced by:
-  //    '<S23>/Gain1'
-  //    '<S23>/Gain2'
-  //    '<S169>/Integral Gain'
-  //    '<S177>/Proportional Gain'
-  //    '<S179>/Saturation'
-  //    '<S164>/DeadZone'
+  //    '<S24>/Gain1'
+  //    '<S24>/Gain2'
+  //    '<S185>/Integral Gain'
+  //    '<S193>/Proportional Gain'
+  //    '<S195>/Saturation'
+  //    '<S180>/DeadZone'
 
   {
     0.00016666666666666666,
@@ -499,8 +499,8 @@ P_imperix_control_T imperix_control_P = {
 
   // Variable: Xmax
   //  Referenced by:
-  //    '<S25>/Input format'
-  //    '<S25>/Gain'
+  //    '<S26>/Input format'
+  //    '<S26>/Gain'
 
   { 10.758793499999992, 10.758793499999992, 10.758793499999992,
     10.758793499999992, 10.758793499999992, 10.758793499999992, 4.2,
@@ -509,162 +509,142 @@ P_imperix_control_T imperix_control_P = {
     157.07963267948966 },
 
   // Variable: Ymax
-  //  Referenced by: '<S25>/Gain4'
+  //  Referenced by: '<S26>/Gain4'
 
   { 8.5, 8.5, 260.0 },
 
   // Mask Parameter: AlphaBetaZerotodq0_Alignment
-  //  Referenced by: '<S434>/Constant'
+  //  Referenced by: '<S476>/Constant'
 
   1.0,
 
   // Mask Parameter: dq0toAlphaBetaZero_Alignment
-  //  Referenced by: '<S265>/Constant'
+  //  Referenced by: '<S307>/Constant'
 
   1.0,
 
   // Mask Parameter: dq0toAlphaBetaZero_Alignment_k
-  //  Referenced by: '<S257>/Constant'
+  //  Referenced by: '<S299>/Constant'
 
   1.0,
 
   // Mask Parameter: dq0toAlphaBetaZero1_Alignment
-  //  Referenced by: '<S374>/Constant'
+  //  Referenced by: '<S416>/Constant'
 
   2.0,
 
   // Mask Parameter: PIDController_InitialConditionF
-  //  Referenced by: '<S172>/Integrator'
+  //  Referenced by: '<S188>/Integrator'
 
   0.0,
 
   // Mask Parameter: PCCPI_InitialConditionForIntegr
-  //  Referenced by: '<S416>/Integrator'
+  //  Referenced by: '<S458>/Integrator'
 
   0.0,
 
   // Mask Parameter: SpeedPI_InitialConditionForInte
-  //  Referenced by: '<S226>/Integrator'
+  //  Referenced by: '<S268>/Integrator'
 
   0.0,
 
   // Mask Parameter: FluxPI_InitialConditionForInteg
-  //  Referenced by: '<S112>/Integrator'
+  //  Referenced by: '<S128>/Integrator'
 
   0.0,
 
   // Mask Parameter: MCCPId_InitialConditionForInteg
-  //  Referenced by: '<S300>/Integrator'
+  //  Referenced by: '<S342>/Integrator'
 
   0.0,
 
   // Mask Parameter: MCCPIq_InitialConditionForInteg
-  //  Referenced by: '<S352>/Integrator'
+  //  Referenced by: '<S394>/Integrator'
 
   0.0,
 
   // Mask Parameter: CompareToConstant_const
-  //  Referenced by: '<S436>/Constant'
+  //  Referenced by: '<S478>/Constant'
 
   1.0,
 
   // Mask Parameter: CompareToConstant1_const
-  //  Referenced by: '<S437>/Constant'
+  //  Referenced by: '<S479>/Constant'
 
   2.0,
 
   // Mask Parameter: CompareToConstant_const_h
-  //  Referenced by: '<S370>/Constant'
+  //  Referenced by: '<S412>/Constant'
 
   1.0,
 
   // Mask Parameter: CompareToConstant1_const_f
-  //  Referenced by: '<S371>/Constant'
+  //  Referenced by: '<S413>/Constant'
 
   2.0,
 
   // Mask Parameter: CompareToConstant_const_m
-  //  Referenced by: '<S258>/Constant'
+  //  Referenced by: '<S300>/Constant'
 
   1.0,
 
   // Mask Parameter: CompareToConstant1_const_p
-  //  Referenced by: '<S259>/Constant'
+  //  Referenced by: '<S301>/Constant'
 
   2.0,
 
   // Mask Parameter: CompareToConstant_const_d
-  //  Referenced by: '<S375>/Constant'
+  //  Referenced by: '<S417>/Constant'
 
   1.0,
 
   // Mask Parameter: CompareToConstant1_const_l
-  //  Referenced by: '<S376>/Constant'
+  //  Referenced by: '<S418>/Constant'
 
   2.0,
 
   // Expression: [0,0]
-  //  Referenced by: '<S377>/alpha_beta'
+  //  Referenced by: '<S419>/alpha_beta'
 
   { 0.0, 0.0 },
 
   // Expression: [0,0]
-  //  Referenced by: '<S378>/alpha_beta'
+  //  Referenced by: '<S420>/alpha_beta'
 
   { 0.0, 0.0 },
 
   // Expression: [0,0]
-  //  Referenced by: '<S438>/dq'
+  //  Referenced by: '<S480>/dq'
 
   { 0.0, 0.0 },
 
   // Expression: [0,0]
-  //  Referenced by: '<S439>/dq'
+  //  Referenced by: '<S481>/dq'
 
   { 0.0, 0.0 },
 
   // Expression: 0
-  //  Referenced by: '<S162>/Constant1'
+  //  Referenced by: '<S178>/Constant1'
 
   0.0,
 
   // Expression: 0
-  //  Referenced by: '<S406>/Constant1'
+  //  Referenced by: '<S448>/Constant1'
 
   0.0,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S52>/ADC'
-
-  0.00016666666666666666,
-
-  // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S54>/ADC'
-
-  0.00016666666666666666,
-
-  // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S56>/ADC'
-
-  0.00016666666666666666,
-
-  // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S58>/ADC'
-
-  0.00016666666666666666,
-
-  // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S60>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   0.00016666666666666666,
 
@@ -674,7 +654,32 @@ P_imperix_control_T imperix_control_P = {
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S76>/ADC'
+
+  0.00016666666666666666,
+
+  // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S78>/ADC'
+
+  0.00016666666666666666,
+
+  // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S70>/ADC'
+
+  0.00016666666666666666,
+
+  // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S88>/ADC'
+
+  0.00016666666666666666,
+
+  // Expression: double(CTRLPERIOD(1))
   //  Referenced by: '<S64>/ADC'
+
+  0.00016666666666666666,
+
+  // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S72>/ADC'
 
   0.00016666666666666666,
 
@@ -689,22 +694,17 @@ P_imperix_control_T imperix_control_P = {
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S70>/ADC'
+  //  Referenced by: '<S80>/ADC'
 
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S72>/ADC'
+  //  Referenced by: '<S543>/S-Function'
 
   0.00016666666666666666,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S501>/S-Function'
-
-  0.00016666666666666666,
-
-  // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   0.00016666666666666666,
 
@@ -714,7 +714,7 @@ P_imperix_control_T imperix_control_P = {
   0.001,
 
   // Expression: double(CTRLPERIOD(1))
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.00016666666666666666,
 
@@ -724,17 +724,17 @@ P_imperix_control_T imperix_control_P = {
   0.0,
 
   // Computed Parameter: Integrator_gainval
-  //  Referenced by: '<S172>/Integrator'
+  //  Referenced by: '<S188>/Integrator'
 
   0.00016666666666666666,
 
   // Computed Parameter: Integrator_gainval_m
-  //  Referenced by: '<S416>/Integrator'
+  //  Referenced by: '<S458>/Integrator'
 
   0.00016666666666666666,
 
   // Computed Parameter: Integrator_gainval_k
-  //  Referenced by: '<S226>/Integrator'
+  //  Referenced by: '<S268>/Integrator'
 
   0.00016666666666666666,
 
@@ -744,23 +744,23 @@ P_imperix_control_T imperix_control_P = {
   0.0,
 
   // Computed Parameter: Integrator_gainval_o
-  //  Referenced by: '<S112>/Integrator'
+  //  Referenced by: '<S128>/Integrator'
 
   0.00016666666666666666,
 
   // Expression: -1
-  //  Referenced by: '<S37>/Gain2'
+  //  Referenced by: '<S51>/Gain2'
 
   -1.0,
 
   // Expression: [ 1   -1/2   -1/2; 0   sqrt(3)/2   -sqrt(3)/2; 1/2  1/2  1/2 ]
-  //  Referenced by: '<S435>/Gain3'
+  //  Referenced by: '<S477>/Gain3'
 
   { 1.0, 0.0, 0.5, -0.5, 0.8660254037844386, 0.5, -0.5, -0.8660254037844386, 0.5
   },
 
   // Expression: 2/3
-  //  Referenced by: '<S435>/Gain1'
+  //  Referenced by: '<S477>/Gain1'
 
   0.66666666666666663,
 
@@ -770,22 +770,22 @@ P_imperix_control_T imperix_control_P = {
   0.0,
 
   // Computed Parameter: Integrator_gainval_c
-  //  Referenced by: '<S300>/Integrator'
+  //  Referenced by: '<S342>/Integrator'
 
   0.00016666666666666666,
 
   // Computed Parameter: Integrator_gainval_p
-  //  Referenced by: '<S352>/Integrator'
+  //  Referenced by: '<S394>/Integrator'
 
   0.00016666666666666666,
 
   // Expression: 2
-  //  Referenced by: '<S33>/Gain1'
+  //  Referenced by: '<S47>/Gain1'
 
   2.0,
 
   // Expression: 0
-  //  Referenced by: '<S132>/Unit Delay1'
+  //  Referenced by: '<S148>/Unit Delay1'
 
   0.0,
 
@@ -800,23 +800,23 @@ P_imperix_control_T imperix_control_P = {
   0.0,
 
   // Expression: 40*10
-  //  Referenced by: '<S25>/Switch'
+  //  Referenced by: '<S26>/Switch'
 
   400.0,
 
   // Expression: [1; -1]
-  //  Referenced by: '<S25>/Gain3'
+  //  Referenced by: '<S26>/Gain3'
 
   { 1.0, -1.0 },
 
   // Expression: [ 1   0   1; -1/2  sqrt(3)/2   1; -1/2  -sqrt(3)/2  1 ]
-  //  Referenced by: '<S262>/Gain3'
+  //  Referenced by: '<S304>/Gain3'
 
   { 1.0, -0.5, -0.5, 0.0, 0.8660254037844386, -0.8660254037844386, 1.0, 1.0, 1.0
   },
 
   // Expression: M2C.A'
-  //  Referenced by: '<S32>/Gain2'
+  //  Referenced by: '<S46>/Gain2'
 
   { 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, -1.0, -0.0, -0.0,
     -1.0, -0.0, -0.0, -0.0, -1.0, -0.0, -0.0, -1.0, -0.0, -0.0, -0.0, -1.0, -0.0,
@@ -828,475 +828,255 @@ P_imperix_control_T imperix_control_P = {
   1.0,
 
   // Expression: 0
-  //  Referenced by: '<S162>/Clamping_zero'
+  //  Referenced by: '<S178>/Clamping_zero'
 
   0.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S27>/phase'
+  //  Referenced by: '<S28>/phase'
 
   0.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S244>/phase'
+  //  Referenced by: '<S286>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S245>/phase'
+  //  Referenced by: '<S287>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S246>/phase'
+  //  Referenced by: '<S288>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S247>/phase'
+  //  Referenced by: '<S289>/phase'
 
   0.0,
 
   // Expression: [ 1   0   1; -1/2  sqrt(3)/2   1; -1/2  -sqrt(3)/2  1 ]
-  //  Referenced by: '<S256>/Gain3'
+  //  Referenced by: '<S298>/Gain3'
 
   { 1.0, -0.5, -0.5, 0.0, 0.8660254037844386, -0.8660254037844386, 1.0, 1.0, 1.0
   },
 
   // Expression: -1
-  //  Referenced by: '<S31>/Gain'
+  //  Referenced by: '<S45>/Gain'
 
   -1.0,
 
   // Expression: -1
-  //  Referenced by: '<S31>/Gain8'
+  //  Referenced by: '<S45>/Gain8'
 
   -1.0,
 
   // Expression: 0
-  //  Referenced by: '<S406>/Clamping_zero'
+  //  Referenced by: '<S448>/Clamping_zero'
 
   0.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S440>/phase'
+  //  Referenced by: '<S482>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S441>/phase'
+  //  Referenced by: '<S483>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S442>/phase'
+  //  Referenced by: '<S484>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S443>/phase'
+  //  Referenced by: '<S485>/phase'
 
   0.0,
 
   // Expression: -1
-  //  Referenced by: '<S39>/Gain1'
+  //  Referenced by: '<S53>/Gain1'
 
   -1.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S452>/phase'
+  //  Referenced by: '<S494>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S453>/phase'
+  //  Referenced by: '<S495>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S454>/phase'
+  //  Referenced by: '<S496>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S455>/phase'
+  //  Referenced by: '<S497>/phase'
 
   0.0,
 
   // Expression: -1
-  //  Referenced by: '<S40>/Gain3'
+  //  Referenced by: '<S54>/Gain3'
 
   -1.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S464>/phase'
+  //  Referenced by: '<S506>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S465>/phase'
+  //  Referenced by: '<S507>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S466>/phase'
+  //  Referenced by: '<S508>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S467>/phase'
+  //  Referenced by: '<S509>/phase'
 
   0.0,
 
   // Expression: -1
-  //  Referenced by: '<S41>/Gain3'
+  //  Referenced by: '<S55>/Gain3'
 
   -1.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S476>/phase'
+  //  Referenced by: '<S518>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S477>/phase'
+  //  Referenced by: '<S519>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S478>/phase'
+  //  Referenced by: '<S520>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S479>/phase'
+  //  Referenced by: '<S521>/phase'
 
   0.0,
 
   // Expression: PHASE
-  //  Referenced by: '<S488>/phase'
+  //  Referenced by: '<S530>/phase'
 
   0.75,
 
   // Expression: PHASE
-  //  Referenced by: '<S489>/phase'
+  //  Referenced by: '<S531>/phase'
 
   0.5,
 
   // Expression: PHASE
-  //  Referenced by: '<S490>/phase'
+  //  Referenced by: '<S532>/phase'
 
   0.25,
 
   // Expression: PHASE
-  //  Referenced by: '<S491>/phase'
+  //  Referenced by: '<S533>/phase'
 
   0.0,
+
+  // Expression: double(CTRLPERIOD(1))
+  //  Referenced by: '<S82>/ADC'
+
+  0.00016666666666666666,
 
   // Expression: 2/3*pi*0
-  //  Referenced by: '<S34>/IC'
+  //  Referenced by: '<S48>/IC'
 
   0.0,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   1.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   0.0F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0.75F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   0.5F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   0.25F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   0.0F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S445>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S445>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S445>/PWM'
-
-  0.75F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S447>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S447>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S447>/PWM'
-
-  0.5F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S449>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S449>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S449>/PWM'
-
-  0.25F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S451>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S451>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S451>/PWM'
-
-  0.0F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S457>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S457>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S457>/PWM'
-
-  0.75F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S459>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S459>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S459>/PWM'
-
-  0.5F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S461>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S461>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S461>/PWM'
-
-  0.25F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S463>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S463>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S463>/PWM'
-
-  0.0F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S469>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S469>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S469>/PWM'
-
-  0.75F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S471>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S471>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S471>/PWM'
-
-  0.5F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S473>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S473>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S473>/PWM'
-
-  0.25F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S475>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S475>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S475>/PWM'
-
-  0.0F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S481>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S481>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S481>/PWM'
-
-  0.75F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S483>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S483>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S483>/PWM'
-
-  0.5F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S485>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S485>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S485>/PWM'
-
-  0.25F,
 
   // Expression: single(deadtime)
   //  Referenced by: '<S487>/PWM'
@@ -1311,52 +1091,52 @@ P_imperix_control_T imperix_control_P = {
   // Expression: single(phase)
   //  Referenced by: '<S487>/PWM'
 
-  0.0F,
-
-  // Expression: single(deadtime)
-  //  Referenced by: '<S493>/PWM'
-
-  1.0E-6F,
-
-  // Expression: single(duty)
-  //  Referenced by: '<S493>/PWM'
-
-  0.0F,
-
-  // Expression: single(phase)
-  //  Referenced by: '<S493>/PWM'
-
   0.75F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0.5F,
 
   // Expression: single(deadtime)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   1.0E-6F,
 
   // Expression: single(duty)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0.0F,
 
   // Expression: single(phase)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0.25F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S493>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S493>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S493>/PWM'
+
+  0.0F,
 
   // Expression: single(deadtime)
   //  Referenced by: '<S499>/PWM'
@@ -1370,76 +1150,261 @@ P_imperix_control_T imperix_control_P = {
 
   // Expression: single(phase)
   //  Referenced by: '<S499>/PWM'
+
+  0.75F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S501>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S501>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S501>/PWM'
+
+  0.5F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S503>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S503>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S503>/PWM'
+
+  0.25F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S505>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S505>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S505>/PWM'
+
+  0.0F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S511>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S511>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S511>/PWM'
+
+  0.75F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S513>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S513>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S513>/PWM'
+
+  0.5F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S515>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S515>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S515>/PWM'
+
+  0.25F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S517>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S517>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S517>/PWM'
+
+  0.0F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S523>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S523>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S523>/PWM'
+
+  0.75F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S525>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S525>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S525>/PWM'
+
+  0.5F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S527>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S527>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S527>/PWM'
+
+  0.25F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S529>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S529>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S529>/PWM'
+
+  0.0F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S535>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S535>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S535>/PWM'
+
+  0.75F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S537>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S537>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S537>/PWM'
+
+  0.5F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S539>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S539>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S539>/PWM'
+
+  0.25F,
+
+  // Expression: single(deadtime)
+  //  Referenced by: '<S541>/PWM'
+
+  1.0E-6F,
+
+  // Expression: single(duty)
+  //  Referenced by: '<S541>/PWM'
+
+  0.0F,
+
+  // Expression: single(phase)
+  //  Referenced by: '<S541>/PWM'
 
   0.0F,
 
   // Expression: single(gain)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   0.00045776F,
 
   // Expression: single(offset)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   0.0F,
 
   // Expression: single(gain)
-  //  Referenced by: '<S50>/ADC'
-
-  0.027466F,
-
-  // Expression: single(offset)
-  //  Referenced by: '<S50>/ADC'
-
-  0.0F,
-
-  // Expression: single(gain)
-  //  Referenced by: '<S52>/ADC'
-
-  0.027466F,
-
-  // Expression: single(offset)
-  //  Referenced by: '<S52>/ADC'
-
-  0.0F,
-
-  // Expression: single(gain)
-  //  Referenced by: '<S54>/ADC'
-
-  0.027466F,
-
-  // Expression: single(offset)
-  //  Referenced by: '<S54>/ADC'
-
-  0.0F,
-
-  // Expression: single(gain)
-  //  Referenced by: '<S56>/ADC'
-
-  0.027466F,
-
-  // Expression: single(offset)
-  //  Referenced by: '<S56>/ADC'
-
-  0.0F,
-
-  // Expression: single(gain)
-  //  Referenced by: '<S58>/ADC'
-
-  0.027466F,
-
-  // Expression: single(offset)
-  //  Referenced by: '<S58>/ADC'
-
-  0.0F,
-
-  // Expression: single(gain)
-  //  Referenced by: '<S60>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   0.00045776F,
 
   // Expression: single(offset)
-  //  Referenced by: '<S60>/ADC'
+  //  Referenced by: '<S86>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S74>/ADC'
+
+  0.00045776F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S74>/ADC'
 
   0.0F,
 
@@ -1454,1134 +1419,1364 @@ P_imperix_control_T imperix_control_P = {
   0.0F,
 
   // Expression: single(gain)
-  //  Referenced by: '<S64>/ADC'
+  //  Referenced by: '<S76>/ADC'
 
   0.00045776F,
 
   // Expression: single(offset)
+  //  Referenced by: '<S76>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S78>/ADC'
+
+  0.00045776F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S78>/ADC'
+
+  0.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S209>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S209>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S211>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S211>/S-Function'
+
+  10.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S70>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S70>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S88>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S88>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
   //  Referenced by: '<S64>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S64>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S72>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S72>/ADC'
 
   0.0F,
 
   // Expression: single(gain)
   //  Referenced by: '<S66>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S66>/ADC'
+
+  0.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S68>/ADC'
+
+  0.027466F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S68>/ADC'
+
+  0.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S213>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S213>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S215>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S215>/S-Function'
+
+  10.0F,
+
+  // Expression: single(gain)
+  //  Referenced by: '<S80>/ADC'
 
   0.012207F,
 
   // Expression: single(offset)
-  //  Referenced by: '<S66>/ADC'
+  //  Referenced by: '<S80>/ADC'
 
   0.0F,
 
-  // Expression: single(gain)
-  //  Referenced by: '<S68>/ADC'
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S217>/S-Function'
 
-  0.00045776F,
+  10.0F,
 
-  // Expression: single(offset)
-  //  Referenced by: '<S68>/ADC'
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S217>/S-Function'
 
-  0.0F,
+  10.0F,
 
-  // Expression: single(gain)
-  //  Referenced by: '<S70>/ADC'
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S219>/S-Function'
 
-  0.00045776F,
+  10.0F,
 
-  // Expression: single(offset)
-  //  Referenced by: '<S70>/ADC'
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S219>/S-Function'
 
-  0.0F,
+  10.0F,
 
-  // Expression: single(gain)
-  //  Referenced by: '<S72>/ADC'
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S221>/S-Function'
 
-  0.027466F,
+  10.0F,
 
-  // Expression: single(offset)
-  //  Referenced by: '<S72>/ADC'
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S221>/S-Function'
 
-  0.0F,
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S223>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S223>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S225>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S225>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S227>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S227>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S229>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S229>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S231>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S231>/S-Function'
+
+  10.0F,
+
+  // Expression: single(CAN_TX_FREQ)
+  //  Referenced by: '<S233>/S-Function'
+
+  10.0F,
+
+  // Expression: single(ETH_TX_FREQ)
+  //  Referenced by: '<S233>/S-Function'
+
+  10.0F,
 
   // Expression: single(INITIALVAL)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   0.0F,
 
   // Expression: single(VAL_MIN)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   0.0F,
 
   // Expression: single(VAL_MAX)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   1.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   0.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   0.0F,
 
   // Expression: single(INITIALVAL)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   0.0F,
 
   // Expression: single(VAL_MIN)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   -1.0F,
 
   // Expression: single(VAL_MAX)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   1.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   0.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   0.0F,
 
   // Expression: single(INITIALVAL)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.0F,
 
   // Expression: single(VAL_MIN)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.0F,
 
   // Expression: single(VAL_MAX)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.0F,
 
   // Expression: single(0)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0.0F,
 
   // Expression: single(private_nb_oversamples)
-  //  Referenced by: '<S75>/S-Function'
+  //  Referenced by: '<S91>/S-Function'
 
   0.0F,
 
   // Expression: single(interrupt_phase)
-  //  Referenced by: '<S75>/S-Function'
+  //  Referenced by: '<S91>/S-Function'
 
   0.5F,
 
   // Expression: single(frequency)
-  //  Referenced by: '<S77>/CLK1'
+  //  Referenced by: '<S93>/CLK1'
 
   6000.0F,
 
+  // Expression: single(gain)
+  //  Referenced by: '<S82>/ADC'
+
+  0.012207F,
+
+  // Expression: single(offset)
+  //  Referenced by: '<S82>/ADC'
+
+  0.0F,
+
   // Expression: uint32(CAN_BAUDRATE)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S209>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S209>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S211>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S211>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S213>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S213>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S215>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S215>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S217>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S217>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S219>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S219>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S221>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S221>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S223>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S223>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S225>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S225>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S227>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S227>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S229>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S229>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S231>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S231>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S233>/S-Function'
+
+  1000000U,
+
+  // Expression: uint32(ETH_PORT)
+  //  Referenced by: '<S233>/S-Function'
+
+  2000U,
+
+  // Expression: uint32(CAN_BAUDRATE)
+  //  Referenced by: '<S543>/S-Function'
 
   1000000U,
 
   // Expression: uint32(CAN_BAUDRATE)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   1000000U,
 
   // Expression: uint32(CAN_BAUDRATE)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   1000000U,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   8,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   1,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   2,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   3,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   8,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S445>/PWM'
+  //  Referenced by: '<S487>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   9,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S447>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   10,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S449>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   11,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S451>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   4,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S457>/PWM'
+  //  Referenced by: '<S499>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   5,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S459>/PWM'
+  //  Referenced by: '<S501>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   6,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S461>/PWM'
+  //  Referenced by: '<S503>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   7,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S463>/PWM'
+  //  Referenced by: '<S505>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   4,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S469>/PWM'
+  //  Referenced by: '<S511>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   5,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S471>/PWM'
+  //  Referenced by: '<S513>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   6,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S473>/PWM'
+  //  Referenced by: '<S515>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   7,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S475>/PWM'
+  //  Referenced by: '<S517>/PWM'
 
   1,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   12,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S481>/PWM'
+  //  Referenced by: '<S523>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   13,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S483>/PWM'
+  //  Referenced by: '<S525>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   14,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S527>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   15,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S487>/PWM'
+  //  Referenced by: '<S529>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   0,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S535>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   1,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S537>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   2,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S539>/PWM'
 
   0,
 
   // Expression: int16(lane)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   3,
 
   // Expression: int16(carrier)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   0,
 
   // Expression: int16(rate)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   0,
 
   // Expression: int16(outconf)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   1,
 
   // Expression: int16(outmode)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S499>/PWM'
+  //  Referenced by: '<S541>/PWM'
 
   0,
 
   // Expression: int16(channel)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
-  3,
+  0,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   0,
 
   // Expression: int16(outputwidth)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   1,
 
   // Expression: int16(averagelength)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   1,
 
   // Expression: int16(channel)
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
+
+  1,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S86>/ADC'
 
   0,
 
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S50>/ADC'
-
-  1,
-
   // Expression: int16(outputwidth)
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   1,
 
   // Expression: int16(averagelength)
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   1,
 
   // Expression: int16(channel)
-  //  Referenced by: '<S52>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   2,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S52>/ADC'
-
-  1,
-
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S52>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S52>/ADC'
-
-  1,
-
-  // Expression: int16(channel)
-  //  Referenced by: '<S54>/ADC'
-
-  3,
-
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S54>/ADC'
-
-  1,
-
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S54>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S54>/ADC'
-
-  1,
-
-  // Expression: int16(channel)
-  //  Referenced by: '<S56>/ADC'
-
-  6,
-
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S56>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   0,
 
   // Expression: int16(outputwidth)
-  //  Referenced by: '<S56>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   1,
 
   // Expression: int16(averagelength)
-  //  Referenced by: '<S56>/ADC'
-
-  1,
-
-  // Expression: int16(channel)
-  //  Referenced by: '<S58>/ADC'
-
-  1,
-
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S58>/ADC'
-
-  1,
-
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S58>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S58>/ADC'
-
-  1,
-
-  // Expression: int16(channel)
-  //  Referenced by: '<S60>/ADC'
-
-  2,
-
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S60>/ADC'
-
-  0,
-
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S60>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S60>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   1,
 
   // Expression: int16(channel)
   //  Referenced by: '<S62>/ADC'
+
+  3,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S62>/ADC'
+
+  0,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S62>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S62>/ADC'
+
+  1,
+
+  // Expression: int16(channel)
+  //  Referenced by: '<S76>/ADC'
 
   4,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S62>/ADC'
+  //  Referenced by: '<S76>/ADC'
 
   0,
 
   // Expression: int16(outputwidth)
-  //  Referenced by: '<S62>/ADC'
+  //  Referenced by: '<S76>/ADC'
 
   1,
 
   // Expression: int16(averagelength)
-  //  Referenced by: '<S62>/ADC'
+  //  Referenced by: '<S76>/ADC'
 
   1,
 
   // Expression: int16(channel)
-  //  Referenced by: '<S64>/ADC'
+  //  Referenced by: '<S78>/ADC'
 
   5,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S64>/ADC'
+  //  Referenced by: '<S78>/ADC'
 
   0,
 
   // Expression: int16(outputwidth)
-  //  Referenced by: '<S64>/ADC'
+  //  Referenced by: '<S78>/ADC'
 
   1,
 
   // Expression: int16(averagelength)
-  //  Referenced by: '<S64>/ADC'
+  //  Referenced by: '<S78>/ADC'
 
   1,
 
-  // Expression: int16(channel)
-  //  Referenced by: '<S66>/ADC'
-
-  4,
-
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S66>/ADC'
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S209>/S-Function'
 
   1,
 
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S66>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S66>/ADC'
-
-  1,
-
-  // Expression: int16(channel)
-  //  Referenced by: '<S68>/ADC'
+  // Expression: int16(0)
+  //  Referenced by: '<S209>/S-Function'
 
   0,
 
-  // Expression: int16(nbBbx)
-  //  Referenced by: '<S68>/ADC'
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S211>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S211>/S-Function'
 
   0,
-
-  // Expression: int16(outputwidth)
-  //  Referenced by: '<S68>/ADC'
-
-  1,
-
-  // Expression: int16(averagelength)
-  //  Referenced by: '<S68>/ADC'
-
-  1,
 
   // Expression: int16(channel)
   //  Referenced by: '<S70>/ADC'
 
-  1,
+  6,
 
   // Expression: int16(nbBbx)
   //  Referenced by: '<S70>/ADC'
@@ -2599,14 +2794,54 @@ P_imperix_control_T imperix_control_P = {
   1,
 
   // Expression: int16(channel)
-  //  Referenced by: '<S72>/ADC'
+  //  Referenced by: '<S88>/ADC'
 
   7,
 
   // Expression: int16(nbBbx)
-  //  Referenced by: '<S72>/ADC'
+  //  Referenced by: '<S88>/ADC'
 
   0,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S88>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S88>/ADC'
+
+  1,
+
+  // Expression: int16(channel)
+  //  Referenced by: '<S64>/ADC'
+
+  0,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S64>/ADC'
+
+  1,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S64>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S64>/ADC'
+
+  1,
+
+  // Expression: int16(channel)
+  //  Referenced by: '<S72>/ADC'
+
+  1,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S72>/ADC'
+
+  1,
 
   // Expression: int16(outputwidth)
   //  Referenced by: '<S72>/ADC'
@@ -2618,418 +2853,708 @@ P_imperix_control_T imperix_control_P = {
 
   1,
 
+  // Expression: int16(channel)
+  //  Referenced by: '<S66>/ADC'
+
+  2,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S66>/ADC'
+
+  1,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S66>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S66>/ADC'
+
+  1,
+
+  // Expression: int16(channel)
+  //  Referenced by: '<S68>/ADC'
+
+  3,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S68>/ADC'
+
+  1,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S68>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S68>/ADC'
+
+  1,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S213>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S213>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S215>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S215>/S-Function'
+
+  0,
+
+  // Expression: int16(channel)
+  //  Referenced by: '<S80>/ADC'
+
+  4,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S80>/ADC'
+
+  1,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S80>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S80>/ADC'
+
+  1,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S217>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S217>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S219>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S219>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S221>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S221>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S223>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S223>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S225>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S225>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S227>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S227>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S229>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S229>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S231>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S231>/S-Function'
+
+  0,
+
+  // Expression: int16(DATATYPE)
+  //  Referenced by: '<S233>/S-Function'
+
+  1,
+
+  // Expression: int16(0)
+  //  Referenced by: '<S233>/S-Function'
+
+  0,
+
   // Expression: int16(DATA_TYPE)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   1,
 
   // Expression: int16(DATA_TYPE)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   1,
 
   // Expression: int16(DATA_TYPE)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   1,
 
   // Computed Parameter: clk_id_Value
-  //  Referenced by: '<S77>/clk_id'
+  //  Referenced by: '<S93>/clk_id'
 
   0,
 
   // Expression: int16(id)
-  //  Referenced by: '<S77>/CLK1'
+  //  Referenced by: '<S93>/CLK1'
 
   0,
 
+  // Expression: int16(channel)
+  //  Referenced by: '<S82>/ADC'
+
+  0,
+
+  // Expression: int16(nbBbx)
+  //  Referenced by: '<S82>/ADC'
+
+  2,
+
+  // Expression: int16(outputwidth)
+  //  Referenced by: '<S82>/ADC'
+
+  1,
+
+  // Expression: int16(averagelength)
+  //  Referenced by: '<S82>/ADC'
+
+  1,
+
   // Computed Parameter: SFunction_P1
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S209>/S-Function'
+
+  { 105U, 115U, 49U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S209>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S209>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S209>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14
+  //  Referenced by: '<S209>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_m
+  //  Referenced by: '<S211>/S-Function'
+
+  { 105U, 115U, 50U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S211>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S211>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S211>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_c
+  //  Referenced by: '<S211>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_b
+  //  Referenced by: '<S213>/S-Function'
+
+  { 86U, 99U, 53U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S213>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S213>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S213>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_f
+  //  Referenced by: '<S213>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_d
+  //  Referenced by: '<S215>/S-Function'
+
+  { 86U, 99U, 54U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S215>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S215>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S215>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_e
+  //  Referenced by: '<S215>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_n
+  //  Referenced by: '<S217>/S-Function'
+
+  { 119U, 109U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S217>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S217>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S217>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_h
+  //  Referenced by: '<S217>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_g
+  //  Referenced by: '<S219>/S-Function'
+
+  { 105U, 115U, 51U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S219>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S219>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S219>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_ef
+  //  Referenced by: '<S219>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_c
+  //  Referenced by: '<S221>/S-Function'
+
+  { 105U, 115U, 52U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S221>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S221>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S221>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_a
+  //  Referenced by: '<S221>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_a
+  //  Referenced by: '<S223>/S-Function'
+
+  { 105U, 115U, 53U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S223>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S223>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S223>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_cs
+  //  Referenced by: '<S223>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_nx
+  //  Referenced by: '<S225>/S-Function'
+
+  { 105U, 115U, 54U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S225>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S225>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S225>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_p
+  //  Referenced by: '<S225>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_l
+  //  Referenced by: '<S227>/S-Function'
+
+  { 86U, 99U, 49U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S227>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S227>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S227>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_d
+  //  Referenced by: '<S227>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_cv
+  //  Referenced by: '<S229>/S-Function'
+
+  { 86U, 99U, 50U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S229>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S229>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S229>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_fg
+  //  Referenced by: '<S229>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_ce
+  //  Referenced by: '<S231>/S-Function'
+
+  { 86U, 99U, 51U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S231>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S231>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S231>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_k
+  //  Referenced by: '<S231>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_cu
+  //  Referenced by: '<S233>/S-Function'
+
+  { 86U, 99U, 52U },
+
+  // Expression: uint16(CAN_MB_ID)
+  //  Referenced by: '<S233>/S-Function'
+
+  0U,
+
+  // Expression: uint16(CAN_ADDRESS)
+  //  Referenced by: '<S233>/S-Function'
+
+  0U,
+
+  // Expression: uint16(ETH_MB_ID)
+  //  Referenced by: '<S233>/S-Function'
+
+  1U,
+
+  // Computed Parameter: SFunction_P14_cu
+  //  Referenced by: '<S233>/S-Function'
+
+  { 101U, 109U, 112U, 116U, 121U },
+
+  // Computed Parameter: SFunction_P1_i
+  //  Referenced by: '<S543>/S-Function'
 
   { 70U, 95U, 114U, 101U, 102U },
 
   // Expression: uint16(CAN_MB_ID)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   1U,
 
   // Expression: uint16(CAN_ADDRESS)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   0U,
 
   // Expression: uint16(ETH_MB_ID)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   2U,
 
   // Expression: uint16(ETH_PORT)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S543>/S-Function'
 
   2000U,
 
   // Computed Parameter: SFunction_P1_f
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   { 119U, 95U, 114U, 101U, 102U },
 
   // Expression: uint16(CAN_MB_ID)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   1U,
 
   // Expression: uint16(CAN_ADDRESS)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   0U,
 
   // Expression: uint16(ETH_MB_ID)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   2U,
 
   // Expression: uint16(ETH_PORT)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S547>/S-Function'
 
   2000U,
 
   // Computed Parameter: SFunction_P1_p
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   { 100U, 111U, 95U, 99U, 111U, 110U, 116U, 114U, 111U, 108U },
 
   // Expression: uint16(CAN_MB_ID)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   1U,
 
   // Expression: uint16(CAN_ADDRESS)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   0U,
 
   // Expression: uint16(ETH_MB_ID)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   2U,
 
   // Expression: uint16(ETH_PORT)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S545>/S-Function'
 
   2000U,
 
   // Expression: uint16(interrupt_pstsclr)
-  //  Referenced by: '<S75>/S-Function'
+  //  Referenced by: '<S91>/S-Function'
 
   0U,
 
   // Expression: uint16(private_adc_delay_ns)
-  //  Referenced by: '<S75>/S-Function'
+  //  Referenced by: '<S91>/S-Function'
 
   2000U,
 
   // Expression: uint16(highest_device_id)
-  //  Referenced by: '<S75>/S-Function'
+  //  Referenced by: '<S91>/S-Function'
 
-  1U,
+  2U,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S191>/PWM'
+  //  Referenced by: '<S207>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S249>/PWM'
+  //  Referenced by: '<S291>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S251>/PWM'
+  //  Referenced by: '<S293>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S253>/PWM'
+  //  Referenced by: '<S295>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S255>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S255>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S445>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S445>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S445>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S447>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S447>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S447>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S449>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S449>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S449>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S451>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S451>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S451>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S457>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S457>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S457>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S459>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S459>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S459>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S461>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S461>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S461>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S463>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S463>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S463>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S469>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S469>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S469>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S471>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S471>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S471>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S473>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S473>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S473>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S475>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S475>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S475>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S481>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S481>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S481>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S483>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S483>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S483>/PWM'
-
-  true,
-
-  // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S485>/PWM'
-
-  true,
-
-  // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S485>/PWM'
-
-  false,
-
-  // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S485>/PWM'
+  //  Referenced by: '<S297>/PWM'
 
   true,
 
@@ -3049,47 +3574,47 @@ P_imperix_control_T imperix_control_P = {
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S493>/PWM'
+  //  Referenced by: '<S489>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S495>/PWM'
+  //  Referenced by: '<S491>/PWM'
 
   true,
 
   // Expression: boolean(dutyrealtime)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   true,
 
   // Expression: boolean(phaserealtime)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   false,
 
   // Expression: boolean(activaterealtime)
-  //  Referenced by: '<S497>/PWM'
+  //  Referenced by: '<S493>/PWM'
 
   true,
 
@@ -3108,73 +3633,258 @@ P_imperix_control_T imperix_control_P = {
 
   true,
 
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S501>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S501>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S501>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S503>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S503>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S503>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S505>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S505>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S505>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S511>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S511>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S511>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S513>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S513>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S513>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S515>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S515>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S515>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S517>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S517>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S517>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S523>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S523>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S523>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S525>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S525>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S525>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S527>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S527>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S527>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S529>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S529>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S529>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S535>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S535>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S535>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S537>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S537>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S537>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S539>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S539>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S539>/PWM'
+
+  true,
+
+  // Expression: boolean(dutyrealtime)
+  //  Referenced by: '<S541>/PWM'
+
+  true,
+
+  // Expression: boolean(phaserealtime)
+  //  Referenced by: '<S541>/PWM'
+
+  false,
+
+  // Expression: boolean(activaterealtime)
+  //  Referenced by: '<S541>/PWM'
+
+  true,
+
   // Expression: boolean(usehist)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   false,
 
   // Expression: boolean(useaverage)
-  //  Referenced by: '<S48>/ADC'
+  //  Referenced by: '<S84>/ADC'
 
   false,
 
   // Expression: boolean(usehist)
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   false,
 
   // Expression: boolean(useaverage)
-  //  Referenced by: '<S50>/ADC'
+  //  Referenced by: '<S86>/ADC'
 
   false,
 
   // Expression: boolean(usehist)
-  //  Referenced by: '<S52>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   false,
 
   // Expression: boolean(useaverage)
-  //  Referenced by: '<S52>/ADC'
-
-  false,
-
-  // Expression: boolean(usehist)
-  //  Referenced by: '<S54>/ADC'
-
-  false,
-
-  // Expression: boolean(useaverage)
-  //  Referenced by: '<S54>/ADC'
-
-  false,
-
-  // Expression: boolean(usehist)
-  //  Referenced by: '<S56>/ADC'
-
-  false,
-
-  // Expression: boolean(useaverage)
-  //  Referenced by: '<S56>/ADC'
-
-  false,
-
-  // Expression: boolean(usehist)
-  //  Referenced by: '<S58>/ADC'
-
-  false,
-
-  // Expression: boolean(useaverage)
-  //  Referenced by: '<S58>/ADC'
-
-  false,
-
-  // Expression: boolean(usehist)
-  //  Referenced by: '<S60>/ADC'
-
-  false,
-
-  // Expression: boolean(useaverage)
-  //  Referenced by: '<S60>/ADC'
+  //  Referenced by: '<S74>/ADC'
 
   false,
 
@@ -3189,12 +3899,102 @@ P_imperix_control_T imperix_control_P = {
   false,
 
   // Expression: boolean(usehist)
+  //  Referenced by: '<S76>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S76>/ADC'
+
+  false,
+
+  // Expression: boolean(usehist)
+  //  Referenced by: '<S78>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S78>/ADC'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S209>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S209>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S209>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S209>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S211>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S211>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S211>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S211>/S-Function'
+
+  false,
+
+  // Expression: boolean(usehist)
+  //  Referenced by: '<S70>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S70>/ADC'
+
+  false,
+
+  // Expression: boolean(usehist)
+  //  Referenced by: '<S88>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S88>/ADC'
+
+  false,
+
+  // Expression: boolean(usehist)
   //  Referenced by: '<S64>/ADC'
 
   false,
 
   // Expression: boolean(useaverage)
   //  Referenced by: '<S64>/ADC'
+
+  false,
+
+  // Expression: boolean(usehist)
+  //  Referenced by: '<S72>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S72>/ADC'
 
   false,
 
@@ -3218,172 +4018,392 @@ P_imperix_control_T imperix_control_P = {
 
   false,
 
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S213>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S213>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S213>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S213>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S215>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S215>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S215>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S215>/S-Function'
+
+  false,
+
   // Expression: boolean(usehist)
-  //  Referenced by: '<S70>/ADC'
+  //  Referenced by: '<S80>/ADC'
 
   false,
 
   // Expression: boolean(useaverage)
-  //  Referenced by: '<S70>/ADC'
-
-  false,
-
-  // Expression: boolean(usehist)
-  //  Referenced by: '<S72>/ADC'
-
-  false,
-
-  // Expression: boolean(useaverage)
-  //  Referenced by: '<S72>/ADC'
+  //  Referenced by: '<S80>/ADC'
 
   false,
 
   // Expression: boolean(CAN_ENABLED)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S217>/S-Function'
 
   false,
 
   // Expression: boolean(CAN_BIG_ENDIAN)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S217>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_ENABLED)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S217>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_BIG_ENDIAN)
-  //  Referenced by: '<S501>/S-Function'
+  //  Referenced by: '<S217>/S-Function'
 
   false,
 
   // Expression: boolean(CAN_ENABLED)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S219>/S-Function'
 
   false,
 
   // Expression: boolean(CAN_BIG_ENDIAN)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S219>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_ENABLED)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S219>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_BIG_ENDIAN)
-  //  Referenced by: '<S505>/S-Function'
+  //  Referenced by: '<S219>/S-Function'
 
   false,
 
   // Expression: boolean(CAN_ENABLED)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S221>/S-Function'
 
   false,
 
   // Expression: boolean(CAN_BIG_ENDIAN)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S221>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_ENABLED)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S221>/S-Function'
 
   false,
 
   // Expression: boolean(ETH_BIG_ENDIAN)
-  //  Referenced by: '<S503>/S-Function'
+  //  Referenced by: '<S221>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S223>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S223>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S223>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S223>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S225>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S225>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S225>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S225>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S227>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S227>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S227>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S227>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S229>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S229>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S229>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S229>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S231>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S231>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S231>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S231>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S233>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S233>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S233>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S233>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S543>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S543>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S543>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S543>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S547>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S547>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S547>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S547>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_ENABLED)
+  //  Referenced by: '<S545>/S-Function'
+
+  false,
+
+  // Expression: boolean(CAN_BIG_ENDIAN)
+  //  Referenced by: '<S545>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_ENABLED)
+  //  Referenced by: '<S545>/S-Function'
+
+  false,
+
+  // Expression: boolean(ETH_BIG_ENDIAN)
+  //  Referenced by: '<S545>/S-Function'
 
   false,
 
   // Expression: boolean(var_freq)
-  //  Referenced by: '<S77>/CLK1'
+  //  Referenced by: '<S93>/CLK1'
+
+  false,
+
+  // Expression: boolean(usehist)
+  //  Referenced by: '<S82>/ADC'
+
+  false,
+
+  // Expression: boolean(useaverage)
+  //  Referenced by: '<S82>/ADC'
 
   false,
 
   // Computed Parameter: Constant_Value
-  //  Referenced by: '<S162>/Constant'
+  //  Referenced by: '<S178>/Constant'
 
   1,
 
   // Computed Parameter: Constant2_Value
-  //  Referenced by: '<S162>/Constant2'
+  //  Referenced by: '<S178>/Constant2'
 
   -1,
 
   // Computed Parameter: Constant3_Value
-  //  Referenced by: '<S162>/Constant3'
+  //  Referenced by: '<S178>/Constant3'
 
   1,
 
   // Computed Parameter: Constant4_Value_j
-  //  Referenced by: '<S162>/Constant4'
+  //  Referenced by: '<S178>/Constant4'
 
   -1,
 
   // Computed Parameter: Constant_Value_i
-  //  Referenced by: '<S406>/Constant'
+  //  Referenced by: '<S448>/Constant'
 
   1,
 
   // Computed Parameter: Constant2_Value_p
-  //  Referenced by: '<S406>/Constant2'
+  //  Referenced by: '<S448>/Constant2'
 
   -1,
 
   // Computed Parameter: Constant3_Value_g
-  //  Referenced by: '<S406>/Constant3'
+  //  Referenced by: '<S448>/Constant3'
 
   1,
 
   // Computed Parameter: Constant4_Value_c
-  //  Referenced by: '<S406>/Constant4'
+  //  Referenced by: '<S448>/Constant4'
 
   -1,
 
-  // Start of '<S265>/Subsystem1'
+  // Start of '<S307>/Subsystem1'
   {
     // Expression: [0,0]
-    //  Referenced by: '<S373>/alpha_beta'
+    //  Referenced by: '<S415>/alpha_beta'
 
     { 0.0, 0.0 }
   }
   ,
 
-  // End of '<S265>/Subsystem1'
+  // End of '<S307>/Subsystem1'
 
-  // Start of '<S265>/Subsystem - pi//2 delay'
+  // Start of '<S307>/Subsystem - pi//2 delay'
   {
     // Expression: [0,0]
-    //  Referenced by: '<S372>/alpha_beta'
+    //  Referenced by: '<S414>/alpha_beta'
 
     { 0.0, 0.0 }
   }
   ,
 
-  // End of '<S265>/Subsystem - pi//2 delay'
+  // End of '<S307>/Subsystem - pi//2 delay'
 
-  // Start of '<S257>/Subsystem1'
+  // Start of '<S299>/Subsystem1'
   {
     // Expression: [0,0]
-    //  Referenced by: '<S261>/alpha_beta'
+    //  Referenced by: '<S303>/alpha_beta'
 
     { 0.0, 0.0 }
   }
   ,
 
-  // End of '<S257>/Subsystem1'
+  // End of '<S299>/Subsystem1'
 
-  // Start of '<S257>/Subsystem - pi//2 delay'
+  // Start of '<S299>/Subsystem - pi//2 delay'
   {
     // Expression: [0,0]
-    //  Referenced by: '<S260>/alpha_beta'
+    //  Referenced by: '<S302>/alpha_beta'
 
     { 0.0, 0.0 }
   }
-  // End of '<S257>/Subsystem - pi//2 delay'
+  // End of '<S299>/Subsystem - pi//2 delay'
 };
 
 //

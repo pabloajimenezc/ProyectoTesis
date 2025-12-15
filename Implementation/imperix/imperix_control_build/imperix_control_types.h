@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.10
+// Model version                  : 19.14
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Sat Dec 13 16:25:19 2025
+// C/C++ source code generated on : Mon Dec 15 16:19:02 2025
 //
 #ifndef imperix_control_types_h_
 #define imperix_control_types_h_
@@ -233,7 +233,7 @@ struct struct_8pcJrWnT2NIOYJW9vpRYLD
 
 #endif
 
-// Custom Type definition for MATLAB Function: '<S25>/Saturation'
+// Custom Type definition for MATLAB Function: '<S26>/Saturation'
 #ifndef struct_mpcActiveSetOptions_imperix_c_T
 #define struct_mpcActiveSetOptions_imperix_c_T
 
@@ -247,10 +247,10 @@ struct mpcActiveSetOptions_imperix_c_T
 
 #endif                                // struct_mpcActiveSetOptions_imperix_c_T
 
-// Parameters for system: '<S257>/Subsystem - pi//2 delay'
+// Parameters for system: '<S299>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_c_T_ P_Subsystempi2delay_imperix_c_T;
 
-// Parameters for system: '<S257>/Subsystem1'
+// Parameters for system: '<S299>/Subsystem1'
 typedef struct P_Subsystem1_imperix_control_T_ P_Subsystem1_imperix_control_T;
 
 // Parameters (default storage)
