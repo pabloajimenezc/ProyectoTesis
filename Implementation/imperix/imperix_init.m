@@ -194,7 +194,7 @@ CEMPC = struct(); % Cluster Energy MPC parameters
 
 CEMPC.Ts        = Ts_ce; % Sampling time
 CEMPC.Nl        = 10;    % # of BCD iterations
-CEMPC.Np        = 1;    % Rolling horizon length
+CEMPC.Np        = 3;    % Rolling horizon length
 CEMPC.ONE       = repmat({ones(M2C.m, 1)}, CEMPC.Np, 1);
 CEMPC.ONE       = blkdiag(CEMPC.ONE{:});                     % CMV incidence matrix, long horizon
 CEMPC.NN        = repmat({M2C.N}, CEMPC.Np, 1);

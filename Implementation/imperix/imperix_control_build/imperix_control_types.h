@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.18
+// Model version                  : 19.25
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Mon Dec 15 17:17:56 2025
+// C/C++ source code generated on : Tue Dec 16 14:56:12 2025
 //
 #ifndef imperix_control_types_h_
 #define imperix_control_types_h_
@@ -247,10 +247,10 @@ struct mpcActiveSetOptions_imperix_c_T
 
 #endif                                // struct_mpcActiveSetOptions_imperix_c_T
 
-// Parameters for system: '<S299>/Subsystem - pi//2 delay'
+// Parameters for system: '<S314>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_c_T_ P_Subsystempi2delay_imperix_c_T;
 
-// Parameters for system: '<S299>/Subsystem1'
+// Parameters for system: '<S314>/Subsystem1'
 typedef struct P_Subsystem1_imperix_control_T_ P_Subsystem1_imperix_control_T;
 
 // Parameters (default storage)
