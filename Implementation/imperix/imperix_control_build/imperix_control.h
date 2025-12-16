@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.14
+// Model version                  : 19.18
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Mon Dec 15 16:19:02 2025
+// C/C++ source code generated on : Mon Dec 15 17:17:56 2025
 //
 #ifndef imperix_control_h_
 #define imperix_control_h_
@@ -185,6 +185,7 @@ struct DW_imperix_control_T {
   real_T Integrator_DSTATE_k;          // '<S394>/Integrator'
   real_T UnitDelay1_DSTATE_a[2];       // '<S148>/Unit Delay1'
   real_T SFunction_DSTATE_m;           // '<S91>/S-Function'
+  real_T UnitDelay_DSTATE[2];          // '<S1>/Unit Delay'
   real_T TmpRTBAtSum7Inport1_Buffer0;  // synthesized block
   real_T TmpRTBAtSum5Inport2_Buffer0;  // synthesized block
   real_T TmpRTBAtICOutport1_Buffer0;   // synthesized block
@@ -198,10 +199,9 @@ struct DW_imperix_control_T {
   real_T TmpRTBAtEnergybalanceInport2_Bu[6];// synthesized block
   real_T TmpRTBAtEnergybalanceInport3_Bu[5];// synthesized block
   real_T TmpRTBAtEnergybalanceInport4_Bu[5];// synthesized block
-  real_T TmpRTBAtEnergybalanceInport5_Bu;// synthesized block
   real_T TmpRTBAtKalmanFilterInport1_Buf[2];// synthesized block
   real_T TmpRTBAtKalmanFilterInport2_Buf;// synthesized block
-  real_T TmpRTBAtKalmanFilterInport3_Buf[2];// synthesized block
+  real_T TmpRTBAtUnitDelayInport1_Buffer[2];// synthesized block
   real_T Ac[24];                       // '<S26>/Saturation'
   real_T Ix[4];                        // '<S26>/Saturation'
   real_T Tol;                          // '<S26>/Saturation'
@@ -229,24 +229,22 @@ struct DW_imperix_control_T {
   real_T dF;                           // '<S1>/IM references'
   real_T dw;                           // '<S1>/IM references'
   real_T Ts;                           // '<S1>/Energy balance'
-  real_T Tab2abc[6];                   // '<S1>/Energy balance'
-  real_T Tabc2ab[6];                   // '<S1>/Energy balance'
   real_T A[30];                        // '<S1>/Energy balance'
   real_T pinvA[30];                    // '<S1>/Energy balance'
-  real_T K[324];                       // '<S1>/Energy balance'
-  real_T MI[324];                      // '<S1>/Energy balance'
-  real_T NN[108];                      // '<S1>/Energy balance'
-  real_T ONE[54];                      // '<S1>/Energy balance'
+  real_T K[36];                        // '<S1>/Energy balance'
+  real_T MI[36];                       // '<S1>/Energy balance'
+  real_T NN[12];                       // '<S1>/Energy balance'
+  real_T ONE[6];                       // '<S1>/Energy balance'
   real_T Nl;                           // '<S1>/Energy balance'
-  real_T is_max_h;                     // '<S1>/Energy balance'
-  real_T is_max2_o;                    // '<S1>/Energy balance'
+  real_T is_max_c;                     // '<S1>/Energy balance'
+  real_T is_max2_f;                    // '<S1>/Energy balance'
   real_T vo_max2;                      // '<S1>/Energy balance'
   real_T Ec_ref2;                      // '<S1>/Energy balance'
-  real_T Hu_z[36];                     // '<S1>/Energy balance'
-  real_T Aineq_z[216];                 // '<S1>/Energy balance'
+  real_T Hu_z[4];                      // '<S1>/Energy balance'
+  real_T Aineq_z[24];                  // '<S1>/Energy balance'
   real_T lambda_z;                     // '<S1>/Energy balance'
-  real_T Hu_o[9];                      // '<S1>/Energy balance'
-  real_T Aineq_o[18];                  // '<S1>/Energy balance'
+  real_T Hu_o;                         // '<S1>/Energy balance'
+  real_T Aineq_o[2];                   // '<S1>/Energy balance'
   real_T lambda_o;                     // '<S1>/Energy balance'
   real_T Ec_dev;                       // '<S1>/Energy balance'
   boolean_T IC_FirstOutputTime;        // '<S48>/IC'
@@ -275,9 +273,6 @@ struct P_Subsystem1_imperix_control_T_ {
 
 // Parameters (default storage)
 struct P_imperix_control_T_ {
-  struct_kYK8klzU7k6CF2sPPFadY CEMPC;  // Variable: CEMPC
-                                          //  Referenced by: '<S1>/Energy balance'
-
   struct_Jn3yK8idWqC5lwHij8OsQE CCMPC; // Variable: CCMPC
                                           //  Referenced by:
                                           //    '<S1>/LICCs control'
@@ -304,6 +299,9 @@ struct P_imperix_control_T_ {
 
   struct_8pcJrWnT2NIOYJW9vpRYLD KF;    // Variable: KF
                                           //  Referenced by: '<S1>/Kalman Filter'
+
+  struct_UQuwmheec9p2Pu91dfupQB CEMPC; // Variable: CEMPC
+                                          //  Referenced by: '<S1>/Energy balance'
 
   struct_aK5aQeabUeTOrz39VMjTKC IM;    // Variable: IM
                                           //  Referenced by:
@@ -669,6 +667,9 @@ struct P_imperix_control_T_ {
 
   real_T ADC_P8_gx;                    // Expression: double(CTRLPERIOD(1))
                                           //  Referenced by: '<S82>/ADC'
+
+  real_T UnitDelay_InitialCondition;   // Expression: 0
+                                          //  Referenced by: '<S1>/Unit Delay'
 
   real_T IC_Value;                     // Expression: 2/3*pi*0
                                           //  Referenced by: '<S48>/IC'

@@ -194,7 +194,7 @@ CEMPC = struct(); % Cluster Energy MPC parameters
 
 CEMPC.Ts        = Ts_ce; % Sampling time
 CEMPC.Nl        = 10;    % # of BCD iterations
-CEMPC.Np        = 3;    % Rolling horizon length
+CEMPC.Np        = 1;    % Rolling horizon length
 CEMPC.ONE       = repmat({ones(M2C.m, 1)}, CEMPC.Np, 1);
 CEMPC.ONE       = blkdiag(CEMPC.ONE{:});                     % CMV incidence matrix, long horizon
 CEMPC.NN        = repmat({M2C.N}, CEMPC.Np, 1);
@@ -209,11 +209,11 @@ CEMPC.Aineq_o   = [eye(CEMPC.Np); -eye(CEMPC.Np)];           % CMV control actio
 %% 
 % 600 Hz
 
-% CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
-% CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
+CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
+CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
 
-CEMPC.lambda_z  = 0.2 * 3;
-CEMPC.lambda_o  = 0.4 * 3;
+% CEMPC.lambda_z  = 0.2 * 3;
+% CEMPC.lambda_o  = 0.4 * 3;
 
 % CEMPC.lambda_z  = 0.2 * 10;
 % CEMPC.lambda_o  = 0.4 * 10;

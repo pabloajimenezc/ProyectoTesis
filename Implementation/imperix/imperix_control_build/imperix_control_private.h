@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.14
+// Model version                  : 19.18
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Mon Dec 15 16:19:02 2025
+// C/C++ source code generated on : Mon Dec 15 17:17:56 2025
 //
 #ifndef imperix_control_private_h_
 #define imperix_control_private_h_
@@ -27,19 +27,19 @@ tUserSafe SimulinkInterrupt(void);
 void ConfigureReadTriggerDelayInNs(int);
 extern real_T rt_hypotd_snf(real_T u0, real_T u1);
 extern real_T rt_roundd_snf(real_T u);
-extern void microKernel5135854460348519526(int32_T K, const real32_T *A, int32_T
-  LDA, const real32_T *B, real32_T *C);
-extern void microKernel5725261749167964963(int32_T K, const real32_T *A, int32_T
-  LDA, const real32_T *B, real32_T *C);
-extern void macroKernel15460595535440184007(int32_T M, int32_T K, int32_T N,
+extern void microKernel18374138742484343125(int32_T K, const real32_T *A,
+  int32_T LDA, const real32_T *B, real32_T *C);
+extern void microKernel17337926646955518060(int32_T K, const real32_T *A,
+  int32_T LDA, const real32_T *B, real32_T *C);
+extern void macroKernel17233443566231932563(int32_T M, int32_T K, int32_T N,
   const real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C,
   int32_T LDC);
-extern void matrixMultiply15460595535440184007(int32_T M, int32_T K, int32_T N,
+extern void matrixMultiply17233443566231932563(int32_T M, int32_T K, int32_T N,
   int32_T blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A,
   const real32_T *B, real32_T *C);
 extern real_T rt_atan2d_snf(real_T u0, real_T u1);
-extern int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator);
 extern int32_T div_s32_floor(int32_T numerator, int32_T denominator);
+extern int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator);
 extern void impe_Subsystempi2delay_Init(real_T *rty_alpha_beta, real_T
   *rty_alpha_beta_j, P_Subsystempi2delay_imperix_c_T *localP);
 extern void imperix_c_Subsystempi2delay(uint8_T rtu_Enable, real_T rtu_dq,
