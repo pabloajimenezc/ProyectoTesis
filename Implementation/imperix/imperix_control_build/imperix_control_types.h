@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.25
+// Model version                  : 19.29
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Dec 16 14:56:12 2025
+// C/C++ source code generated on : Tue Dec 16 16:43:14 2025
 //
 #ifndef imperix_control_types_h_
 #define imperix_control_types_h_
@@ -134,22 +134,22 @@ struct struct_04ti4QO3MEcLknQdotQIR
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_UQuwmheec9p2Pu91dfupQB_
-#define DEFINED_TYPEDEF_FOR_struct_UQuwmheec9p2Pu91dfupQB_
+#ifndef DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
+#define DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
 
-struct struct_UQuwmheec9p2Pu91dfupQB
+struct struct_kYK8klzU7k6CF2sPPFadY
 {
   real_T Ts;
   real_T Nl;
   real_T Np;
-  real_T ONE[6];
-  real_T NN[12];
-  real_T MI[36];
-  real_T K[36];
-  real_T Hu_z[4];
-  real_T Aineq_z[24];
-  real_T Hu_o;
-  real_T Aineq_o[2];
+  real_T ONE[54];
+  real_T NN[108];
+  real_T MI[324];
+  real_T K[324];
+  real_T Hu_z[36];
+  real_T Aineq_z[216];
+  real_T Hu_o[9];
+  real_T Aineq_o[18];
   real_T lambda_z;
   real_T lambda_o;
 };

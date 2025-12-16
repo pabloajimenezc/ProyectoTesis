@@ -209,11 +209,11 @@ CEMPC.Aineq_o   = [eye(CEMPC.Np); -eye(CEMPC.Np)];           % CMV control actio
 %% 
 % 600 Hz
 
-CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
-CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
+% CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
+% CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
 
-% CEMPC.lambda_z  = 0.2 * 3;
-% CEMPC.lambda_o  = 0.4 * 3;
+CEMPC.lambda_z  = 0.2 * 3;
+CEMPC.lambda_o  = 0.4 * 3;
 
 % CEMPC.lambda_z  = 0.2 * 10;
 % CEMPC.lambda_o  = 0.4 * 10;

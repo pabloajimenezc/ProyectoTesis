@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.25
+// Model version                  : 19.29
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Dec 16 14:56:12 2025
+// C/C++ source code generated on : Tue Dec 16 16:43:14 2025
 //
 #ifndef imperix_control_h_
 #define imperix_control_h_
@@ -40,8 +40,7 @@ extern "C"
 
 // Block signals (default storage)
 struct B_imperix_control_T {
-  real_T TmpRTBAtSwitchInport1[3];     // '<S26>/Vector Concatenate4'
-  real_T TmpRTBAtSwitchInport3[3];     // '<S26>/Vector Concatenate5'
+  real_T TmpRTBAtSaturationInport1[3]; // '<S26>/Vector Concatenate4'
   real_T TmpRTBAtSum7Inport1;          // '<S1>/Constant5'
   real_T TmpRTBAtSum5Inport2;
   real_T TmpRTBAtICOutport1;           // '<S53>/IC'
@@ -194,19 +193,15 @@ struct DW_imperix_control_T {
   real_T Integrator_DSTATE_hg;         // '<S473>/Integrator'
   real_T SFunction_DSTATE_m;           // '<S96>/S-Function'
   real_T UnitDelay_DSTATE[2];          // '<S1>/Unit Delay'
-  real_T TmpRTBAtSwitchInport1_Buffer0[3];// synthesized block
-  real_T TmpRTBAtSwitchInport3_Buffer0[3];// synthesized block
+  real_T TmpRTBAtSaturationInport1_Buffe[3];// synthesized block
   real_T TmpRTBAtSum7Inport1_Buffer0;  // synthesized block
   real_T TmpRTBAtSum5Inport2_Buffer0;  // synthesized block
   real_T TmpRTBAtICOutport1_Buffer0;   // synthesized block
-  real_T TmpRTBAtInputformatInport2_Buff;// synthesized block
-  real_T TmpRTBAtInputformatInport3_Buff[2];// synthesized block
-  real_T TmpRTBAtInputformatInport4_Buff[2];// synthesized block
-  real_T TmpRTBAtInputformatInport5_Buff;// synthesized block
   real_T TmpRTBAtGainOutport1_Buffer[6];// synthesized block
   real_T TmpRTBAtEnergybalanceInport2_Bu[6];// synthesized block
   real_T TmpRTBAtEnergybalanceInport3_Bu[5];// synthesized block
   real_T TmpRTBAtEnergybalanceInport4_Bu[5];// synthesized block
+  real_T TmpRTBAtEnergybalanceInport5_Bu;// synthesized block
   real_T TmpRTBAtKalmanFilterInport1_Buf[2];// synthesized block
   real_T TmpRTBAtKalmanFilterInport2_Buf;// synthesized block
   real_T TmpRTBAtUnitDelayInport1_Buffer[2];// synthesized block
@@ -237,22 +232,24 @@ struct DW_imperix_control_T {
   real_T dF;                           // '<S1>/IM references'
   real_T dw;                           // '<S1>/IM references'
   real_T Ts;                           // '<S1>/Energy balance'
+  real_T Tab2abc[6];                   // '<S1>/Energy balance'
+  real_T Tabc2ab[6];                   // '<S1>/Energy balance'
   real_T A[30];                        // '<S1>/Energy balance'
   real_T pinvA[30];                    // '<S1>/Energy balance'
-  real_T K[36];                        // '<S1>/Energy balance'
-  real_T MI[36];                       // '<S1>/Energy balance'
-  real_T NN[12];                       // '<S1>/Energy balance'
-  real_T ONE[6];                       // '<S1>/Energy balance'
+  real_T K[324];                       // '<S1>/Energy balance'
+  real_T MI[324];                      // '<S1>/Energy balance'
+  real_T NN[108];                      // '<S1>/Energy balance'
+  real_T ONE[54];                      // '<S1>/Energy balance'
   real_T Nl;                           // '<S1>/Energy balance'
-  real_T is_max_c;                     // '<S1>/Energy balance'
-  real_T is_max2_f;                    // '<S1>/Energy balance'
+  real_T is_max_h;                     // '<S1>/Energy balance'
+  real_T is_max2_o;                    // '<S1>/Energy balance'
   real_T vo_max2;                      // '<S1>/Energy balance'
   real_T Ec_ref2;                      // '<S1>/Energy balance'
-  real_T Hu_z[4];                      // '<S1>/Energy balance'
-  real_T Aineq_z[24];                  // '<S1>/Energy balance'
+  real_T Hu_z[36];                     // '<S1>/Energy balance'
+  real_T Aineq_z[216];                 // '<S1>/Energy balance'
   real_T lambda_z;                     // '<S1>/Energy balance'
-  real_T Hu_o;                         // '<S1>/Energy balance'
-  real_T Aineq_o[2];                   // '<S1>/Energy balance'
+  real_T Hu_o[9];                      // '<S1>/Energy balance'
+  real_T Aineq_o[18];                  // '<S1>/Energy balance'
   real_T lambda_o;                     // '<S1>/Energy balance'
   real_T Ec_dev;                       // '<S1>/Energy balance'
   boolean_T IC_FirstOutputTime;        // '<S53>/IC'
@@ -281,6 +278,9 @@ struct P_Subsystem1_imperix_control_T_ {
 
 // Parameters (default storage)
 struct P_imperix_control_T_ {
+  struct_kYK8klzU7k6CF2sPPFadY CEMPC;  // Variable: CEMPC
+                                          //  Referenced by: '<S1>/Energy balance'
+
   struct_Jn3yK8idWqC5lwHij8OsQE CCMPC; // Variable: CCMPC
                                           //  Referenced by:
                                           //    '<S1>/LICCs control'
@@ -307,9 +307,6 @@ struct P_imperix_control_T_ {
 
   struct_8pcJrWnT2NIOYJW9vpRYLD KF;    // Variable: KF
                                           //  Referenced by: '<S1>/Kalman Filter'
-
-  struct_UQuwmheec9p2Pu91dfupQB CEMPC; // Variable: CEMPC
-                                          //  Referenced by: '<S1>/Energy balance'
 
   struct_aK5aQeabUeTOrz39VMjTKC IM;    // Variable: IM
                                           //  Referenced by:
@@ -499,14 +496,8 @@ struct P_imperix_control_T_ {
   real_T UnitDelay1_InitialCondition;  // Expression: 0
                                           //  Referenced by: '<S153>/Unit Delay1'
 
-  real_T TmpRTBAtSwitchInport1_InitialCo;// Expression: 0
+  real_T TmpRTBAtSaturationInport1_Initi;// Expression: 0
                                             //  Referenced by:
-
-  real_T TmpRTBAtSwitchInport3_InitialCo;// Expression: 0
-                                            //  Referenced by:
-
-  real_T Switch_Threshold;             // Expression: 40*10
-                                          //  Referenced by: '<S26>/Switch'
 
   real_T TmpRTBAtSum7Inport1_InitialCond;// Expression: 0
                                             //  Referenced by:
@@ -3034,6 +3025,11 @@ extern "C"
 //
 //  Block '<S1>/Constant2' : Unused code path elimination
 //  Block '<S1>/Data Type Conversion9' : Unused code path elimination
+//  Block '<S26>/Abs' : Unused code path elimination
+//  Block '<S26>/Max of Elements' : Unused code path elimination
+//  Block '<S26>/Mean' : Unused code path elimination
+//  Block '<S26>/Sum' : Unused code path elimination
+//  Block '<S26>/Switch' : Unused code path elimination
 //  Block '<S50>/Gain6' : Unused code path elimination
 //  Block '<S50>/Gain7' : Unused code path elimination
 //  Block '<S50>/Sum4' : Unused code path elimination
