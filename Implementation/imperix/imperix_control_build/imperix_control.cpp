@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.29
+// Model version                  : 19.31
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Dec 16 16:43:14 2025
+// C/C++ source code generated on : Wed Dec 17 15:44:39 2025
 //
 #include "imperix_control.h"
 #include "rtwtypes.h"
@@ -60,7 +60,7 @@ real32_T Vc1;                          // Probe
 real32_T Vc2;                          // Probe
 real32_T Vc3;                          // Probe
 real32_T Vc4;                          // Probe
-real32_T do_control;                   // Tunable parameter
+real32_T enable;                       // Tunable parameter
 unsigned char __attribute__ ((section ("devicescount"))) __attribute__((used))
   ____DEVICES_COUNT = (2U+1);
 int16_T* ix_raw_adc_ptr_0_2;
@@ -4618,6 +4618,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   real_T rtb_Gain7[6];
   real_T rtb_Gain1_g[5];
   real_T rtb_TmpSignalConversionAtGain2I[5];
+  real_T rtb_VectorConcatenate[5];
   real_T A[4];
   real_T Linv[4];
   real_T Linv_1[4];
@@ -4627,6 +4628,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   real_T tmp_0[2];
   real_T Mean_AccVal;
   real_T b_c;
+  real_T ie_idx_0;
   real_T rtb_CastToDouble2;
   real_T rtb_DeadZone;
   real_T rtb_F;
@@ -4653,8 +4655,6 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   real_T rtb_Switch_h_idx_1;
   real_T rtb_vo_sat;
   real_T ssq;
-  real_T tmp_2;
-  real_T tmp_3;
   int32_T A_tmp;
   int32_T b_c_tmp;
   int32_T d;
@@ -4663,8 +4663,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   int32_T idxAjj;
   int32_T info;
   int32_T jmax;
-  int8_T tmp_4;
-  int8_T tmp_5;
+  int8_T tmp_2;
+  int8_T tmp_3;
   uint8_T rtb_Compare;
   boolean_T iA1_0[24];
   boolean_T iA1[12];
@@ -4760,8 +4760,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // DataTypeConversion: '<S1>/Data Type Conversion5' incorporates:
   //   DataTypeConversion: '<S1>/Data Type Conversion36'
+  //   Gain: '<S1>/Gain'
 
-  imperix_control_B.DataTypeConversion5 = imperix_control_B.ADC_bz;
+  imperix_control_B.DataTypeConversion5 = static_cast<real32_T>(1.0 /
+    imperix_control_P.IM.w_max * imperix_control_B.ADC_bz);
 
   // S-Function (PROBE): '<S222>/S-Function'
   wm = imperix_control_B.DataTypeConversion5;
@@ -4792,14 +4794,14 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
       ssq += imperix_control_P.M2C.pinvA[6 * idxAjj + i] * rtb_Gain1_g[idxAjj];
     }
 
-    Mean_AccVal = rtb_DataTypeConversion2[i] - ssq;
+    rtb_vo_sat = rtb_DataTypeConversion2[i] - ssq;
 
     // End of Sum: '<S61>/Sum3'
 
     // Gain: '<S61>/Gain4'
     idxAjj = i << 1;
-    rtb_Gain4_idx_0 += imperix_control_P.M2C.pinvN[idxAjj] * Mean_AccVal;
-    rtb_Gain4_idx_1 += imperix_control_P.M2C.pinvN[idxAjj + 1] * Mean_AccVal;
+    rtb_Gain4_idx_0 += imperix_control_P.M2C.pinvN[idxAjj] * rtb_vo_sat;
+    rtb_Gain4_idx_1 += imperix_control_P.M2C.pinvN[idxAjj + 1] * rtb_vo_sat;
   }
 
   // DataTypeConversion: '<S1>/Data Type Conversion6'
@@ -5112,18 +5114,18 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   Gain: '<S56>/Gain2'
 
   b_c = 0.0;
-  tmp_3 = 0.0;
+  ie_idx_0 = 0.0;
   for (i = 0; i < 3; i++) {
     ssq = rtb_Gain1_g[i + 2] * imperix_control_P.Gain2_Gain;
     b_c += imperix_control_P.Gain3_Gain_b[3 * i] * ssq;
-    tmp_3 += imperix_control_P.Gain3_Gain_b[3 * i + 1] * ssq;
+    ie_idx_0 += imperix_control_P.Gain3_Gain_b[3 * i + 1] * ssq;
   }
 
   // End of Gain: '<S492>/Gain3'
 
   // Gain: '<S492>/Gain1'
   rtb_Gain1_e_idx_0 = imperix_control_P.Gain1_Gain * b_c;
-  rtb_Gain1_e_idx_1 = imperix_control_P.Gain1_Gain * tmp_3;
+  rtb_Gain1_e_idx_1 = imperix_control_P.Gain1_Gain * ie_idx_0;
 
   // RelationalOperator: '<S493>/Compare' incorporates:
   //   Constant: '<S491>/Constant'
@@ -5285,13 +5287,13 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // Gain: '<S319>/Gain3'
   b_c = 0.0;
-  tmp_3 = 0.0;
-  tmp_2 = 0.0;
+  ie_idx_0 = 0.0;
+  rtb_vo_sat = 0.0;
   for (i = 0; i < 3; i++) {
     ssq = rtb_Switch_h_0[i];
     b_c += imperix_control_P.Gain3_Gain_o[3 * i] * ssq;
-    tmp_3 += imperix_control_P.Gain3_Gain_o[3 * i + 1] * ssq;
-    tmp_2 += imperix_control_P.Gain3_Gain_o[3 * i + 2] * ssq;
+    ie_idx_0 += imperix_control_P.Gain3_Gain_o[3 * i + 1] * ssq;
+    rtb_vo_sat += imperix_control_P.Gain3_Gain_o[3 * i + 2] * ssq;
   }
 
   // End of Gain: '<S319>/Gain3'
@@ -5302,8 +5304,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   rtb_TmpSignalConversionAtGain2I[0] = rtb_CastToDouble2;
   rtb_TmpSignalConversionAtGain2I[1] = -rtb_CastToDouble2;
   rtb_TmpSignalConversionAtGain2I[2] = b_c;
-  rtb_TmpSignalConversionAtGain2I[3] = tmp_3;
-  rtb_TmpSignalConversionAtGain2I[4] = tmp_2;
+  rtb_TmpSignalConversionAtGain2I[3] = ie_idx_0;
+  rtb_TmpSignalConversionAtGain2I[4] = rtb_vo_sat;
 
   // Gain: '<S51>/Gain2'
   for (i = 0; i < 6; i++) {
@@ -5355,17 +5357,17 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // '<S154>:1:23'
   for (i = 0; i < 6; i++) {
-    ssq = rtb_Gain7[i];
-    bc[i] = imperix_control_DW.is_max - ssq;
-    bc[i + 6] = imperix_control_DW.is_max + ssq;
+    rtb_vo_sat = rtb_Gain7[i];
+    bc[i] = imperix_control_DW.is_max - rtb_vo_sat;
+    bc[i + 6] = imperix_control_DW.is_max + rtb_vo_sat;
   }
 
   // '<S154>:1:30'
   rtb_CastToDouble2 = imperix_control_B.TmpRTBAtSaturationInport1[1];
-  ssq = imperix_control_B.TmpRTBAtSaturationInport1[0];
+  rtb_vo_sat = imperix_control_B.TmpRTBAtSaturationInport1[0];
   for (i = 0; i < 12; i++) {
     lb[i] = (imperix_control_DW.Ac[i + 12] * rtb_CastToDouble2 +
-             imperix_control_DW.Ac[i] * ssq) - bc[i];
+             imperix_control_DW.Ac[i] * rtb_vo_sat) - bc[i];
   }
 
   if (!rtIsNaN(lb[0])) {
@@ -5389,9 +5391,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   } else {
     rtb_CastToDouble2 = lb[i - 1];
     for (idxAjj = i + 1; idxAjj < 13; idxAjj++) {
-      ssq = lb[idxAjj - 1];
-      if (rtb_CastToDouble2 < ssq) {
-        rtb_CastToDouble2 = ssq;
+      rtb_vo_sat = lb[idxAjj - 1];
+      if (rtb_CastToDouble2 < rtb_vo_sat) {
+        rtb_CastToDouble2 = rtb_vo_sat;
       }
     }
   }
@@ -5458,9 +5460,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     for (i = 0; i < 2; i++) {
       jmax = i << 1;
       rtb_CastToDouble2 = Linv[jmax + 1];
-      ssq = Linv[jmax];
-      Linv_1[jmax] = rtb_CastToDouble2 * Linv[1] + ssq * Linv[0];
-      Linv_1[jmax + 1] = rtb_CastToDouble2 * Linv[3] + ssq * Linv[2];
+      rtb_vo_sat = Linv[jmax];
+      Linv_1[jmax] = rtb_CastToDouble2 * Linv[1] + rtb_vo_sat * Linv[0];
+      Linv_1[jmax + 1] = rtb_CastToDouble2 * Linv[3] + rtb_vo_sat * Linv[2];
       tmp_0[i] = -imperix_control_B.TmpRTBAtSaturationInport1[i];
     }
 
@@ -5513,9 +5515,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   } else {
     rtb_Gain3 = rtb_Gain7[i - 1];
     for (info = i + 1; info < 7; info++) {
-      ssq = rtb_Gain7[info - 1];
-      if (rtb_Gain3 > ssq) {
-        rtb_Gain3 = ssq;
+      rtb_vo_sat = rtb_Gain7[info - 1];
+      if (rtb_Gain3 > rtb_vo_sat) {
+        rtb_Gain3 = rtb_vo_sat;
       }
     }
   }
@@ -5551,9 +5553,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   } else {
     rtb_CastToDouble2 = rtb_Gain7[i - 1];
     for (idxAjj = i + 1; idxAjj < 7; idxAjj++) {
-      ssq = rtb_Gain7[idxAjj - 1];
-      if (rtb_CastToDouble2 < ssq) {
-        rtb_CastToDouble2 = ssq;
+      rtb_vo_sat = rtb_Gain7[idxAjj - 1];
+      if (rtb_CastToDouble2 < rtb_vo_sat) {
+        rtb_CastToDouble2 = rtb_vo_sat;
       }
     }
   }
@@ -5641,7 +5643,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   Vc4 = imperix_control_B.DataTypeConversion4[3];
 
   // S-Function (TUNABLE_PARAM): '<S560>/S-Function'
-  imperix_control_B.SFunction_kx = do_control;
+  imperix_control_B.SFunction_kx = enable;
 
   // Sum: '<S54>/Sum3'
   rtb_CastToDouble2 = rtb_Saturation_n - rtb_Gain1_g[0];
@@ -5653,7 +5655,46 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   rtb_Gain3 = imperix_control_P.PCC.kp * rtb_CastToDouble2 +
     imperix_control_DW.Integrator_DSTATE_hg;
 
-  // MATLAB Function: '<S1>/LICCs control'
+  // Saturate: '<S480>/Saturation'
+  if (rtb_Gain3 > imperix_control_P.PCC.u_max) {
+    ssq = imperix_control_P.PCC.u_max;
+  } else if (rtb_Gain3 < -imperix_control_P.PCC.u_max) {
+    ssq = -imperix_control_P.PCC.u_max;
+  } else {
+    ssq = rtb_Gain3;
+  }
+
+  // Sum: '<S54>/Sum13' incorporates:
+  //   Constant: '<S54>/Constant1'
+  //   Saturate: '<S480>/Saturation'
+
+  ssq -= 1.5 * imperix_control_P.M2C.Vdc;
+
+  // SignalConversion generated from: '<S17>/Vector Concatenate'
+  rtb_VectorConcatenate[0] = ssq;
+
+  // Gain: '<S52>/Gain1'
+  b_c = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_0;
+  ie_idx_0 = b_c;
+
+  // SignalConversion generated from: '<S17>/Vector Concatenate' incorporates:
+  //   Gain: '<S52>/Gain1'
+
+  rtb_VectorConcatenate[1] = b_c;
+
+  // Gain: '<S52>/Gain1'
+  b_c = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_1;
+
+  // SignalConversion generated from: '<S17>/Vector Concatenate' incorporates:
+  //   Gain: '<S52>/Gain1'
+
+  rtb_VectorConcatenate[2] = b_c;
+
+  // MATLAB Function: '<S1>/LICCs control' incorporates:
+  //   DataTypeConversion: '<S1>/Data Type Conversion1'
+  //   Gain: '<S52>/Gain1'
+  //   UnitDelay: '<S153>/Unit Delay1'
+
   // MATLAB Function 'Closed_loop_control/LICCs control': '<S23>:1'
   // '<S23>:1:48'
   if (!imperix_control_DW.Ad_not_empty) {
@@ -5700,44 +5741,24 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     imperix_control_DW.options.ConstraintTolerance = 1.0E-5;
   }
 
-  // Saturate: '<S480>/Saturation'
   // '<S23>:1:33'
   // '<S23>:1:36'
   // '<S23>:1:39'
   // '<S23>:1:42'
   // '<S23>:1:45'
   // '<S23>:1:48'
-  if (rtb_Gain3 > imperix_control_P.PCC.u_max) {
-    ssq = imperix_control_P.PCC.u_max;
-  } else if (rtb_Gain3 < -imperix_control_P.PCC.u_max) {
-    ssq = -imperix_control_P.PCC.u_max;
-  } else {
-    ssq = rtb_Gain3;
-  }
-
-  // MATLAB Function: '<S1>/LICCs control' incorporates:
-  //   Constant: '<S54>/Constant1'
-  //   DataTypeConversion: '<S1>/Data Type Conversion1'
-  //   Gain: '<S52>/Gain1'
-  //   Saturate: '<S480>/Saturation'
-  //   Sum: '<S54>/Sum13'
-  //   UnitDelay: '<S153>/Unit Delay1'
-
-  b_c = ssq - 1.5 * imperix_control_P.M2C.Vdc;
   Linv[0] = imperix_control_DW.UnitDelay1_DSTATE[0];
   A[0] = imperix_control_DW.u_prev[0];
   Linv[1] = imperix_control_DW.UnitDelay1_DSTATE[1];
   A[1] = imperix_control_DW.u_prev[1];
-  tmp_3 = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_0;
   Linv[2] = imperix_control_DW.UnitDelay1_DSTATE[0];
   A[2] = imperix_control_DW.u_prev[0];
   Linv[3] = imperix_control_DW.UnitDelay1_DSTATE[1];
   A[3] = imperix_control_DW.u_prev[1];
-  tmp_2 = imperix_control_P.Gain1_Gain_p * rtb_Switch_h_idx_1;
   for (i = 0; i < 6; i++) {
-    rtb_DataTypeConversion2[i] = ((imperix_control_DW.pinvT[i + 6] * tmp_3 +
-      imperix_control_DW.pinvT[i] * b_c) + imperix_control_DW.pinvT[i + 12] *
-      tmp_2) + rtb_vo_sat;
+    rtb_DataTypeConversion2[i] = ((imperix_control_DW.pinvT[i + 6] * ie_idx_0 +
+      imperix_control_DW.pinvT[i] * ssq) + imperix_control_DW.pinvT[i + 12] *
+      b_c) + rtb_vo_sat;
   }
 
   // '<S23>:1:49'
@@ -5852,13 +5873,13 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
          rtb_Gain4_idx_1) + (imperix_control_DW.Bd[0] *
     imperix_control_DW.u_prev[0] + imperix_control_DW.u_prev[1] *
     imperix_control_DW.Bd[4]);
-  tmp_3 = (imperix_control_DW.Ad[1] * rtb_Gain4_idx_0 + imperix_control_DW.Ad[5]
-           * rtb_Gain4_idx_1) + (imperix_control_DW.u_prev[0] *
-    imperix_control_DW.Bd[1] + imperix_control_DW.u_prev[1] *
-    imperix_control_DW.Bd[5]);
+  ie_idx_0 = (imperix_control_DW.Ad[1] * rtb_Gain4_idx_0 +
+              imperix_control_DW.Ad[5] * rtb_Gain4_idx_1) +
+    (imperix_control_DW.u_prev[0] * imperix_control_DW.Bd[1] +
+     imperix_control_DW.u_prev[1] * imperix_control_DW.Bd[5]);
   for (i = 0; i < 4; i++) {
-    Linv_1[i] = (imperix_control_DW.Ad[i + 4] * tmp_3 + imperix_control_DW.Ad[i]
-                 * b_c) - Linv[i];
+    Linv_1[i] = (imperix_control_DW.Ad[i + 4] * ie_idx_0 +
+                 imperix_control_DW.Ad[i] * b_c) - Linv[i];
     for (idxAjj = 0; idxAjj < 4; idxAjj++) {
       jmax = idxAjj << 2;
       info = i << 2;
@@ -5897,12 +5918,6 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // '<S23>:1:56'
   // '<S23>:1:58'
-  imperix_control_DW.u_prev[0] = Linv[0];
-  imperix_control_DW.u_prev[1] = Linv[1];
-
-  // S-Function (IRQ): '<S96>/S-Function' incorporates:
-  //   Constant: '<S98>/clk_id'
-
   // '<S23>:1:62'
   // '<S23>:1:63'
   // '<S23>:1:64'
@@ -5910,10 +5925,52 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // '<S23>:1:66'
   // '<S23>:1:67'
   // '<S23>:1:69'
-  // DeadZone: '<S185>/DeadZone'
+  imperix_control_DW.u_prev[0] = Linv[0];
+  rtb_VectorConcatenate[3] = Linv[0];
+  imperix_control_DW.u_prev[1] = Linv[1];
+  rtb_VectorConcatenate[4] = Linv[1];
+
+  // End of MATLAB Function: '<S1>/LICCs control'
+
+  // Sum: '<S17>/Sum11' incorporates:
+  //   Gain: '<S17>/Gain'
+
+  for (i = 0; i < 6; i++) {
+    ssq = 0.0;
+    for (idxAjj = 0; idxAjj < 5; idxAjj++) {
+      ssq += imperix_control_P.CCMPC.pinvT[6 * idxAjj + i] *
+        rtb_VectorConcatenate[idxAjj];
+    }
+
+    rtb_DataTypeConversion2[i] = ssq + rtb_vo_sat;
+  }
+
+  // End of Sum: '<S17>/Sum11'
+  // MATLAB Function: '<S1>/Modulation index'
   // MATLAB Function 'Closed_loop_control/Modulation index': '<S25>:1'
   // '<S25>:1:4'
+  rtb_DataTypeConversion2[3] = -rtb_DataTypeConversion2[3];
+  rtb_DataTypeConversion2[4] = -rtb_DataTypeConversion2[4];
+  rtb_DataTypeConversion2[5] = -rtb_DataTypeConversion2[5];
+
   // '<S25>:1:8'
+  for (idxAjj = 0; idxAjj < 6; idxAjj++) {
+    rtb_vo_sat = rtb_DataTypeConversion2[idxAjj] /
+      rtb_DataTypeConversion1[idxAjj];
+    if (!(rtb_vo_sat >= 0.0)) {
+      rtb_vo_sat = 0.0;
+    }
+
+    if (rtb_vo_sat <= 1.0) {
+      rtb_DataTypeConversion2[idxAjj] = rtb_vo_sat;
+    } else {
+      rtb_DataTypeConversion2[idxAjj] = 1.0;
+    }
+  }
+
+  // End of MATLAB Function: '<S1>/Modulation index'
+
+  // DeadZone: '<S185>/DeadZone'
   if (rtb_DeadZone > imperix_control_P.TEB.u_max) {
     rtb_DeadZone -= imperix_control_P.TEB.u_max;
   } else if (rtb_DeadZone >= -imperix_control_P.TEB.u_max) {
@@ -5958,11 +6015,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S211>/generation'
 
-  // DataTypeConversion: '<S301>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
-
+  // DataTypeConversion: '<S301>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_n = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S301>/Data Type Conversion2' incorporates:
   //   Constant: '<S301>/phase'
@@ -5990,10 +6045,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S305>/generation'
 
   // DataTypeConversion: '<S302>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_i = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S302>/Data Type Conversion2' incorporates:
   //   Constant: '<S302>/phase'
@@ -6021,10 +6076,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S307>/generation'
 
   // DataTypeConversion: '<S303>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_nb = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S303>/Data Type Conversion2' incorporates:
   //   Constant: '<S303>/phase'
@@ -6052,10 +6107,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S309>/generation'
 
   // DataTypeConversion: '<S304>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S301>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_k = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[1]);
+    (rtb_DataTypeConversion2[1]);
 
   // DataTypeConversion: '<S304>/Data Type Conversion2' incorporates:
   //   Constant: '<S304>/phase'
@@ -6103,9 +6158,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   RelationalOperator: '<S463>/fix for DT propagation issue'
 
   if (rtb_Gain3 > imperix_control_P.Clamping_zero_Value_e) {
-    tmp_4 = imperix_control_P.Constant_Value_i;
+    tmp_2 = imperix_control_P.Constant_Value_i;
   } else {
-    tmp_4 = imperix_control_P.Constant2_Value_p;
+    tmp_2 = imperix_control_P.Constant2_Value_p;
   }
 
   // Switch: '<S463>/Switch2' incorporates:
@@ -6115,9 +6170,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   RelationalOperator: '<S463>/fix for DT propagation issue1'
 
   if (rtb_CastToDouble2 > imperix_control_P.Clamping_zero_Value_e) {
-    tmp_5 = imperix_control_P.Constant3_Value_g;
+    tmp_3 = imperix_control_P.Constant3_Value_g;
   } else {
-    tmp_5 = imperix_control_P.Constant4_Value_c;
+    tmp_3 = imperix_control_P.Constant4_Value_c;
   }
 
   // Logic: '<S463>/AND3' incorporates:
@@ -6127,8 +6182,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   Switch: '<S463>/Switch1'
   //   Switch: '<S463>/Switch2'
 
-  rtb_AND3_j = ((imperix_control_P.Clamping_zero_Value_e != rtb_Gain3) && (tmp_4
-    == tmp_5));
+  rtb_AND3_j = ((imperix_control_P.Clamping_zero_Value_e != rtb_Gain3) && (tmp_2
+    == tmp_3));
 
   // Gain: '<S55>/Gain'
   ssq = imperix_control_P.M2C.C * 0.5;
@@ -6146,11 +6201,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     }
   }
 
-  // DataTypeConversion: '<S497>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
-
+  // DataTypeConversion: '<S497>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_e = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S497>/Data Type Conversion2' incorporates:
   //   Constant: '<S497>/phase'
@@ -6178,10 +6231,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S501>/generation'
 
   // DataTypeConversion: '<S498>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S497>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_ii = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S498>/Data Type Conversion2' incorporates:
   //   Constant: '<S498>/phase'
@@ -6209,10 +6262,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S503>/generation'
 
   // DataTypeConversion: '<S499>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S497>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_d = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S499>/Data Type Conversion2' incorporates:
   //   Constant: '<S499>/phase'
@@ -6240,10 +6293,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S505>/generation'
 
   // DataTypeConversion: '<S500>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S497>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_h = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[2]);
+    (rtb_DataTypeConversion2[2]);
 
   // DataTypeConversion: '<S500>/Data Type Conversion2' incorporates:
   //   Constant: '<S500>/phase'
@@ -6270,11 +6323,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S507>/generation'
 
-  // Gain: '<S58>/Gain1' incorporates:
-  //   Constant: '<S1>/Constant1'
-
-  rtb_Gain3 = imperix_control_P.Gain1_Gain_p0 *
-    imperix_control_P.Constant1_Value_p[3];
+  // Gain: '<S58>/Gain1'
+  rtb_Gain3 = imperix_control_P.Gain1_Gain_p0 * rtb_DataTypeConversion2[3];
 
   // DataTypeConversion: '<S509>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_c = static_cast<real32_T>(rtb_Gain3);
@@ -6394,11 +6444,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S519>/generation'
 
-  // Gain: '<S59>/Gain3' incorporates:
-  //   Constant: '<S1>/Constant1'
-
-  rtb_Gain3 = imperix_control_P.Gain3_Gain_l *
-    imperix_control_P.Constant1_Value_p[4];
+  // Gain: '<S59>/Gain3'
+  rtb_Gain3 = imperix_control_P.Gain3_Gain_l * rtb_DataTypeConversion2[4];
 
   // DataTypeConversion: '<S521>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_eq = static_cast<real32_T>(rtb_Gain3);
@@ -6518,11 +6565,8 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S531>/generation'
 
-  // Gain: '<S60>/Gain3' incorporates:
-  //   Constant: '<S1>/Constant1'
-
-  rtb_Gain3 = imperix_control_P.Gain3_Gain_k *
-    imperix_control_P.Constant1_Value_p[5];
+  // Gain: '<S60>/Gain3'
+  rtb_Gain3 = imperix_control_P.Gain3_Gain_k * rtb_DataTypeConversion2[5];
 
   // DataTypeConversion: '<S533>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_hk = static_cast<real32_T>(rtb_Gain3);
@@ -6646,11 +6690,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
   // End of Outputs for SubSystem: '<S543>/generation'
 
-  // DataTypeConversion: '<S545>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
-
+  // DataTypeConversion: '<S545>/Data Type Conversion1'
   imperix_control_B.DataTypeConversion1_iz = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S545>/Data Type Conversion2' incorporates:
   //   Constant: '<S545>/phase'
@@ -6678,10 +6720,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S549>/generation'
 
   // DataTypeConversion: '<S546>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S545>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_b = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S546>/Data Type Conversion2' incorporates:
   //   Constant: '<S546>/phase'
@@ -6709,10 +6751,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S551>/generation'
 
   // DataTypeConversion: '<S547>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S545>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_kz = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S547>/Data Type Conversion2' incorporates:
   //   Constant: '<S547>/phase'
@@ -6740,10 +6782,10 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   // End of Outputs for SubSystem: '<S553>/generation'
 
   // DataTypeConversion: '<S548>/Data Type Conversion1' incorporates:
-  //   Constant: '<S1>/Constant1'
+  //   DataTypeConversion: '<S545>/Data Type Conversion1'
 
   imperix_control_B.DataTypeConversion1_h3 = static_cast<real32_T>
-    (imperix_control_P.Constant1_Value_p[0]);
+    (rtb_DataTypeConversion2[0]);
 
   // DataTypeConversion: '<S548>/Data Type Conversion2' incorporates:
   //   Constant: '<S548>/phase'
@@ -6792,13 +6834,13 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
 
     // Gain: '<S313>/Gain3'
     b_c = 0.0;
-    tmp_3 = 0.0;
-    tmp_2 = 0.0;
+    ie_idx_0 = 0.0;
+    rtb_vo_sat = 0.0;
     for (i = 0; i < 3; i++) {
       ssq = rtb_Switch_h_0[i];
       b_c += imperix_control_P.Gain3_Gain_d[3 * i] * ssq;
-      tmp_3 += imperix_control_P.Gain3_Gain_d[3 * i + 1] * ssq;
-      tmp_2 += imperix_control_P.Gain3_Gain_d[3 * i + 2] * ssq;
+      ie_idx_0 += imperix_control_P.Gain3_Gain_d[3 * i + 1] * ssq;
+      rtb_vo_sat += imperix_control_P.Gain3_Gain_d[3 * i + 2] * ssq;
     }
 
     // End of Gain: '<S313>/Gain3'
@@ -6813,9 +6855,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
     imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[2] =
       imperix_control_P.Gain_Gain * b_c;
     imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[3] =
-      imperix_control_P.Gain_Gain * tmp_3;
+      imperix_control_P.Gain_Gain * ie_idx_0;
     imperix_control_DW.TmpRTBAtEnergybalanceInport4_Bu[4] =
-      imperix_control_P.Gain_Gain * tmp_2;
+      imperix_control_P.Gain_Gain * rtb_vo_sat;
 
     // RateTransition generated from: '<S1>/Energy balance'
     imperix_control_DW.TmpRTBAtEnergybalanceInport5_Bu = rtb_F;
@@ -6842,9 +6884,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   RelationalOperator: '<S183>/fix for DT propagation issue'
 
   if (rtb_DeadZone > imperix_control_P.Clamping_zero_Value) {
-    tmp_4 = imperix_control_P.Constant_Value;
+    tmp_2 = imperix_control_P.Constant_Value;
   } else {
-    tmp_4 = imperix_control_P.Constant2_Value;
+    tmp_2 = imperix_control_P.Constant2_Value;
   }
 
   // Switch: '<S183>/Switch2' incorporates:
@@ -6854,9 +6896,9 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   RelationalOperator: '<S183>/fix for DT propagation issue1'
 
   if (Mean_AccVal > imperix_control_P.Clamping_zero_Value) {
-    tmp_5 = imperix_control_P.Constant3_Value;
+    tmp_3 = imperix_control_P.Constant3_Value;
   } else {
-    tmp_5 = imperix_control_P.Constant4_Value_j;
+    tmp_3 = imperix_control_P.Constant4_Value_j;
   }
 
   // Switch: '<S183>/Switch' incorporates:
@@ -6868,7 +6910,7 @@ void imperix_control_step0(void)       // Sample time: [0.000166667s, 0.0s]
   //   Switch: '<S183>/Switch1'
   //   Switch: '<S183>/Switch2'
 
-  if ((imperix_control_P.Clamping_zero_Value != rtb_DeadZone) && (tmp_4 == tmp_5))
+  if ((imperix_control_P.Clamping_zero_Value != rtb_DeadZone) && (tmp_2 == tmp_3))
   {
     Mean_AccVal = imperix_control_P.Constant1_Value;
   }
@@ -8101,8 +8143,8 @@ void imperix_control_initialize(void)
     ConfigureProbe(&Vc4, 0);
 
     // Start for S-Function (TUNABLE_PARAM): '<S560>/S-Function'
-    do_control = 0.0F;                 // Tunable parameter initialization
-    ConfigureTunable(&do_control, 0, 0);
+    enable = 0.0F;                     // Tunable parameter initialization
+    ConfigureTunable(&enable, 0, 0);
 
     // Start for S-Function (IRQ): '<S96>/S-Function' incorporates:
     //   Constant: '<S98>/clk_id'

@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.29
+// Model version                  : 19.31
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Dec 16 16:43:14 2025
+// C/C++ source code generated on : Wed Dec 17 15:44:39 2025
 //
 #include "imperix_control.h"
 
@@ -358,6 +358,7 @@ P_imperix_control_T imperix_control_P = {
   //  Referenced by:
   //    '<S1>/IM references'
   //    '<S1>/Kalman Filter'
+  //    '<S1>/Gain'
   //    '<S1>/Gain2'
   //    '<S1>/Gain4'
   //    '<S52>/Gain'
@@ -811,11 +812,6 @@ P_imperix_control_T imperix_control_P = {
   //  Referenced by: '<S52>/Gain1'
 
   2.0,
-
-  // Expression: ones(6, 1)
-  //  Referenced by: '<S1>/Constant1'
-
-  { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 },
 
   // Expression: 1
   //  Referenced by: '<S1>/Constant4'
@@ -3721,7 +3717,7 @@ P_imperix_control_T imperix_control_P = {
   // Computed Parameter: SFunction_P1_p
   //  Referenced by: '<S560>/S-Function'
 
-  { 100U, 111U, 95U, 99U, 111U, 110U, 116U, 114U, 111U, 108U },
+  { 101U, 110U, 97U, 98U, 108U, 101U },
 
   // Expression: uint16(CAN_MB_ID)
   //  Referenced by: '<S560>/S-Function'
