@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_control'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.31
+// Model version                  : 19.33
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Wed Dec 17 15:44:39 2025
+// C/C++ source code generated on : Thu Dec 18 17:11:36 2025
 //
 #ifndef rtmodel_h_
 #define rtmodel_h_
