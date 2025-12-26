@@ -69,20 +69,6 @@ KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
 KF.SIG1  = 1e-3*eye(KF.nx); % Initial state covariance
 
 % State matrix
-% KF.Ad       = zeros(KF.nx);
-% KF.Ad(1, 1) = 1-KF.Ts/MCC.tau;
-% KF.Ad(1, 3) = KF.Ts*IM.kr/(IM.tau_r*MCC.L);
-% KF.Ad(1, 4) = KF.Ts*IM.kr/MCC.L; % * we
-% KF.Ad(2, 2) = 1-KF.Ts/MCC.tau;
-% KF.Ad(2, 3) = -KF.Ts*IM.kr/MCC.L; % * we
-% KF.Ad(2, 4) = KF.Ts*IM.kr/(IM.tau_r*MCC.L);
-% KF.Ad(3, 1) = KF.Ts*IM.Lm/IM.tau_r;
-% KF.Ad(3, 3) = 1-KF.Ts/IM.tau_r;
-% KF.Ad(3, 4) = -KF.Ts; % * we
-% KF.Ad(4, 2) = KF.Ts*IM.Lm/IM.tau_r;
-% KF.Ad(4, 3) = KF.Ts; % * we
-% KF.Ad(4, 4) = 1-KF.Ts/IM.tau_r;
-
 KF.A       = zeros(KF.nx);
 KF.A(1, 1) = -1/MCC.tau;
 KF.A(1, 3) = IM.kr/(IM.tau_r*MCC.L);
@@ -100,15 +86,11 @@ KF.A(4, 4) = -1/IM.tau_r;
 KF.Ad = eye(KF.nx) + KF.Ts * KF.A + 0.5 * (KF.Ts * KF.A)^2;
 
 % Input matrix
-% KF.Bd       = zeros(KF.nx, KF.nu);
-% KF.Bd(1, 1) = KF.Ts/MCC.L;
-% KF.Bd(2, 2) = KF.Ts/MCC.L;
-
 KF.B       = zeros(KF.nx, KF.nu);
 KF.B(1, 1) = 1/MCC.L;
 KF.B(2, 2) = 1/MCC.L;
 
-KF.Bd = (eye(KF.nx) + 0.5 * KF.Ts * KF.A) * KF.B;
+KF.Bd = (eye(KF.nx) + 0.5 * KF.Ts * KF.A) * KF.B * KF.Ts;
 
 % Measurement matrix
 KF.C = zeros(KF.ny, KF.nx);
@@ -122,11 +104,6 @@ KF.we_list = IM.w_max * IM.np * linspace(-1.1, 1.1, KF.we_steps);
 
 for i = 1:KF.we_steps
     we = KF.we_list(i);
-    % Ad = KF.Ad;
-    % Ad(1, 4) = KF.Ad(1, 4) * we;
-    % Ad(2, 3) = KF.Ad(2, 3) * we;
-    % Ad(3, 4) = KF.Ad(3, 4) * we;
-    % Ad(4, 3) = KF.Ad(4, 3) * we;
     A = KF.A;
     A(1, 4) = KF.A(1, 4) * we;
     A(2, 3) = KF.A(2, 3) * we;
@@ -147,7 +124,6 @@ Fr_ab_vec = data(6:7, :);
 %% Apply Kalman Filter
 
 xt_est_apriori = KF.x1_mu;
-% Bd = KF.Bd;
 C  = KF.C;
 
 im_ab_est = zeros(size(im_ab_vec));
@@ -158,19 +134,15 @@ for t = 1:numel(we_vec)
     im_ab = im_ab_vec(:, t);
     we = we_vec(t);
     vm_ab = vm_ab_vec(:, t);
-    
+
     % State matrix actualization
-    % Ad = KF.Ad;
-    % Ad(1, 4) = Ad(1, 4) * we;
-    % Ad(2, 3) = Ad(2, 3) * we;
-    % Ad(3, 4) = Ad(3, 4) * we;
-    % Ad(4, 3) = Ad(4, 3) * we;
     A = KF.A;
     A(1, 4) = KF.A(1, 4) * we;
     A(2, 3) = KF.A(2, 3) * we;
     A(3, 4) = KF.A(3, 4) * we;
     A(4, 3) = KF.A(4, 3) * we;
-    Ad = eye(KF.nx) + KF.Ts * A + 0.5 * (KF.Ts * A)^2;
+    M = eye(KF.nx) + 0.5 * KF.Ts * A;
+    Ad = eye(KF.nx) + KF.Ts * A * M;
     
     % Initialize
     yt = im_ab;
@@ -184,7 +156,7 @@ for t = 1:numel(we_vec)
     xt_est(:) = xt_est_apriori + Kt * (yt - C * xt_est_apriori);
     
     % Temporal update
-    Bd = (eye(KF.nx) + 0.5 * KF.Ts * A) * KF.B * KF.Ts;
+    Bd = M * KF.B * KF.Ts;
     xt1_est = Ad * xt_est + Bd * ut;
     xt1_est(1:2) = min(max(xt1_est(1:2), -2*IM.IN*sqrt(2)), 2*IM.IN*sqrt(2)); % Clip current
     xt1_est(3:4) = min(max(xt1_est(3:4), -2*IM.FrN), 2*IM.FrN);               % Clip flux
@@ -197,17 +169,23 @@ end
 
 %% Compute mean squared error
 
+% Mean squared error
 error_i = (im_ab_vec(:) - im_ab_est(:)) / (IM.IN / sqrt(2));
-error_F = (Fr_ab_vec(:) - Fr_ab_est(:)) / (IM.FrN);
-
 cost = mean(error_i.^2);
-% cost = mean(error_F.^2);
-% cost = mean(error_i.^2) + mean(error_F.^2);
+
+% To reduce the spread between good and bad cost
 cost = log(1 + cost);
 
-if abs(KF.qi) > 100.1 || abs(KF.qF) > 100.1
-    cost = cost + abs(KF.qi) + abs(KF.qF);
+% To prevent Q from exploding (fminsearch cannot be constrained)
+if abs(KF.qi) > 100
+    cost = cost + abs(KF.qi);
 end
+
+if abs(KF.qF) > 100
+    cost = cost + abs(KF.qF);
+end
+
+%% Plot filtering
 
 if do_plot
     clf
