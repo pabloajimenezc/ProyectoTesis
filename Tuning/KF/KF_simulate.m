@@ -137,10 +137,10 @@ for t = 1:numel(we_vec)
 
     % State matrix actualization
     A = KF.A;
-    A(1, 4) = KF.A(1, 4) * we;
-    A(2, 3) = KF.A(2, 3) * we;
-    A(3, 4) = KF.A(3, 4) * we;
-    A(4, 3) = KF.A(4, 3) * we;
+    A(1, 4) = A(1, 4) * we;
+    A(2, 3) = A(2, 3) * we;
+    A(3, 4) = A(3, 4) * we;
+    A(4, 3) = A(4, 3) * we;
     M = eye(KF.nx) + 0.5 * KF.Ts * A;
     Ad = eye(KF.nx) + KF.Ts * A * M;
     
@@ -163,8 +163,8 @@ for t = 1:numel(we_vec)
     xt_est_apriori = xt1_est;
     
     % Output
-    im_ab_est(:, t) = xt1_est(1:2);
-    Fr_ab_est(:, t) = xt1_est(3:4);
+    im_ab_est(:, t) = xt_est(1:2);
+    Fr_ab_est(:, t) = xt_est(3:4);
 end
 
 %% Compute mean squared error
@@ -177,11 +177,11 @@ cost = mean(error_i.^2);
 cost = log(1 + cost);
 
 % To prevent Q from exploding (fminsearch cannot be constrained)
-if abs(KF.qi) > 100
+if abs(KF.qi) > 1e-3
     cost = cost + abs(KF.qi);
 end
 
-if abs(KF.qF) > 100
+if abs(KF.qF) > 1e-3
     cost = cost + abs(KF.qF);
 end
 
