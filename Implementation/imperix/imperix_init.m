@@ -1,5 +1,8 @@
+clc
+clf
+clear all
+close all
 rng(0)
-
 %% Initialize Simulink simulation parameters
 %% Simulation
 
@@ -45,7 +48,7 @@ IM.np    = 2; % Number of pole pairs
 %% 
 % Lumped parameters
 
-IM.J    = 0.006;    % [kg/m^2] Rotor inertia 
+IM.J    = 0.006;    % [kg/m^2] Rotor inertia
 IM.Rs   = 1.8;      % [Ohm] Stator resistance
 IM.Rr   = 1.8;      % [Ohm] Equivalent rotor resistance
 IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
@@ -65,20 +68,16 @@ IM.kT    = 1.5 * IM.np * IM.kr;
 
 IM.isdN  = IM.FrN / IM.Lm;
 IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
-%% Induction Machine Stator Voltage Estimation (IM_vs)
-
-IM_vs = struct();
-
-IM_vs.M = [IM.Ro     , -IM.o*IM.Ls, -IM.kr/IM.tau_r;
-           IM.o*IM.Ls,       IM.Ro,     IM.kr*IM.np];
-
-% M       = IM_vs.M;
-% M(1, 2) = M(1, 2) * ws;
-% M(2, 1) = M(2, 1) * ws;
-% M(2, 3) = M(2, 3) * wm_ref;
-% 
-% vm_dq = M * [imdq_ref;
-%              Frd_ref];
+%%
+% fprintf('%.9f', 0.5 * IM.J * IM.wN^2 / IM.SN)
+% fprintf('%.9f', IM.SN / 1e6)
+% Zb = sqrt(3) * IM.VLLN^2 / IM.SN
+% fprintf('%.9f', IM.Rs / Zb)
+% fprintf('%.9f', IM.Rr / Zb)
+% Lb = sqrt(3) * IM.VLLN^2 / IM.SN / (IM.np * IM.wN)
+% fprintf('%.9f', IM.Los / Lb)
+% fprintf('%.9f', IM.Lm / Lb)
+% fprintf('%.9f', IM.Lor / Lb)
 %% Modular Multilevel Converter (M2C)
 
 M2C = struct(); % Modular Multilevel Converter parameters
@@ -260,60 +259,73 @@ CCMPC.Aineq  = [CCMPC.pinvT(:, 4:5), zeros(M2C.m, CCMPC.nu);
 % Reference low-pass filter (yf=alpha*yf+(1-alpha)*y)
 CCMPC.tau_f = CEMPC.Ts/10;
 CCMPC.alpha = exp(-CCMPC.Ts/CCMPC.tau_f);
-%% Extended Kalman Filtering of Induction Machine (KF)
-% Measure current and speed
+%% Kalman Filtering of Induction Machine (KF)
+% Measure current and speed is known, slow varying parameter
 
-KF = struct(); % Extended Kalman Filter parameters, for state estimation in alpha-beta
+KF = struct(); % Kalman Filter parameters, for state estimation in alpha-beta
 
-KF.Ts    = Ts_ce;           % Sampling time
-KF.nx    = 6;               % # of state variables
+KF.Ts    = Ts_cc;           % Sampling time
+KF.nx    = 4;               % # of state variables
 KF.nu    = 2;               % # of inputs
-KF.ny    = 3;               % # of measurements
-KF.qi    = 1e1;             % Current process noise covariance
-KF.qF    = 1e-1;            % Flux process noise covariance
-KF.qw    = 1e1;             % Speed process noise covariance
-KF.qT    = 1e0;            % Speed process noise covariance
+KF.ny    = 2;               % # of measurements
+% KF.qi    = 0.00046416;            % Current process noise covariance
+% KF.qF    = 4.6416e-08;            % Flux process noise covariance
+% KF.qi    = 0.0010000000;            % Current process noise covariance
+% KF.qF    = 0.0006155507;            % Flux process noise covariance
+KF.qi = 1e-4;
+KF.qF = 1e-7;
 KF.r     = 1e-3;            % Current measurement noise covariance
-KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF, KF.qw, KF.qT]); % Process noise covariance matrix
+KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
 KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
-KF.SIG1  = 1e-3*eye(KF.nx); % Initial state covariance
 
-KF.Ad       = zeros(KF.nx); % State matrix
-KF.Ad(1, 1) = 1-KF.Ts/IM.tau_o;
-KF.Ad(1, 3) = KF.Ts*IM.kr/(IM.tau_r*IM.Lo);
-KF.Ad(1, 4) = KF.Ts*IM.kr/IM.Lo; % * we
-KF.Ad(2, 2) = 1-KF.Ts/IM.tau_o;
-KF.Ad(2, 3) = -KF.Ts*IM.kr/IM.Lo; % * we
-KF.Ad(2, 4) = KF.Ts*IM.kr/(IM.tau_r*IM.Lo);
-KF.Ad(3, 1) = KF.Ts*IM.Lm/IM.tau_r;
-KF.Ad(3, 3) = 1-KF.Ts/IM.tau_r;
-KF.Ad(3, 4) = -KF.Ts; % * we
-KF.Ad(4, 2) = KF.Ts*IM.Lm/IM.tau_r;
-KF.Ad(4, 3) = KF.Ts; % * we
-KF.Ad(4, 4) = 1-KF.Ts/IM.tau_r;
-KF.Ad(5, 1) = KF.Ts*IM.np*IM.kT/IM.J; % * Frb
-KF.Ad(5, 2) = -KF.Ts*IM.np*IM.kT/IM.J; % * Fra
-KF.Ad(5, 5) = 1;
-KF.Ad(5, 6) = -KF.Ts*IM.np/IM.J;
-KF.Ad(6, 6) = 1;
+% State matrix
+KF.A       = zeros(KF.nx);
+KF.A(1, 1) = -1/MCC.tau;
+KF.A(1, 3) = IM.kr/(IM.tau_r*MCC.L);
+KF.A(1, 4) = IM.kr/MCC.L; % * we
+KF.A(2, 2) = -1/MCC.tau;
+KF.A(2, 3) = -IM.kr/MCC.L; % * we
+KF.A(2, 4) = IM.kr/(IM.tau_r*MCC.L);
+KF.A(3, 1) = IM.Lm/IM.tau_r;
+KF.A(3, 3) = -1/IM.tau_r;
+KF.A(3, 4) = -1; % * we
+KF.A(4, 2) = IM.Lm/IM.tau_r;
+KF.A(4, 3) = 1; % * we
+KF.A(4, 4) = -1/IM.tau_r;
 
-KF.Adt       = KF.Ad; % Jacobian
-KF.Adt(1, 5) = KF.Ts*IM.kr/IM.Lo; % * Frb
-KF.Adt(2, 5) = -KF.Ts*IM.kr/IM.Lo; % * Fra
-KF.Adt(3, 5) = -KF.Ts; % * Frb
-KF.Adt(4, 5) = KF.Ts; % * Fra
-KF.Adt(5, 3) = -KF.Ts*IM.np*IM.kT/IM.J; % * isb
-KF.Adt(5, 4) = KF.Ts*IM.np*IM.kT/IM.J; % * isa
+% KF.Ad = eye(KF.nx) + KF.Ts * KF.A + 0.5 * (KF.Ts * KF.A)^2;
 
-KF.Bd       = zeros(KF.nx, KF.nu); % Input matrix
-KF.Bd(1, 1) = KF.Ts/IM.Lo;
-KF.Bd(2, 2) = KF.Ts/IM.Lo;
+% Input matrix
+KF.B       = zeros(KF.nx, KF.nu);
+KF.B(1, 1) = 1/MCC.L;
+KF.B(2, 2) = 1/MCC.L;
 
-KF.C = zeros(KF.ny, KF.nx); % Measurement matrix
+% KF.Bd = (eye(KF.nx) + 0.5 * KF.Ts * KF.A) * KF.B * KF.Ts;
+
+% Measurement matrix
+KF.C = zeros(KF.ny, KF.nx);
 KF.C(1, 1) = 1;
 KF.C(2, 2) = 1;
-KF.C(3, 5) = 1;
+%% 
+% Steady-state Kalman gain schedule
+
+KF.we_steps = 200;
+KF.gain_schedule = zeros(KF.nx, KF.ny, KF.we_steps);
+KF.we_list = IM.w_max * IM.np * linspace(-1.1, 1.1, KF.we_steps);
+
+for i = 1:KF.we_steps
+    we = KF.we_list(i);
+    A = KF.A;
+    A(1, 4) = KF.A(1, 4) * we;
+    A(2, 3) = KF.A(2, 3) * we;
+    A(3, 4) = KF.A(3, 4) * we;
+    A(4, 3) = KF.A(4, 3) * we;
+    Ad = eye(KF.nx) + KF.Ts * A + 0.5 * (KF.Ts * A)^2;
+    [~, K] = idare(Ad', KF.C', KF.Q, KF.R);
+    K = K.';
+    KF.gain_schedule(:, :, i) = K;
+end
 %% Modulation
 % <https://ieeexplore.ieee.org/document/8912558 PSPWM Comparison>
 % 
@@ -351,3 +363,124 @@ end
 
 Xmax = load("ImitationLearningSimulink\TrainingData\Data\Xmax.mat").Xmax;
 Ymax = load("ImitationLearningSimulink\TrainingData\Data\Ymax.mat").Ymax;
+%% 
+% 
+
+load_net     = false;
+average_net  = false;
+quantize_net = false;
+save_net     = false;
+%% 
+% Load NN
+
+if load_net
+    % results = load('ImitationLearningSimulink\ActualArchitecture\Results10k.mat')
+    % results = load('ImitationLearningSimulink\ActualArchitecture\Results20k.mat')
+    % results = load('ImitationLearningSimulink\ActualArchitecture\Results100k.mat')
+    results = load('ImitationLearningSimulink\ActualArchitecture\Results100k_dagger.mat')
+    % results = load('ImitationLearningSimulink\ActualArchitecture\Results100k_dagger_2L5N.mat')
+    % results = load('ImitationLearningSimulink\ActualArchitecture\Results200k.mat')
+    net = results.net;
+    history = results.history;
+end
+%% 
+% Weight averaging
+
+if average_net & load_net
+    [~, sorted_idxs] = sort([history.val_loss], 'ascend');
+    sorted_history = history(sorted_idxs)
+
+    M = 3;
+    nets = cell(1, M);
+
+    for k = 1:M
+        nets{k} = sorted_history(k).net;
+    end
+
+    % best_val_idx = sorted_idxs(1)
+    % nets{1} = sorted_history(best_val_idx).net;
+    % nets{2} = sorted_history(best_val_idx+1).net;
+    % nets{3} = sorted_history(best_val_idx-1).net;
+
+    net_avg = nets{1};
+    tbl     = net_avg.Learnables;
+    nParams = size(tbl, 1);
+    for i = 1:nParams
+        vals = cellfun(@(n) n.Learnables.Value{i}, nets, 'UniformOutput', false);
+        nd = ndims(vals{1});
+        stacked = cat(nd+1, vals{:});
+        avgVal  = mean(stacked, nd+1);
+        net_avg.Learnables.Value{i} = avgVal;
+    end
+    net = net_avg;
+end
+%% 
+% Weight quantization
+
+if quantize_net & load_net
+    % 1) Crear el cuantizador en entorno MATLAB
+    quantObj = dlquantizer(net, 'ExecutionEnvironment','MATLAB');
+
+    % 2) Calibrar con tu dsX_tr
+    nBatches    = min(100, numel(dsX_tr));
+    calibration = subset(dsX_tr, 1:nBatches);
+    calibrate(quantObj, calibration, 'MiniBatchSize', 64);
+
+    % 3) Cuantizar la red
+    qNet = quantize(quantObj);
+
+    % 4) (Opcional) Validar degradación
+    Yq = predict(qNet, dlX_val);
+    Yo = predict(net,  dlX_val);
+    fprintf('MSE cuantizado vs original: %g\n', mse(extractdata(Yq), extractdata(Yo)));
+end
+%% 
+% Select net with best validation score for the expert test trajectory
+
+% if load_net
+%     Nnets = numel(history);
+%     loss_list = zeros(Nnets, 1);
+%     sample = load('ImitationLearningSimulink\TrainingData\Data\test_trajectory_expert.mat').sample;
+%     X = sample.net_in ./ Xmax;
+%     Y = sample.mpc_out ./ Ymax;
+%     dlX  = dlarray(X, 'CB');
+%     dlY  = dlarray(Y, 'CB');
+%     for k = 1:Nnets
+%         net = history(k).net;
+%         loss = dlfeval(@FFNNLoss, net, dlX, dlY, 'validation', 1, [1; 1; 1]);
+%         loss_list(k) = loss;
+%     end
+%     [~, sorted_idxs] = sort(loss_list, 'ascend');
+%     sorted_history = history(sorted_idxs);
+%     net = sorted_history(1).net;
+% end
+%% 
+% Save current NN
+
+if save_net & load_net
+    save('ImitationLearningSimulink\ActualArchitecture\net.mat', 'net')
+end
+%% Save expert sample
+
+% sample = struct();
+% 
+% net_in = squeeze(out.net_in.data);
+% mpc_out = squeeze(out.mpc_out.data);
+% 
+% sample.net_in = net_in;
+% sample.mpc_out = mpc_out;
+% 
+% figure
+% plot(net_in' ./ Xmax')
+% figure
+% plot(mpc_out' ./ Ymax')
+% 
+% save('ImitationLearningSimulink\TrainingData\Data\test_trajectory_expert.mat', 'sample')
+% 
+% save('ImitationLearningSimulink\TrainingData\Data\expert_sample_clean.mat', 'sample')
+% save('ImitationLearningSimulink\TrainingData\Data\expert_sample_noisy.mat', 'sample')
+% 
+% save('ImitationLearningSimulink\TrainingData\Data\dagger.mat', 'sample')
+%%
+% out = out.KF.data;
+% save('KF_TuningData', 'out')
