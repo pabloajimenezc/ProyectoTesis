@@ -170,20 +170,13 @@ end
 %% Compute mean squared error
 
 % Mean squared error
-error_i = (im_ab_vec(:) - im_ab_est(:)) / (IM.IN / sqrt(2));
-cost = mean(error_i.^2);
+mse_i = mean((im_ab_vec(:) - im_ab_est(:)).^2) / (IM.IN / sqrt(2));
+
+% Cost function
+cost = mse_i;
 
 % To reduce the spread between good and bad cost
 cost = log(1 + cost);
-
-% To prevent Q from exploding (fminsearch cannot be constrained)
-if abs(KF.qi) > 1e-3
-    cost = cost + abs(KF.qi);
-end
-
-if abs(KF.qF) > 1e-3
-    cost = cost + abs(KF.qF);
-end
 
 %% Plot filtering
 
