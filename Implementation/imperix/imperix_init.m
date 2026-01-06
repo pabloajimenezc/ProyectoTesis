@@ -205,8 +205,6 @@ CEMPC.Hu_z      = 2 * CEMPC.NN' * CEMPC.NN / M2C.is_max^2;   % LICCs control eff
 CEMPC.Aineq_z   = [CEMPC.NN; -CEMPC.NN];                     % LICCs control action constraints matrix
 CEMPC.Hu_o      = 2 * eye(CEMPC.Np) / M2C.vo_max^2;          % CMV control effort hessian, normalized
 CEMPC.Aineq_o   = [eye(CEMPC.Np); -eye(CEMPC.Np)];           % CMV control action constraints matrix
-%% 
-% 600 Hz
 
 % CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
 % CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
@@ -233,23 +231,27 @@ CCMPC.Ts = Ts_cc; % Sampling time
 CCMPC.nx = M2C.n; % # of state variables (LICCs)
 CCMPC.nu = M2C.n; % # of control actions (decoupled voltage)
 % Continuous time state space model
-CCMPC.As = -eye(CCMPC.nx) * M2C.Rb / M2C.Lb; % State
-CCMPC.Bs = eye(CCMPC.nu) / M2C.Lb;           % Input
+CCMPC.A = -eye(CCMPC.nx) * M2C.Rb / M2C.Lb; % State
+CCMPC.B = eye(CCMPC.nu) / M2C.Lb;           % Input
 % Discrete time model
-CCMPC.ABd = expm(CCMPC.Ts * [CCMPC.As, CCMPC.Bs; zeros(CCMPC.nx, CCMPC.nx+CCMPC.nu)]);
-CCMPC.Ad  = CCMPC.ABd(1:CCMPC.nx, 1:CCMPC.nx);
-CCMPC.Bd  = CCMPC.ABd(1:CCMPC.nx, CCMPC.nx+1:end);
-
+CCMPC.AB = expm(CCMPC.Ts * [CCMPC.A, CCMPC.B; zeros(CCMPC.nx, CCMPC.nx+CCMPC.nu)]);
+CCMPC.A  = CCMPC.AB(1:CCMPC.nx, 1:CCMPC.nx);
+CCMPC.B  = CCMPC.AB(1:CCMPC.nx, CCMPC.nx+1:end);
+% Weighting matrices
+CCMPC.Q = eye(CCMPC.nx)/M2C.is_max^2;              % Reference tracking weighting matrix
+CCMPC.lambda = 10;                                 % Control effort weighting factor
+CCMPC.R = CCMPC.lambda*eye(CCMPC.nu)/M2C.Vc_ref^2; % Control action weighting matrix
+CCMPC.QT = idare(CCMPC.A, CCMPC.B, CCMPC.Q, CCMPC.R, zeros(CCMPC.nx), eye(CCMPC.nx)); % Terminal cost matrix
 % 2 steps horizon
-CCMPC.Bd = [CCMPC.Bd, zeros(CCMPC.nx, CCMPC.nu);
-            CCMPC.Ad*CCMPC.Bd, CCMPC.Bd];
-CCMPC.Ad = [CCMPC.Ad; CCMPC.Ad^2];
+CCMPC.Q = [CCMPC.Q, zeros(CCMPC.nx);
+           zeros(CCMPC.nx), CCMPC.QT];
+CCMPC.R = [CCMPC.R, zeros(CCMPC.nu);
+           zeros(CCMPC.nu), CCMPC.R];
+CCMPC.B = [CCMPC.B, zeros(CCMPC.nx, CCMPC.nu);
+            CCMPC.A*CCMPC.B, CCMPC.B];
+CCMPC.A = [CCMPC.A; CCMPC.A^2];
 % Hessian
-CCMPC.Hx     = 2 * CCMPC.Bd' * CCMPC.Bd / M2C.is_max^2; % Reference tracking (normalized)
-CCMPC.Hu     = 2 * eye(2*CCMPC.nu) / M2C.Vc_ref^2;      % Control effort (normalized)
-CCMPC.lambda = 10;                                      % Control effort weighting factor
-CCMPC.H      = CCMPC.Hx + CCMPC.lambda * CCMPC.Hu;      % Total hessian
-CCMPC.H      = (CCMPC.H + CCMPC.H') / 2;                % Symmetrical hessian
+CCMPC.H      = CCMPC.B' * CCMPC.Q * CCMPC.B + CCMPC.R; % Symmetrical hessian
 % Control action constraints matrix
 CCMPC.Aineq  = [CCMPC.pinvT(:, 4:5), zeros(M2C.m, CCMPC.nu);
                 zeros(M2C.m, CCMPC.nu), CCMPC.pinvT(:, 4:5);
@@ -257,7 +259,7 @@ CCMPC.Aineq  = [CCMPC.pinvT(:, 4:5), zeros(M2C.m, CCMPC.nu);
                 zeros(M2C.m, CCMPC.nu), -CCMPC.pinvT(:, 4:5)];
 
 % Reference low-pass filter (yf=alpha*yf+(1-alpha)*y)
-CCMPC.tau_f = CEMPC.Ts/10;
+CCMPC.tau_f = CEMPC.Ts/5;
 CCMPC.alpha = exp(-CCMPC.Ts/CCMPC.tau_f);
 %% Kalman Filtering of Induction Machine (KF)
 % Measure current and speed is known, slow varying parameter

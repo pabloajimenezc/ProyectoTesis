@@ -36,6 +36,7 @@ IM.o     = 1 - IM.ks * IM.kr;
 IM.Ro    = IM.Rs + IM.Rr * IM.kr^2;
 IM.Lo    = IM.o * IM.Ls;
 IM.tau_o = IM.Lo / IM.Ro;
+IM.kT    = 1.5 * IM.np * IM.kr;
 
 %% Modular Multilevel Converter (M2C)
 M2C = struct(); % Modular Multilevel Converter parameters
@@ -120,6 +121,7 @@ im_ab_vec = data(1:2, :);
 we_vec = data(3, :);
 vm_ab_vec = data(4:5, :);
 Fr_ab_vec = data(6:7, :);
+Te_vec = data(8, :);
 
 %% Apply Kalman Filter
 
@@ -128,6 +130,7 @@ C  = KF.C;
 
 im_ab_est = zeros(size(im_ab_vec));
 Fr_ab_est = zeros(size(Fr_ab_vec));
+Te_est = zeros(size(Te_vec));
 
 for t = 1:numel(we_vec)
 
@@ -165,15 +168,29 @@ for t = 1:numel(we_vec)
     % Output
     im_ab_est(:, t) = xt_est(1:2);
     Fr_ab_est(:, t) = xt_est(3:4);
+    Te_est(t) = -IM.kT * (xt_est(4) * xt_est(1) - xt_est(3) * xt_est(2));
 end
 
 %% Compute mean squared error
 
 % Mean squared error
 mse_i = mean((im_ab_vec(:) - im_ab_est(:)).^2) / (IM.IN / sqrt(2));
+mse_F = mean((Fr_ab_vec(:) - Fr_ab_est(:)).^2) / IM.FrN;
+mse_T = mean((Te_vec(:) - Te_est(:)).^2) / (IM.FrN * IM.IN / sqrt(2));
+
+S_vec = zeros(size(im_ab_vec));
+S_est = zeros(size(im_ab_vec));
+
+S_vec(1, :) = vm_ab_vec(1, :) .* im_ab_vec(1, :) + vm_ab_vec(2, :) .* im_ab_vec(2, :);
+S_vec(2, :) = vm_ab_vec(2, :) .* im_ab_vec(1, :) - vm_ab_vec(1, :) .* im_ab_vec(2, :);
+
+S_est(1, :) = vm_ab_vec(1, :) .* im_ab_est(1, :) + vm_ab_vec(2, :) .* im_ab_est(2, :);
+S_est(2, :) = vm_ab_vec(2, :) .* im_ab_est(1, :) - vm_ab_vec(1, :) .* im_ab_est(2, :);
+
+mse_S = mean((S_vec(:) - S_est(:)).^2) / IM.SN;
 
 % Cost function
-cost = mse_i;
+cost = mse_i + mse_S;
 
 % To reduce the spread between good and bad cost
 cost = log(1 + cost);
