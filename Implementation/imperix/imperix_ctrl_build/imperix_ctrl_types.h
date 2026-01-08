@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.24
+// Model version                  : 19.36
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Wed Jan  7 19:32:35 2026
+// C/C++ source code generated on : Thu Jan  8 18:39:14 2026
 //
 #ifndef imperix_ctrl_types_h_
 #define imperix_ctrl_types_h_
@@ -133,40 +133,6 @@ struct struct_04ti4QO3MEcLknQdotQIR
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
-#define DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
-
-struct struct_kYK8klzU7k6CF2sPPFadY
-{
-  real_T Ts;
-  real_T Nl;
-  real_T Np;
-  real_T ONE[54];
-  real_T NN[108];
-  real_T MI[324];
-  real_T K[324];
-  real_T Hu_z[36];
-  real_T Aineq_z[216];
-  real_T Hu_o[9];
-  real_T Aineq_o[18];
-  real_T lambda_z;
-  real_T lambda_o;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-
-struct struct_eLXpdkXVH71IKiDfJkdaiC
-{
-  real_T abc2ab[6];
-  real_T ab2abc[6];
-  real_T rot[4];
-};
-
-#endif
-
 #ifndef DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
 #define DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
 
@@ -230,26 +196,6 @@ struct struct_1mUndb4d19cpHVlbIkwLFC
 };
 
 #endif
-
-// Custom Type definition for MATLAB Function: '<S25>/Saturation'
-#ifndef struct_mpcActiveSetOptions_imperix_c_T
-#define struct_mpcActiveSetOptions_imperix_c_T
-
-struct mpcActiveSetOptions_imperix_c_T
-{
-  boolean_T IntegrityChecks;
-  int32_T MaxIterations;
-  real_T ConstraintTolerance;
-  boolean_T UseHessianAsInput;
-};
-
-#endif                                // struct_mpcActiveSetOptions_imperix_c_T
-
-// Parameters for system: '<S350>/Subsystem - pi//2 delay'
-typedef struct P_Subsystempi2delay_imperix_c_T_ P_Subsystempi2delay_imperix_c_T;
-
-// Parameters for system: '<S350>/Subsystem1'
-typedef struct P_Subsystem1_imperix_ctrl_T_ P_Subsystem1_imperix_ctrl_T;
 
 // Parameters (default storage)
 typedef struct P_imperix_ctrl_T_ P_imperix_ctrl_T;
