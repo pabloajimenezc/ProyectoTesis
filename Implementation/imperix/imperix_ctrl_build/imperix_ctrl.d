@@ -1,6 +1,5 @@
 imperix_ctrl.o imperix_ctrl.o: imperix_ctrl.cpp imperix_ctrl.h rtwtypes.h \
- imperix_ctrl_types.h rt_nonfinite.h rtGetInf.h rtGetNaN.h \
- imperix_ctrl_private.h \
+ imperix_ctrl_types.h rt_nonfinite.h rtGetNaN.h imperix_ctrl_private.h \
  C:\imperix\BB3_ACG_SDK\toolchain\includes/allIncludes.h \
  C:\imperix\BB3_ACG_SDK\toolchain\includes/Core/core.h \
  C:\imperix\BB3_ACG_SDK\toolchain\includes/Core/interrupts.h \
@@ -49,8 +48,6 @@ rtwtypes.h:
 imperix_ctrl_types.h:
 
 rt_nonfinite.h:
-
-rtGetInf.h:
 
 rtGetNaN.h:
 

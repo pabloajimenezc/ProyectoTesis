@@ -6,14 +6,10 @@ rng(0)
 %% Initialize Simulink simulation parameters
 %% Simulation
 
-Tf    = 3;       % Total simulation time
-
-fi    = 100e3;    % Simulation frequency
 fs_cc = 6e3;      % Current control frequency
 fc    = fs_cc/2;  % Carrier frequency (double update)
 fs_ce = 600;      % Energy control frequency
 
-Ti    = 1/fi;    % Integration timestep
 Ts_cc = 1/fs_cc; % Current control timestep
 Tc    = 1/fc;    % Carrier step
 Ts_ce = 1/fs_ce; % Energy control timestep
@@ -51,8 +47,10 @@ IM.np    = 2; % Number of pole pairs
 IM.J    = 0.006;    % [kg/m^2] Rotor inertia
 IM.Rs   = 1.8;      % [Ohm] Stator resistance
 IM.Rr   = 1.8;      % [Ohm] Equivalent rotor resistance
-IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
-IM.Lor  = 2.6e-3;   % [H] Rotor leakage inductance
+% IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
+% IM.Lor  = 2.6e-3;   % [H] Rotor leakage inductance
+IM.Los  = 3.8e-3;   % [H] Stator leakage inductance
+IM.Lor  = 3.8e-3;   % [H] Rotor leakage inductance
 IM.Lm   = 235.1e-3; % [H] Mutual inductance
 IM.Ls   = IM.Los + IM.Lm; % [H] Stator inductance
 IM.Lr   = IM.Lor + IM.Lm; % [H] Rotor inductance
@@ -68,6 +66,9 @@ IM.kT    = 1.5 * IM.np * IM.kr;
 
 IM.isdN  = IM.FrN / IM.Lm;
 IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
+
+IM.vF = (1/IM.tau_o*IM.isdN-IM.kr/(IM.tau_r*IM.Lo)*IM.FrN)*IM.Lo;
+
 %%
 % fprintf('%.9f', 0.5 * IM.J * IM.wN^2 / IM.SN)
 % fprintf('%.9f', IM.SN / 1e6)
@@ -276,10 +277,11 @@ KF.ny    = 2;               % # of measurements
 % KF.qF    = 0.0006155507;            % Flux process noise covariance
 KF.qi = 1e-4;
 KF.qF = 1e-7;
-KF.r     = 1e-3;            % Current measurement noise covariance
+KF.r     = 1e-6;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
-KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
+% KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
+KF.x1_mu = [IM.isdN; 0; IM.FrN; 0]; % Initial state estimations
 
 % State matrix
 KF.A       = zeros(KF.nx);
@@ -328,161 +330,9 @@ for i = 1:KF.we_steps
     K = K.';
     KF.gain_schedule(:, :, i) = K;
 end
-%% Modulation
-% <https://ieeexplore.ieee.org/document/8912558 PSPWM Comparison>
-% 
-% Phase shifted pulse width modulation (PSPWM)
-% 
-% Modulation is done with 'Symmetrical PWM' block from Plecs
-% 
-% Carrier shifts for upper and lower converter clusters are in [0, 1[, as fraction 
-% of the carrier period
 
-pspwm = 1;
-
-switch pspwm
-    case 0
-        du = (0:M2C.Nsm-1)/M2C.Nsm;
-        dl = du;
-    case 1
-        du = (0:M2C.Nsm-1)/M2C.Nsm;
-        dl = mod(du + 0.5, 1);
-    case 2
-        du = (0:M2C.Nsm-1)/M2C.Nsm;
-        dl = mod(du + 0.5/M2C.Nsm, 1);
-    case 3
-        du = (0:M2C.Nsm-1)/M2C.Nsm;
-        dl = mod(du + 0.5*(1+1/M2C.Nsm), 1);
-    case 4
-        du = (0:M2C.Nsm-1)*0.5/M2C.Nsm;
-        dl = du;
-end
-%% 
-% Local balancing is performed by rotating the modulation signals of same branch 
-% submodules each carrier period
 %% Neural network
 % Input/output normalization
 
 Xmax = load("ImitationLearningSimulink\TrainingData\Data\Xmax.mat").Xmax;
 Ymax = load("ImitationLearningSimulink\TrainingData\Data\Ymax.mat").Ymax;
-%% 
-% 
-
-load_net     = false;
-average_net  = false;
-quantize_net = false;
-save_net     = false;
-%% 
-% Load NN
-
-if load_net
-    % results = load('ImitationLearningSimulink\ActualArchitecture\Results10k.mat')
-    % results = load('ImitationLearningSimulink\ActualArchitecture\Results20k.mat')
-    % results = load('ImitationLearningSimulink\ActualArchitecture\Results100k.mat')
-    results = load('ImitationLearningSimulink\ActualArchitecture\Results100k_dagger.mat')
-    % results = load('ImitationLearningSimulink\ActualArchitecture\Results100k_dagger_2L5N.mat')
-    % results = load('ImitationLearningSimulink\ActualArchitecture\Results200k.mat')
-    net = results.net;
-    history = results.history;
-end
-%% 
-% Weight averaging
-
-if average_net & load_net
-    [~, sorted_idxs] = sort([history.val_loss], 'ascend');
-    sorted_history = history(sorted_idxs)
-
-    M = 3;
-    nets = cell(1, M);
-
-    for k = 1:M
-        nets{k} = sorted_history(k).net;
-    end
-
-    % best_val_idx = sorted_idxs(1)
-    % nets{1} = sorted_history(best_val_idx).net;
-    % nets{2} = sorted_history(best_val_idx+1).net;
-    % nets{3} = sorted_history(best_val_idx-1).net;
-
-    net_avg = nets{1};
-    tbl     = net_avg.Learnables;
-    nParams = size(tbl, 1);
-    for i = 1:nParams
-        vals = cellfun(@(n) n.Learnables.Value{i}, nets, 'UniformOutput', false);
-        nd = ndims(vals{1});
-        stacked = cat(nd+1, vals{:});
-        avgVal  = mean(stacked, nd+1);
-        net_avg.Learnables.Value{i} = avgVal;
-    end
-    net = net_avg;
-end
-%% 
-% Weight quantization
-
-if quantize_net & load_net
-    % 1) Crear el cuantizador en entorno MATLAB
-    quantObj = dlquantizer(net, 'ExecutionEnvironment','MATLAB');
-
-    % 2) Calibrar con tu dsX_tr
-    nBatches    = min(100, numel(dsX_tr));
-    calibration = subset(dsX_tr, 1:nBatches);
-    calibrate(quantObj, calibration, 'MiniBatchSize', 64);
-
-    % 3) Cuantizar la red
-    qNet = quantize(quantObj);
-
-    % 4) (Opcional) Validar degradación
-    Yq = predict(qNet, dlX_val);
-    Yo = predict(net,  dlX_val);
-    fprintf('MSE cuantizado vs original: %g\n', mse(extractdata(Yq), extractdata(Yo)));
-end
-%% 
-% Select net with best validation score for the expert test trajectory
-
-% if load_net
-%     Nnets = numel(history);
-%     loss_list = zeros(Nnets, 1);
-%     sample = load('ImitationLearningSimulink\TrainingData\Data\test_trajectory_expert.mat').sample;
-%     X = sample.net_in ./ Xmax;
-%     Y = sample.mpc_out ./ Ymax;
-%     dlX  = dlarray(X, 'CB');
-%     dlY  = dlarray(Y, 'CB');
-%     for k = 1:Nnets
-%         net = history(k).net;
-%         loss = dlfeval(@FFNNLoss, net, dlX, dlY, 'validation', 1, [1; 1; 1]);
-%         loss_list(k) = loss;
-%     end
-%     [~, sorted_idxs] = sort(loss_list, 'ascend');
-%     sorted_history = history(sorted_idxs);
-%     net = sorted_history(1).net;
-% end
-%% 
-% Save current NN
-
-if save_net & load_net
-    save('ImitationLearningSimulink\ActualArchitecture\net.mat', 'net')
-end
-%% Save expert sample
-
-% sample = struct();
-% 
-% net_in = squeeze(out.net_in.data);
-% mpc_out = squeeze(out.mpc_out.data);
-% 
-% sample.net_in = net_in;
-% sample.mpc_out = mpc_out;
-% 
-% figure
-% plot(net_in' ./ Xmax')
-% figure
-% plot(mpc_out' ./ Ymax')
-% 
-% save('ImitationLearningSimulink\TrainingData\Data\test_trajectory_expert.mat', 'sample')
-% 
-% save('ImitationLearningSimulink\TrainingData\Data\expert_sample_clean.mat', 'sample')
-% save('ImitationLearningSimulink\TrainingData\Data\expert_sample_noisy.mat', 'sample')
-% 
-% save('ImitationLearningSimulink\TrainingData\Data\dagger.mat', 'sample')
-%%
-% out = out.KF.data;
-% save('KF_TuningData', 'out')
