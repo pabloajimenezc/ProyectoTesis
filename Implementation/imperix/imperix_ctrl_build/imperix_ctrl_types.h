@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.45
+// Model version                  : 19.50
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Jan  9 15:45:39 2026
+// C/C++ source code generated on : Mon Jan 12 16:12:02 2026
 //
 #ifndef imperix_ctrl_types_h_
 #define imperix_ctrl_types_h_
@@ -133,10 +133,10 @@ struct struct_04ti4QO3MEcLknQdotQIR
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_ufhp0dPGHTdMqEr0nhHoeE_
-#define DEFINED_TYPEDEF_FOR_struct_ufhp0dPGHTdMqEr0nhHoeE_
+#ifndef DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
+#define DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
 
-struct struct_ufhp0dPGHTdMqEr0nhHoeE
+struct struct_aK5aQeabUeTOrz39VMjTKC
 {
   real_T VLLN;
   real_T PN;
@@ -168,7 +168,6 @@ struct struct_ufhp0dPGHTdMqEr0nhHoeE
   real_T kT;
   real_T isdN;
   real_T isqN;
-  real_T vF;
 };
 
 #endif

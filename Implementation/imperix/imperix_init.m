@@ -67,18 +67,6 @@ IM.kT    = 1.5 * IM.np * IM.kr;
 IM.isdN  = IM.FrN / IM.Lm;
 IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
 
-IM.vF = (1/IM.tau_o*IM.isdN-IM.kr/(IM.tau_r*IM.Lo)*IM.FrN)*IM.Lo;
-
-%%
-% fprintf('%.9f', 0.5 * IM.J * IM.wN^2 / IM.SN)
-% fprintf('%.9f', IM.SN / 1e6)
-% Zb = sqrt(3) * IM.VLLN^2 / IM.SN
-% fprintf('%.9f', IM.Rs / Zb)
-% fprintf('%.9f', IM.Rr / Zb)
-% Lb = sqrt(3) * IM.VLLN^2 / IM.SN / (IM.np * IM.wN)
-% fprintf('%.9f', IM.Los / Lb)
-% fprintf('%.9f', IM.Lm / Lb)
-% fprintf('%.9f', IM.Lor / Lb)
 %% Modular Multilevel Converter (M2C)
 
 M2C = struct(); % Modular Multilevel Converter parameters
@@ -271,13 +259,9 @@ KF.Ts    = Ts_cc;           % Sampling time
 KF.nx    = 4;               % # of state variables
 KF.nu    = 2;               % # of inputs
 KF.ny    = 2;               % # of measurements
-% KF.qi    = 0.00046416;            % Current process noise covariance
-% KF.qF    = 4.6416e-08;            % Flux process noise covariance
-% KF.qi    = 0.0010000000;            % Current process noise covariance
-% KF.qF    = 0.0006155507;            % Flux process noise covariance
 KF.qi = 1e-4;
-KF.qF = 1e-7;
-KF.r     = 1e-6;            % Current measurement noise covariance
+KF.qF = 1e-8;
+KF.r     = 1e-3;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
 % KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
