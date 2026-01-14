@@ -120,8 +120,8 @@ end
 im_ab_vec = data(1:2, :);
 we_vec = data(3, :);
 vm_ab_vec = data(4:5, :);
-Fr_ab_vec = data(6:7, :);
-Te_vec = data(8, :);
+% Fr_ab_vec = data(6:7, :);
+% Te_vec = data(8, :);
 
 %% Apply Kalman Filter
 
@@ -129,8 +129,8 @@ xt_est_apriori = KF.x1_mu;
 C  = KF.C;
 
 im_ab_est = zeros(size(im_ab_vec));
-Fr_ab_est = zeros(size(Fr_ab_vec));
-Te_est = zeros(size(Te_vec));
+% Fr_ab_est = zeros(size(Fr_ab_vec));
+% Te_est = zeros(size(Te_vec));
 
 for t = 1:numel(we_vec)
 
@@ -175,8 +175,8 @@ end
 
 % Mean squared error
 mse_i = mean((im_ab_vec(:) - im_ab_est(:)).^2) / (IM.IN / sqrt(2));
-mse_F = mean((Fr_ab_vec(:) - Fr_ab_est(:)).^2) / IM.FrN;
-mse_T = mean((Te_vec(:) - Te_est(:)).^2) / (IM.FrN * IM.IN / sqrt(2));
+% mse_F = mean((Fr_ab_vec(:) - Fr_ab_est(:)).^2) / IM.FrN;
+% mse_T = mean((Te_vec(:) - Te_est(:)).^2) / (IM.FrN * IM.IN / sqrt(2));
 
 S_vec = zeros(size(im_ab_vec));
 S_est = zeros(size(im_ab_vec));
@@ -202,7 +202,7 @@ if do_plot
     figure
     subplot(2, 1, 1)
     hold on
-    plot(Fr_ab_vec', '--')
+    % plot(Fr_ab_vec', '--')
     plot(Fr_ab_est')
     legend('Fra*', 'Frb*', 'Fra KF', 'Frb KF')
     hold off

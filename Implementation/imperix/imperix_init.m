@@ -44,13 +44,15 @@ IM.np    = 2; % Number of pole pairs
 %% 
 % Lumped parameters
 
-IM.J    = 0.006;    % [kg/m^2] Rotor inertia
+IM.H    = 1;       % [s] Inertia constant
+IM.J    = 2 * IM.H * IM.SN / IM.wN^2 * 10000 / IM.SN;
+% IM.J    = 0.006;    % [kg/m^2] Rotor inertia
 IM.Rs   = 1.8;      % [Ohm] Stator resistance
 IM.Rr   = 1.8;      % [Ohm] Equivalent rotor resistance
-% IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
-% IM.Lor  = 2.6e-3;   % [H] Rotor leakage inductance
-IM.Los  = 3.8e-3;   % [H] Stator leakage inductance
-IM.Lor  = 3.8e-3;   % [H] Rotor leakage inductance
+IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
+IM.Lor  = 2.6e-3;   % [H] Rotor leakage inductance
+% IM.Los  = 3.8e-3;   % [H] Stator leakage inductance
+% IM.Lor  = 3.8e-3;   % [H] Rotor leakage inductance
 IM.Lm   = 235.1e-3; % [H] Mutual inductance
 IM.Ls   = IM.Los + IM.Lm; % [H] Stator inductance
 IM.Lr   = IM.Lor + IM.Lm; % [H] Rotor inductance
@@ -66,6 +68,7 @@ IM.kT    = 1.5 * IM.np * IM.kr;
 
 IM.isdN  = IM.FrN / IM.Lm;
 IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
+
 
 %% Modular Multilevel Converter (M2C)
 
@@ -261,7 +264,7 @@ KF.nu    = 2;               % # of inputs
 KF.ny    = 2;               % # of measurements
 KF.qi = 1e-4;
 KF.qF = 1e-8;
-KF.r     = 1e-3;            % Current measurement noise covariance
+KF.r     = 1e-4;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
 % KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
