@@ -44,7 +44,7 @@ IM.np    = 2; % Number of pole pairs
 %% 
 % Lumped parameters
 
-IM.H    = 1;       % [s] Inertia constant
+IM.H    = 0.1;       % [s] Inertia constant
 IM.J    = 2 * IM.H * IM.SN / IM.wN^2 * 10000 / IM.SN;
 % IM.J    = 0.006;    % [kg/m^2] Rotor inertia
 IM.Rs   = 1.8;      % [Ohm] Stator resistance
@@ -267,8 +267,8 @@ KF.qF = 1e-8;
 KF.r     = 1e-4;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
-% KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
-KF.x1_mu = [IM.isdN; 0; IM.FrN; 0]; % Initial state estimations
+KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
+% KF.x1_mu = [IM.isdN; 0; IM.FrN; 0]; % Initial state estimations
 
 % State matrix
 KF.A       = zeros(KF.nx);

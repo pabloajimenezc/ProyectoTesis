@@ -2,157 +2,102 @@ classdef ClassIM
     % ClassIM: Induction Machine model in abc frame of reference
 
     properties % Induction Machine Parameters
-        Ti
-        VLLN
-        fN
-        PN
-        FPn
-        SN
-        wN
-        IN
+
+        VLLN  % [V] Line-line rms rated stator voltage
+        PN    % [W] Rated active power
+        FPn   % Rated power factor
+        SN    % [VA] Rated apparent power
+        fN    % [Hz] Rated stator frequency
+        f_max % [Hz] Max. stator frequency
+        wN    % [rad/s] Rated rotor speed
+        w_max % [rad/s] Max. rotor speed
+        IN    % [A] Rms rated stator current
+        TN    % [Nm] Rated electrical torque
+        FrN   % [Wb] Rated rotor flux
+        np    % Number of pole pairs
         
-        np
-        J
-        TN
-        Rs
-        Rr
-        Los
-        Lor
-        Lm
-        Ls
-        Lr
+        J     % [kg/m^2] Rotor inertia
+        Rs    % [Ohm] Stator resistance
+        Rr    % [Ohm] Equivalent rotor resistance
+        Los   % [H] Stator leakage inductance
+        Lor   % [H] Rotor leakage inductance
+        Lm    % [H] Mutual inductance
+        Ls    % [H] Stator inductance
+        Lr    % [H] Rotor inductance
         
-        kr
-        ks
-        tau_r
-        o % sigma
-        Ro
-        tau_o
+        kr    % Rotor magnetic coupling factor  
+        ks    % Stator magnetic coupling factor
+        tau_r % [s] Rotor time constant
+        o     % Magnetic dispersion factor (sigma)
+        Ro    % [Ohm] Stator equivalent resistance
+        Lo    % [H] Stator equivalent inductance
+        tau_o % [s] Stator time constant
+        kT    % Torque constant
         
-        FrN
-        isdN
-        kT
-        
-        R
-        Lss
-        Lrr
-        pi23
-        Lsr
-        dLsr_dt
-        dLsr_dg 
-        L
-        dL
-        A
-        B
-        init_vals
-    end
-    
-    properties % Induction Machine Variables (abc)
-        i
-        is
-        ir
-        F
-        Fs
-        Fr
-        Te
-        w
-        g
-        vs
+        isdN  % Rated d-axis current
+        isqN  % Rated q-axis current
+
+        % Per unit
+        Sb    % [W] Base power
+        H     % [s] Inertia constant
+        Zb    % [Ohm] Base impedance
+        sN    % [pu] Nominal apparent power
+        rs    % [pu] Stator resistance
+        rr    % [pu] Stator resistance
+        xos   % [pu] Stator leakage reactance
+        xor   % [pu] Rotor leakage reactance
+        xm    % [pu] Stator magnetizing reactance
     end
 
     methods
-        function obj = ClassIM(specs, init_vals)
+        function IM = ClassIM()
             %ClassIM: Construct an instance of this class
 
-            obj.init_vals = init_vals;
-
-            % Induction Machine Parameters
-            obj.Ti   = specs.Ti;
-            obj.VLLN = 380;
-            obj.fN   = 50;
-            obj.PN   = 3000;
-            obj.FPn  = 0.81;
-            obj.SN   = obj.PN / obj.FPn;
-            obj.wN   = 1450 * pi / 30;
-            obj.IN   = obj.SN / (obj.VLLN * sqrt(3));
+            IM.VLLN  = 380;
+            IM.PN    = 3000;
+            IM.FPn   = 0.81;
+            IM.SN    = IM.PN / IM.FPn;
+            IM.fN    = 50;
+            IM.f_max = IM.fN * 0.5;
+            IM.wN    = 1450 * pi / 30;
+            IM.w_max = IM.wN * 0.5;
+            IM.IN    = IM.SN / (IM.VLLN * sqrt(3));
+            IM.TN    = IM.PN / IM.wN;
+            IM.FrN   = sqrt(2/3)*IM.VLLN/(2*pi*IM.fN);
+            IM.np    = 2;
             
-            obj.np   = 2;
-            obj.J    = 0.006;
-            obj.TN   = obj.PN / obj.wN;
-            obj.Rs   = 1.8;
-            obj.Rr   = 1.8;
-            obj.Los  = 2.6e-3;
-            obj.Lor  = 2.6e-3;
-            obj.Lm   = 235.1e-3;
-            obj.Ls   = obj.Los + obj.Lm;
-            obj.Lr   = obj.Lor + obj.Lm;
+            % IM.J    = 0.006; % Original (Too low for the RTDS -> Numerical errors)
+            IM.J    = 0.08;
+            IM.Rs   = 1.8;
+            IM.Rr   = 1.8;
+            IM.Los  = 2.6e-3;
+            IM.Lor  = 2.6e-3;
+            IM.Lm   = 235.1e-3;
+            IM.Ls   = IM.Los + IM.Lm;
+            IM.Lr   = IM.Lor + IM.Lm;
             
-            obj.kr    = obj.Lm / obj.Lr;
-            obj.ks    = obj.Lm / obj.Ls;
-            obj.tau_r = obj.Lr / obj.Rr;
-            obj.o     = 1 - obj.ks * obj.kr;
-            obj.Ro    = obj.Rs + obj.Rr * obj.kr^2;
-            obj.tau_o = obj.o * obj.Ls / obj.Ro;
-            obj.kT = 1.5 * obj.np * obj.kr;
+            IM.kr    = IM.Lm / IM.Lr;
+            IM.ks    = IM.Lm / IM.Ls;
+            IM.tau_r = IM.Lr / IM.Rr;
+            IM.o     = 1 - IM.ks * IM.kr;
+            IM.Ro    = IM.Rs + IM.Rr * IM.kr^2;
+            IM.Lo    = IM.o * IM.Ls;
+            IM.tau_o = IM.Lo / IM.Ro;
+            IM.kT    = 1.5 * IM.np * IM.kr;
             
-            obj.FrN  = sqrt(2/3) * obj.VLLN / (2 * pi * obj.fN);
-            obj.isdN = obj.FrN / obj.Lm;
-            
-            obj.R    = diag([obj.Rs * ones(1, 3), obj.Rr * ones(1, 3)]);
-            obj.Lss  = (obj.Los + obj.Lm) * eye(3) - 0.5 * obj.Lm + 0.5 * obj.Lm * eye(3);
-            obj.Lrr  = (obj.Lor + obj.Lm) * eye(3) - 0.5 * obj.Lm + 0.5 * obj.Lm * eye(3);
-            obj.pi23 = pi * 2 / 3;
-            obj.Lsr  = @(g) obj.Lm * cos(g + obj.pi23 * [0,  1, -1;
-                                                        -1,  0,  1;
-                                                         1, -1,  0]);
-            obj.dLsr_dg = @(g) -obj.Lm * sin(g + obj.pi23 * [0,  1, -1;
-                                                            -1,  0,  1;
-                                                             1, -1,  0]);
-            obj.dLsr_dt = @(g, w) w * obj.dLsr_dg(g);
-            obj.L = @(g) [obj.Lss, obj.Lsr(g)
-                          obj.Lsr(g)', obj.Lrr];
-            obj.dL = @(g, w) [zeros(3), obj.dLsr_dt(g, w)
-                              obj.dLsr_dt(g, w)', zeros(3)];
-            obj.A = @(g, w) -inv(obj.L(g)) * (obj.R + obj.dL(g, w));
-            obj.B = @(g) inv(obj.L(g));
+            IM.isdN  = IM.FrN / IM.Lm;
+            IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
 
-            % Initialize variables
-            obj = obj.reset();
-        end
-
-        function obj = step(obj, vs)
-            % step: Perform one step of numerical integration
-            obj.Te = obj.np / 2 * obj.i(1:3)' * obj.dLsr_dg(obj.g) * obj.i(4:6);
-
-            v     = [vs; zeros(3, 1)];
-            di    = obj.A(obj.g, obj.w) * obj.i + obj.B(obj.g) * v;
-            dw    = obj.Te / obj.J;
-            obj.i = obj.i + obj.Ti * di;
-            obj.w = obj.w + obj.Ti * dw;
-        
-            obj.g = obj.g + obj.w * obj.Ti;
-            obj.F = obj.L(obj.g) * obj.i;
-
-            obj.is = obj.i(1:3);
-            obj.ir = obj.i(4:6);
-            obj.Fs = obj.F(1:3);
-            obj.Fr = obj.F(4:6);
-        end
-
-        function obj = reset(obj)
-            obj.i  = zeros(6, 1);
-            obj.is = zeros(3, 1);
-            obj.ir = zeros(3, 1);
-            obj.Fs = zeros(3, 1);
-            obj.Fr = zeros(3, 1);
-            if obj.init_vals.Magnetized
-                obj.Fr(1) = obj.FrN;
-            end
-            obj.F  = [obj.Fs; obj.Fr];
-            obj.Te = 0;
-            obj.w  = obj.init_vals.w0;
-            obj.g  = 0;
-            obj.vs = zeros(3, 1);
+            % Per unit
+            IM.Sb = 10000;
+            IM.Zb = IM.VLLN^2 / IM.Sb;
+            IM.H = 0.5 * IM.J * IM.wN^2 / IM.Sb;
+            IM.sN = IM.SN / IM.Sb;
+            IM.rs = IM.Rs / IM.Zb;
+            IM.rr = IM.Rr / IM.Zb;
+            IM.xos = 2*pi * IM.fN * IM.Los / IM.Zb;
+            IM.xor = 2*pi * IM.fN * IM.Lor / IM.Zb;
+            IM.xm = 2*pi * IM.fN * IM.Lm / IM.Zb;
         end
     end
 end
