@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.67
+// Model version                  : 19.73
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Tue Jan 20 15:15:51 2026
+// C/C++ source code generated on : Wed Jan 21 19:54:07 2026
 //
 #ifndef imperix_ctrl_types_h_
 #define imperix_ctrl_types_h_
@@ -69,42 +69,27 @@ struct struct_lzLWDxdESgOnj63TjlRqe
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
-#define DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
+#ifndef DEFINED_TYPEDEF_FOR_struct_WbJ8avaNECGQlGMumVRlBD_
+#define DEFINED_TYPEDEF_FOR_struct_WbJ8avaNECGQlGMumVRlBD_
 
-struct struct_IJte2L6GJt53g0zOe1fDuD
+struct struct_WbJ8avaNECGQlGMumVRlBD
 {
-  real_T VLLN;
-  real_T PN;
-  real_T FPn;
-  real_T SN;
-  real_T fN;
-  real_T f_max;
-  real_T wN;
-  real_T w_max;
-  real_T IN;
-  real_T TN;
-  real_T FrN;
-  real_T np;
-  real_T H;
-  real_T J;
-  real_T Rs;
-  real_T Rr;
-  real_T Los;
-  real_T Lor;
-  real_T Lm;
-  real_T Ls;
-  real_T Lr;
-  real_T kr;
-  real_T ks;
-  real_T tau_r;
-  real_T o;
-  real_T Ro;
-  real_T Lo;
-  real_T tau_o;
-  real_T kT;
-  real_T isdN;
-  real_T isqN;
+  real_T T[30];
+  real_T pinvT[30];
+  real_T Ts;
+  real_T nx;
+  real_T nu;
+  real_T A[8];
+  real_T B[16];
+  real_T AB[16];
+  real_T Q[16];
+  real_T lambda;
+  real_T R[16];
+  real_T QT[4];
+  real_T H[16];
+  real_T Aineq[96];
+  real_T tau_f;
+  real_T alpha;
 };
 
 #endif
@@ -144,6 +129,46 @@ struct struct_04ti4QO3MEcLknQdotQIR
   real_T vc_dev;
   real_T vc_m_dev;
   real_T Ec_dev;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
+#define DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
+
+struct struct_IJte2L6GJt53g0zOe1fDuD
+{
+  real_T VLLN;
+  real_T PN;
+  real_T FPn;
+  real_T SN;
+  real_T fN;
+  real_T f_max;
+  real_T wN;
+  real_T w_max;
+  real_T IN;
+  real_T TN;
+  real_T FrN;
+  real_T np;
+  real_T H;
+  real_T J;
+  real_T Rs;
+  real_T Rr;
+  real_T Los;
+  real_T Lor;
+  real_T Lm;
+  real_T Ls;
+  real_T Lr;
+  real_T kr;
+  real_T ks;
+  real_T tau_r;
+  real_T o;
+  real_T Ro;
+  real_T Lo;
+  real_T tau_o;
+  real_T kT;
+  real_T isdN;
+  real_T isqN;
 };
 
 #endif

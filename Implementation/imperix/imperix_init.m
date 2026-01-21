@@ -262,13 +262,13 @@ KF.Ts    = Ts_cc;           % Sampling time
 KF.nx    = 4;               % # of state variables
 KF.nu    = 2;               % # of inputs
 KF.ny    = 2;               % # of measurements
-KF.qi = 1e-4;
-KF.qF = 1e-8;
-KF.r     = 1e-4;            % Current measurement noise covariance
+KF.qi    = 1e-3;
+KF.qF    = KF.qi * 1e-6;
+KF.r     = 1e-3;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix
-KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
-% KF.x1_mu = [IM.isdN; 0; IM.FrN; 0]; % Initial state estimations
+% KF.x1_mu = zeros(KF.nx, 1); % Initial state estimations
+KF.x1_mu = [IM.isdN; 0; IM.FrN; 0]; % Initial state estimations
 
 % State matrix
 KF.A       = zeros(KF.nx);
