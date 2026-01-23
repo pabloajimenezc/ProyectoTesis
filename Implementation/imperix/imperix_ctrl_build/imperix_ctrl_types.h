@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.73
+// Model version                  : 19.80
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Wed Jan 21 19:54:07 2026
+// C/C++ source code generated on : Fri Jan 23 17:23:31 2026
 //
 #ifndef imperix_ctrl_types_h_
 #define imperix_ctrl_types_h_
@@ -65,6 +65,45 @@ struct struct_lzLWDxdESgOnj63TjlRqe
   real_T kp;
   real_T ki;
   real_T u_max;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
+#define DEFINED_TYPEDEF_FOR_struct_aK5aQeabUeTOrz39VMjTKC_
+
+struct struct_aK5aQeabUeTOrz39VMjTKC
+{
+  real_T VLLN;
+  real_T PN;
+  real_T FPn;
+  real_T SN;
+  real_T fN;
+  real_T f_max;
+  real_T wN;
+  real_T w_max;
+  real_T IN;
+  real_T TN;
+  real_T FrN;
+  real_T np;
+  real_T J;
+  real_T Rs;
+  real_T Rr;
+  real_T Los;
+  real_T Lor;
+  real_T Lm;
+  real_T Ls;
+  real_T Lr;
+  real_T kr;
+  real_T ks;
+  real_T tau_r;
+  real_T o;
+  real_T Ro;
+  real_T Lo;
+  real_T tau_o;
+  real_T kT;
+  real_T isdN;
+  real_T isqN;
 };
 
 #endif
@@ -133,42 +172,36 @@ struct struct_04ti4QO3MEcLknQdotQIR
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
-#define DEFINED_TYPEDEF_FOR_struct_IJte2L6GJt53g0zOe1fDuD_
+#ifndef DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
+#define DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
 
-struct struct_IJte2L6GJt53g0zOe1fDuD
+struct struct_coWYOfcHQKga4h4Z3609x
 {
-  real_T VLLN;
-  real_T PN;
-  real_T FPn;
-  real_T SN;
-  real_T fN;
-  real_T f_max;
-  real_T wN;
-  real_T w_max;
-  real_T IN;
-  real_T TN;
-  real_T FrN;
-  real_T np;
-  real_T H;
-  real_T J;
-  real_T Rs;
-  real_T Rr;
-  real_T Los;
-  real_T Lor;
-  real_T Lm;
-  real_T Ls;
-  real_T Lr;
-  real_T kr;
-  real_T ks;
-  real_T tau_r;
-  real_T o;
-  real_T Ro;
-  real_T Lo;
-  real_T tau_o;
-  real_T kT;
-  real_T isdN;
-  real_T isqN;
+  real_T Ts;
+  real_T Nl;
+  real_T Np;
+  real_T ONE[96];
+  real_T NN[192];
+  real_T MI[576];
+  real_T K[576];
+  real_T Hu_z[64];
+  real_T Aineq_z[384];
+  real_T Hu_o[16];
+  real_T Aineq_o[32];
+  real_T lambda_z;
+  real_T lambda_o;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+
+struct struct_eLXpdkXVH71IKiDfJkdaiC
+{
+  real_T abc2ab[6];
+  real_T ab2abc[6];
+  real_T rot[4];
 };
 
 #endif
@@ -227,6 +260,26 @@ struct dsp_simulink_MovingAverage_im_T
 };
 
 #endif                                // struct_dsp_simulink_MovingAverage_im_T
+
+// Custom Type definition for MATLAB Function: '<S26>/Saturation'
+#ifndef struct_mpcActiveSetOptions_imperix_c_T
+#define struct_mpcActiveSetOptions_imperix_c_T
+
+struct mpcActiveSetOptions_imperix_c_T
+{
+  boolean_T IntegrityChecks;
+  int32_T MaxIterations;
+  real_T ConstraintTolerance;
+  boolean_T UseHessianAsInput;
+};
+
+#endif                                // struct_mpcActiveSetOptions_imperix_c_T
+
+// Parameters for system: '<S405>/Subsystem - pi//2 delay'
+typedef struct P_Subsystempi2delay_imperix_c_T_ P_Subsystempi2delay_imperix_c_T;
+
+// Parameters for system: '<S405>/Subsystem1'
+typedef struct P_Subsystem1_imperix_ctrl_T_ P_Subsystem1_imperix_ctrl_T;
 
 // Parameters (default storage)
 typedef struct P_imperix_ctrl_T_ P_imperix_ctrl_T;

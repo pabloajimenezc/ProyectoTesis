@@ -23,7 +23,7 @@ RFT.rot    = T.rot;    % 90° rotation
 %% Induction Machine (IM)
 
 IM = struct();
-%% 
+
 % Nominal values and structural parameters
 % 
 % Converter control designed to operate with 50% nominal torque and 50% nominal 
@@ -44,15 +44,11 @@ IM.np    = 2; % Number of pole pairs
 %% 
 % Lumped parameters
 
-IM.H    = 0.1;       % [s] Inertia constant
-IM.J    = 2 * IM.H * IM.SN / IM.wN^2 * 10000 / IM.SN;
-% IM.J    = 0.006;    % [kg/m^2] Rotor inertia
+IM.J    = 0.1;    % [kg/m^2] Rotor inertia
 IM.Rs   = 1.8;      % [Ohm] Stator resistance
 IM.Rr   = 1.8;      % [Ohm] Equivalent rotor resistance
 IM.Los  = 2.6e-3;   % [H] Stator leakage inductance
 IM.Lor  = 2.6e-3;   % [H] Rotor leakage inductance
-% IM.Los  = 3.8e-3;   % [H] Stator leakage inductance
-% IM.Lor  = 3.8e-3;   % [H] Rotor leakage inductance
 IM.Lm   = 235.1e-3; % [H] Mutual inductance
 IM.Ls   = IM.Los + IM.Lm; % [H] Stator inductance
 IM.Lr   = IM.Lor + IM.Lm; % [H] Rotor inductance
@@ -184,8 +180,8 @@ FOC.ki_w = FOC.wn^2 / FOC.k_w;            % Integral gain
 CEMPC = struct(); % Cluster Energy MPC parameters
 
 CEMPC.Ts        = Ts_ce; % Sampling time
-CEMPC.Nl        = 10;    % # of BCD iterations
-CEMPC.Np        = 3;    % Rolling horizon length
+CEMPC.Nl        = 20;    % # of BCD iterations
+CEMPC.Np        = 4;    % Rolling horizon length
 CEMPC.ONE       = repmat({ones(M2C.m, 1)}, CEMPC.Np, 1);
 CEMPC.ONE       = blkdiag(CEMPC.ONE{:});                     % CMV incidence matrix, long horizon
 CEMPC.NN        = repmat({M2C.N}, CEMPC.Np, 1);
@@ -201,8 +197,11 @@ CEMPC.Aineq_o   = [eye(CEMPC.Np); -eye(CEMPC.Np)];           % CMV control actio
 % CEMPC.lambda_z  = 0.2; % LICCs control effort weighting factor
 % CEMPC.lambda_o  = 0.8; % CMV control effort weighting factor
 
-CEMPC.lambda_z  = 0.2 * 3;
-CEMPC.lambda_o  = 0.4 * 3;
+% CEMPC.lambda_z  = 0.2 * 3;
+% CEMPC.lambda_o  = 0.4 * 3;
+
+CEMPC.lambda_z  = 0.2 * 4;
+CEMPC.lambda_o  = 0.4 * 4;
 
 % CEMPC.lambda_z  = 0.2 * 10;
 % CEMPC.lambda_o  = 0.4 * 10;
@@ -262,8 +261,8 @@ KF.Ts    = Ts_cc;           % Sampling time
 KF.nx    = 4;               % # of state variables
 KF.nu    = 2;               % # of inputs
 KF.ny    = 2;               % # of measurements
-KF.qi    = 1e-3;
-KF.qF    = KF.qi * 1e-6;
+KF.qi    = 1e-4;            % Current model noise covariance
+KF.qF    = 1e-9;            % Flux model noise covariance
 KF.r     = 1e-3;            % Current measurement noise covariance
 KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]); % Process noise covariance matrix
 KF.R     = KF.r*eye(KF.ny); % Measurement noise covariance matrix

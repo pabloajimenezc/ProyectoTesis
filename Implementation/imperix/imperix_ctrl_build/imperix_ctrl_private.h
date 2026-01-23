@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.73
+// Model version                  : 19.80
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Wed Jan 21 19:54:07 2026
+// C/C++ source code generated on : Fri Jan 23 17:23:31 2026
 //
 #ifndef imperix_ctrl_private_h_
 #define imperix_ctrl_private_h_
@@ -28,11 +28,33 @@ tUserSafe SimulinkInterrupt(void);
 void ConfigureReadTriggerDelayInNs(int);
 extern real_T rt_hypotd_snf(real_T u0, real_T u1);
 extern real_T rt_atan2d_snf(real_T u0, real_T u1);
+extern real_T rt_roundd_snf(real_T u);
+extern void microKernel667230418117092241(int32_T K, const real32_T *A, int32_T
+  LDA, const real32_T *B, real32_T *C);
+extern void microKernel13678287890782005874(int32_T K, const real32_T *A,
+  int32_T LDA, const real32_T *B, real32_T *C);
+extern void macroKernel2662060675229151125(int32_T M, int32_T K, int32_T N,
+  const real32_T *A, int32_T LDA, const real32_T *B, int32_T LDB, real32_T *C,
+  int32_T LDC);
+extern void matrixMultiply2662060675229151125(int32_T M, int32_T K, int32_T N,
+  int32_T blockSizeM, int32_T blockSizeK, int32_T blockSizeN, const real32_T *A,
+  const real32_T *B, real32_T *C);
+extern int32_T div_s32_floor(int32_T numerator, int32_T denominator);
+extern int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator);
 extern void imperix__MovingAverage_Init(DW_MovingAverage_imperix_ctrl_T *localDW);
 extern void imperix_MovingAverage_Start(DW_MovingAverage_imperix_ctrl_T *localDW);
 extern void imperix_ctrl_MovingAverage(const real_T rtu_0[6],
   B_MovingAverage_imperix_ctrl_T *localB, DW_MovingAverage_imperix_ctrl_T
   *localDW);
+extern void impe_Subsystempi2delay_Init(real_T *rty_alpha_beta, real_T
+  *rty_alpha_beta_e, P_Subsystempi2delay_imperix_c_T *localP);
+extern void imperix_c_Subsystempi2delay(uint8_T rtu_Enable, real_T rtu_dq,
+  real_T rtu_dq_k, real_T rtu_wt, real_T *rty_alpha_beta, real_T
+  *rty_alpha_beta_e);
+extern void imperix_ctr_Subsystem1_Init(real_T *rty_alpha_beta, real_T
+  *rty_alpha_beta_b, P_Subsystem1_imperix_ctrl_T *localP);
+extern void imperix_ctrl_Subsystem1(uint8_T rtu_Enable, real_T rtu_dq, real_T
+  rtu_dq_m, real_T rtu_wt, real_T *rty_alpha_beta, real_T *rty_alpha_beta_b);
 extern void imperix__MovingAverage_Term(DW_MovingAverage_imperix_ctrl_T *localDW);
 
 #endif                                 // imperix_ctrl_private_h_
