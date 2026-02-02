@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.80
+// Model version                  : 19.83
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Jan 23 17:23:31 2026
+// C/C++ source code generated on : Mon Feb  2 18:35:10 2026
 //
 #ifndef imperix_ctrl_types_h_
 #define imperix_ctrl_types_h_
@@ -261,7 +261,7 @@ struct dsp_simulink_MovingAverage_im_T
 
 #endif                                // struct_dsp_simulink_MovingAverage_im_T
 
-// Custom Type definition for MATLAB Function: '<S26>/Saturation'
+// Custom Type definition for MATLAB Function: '<S32>/Saturation'
 #ifndef struct_mpcActiveSetOptions_imperix_c_T
 #define struct_mpcActiveSetOptions_imperix_c_T
 
@@ -275,10 +275,10 @@ struct mpcActiveSetOptions_imperix_c_T
 
 #endif                                // struct_mpcActiveSetOptions_imperix_c_T
 
-// Parameters for system: '<S405>/Subsystem - pi//2 delay'
+// Parameters for system: '<S441>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_c_T_ P_Subsystempi2delay_imperix_c_T;
 
-// Parameters for system: '<S405>/Subsystem1'
+// Parameters for system: '<S441>/Subsystem1'
 typedef struct P_Subsystem1_imperix_ctrl_T_ P_Subsystem1_imperix_ctrl_T;
 
 // Parameters (default storage)

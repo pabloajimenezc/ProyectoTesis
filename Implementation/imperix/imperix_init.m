@@ -316,6 +316,31 @@ for i = 1:KF.we_steps
     K = K.';
     KF.gain_schedule(:, :, i) = K;
 end
+%% Modulation
+% PSPWM Comparison
+% Phase shifted pulse width modulation (PSPWM)
+% Modulation is done with 'Symmetrical PWM' block from Plecs
+% Carrier shifts for upper and lower converter clusters are in [0, 1[, as fraction of the carrier period
+pspwm = 1;
+
+switch pspwm
+    case 0
+        du = (0:M2C.Nsm-1)/M2C.Nsm;
+        dl = du;
+    case 1
+        du = (0:M2C.Nsm-1)/M2C.Nsm;
+        dl = mod(du + 0.5, 1);
+    case 2
+        du = (0:M2C.Nsm-1)/M2C.Nsm;
+        dl = mod(du + 0.5/M2C.Nsm, 1);
+    case 3
+        du = (0:M2C.Nsm-1)/M2C.Nsm;
+        dl = mod(du + 0.5*(1+1/M2C.Nsm), 1);
+    case 4
+        du = (0:M2C.Nsm-1)*0.5/M2C.Nsm;
+        dl = du;
+end
+% Local balancing is performed by rotating the modulation signals of same branch submodules each carrier period
 
 %% Neural network
 % Input/output normalization

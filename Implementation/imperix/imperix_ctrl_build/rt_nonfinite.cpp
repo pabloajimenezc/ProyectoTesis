@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.80
+// Model version                  : 19.83
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Jan 23 17:23:31 2026
+// C/C++ source code generated on : Mon Feb  2 18:35:10 2026
 //
 
 extern "C"
