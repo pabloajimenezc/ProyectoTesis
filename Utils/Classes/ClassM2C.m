@@ -1,5 +1,5 @@
 classdef ClassM2C
-
+    % ClassM2C: Modular Multilevel Converter model
 properties
     Ax       % Input incidence matrix
     Ay       % Output incidence matrix

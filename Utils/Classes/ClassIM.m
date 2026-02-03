@@ -1,5 +1,5 @@
 classdef ClassIM
-    % ClassIM: Induction Machine model in abc frame of reference
+    % ClassIM: Induction Machine model
 
     properties % Induction Machine Parameters
 
@@ -67,7 +67,8 @@ classdef ClassIM
             IM.np    = 2;
             
             % IM.J    = 0.006; % Original (Too low for the RTDS -> Numerical errors)
-            IM.J    = 0.08;
+            IM.J    = 0.01; % Original (Too low for the RTDS -> Numerical errors)
+            % IM.J    = 0.1;
             IM.Rs   = 1.8;
             IM.Rr   = 1.8;
             IM.Los  = 2.6e-3;
@@ -86,7 +87,7 @@ classdef ClassIM
             IM.kT    = 1.5 * IM.np * IM.kr;
             
             IM.isdN  = IM.FrN / IM.Lm;
-            IM.isqN  = IM.TN / (3/2*IM.np*IM.kr*IM.FrN);
+            IM.isqN  = IM.TN / (IM.kT*IM.FrN);
 
             % Per unit
             IM.Sb = 10000;

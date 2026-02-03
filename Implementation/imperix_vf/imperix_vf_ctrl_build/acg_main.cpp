@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_vf_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.85
+// Model version                  : 19.98
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Mon Feb  2 19:19:24 2026
+// C/C++ source code generated on : Tue Feb  3 13:19:50 2026
 //
 #include "User/user.h"
 #include "extern_user.h"

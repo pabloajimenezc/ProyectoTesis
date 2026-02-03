@@ -1,7 +1,3 @@
-% clc
-% clf
-% clear all
-% close all
 rng(0)
 %% Initialize Simulink simulation parameters
 %% Simulation
