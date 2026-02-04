@@ -28,5 +28,13 @@ classdef ClassMCC
             MCC.ki    = MCC.Le * MCC.wn^2;
             MCC.u_max = M2C.Ay_max;
         end
+
+        function s = toStruct(obj)
+            % s: Convert to struct for code generation
+            props = properties(obj);
+            for i = 1:length(props)
+                s.(props{i}) = obj.(props{i});
+            end
+        end
     end
 end

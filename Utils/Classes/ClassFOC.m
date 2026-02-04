@@ -32,5 +32,13 @@ classdef ClassFOC
             FOC.kp_w  = 2 * FOC.wn * FOC.xi / FOC.k_w;
             FOC.ki_w  = FOC.wn^2 / FOC.k_w;
         end
+
+        function s = toStruct(obj)
+            % s: Convert to struct for code generation
+            props = properties(obj);
+            for i = 1:length(props)
+                s.(props{i}) = obj.(props{i});
+            end
+        end
     end
 end

@@ -39,14 +39,16 @@ classdef ClassIM
 
         % Per unit
         Sb    % [W] Base power
+        wb    % [rad/s] Base angular speed
+        Tb    % [Nm] Base torque
         H     % [s] Inertia constant
         Zb    % [Ohm] Base impedance
         sN    % [pu] Nominal apparent power
         rs    % [pu] Stator resistance
         rr    % [pu] Stator resistance
-        xos   % [pu] Stator leakage reactance
-        xor   % [pu] Rotor leakage reactance
-        xm    % [pu] Stator magnetizing reactance
+        los   % [pu] Stator leakage reactance
+        lor   % [pu] Rotor leakage reactance
+        lm    % [pu] Stator magnetizing reactance
     end
 
     methods
@@ -67,7 +69,7 @@ classdef ClassIM
             IM.np    = 2;
             
             % IM.J    = 0.006; % Original (Too low for the RTDS -> Numerical errors)
-            IM.J    = 0.01; % Original (Too low for the RTDS -> Numerical errors)
+            IM.J    = 0.01;
             % IM.J    = 0.1;
             IM.Rs   = 1.8;
             IM.Rr   = 1.8;
@@ -91,14 +93,24 @@ classdef ClassIM
 
             % Per unit
             IM.Sb = 10000;
+            IM.wb = 2 * pi * IM.fN;
+            IM.Tb = IM.Sb / IM.wb;
             IM.Zb = IM.VLLN^2 / IM.Sb;
             IM.H = 0.5 * IM.J * IM.wN^2 / IM.Sb;
             IM.sN = IM.SN / IM.Sb;
             IM.rs = IM.Rs / IM.Zb;
             IM.rr = IM.Rr / IM.Zb;
-            IM.xos = 2*pi * IM.fN * IM.Los / IM.Zb;
-            IM.xor = 2*pi * IM.fN * IM.Lor / IM.Zb;
-            IM.xm = 2*pi * IM.fN * IM.Lm / IM.Zb;
+            IM.los = 2*pi * IM.fN * IM.Los / IM.Zb;
+            IM.lor = 2*pi * IM.fN * IM.Lor / IM.Zb;
+            IM.lm = 2*pi * IM.fN * IM.Lm / IM.Zb;
+        end
+
+        function s = toStruct(obj)
+            % s: Convert to struct for code generation
+            props = properties(obj);
+            for i = 1:length(props)
+                s.(props{i}) = obj.(props{i});
+            end
         end
     end
 end

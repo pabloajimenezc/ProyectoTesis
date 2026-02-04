@@ -87,5 +87,13 @@ classdef ClassKF
                 KF.gain_schedule(:, :, i) = K;
             end
         end
+
+        function s = toStruct(obj)
+            % s: Convert to struct for code generation
+            props = properties(obj);
+            for i = 1:length(props)
+                s.(props{i}) = obj.(props{i});
+            end
+        end
     end
 end
