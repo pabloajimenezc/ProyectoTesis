@@ -40,14 +40,11 @@ classdef ClassCCC
             B  = AB(1:CCC.nx, CCC.nx+1:end);
             % Single-step weighting matrices
             Q = eye(CCC.nx)/M2C.is_max^2;
-            CCC.lambda = 10;
+            % CCC.lambda = 10;
+            CCC.lambda = 5;
             R = CCC.lambda*eye(CCC.nu)/M2C.Vc_ref^2;
             CCC.QT = idare(A, B, Q, R, zeros(CCC.nx), eye(CCC.nx));
             % 2-steps horizon
-            % CCC.Q = [Q, zeros(CCC.nx);
-            %          zeros(CCC.nx), CCC.QT];
-            % CCC.R = [R, zeros(CCC.nu);
-            %          zeros(CCC.nu), R];
             CCC.Q = blkdiag(Q, CCC.QT);
             CCC.R = blkdiag(R, R);
             CCC.B = [B, zeros(CCC.nx, CCC.nu);
