@@ -1,3 +1,6 @@
+# Matias Correa previous work
+Baseline/
+
 # Autosave files
 *.asv
 *.m~
@@ -25,6 +28,7 @@ helpsearch*/
 slprj/
 sccprj/
 codegen/
+*_build/
 
 # Cache files
 *.slxc
