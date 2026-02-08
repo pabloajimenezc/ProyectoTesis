@@ -24,7 +24,7 @@ classdef ClassIEC
             
             IEC.Ts        = Ts;
             IEC.Nl        = 50;
-            IEC.Np        = 5;
+            IEC.Np        = 10;
             ONE           = repmat({ones(M2C.m, 1)}, IEC.Np, 1);
             IEC.ONE       = blkdiag(ONE{:});
             NN            = repmat({M2C.N}, IEC.Np, 1);
