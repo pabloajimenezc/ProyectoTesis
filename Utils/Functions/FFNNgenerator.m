@@ -15,10 +15,11 @@ function net = FFNNgenerator(args)
 % Activation function
 function layer = actFcn(name)
     switch lower(name)
-        case 'relu',    layer = reluLayer;
-        case 'tanh',    layer = tanhLayer;
-        case 'sigmoid', layer = sigmoidLayer;
-        case 'linear',  layer = [];  % Without activation
+        case 'relu',       layer = reluLayer;
+        case 'leaky-relu', layer = leakyReluLayer(0.01);
+        case 'tanh',       layer = tanhLayer;
+        case 'sigmoid',    layer = sigmoidLayer;
+        case 'linear',     layer = [];  % Without activation
         otherwise, error("Unknown activation function: '%s'.", name);
     end
 end
