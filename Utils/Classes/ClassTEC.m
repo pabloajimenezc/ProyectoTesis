@@ -4,7 +4,6 @@ classdef ClassTEC
     % Low-pass filter: yf[t] = alpha * yf[t-1] + (1-alpha) * y[t]
 
     properties
-        
         Ts    % Sampling time
         k     % Plant model gain
         xi    % Closed loop damping

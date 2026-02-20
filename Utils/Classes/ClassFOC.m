@@ -28,7 +28,7 @@ classdef ClassFOC
             FOC.u_max = M2C.iy_max;
             FOC.kp_F  = (2 * FOC.xi * FOC.wn * IM.tau_r - 1) / IM.Lm;
             FOC.ki_F  = FOC.wn^2 * IM.tau_r / IM.Lm;
-            FOC.k_w   = IM.FrN * IM.kT / IM.J;
+            FOC.k_w   = IM.FrN * IM.kT * IM.np / IM.J;
             FOC.kp_w  = 2 * FOC.wn * FOC.xi / FOC.k_w;
             FOC.ki_w  = FOC.wn^2 / FOC.k_w;
         end

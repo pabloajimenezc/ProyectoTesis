@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_balance_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.123
+// Model version                  : 19.129
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Feb  6 16:32:39 2026
+// C/C++ source code generated on : Fri Feb 20 18:44:57 2026
 //
 #ifndef imperix_balance_ctrl_types_h_
 #define imperix_balance_ctrl_types_h_
@@ -124,22 +124,22 @@ struct struct_lzLWDxdESgOnj63TjlRqe
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_KeUCPyfzMcEUK9iBa0sEYD_
-#define DEFINED_TYPEDEF_FOR_struct_KeUCPyfzMcEUK9iBa0sEYD_
+#ifndef DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
+#define DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
 
-struct struct_KeUCPyfzMcEUK9iBa0sEYD
+struct struct_kYK8klzU7k6CF2sPPFadY
 {
   real_T Ts;
   real_T Nl;
   real_T Np;
-  real_T ONE[150];
-  real_T NN[300];
-  real_T MI[900];
-  real_T K[900];
-  real_T Hu_z[100];
-  real_T Aineq_z[600];
-  real_T Hu_o[25];
-  real_T Aineq_o[50];
+  real_T ONE[54];
+  real_T NN[108];
+  real_T MI[324];
+  real_T K[324];
+  real_T Hu_z[36];
+  real_T Aineq_z[216];
+  real_T Hu_o[9];
+  real_T Aineq_o[18];
   real_T lambda_z;
   real_T lambda_o;
 };
@@ -260,20 +260,6 @@ struct struct_iBNhAmynxvQUSUJjZwUnnE
 
 #endif
 
-// Custom Type definition for MATLAB Function: '<S31>/Saturation'
-#ifndef struct_mpcActiveSetOptions_imperix_b_T
-#define struct_mpcActiveSetOptions_imperix_b_T
-
-struct mpcActiveSetOptions_imperix_b_T
-{
-  boolean_T IntegrityChecks;
-  int32_T MaxIterations;
-  real_T ConstraintTolerance;
-  boolean_T UseHessianAsInput;
-};
-
-#endif                                // struct_mpcActiveSetOptions_imperix_b_T
-
 #ifndef struct_cell_wrap_imperix_balance_ctr_T
 #define struct_cell_wrap_imperix_balance_ctr_T
 
@@ -304,10 +290,24 @@ struct dsp_simulink_MovingAverage_im_T
 
 #endif                                // struct_dsp_simulink_MovingAverage_im_T
 
-// Parameters for system: '<S420>/Subsystem - pi//2 delay'
+// Custom Type definition for MATLAB Function: '<S31>/Saturation'
+#ifndef struct_mpcActiveSetOptions_imperix_b_T
+#define struct_mpcActiveSetOptions_imperix_b_T
+
+struct mpcActiveSetOptions_imperix_b_T
+{
+  boolean_T IntegrityChecks;
+  int32_T MaxIterations;
+  real_T ConstraintTolerance;
+  boolean_T UseHessianAsInput;
+};
+
+#endif                                // struct_mpcActiveSetOptions_imperix_b_T
+
+// Parameters for system: '<S425>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_b_T_ P_Subsystempi2delay_imperix_b_T;
 
-// Parameters for system: '<S420>/Subsystem1'
+// Parameters for system: '<S425>/Subsystem1'
 typedef struct P_Subsystem1_imperix_balance__T_ P_Subsystem1_imperix_balance__T;
 
 // Parameters (default storage)
