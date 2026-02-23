@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_balance_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.129
+// Model version                  : 19.134
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Feb 20 18:44:57 2026
+// C/C++ source code generated on : Mon Feb 23 19:32:48 2026
 //
 #ifndef rt_nonfinite_h_
 #define rt_nonfinite_h_

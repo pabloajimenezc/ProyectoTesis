@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_balance_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.129
+// Model version                  : 19.134
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Fri Feb 20 18:44:57 2026
+// C/C++ source code generated on : Mon Feb 23 19:32:48 2026
 //
 #ifndef imperix_balance_ctrl_types_h_
 #define imperix_balance_ctrl_types_h_
@@ -124,22 +124,22 @@ struct struct_lzLWDxdESgOnj63TjlRqe
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
-#define DEFINED_TYPEDEF_FOR_struct_kYK8klzU7k6CF2sPPFadY_
+#ifndef DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
+#define DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
 
-struct struct_kYK8klzU7k6CF2sPPFadY
+struct struct_coWYOfcHQKga4h4Z3609x
 {
   real_T Ts;
   real_T Nl;
   real_T Np;
-  real_T ONE[54];
-  real_T NN[108];
-  real_T MI[324];
-  real_T K[324];
-  real_T Hu_z[36];
-  real_T Aineq_z[216];
-  real_T Hu_o[9];
-  real_T Aineq_o[18];
+  real_T ONE[96];
+  real_T NN[192];
+  real_T MI[576];
+  real_T K[576];
+  real_T Hu_z[64];
+  real_T Aineq_z[384];
+  real_T Hu_o[16];
+  real_T Aineq_o[32];
   real_T lambda_z;
   real_T lambda_o;
 };
@@ -304,10 +304,10 @@ struct mpcActiveSetOptions_imperix_b_T
 
 #endif                                // struct_mpcActiveSetOptions_imperix_b_T
 
-// Parameters for system: '<S425>/Subsystem - pi//2 delay'
+// Parameters for system: '<S446>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_b_T_ P_Subsystempi2delay_imperix_b_T;
 
-// Parameters for system: '<S425>/Subsystem1'
+// Parameters for system: '<S446>/Subsystem1'
 typedef struct P_Subsystem1_imperix_balance__T_ P_Subsystem1_imperix_balance__T;
 
 // Parameters (default storage)
