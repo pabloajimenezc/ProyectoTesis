@@ -1,13 +1,10 @@
 classdef ClassCCC
     % ClassCCC: Linearly Independent Circulating Current Control
     % Linear Model Predictive Control with first-order low-pass reference filtering
+    % and coupled constraints
     % Low-pass filter: yf[t] = alpha * yf[t-1] + (1-alpha) * y[t]
     properties
-        T      % Cluster voltage mapping ([vsP; vsm; vse] = T*vs) => vs = T^-1 * [vsP; vsm; vse]
-        pinvT
         Ts     % Sampling time
-        nx     % # of state variables (LICCs)
-        nu     % # of control actions (decoupled voltage)
         A      % Discrete time state matrix
         B      % Discrete time input matrix
         Q      % Reference tracking weighting matrix
@@ -16,48 +13,47 @@ classdef ClassCCC
         QT     % Terminal cost matrix
         H      % Hessian
         Aineq  % Control action constraints matrix
-        tau_f  % Filter time constante
+        tau_f  % Filter time constant
         alpha  % Filter constant
     end
 
     methods
-        function CCC = ClassCCC(Ts, M2C, IEC, RFT)
+        function CCC = ClassCCC(Ts, M2C, IEC)
             % ClassCCC: Construct an instance of this class
             
-            CCC.T = -[[1, 1, 1, -1, -1, -1]/2;
-                          RFT.abc2ab * M2C.Ay;
-                                   M2C.pinvN];
-            CCC.pinvT = pinv(CCC.T);
             CCC.Ts = Ts;
-            CCC.nx = M2C.n;
-            CCC.nu = M2C.n;
+            
             % Continuous time model
-            A = -eye(CCC.nx) * M2C.R / M2C.L;
-            B = eye(CCC.nu) / M2C.L;
+            A = -eye(M2C.n) * M2C.R / M2C.L;
+            B = -eye(M2C.n) / M2C.L;
+            
             % Single-step discrete time model
-            AB = expm(CCC.Ts * [A, B; zeros(CCC.nx, CCC.nx+CCC.nu)]);
-            A  = AB(1:CCC.nx, 1:CCC.nx);
-            B  = AB(1:CCC.nx, CCC.nx+1:end);
+            AB = expm(CCC.Ts * [A, B; zeros(M2C.n, 2*M2C.n)]);
+            A  = AB(1:M2C.n, 1:M2C.n);
+            B  = AB(1:M2C.n, M2C.n+1:end);
+            
             % Single-step weighting matrices
-            Q = eye(CCC.nx)/M2C.is_max^2;
+            Q = eye(M2C.n)/M2C.is_max^2;
+            CCC.lambda = 50;
             % CCC.lambda = 15;
             % CCC.lambda = 10;
-            CCC.lambda = 5;
+            % CCC.lambda = 5;
             % CCC.lambda = 1;
-            R = CCC.lambda*eye(CCC.nu)/M2C.Vc_ref^2;
+            % CCC.lambda = 0.1;
+            R = CCC.lambda*eye(M2C.n)/M2C.Vc_ref^2;
             CCC.QT = idare(A, B, Q, R, [], []);
+            
             % 2-steps horizon
             CCC.Q = blkdiag(Q, CCC.QT);
             CCC.R = blkdiag(R, R);
-            CCC.B = [B, zeros(CCC.nx, CCC.nu);
-                     A*B, B];
+            CCC.B = [B, zeros(M2C.n); A*B, B];
             CCC.A = [A; A^2];
+            Aineq  = blkdiag(M2C.pinvTe, M2C.pinvTe);
+
+            % Horizon independent
+            CCC.Aineq = [Aineq; -Aineq];
             CCC.H      = 2 * (CCC.B' * CCC.Q * CCC.B + CCC.R);
-            CCC.Aineq  = [CCC.pinvT(:, 4:5), zeros(M2C.m, CCC.nu);
-                          zeros(M2C.m, CCC.nu), CCC.pinvT(:, 4:5);
-                         -CCC.pinvT(:, 4:5), zeros(M2C.m, CCC.nu);
-                          zeros(M2C.m, CCC.nu), -CCC.pinvT(:, 4:5)];
-            CCC.tau_f = IEC.Ts*10;
+            CCC.tau_f = IEC.Ts/5;
             CCC.alpha = exp(-CCC.Ts/CCC.tau_f);
         end
 

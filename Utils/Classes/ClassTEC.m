@@ -20,7 +20,8 @@ classdef ClassTEC
             % ClassTEB: Construct an instance of this class
                         
             TEC.Ts    = Ts;
-            TEC.k     = M2C.Ax_max / (3 * M2C.C * M2C.Vc_ref);
+            % TEC.k     = M2C.vx_max / (3 * M2C.C * M2C.Vc_ref);
+            TEC.k     = M2C.Vdc / (M2C.m * M2C.C * M2C.Vc_ref);
             TEC.xi    = 1 / sqrt(2);
             TEC.wn    = PCC.wn / 5;
             TEC.kp    = TEC.wn / TEC.k;

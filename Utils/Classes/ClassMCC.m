@@ -19,14 +19,14 @@ classdef ClassMCC
             % ClassMCC: Construct an instance of this class
 
             MCC.Ts    = Ts;
-            MCC.Re    = M2C.R/2 + IM.Ro;
-            MCC.Le    = M2C.L/2 + IM.Lo;
+            MCC.Re    = M2C.R + 2*IM.Ro;
+            MCC.Le    = M2C.L + 2*IM.Lo;
             MCC.tau_e = MCC.Le / MCC.Re;
             MCC.xi    = 1 / sqrt(2);
             MCC.wn    = 1 / (MCC.xi * MCC.tau_e);
             MCC.kp    = 2 * MCC.Le * MCC.wn * MCC.xi - MCC.Re;
             MCC.ki    = MCC.Le * MCC.wn^2;
-            MCC.u_max = M2C.Ay_max;
+            MCC.u_max = 2*M2C.vy_max;
         end
 
         function s = toStruct(obj)

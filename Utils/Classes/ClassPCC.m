@@ -26,18 +26,7 @@ classdef ClassPCC
             PCC.wn  = 5 / (PCC.xi * PCC.tau);
             PCC.kp  = 2 * PCC.L * PCC.wn * PCC.xi - PCC.R;
             PCC.ki  = PCC.L * PCC.wn^2;
-
-            % A = [-PCC.R/PCC.L, 0;
-            %       -1, 0];
-            % B = [1/PCC.L; 0];
-            % Q = diag([1, 1000]);
-            % R = 1;
-            % K = abs(lqr(A, B, Q, R));
-            % 
-            % PCC.kp = K(1);
-            % PCC.ki = K(2);
-
-            PCC.u_max = 5 * M2C.R * M2C.ix_max;
+            PCC.u_max = 10 * M2C.R * M2C.ix_max;
         end
 
         function s = toStruct(obj)

@@ -8,36 +8,36 @@
 // Code generated for Simulink model 'imperix_balance_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.134
+// Model version                  : 19.161
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Mon Feb 23 19:32:48 2026
+// C/C++ source code generated on : Thu Feb 26 19:55:06 2026
 //
 #ifndef imperix_balance_ctrl_types_h_
 #define imperix_balance_ctrl_types_h_
 #include "rtwtypes.h"
-#ifndef DEFINED_TYPEDEF_FOR_struct_d2khE9mo8aVLkTDaaK7QMB_
-#define DEFINED_TYPEDEF_FOR_struct_d2khE9mo8aVLkTDaaK7QMB_
+#ifndef DEFINED_TYPEDEF_FOR_struct_KGBPdpuUNiPn7rR2MwzhRE_
+#define DEFINED_TYPEDEF_FOR_struct_KGBPdpuUNiPn7rR2MwzhRE_
 
-struct struct_d2khE9mo8aVLkTDaaK7QMB
+struct struct_KGBPdpuUNiPn7rR2MwzhRE
 {
   real_T Ax[12];
   real_T Ay[18];
   real_T p;
   real_T q;
   real_T A[30];
-  real_T m;
   real_T pinvA[30];
+  real_T m;
   real_T N[12];
-  real_T n;
   real_T pinvN[12];
+  real_T n;
   real_T R;
   real_T L;
   real_T Csm;
   real_T Nsm;
   real_T C;
   real_T Vdc;
-  real_T Ax_max;
-  real_T Ay_max;
+  real_T vx_max;
+  real_T vy_max;
   real_T ix_max;
   real_T iy_max;
   real_T is_max;
@@ -48,24 +48,15 @@ struct struct_d2khE9mo8aVLkTDaaK7QMB
   real_T vc_dev;
   real_T vc_m_dev;
   real_T Ec_dev;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_rdZwERmVb1rhFtGnZ52PSG_
-#define DEFINED_TYPEDEF_FOR_struct_rdZwERmVb1rhFtGnZ52PSG_
-
-struct struct_rdZwERmVb1rhFtGnZ52PSG
-{
-  real_T Ts;
-  real_T k;
-  real_T xi;
-  real_T wn;
-  real_T kp;
-  real_T ki;
-  real_T u_max;
-  real_T tau_f;
-  real_T alpha;
+  real_T TD[2];
+  real_T Tx[6];
+  real_T Ty[12];
+  real_T Te[12];
+  real_T T[30];
+  real_T pinvTx[6];
+  real_T pinvTy[12];
+  real_T pinvTe[12];
+  real_T pinvT[30];
 };
 
 #endif
@@ -84,6 +75,24 @@ struct struct_V11yzUicWajUfCfdcXdSaC
   real_T k_w;
   real_T kp_w;
   real_T ki_w;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_rdZwERmVb1rhFtGnZ52PSG_
+#define DEFINED_TYPEDEF_FOR_struct_rdZwERmVb1rhFtGnZ52PSG_
+
+struct struct_rdZwERmVb1rhFtGnZ52PSG
+{
+  real_T Ts;
+  real_T k;
+  real_T xi;
+  real_T wn;
+  real_T kp;
+  real_T ki;
+  real_T u_max;
+  real_T tau_f;
+  real_T alpha;
 };
 
 #endif
@@ -124,44 +133,10 @@ struct struct_lzLWDxdESgOnj63TjlRqe
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
-#define DEFINED_TYPEDEF_FOR_struct_coWYOfcHQKga4h4Z3609x_
+#ifndef DEFINED_TYPEDEF_FOR_struct_vMmolkBO3MQ2WCj8YrPzlG_
+#define DEFINED_TYPEDEF_FOR_struct_vMmolkBO3MQ2WCj8YrPzlG_
 
-struct struct_coWYOfcHQKga4h4Z3609x
-{
-  real_T Ts;
-  real_T Nl;
-  real_T Np;
-  real_T ONE[96];
-  real_T NN[192];
-  real_T MI[576];
-  real_T K[576];
-  real_T Hu_z[64];
-  real_T Aineq_z[384];
-  real_T Hu_o[16];
-  real_T Aineq_o[32];
-  real_T lambda_z;
-  real_T lambda_o;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-
-struct struct_eLXpdkXVH71IKiDfJkdaiC
-{
-  real_T abc2ab[6];
-  real_T ab2abc[6];
-  real_T rot[4];
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_3oGPhqag3LrQh40vmdz4AD_
-#define DEFINED_TYPEDEF_FOR_struct_3oGPhqag3LrQh40vmdz4AD_
-
-struct struct_3oGPhqag3LrQh40vmdz4AD
+struct struct_vMmolkBO3MQ2WCj8YrPzlG
 {
   real_T VLLN;
   real_T PN;
@@ -198,12 +173,66 @@ struct struct_3oGPhqag3LrQh40vmdz4AD
   real_T Tb;
   real_T H;
   real_T Zb;
-  real_T sN;
+  real_T Lb;
   real_T rs;
   real_T rr;
   real_T los;
   real_T lor;
   real_T lm;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_YUQGZT1wNQqHOlVxPRDLvF_
+#define DEFINED_TYPEDEF_FOR_struct_YUQGZT1wNQqHOlVxPRDLvF_
+
+struct struct_YUQGZT1wNQqHOlVxPRDLvF
+{
+  real_T Ts;
+  real_T Nl;
+  real_T Np;
+  real_T ONE[24];
+  real_T NN[48];
+  real_T MI[144];
+  real_T K[144];
+  real_T Hu_z[16];
+  real_T Aineq_z[96];
+  real_T Hu_o[4];
+  real_T Aineq_o[8];
+  real_T lambda_z;
+  real_T lambda_o;
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+
+struct struct_eLXpdkXVH71IKiDfJkdaiC
+{
+  real_T abc2ab[6];
+  real_T ab2abc[6];
+  real_T rot[4];
+};
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_struct_rFOxCXlMLRQfdQMau5zCw_
+#define DEFINED_TYPEDEF_FOR_struct_rFOxCXlMLRQfdQMau5zCw_
+
+struct struct_rFOxCXlMLRQfdQMau5zCw
+{
+  real_T Ts;
+  real_T A[8];
+  real_T B[16];
+  real_T Q[16];
+  real_T lambda;
+  real_T R[16];
+  real_T QT[4];
+  real_T H[16];
+  real_T Aineq[96];
+  real_T tau_f;
+  real_T alpha;
 };
 
 #endif
@@ -232,30 +261,6 @@ struct struct_Rky7CkjZg6FWKeiF92MwY
   real_T we_steps;
   real_T we_list[200];
   real_T gain_schedule[1600];
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_iBNhAmynxvQUSUJjZwUnnE_
-#define DEFINED_TYPEDEF_FOR_struct_iBNhAmynxvQUSUJjZwUnnE_
-
-struct struct_iBNhAmynxvQUSUJjZwUnnE
-{
-  real_T T[30];
-  real_T pinvT[30];
-  real_T Ts;
-  real_T nx;
-  real_T nu;
-  real_T A[8];
-  real_T B[16];
-  real_T Q[16];
-  real_T lambda;
-  real_T R[16];
-  real_T QT[4];
-  real_T H[16];
-  real_T Aineq[96];
-  real_T tau_f;
-  real_T alpha;
 };
 
 #endif
@@ -290,7 +295,7 @@ struct dsp_simulink_MovingAverage_im_T
 
 #endif                                // struct_dsp_simulink_MovingAverage_im_T
 
-// Custom Type definition for MATLAB Function: '<S31>/Saturation'
+// Custom Type definition for MATLAB Function: '<S1>/LICCs control'
 #ifndef struct_mpcActiveSetOptions_imperix_b_T
 #define struct_mpcActiveSetOptions_imperix_b_T
 
@@ -304,10 +309,10 @@ struct mpcActiveSetOptions_imperix_b_T
 
 #endif                                // struct_mpcActiveSetOptions_imperix_b_T
 
-// Parameters for system: '<S446>/Subsystem - pi//2 delay'
+// Parameters for system: '<S386>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_b_T_ P_Subsystempi2delay_imperix_b_T;
 
-// Parameters for system: '<S446>/Subsystem1'
+// Parameters for system: '<S386>/Subsystem1'
 typedef struct P_Subsystem1_imperix_balance__T_ P_Subsystem1_imperix_balance__T;
 
 // Parameters (default storage)

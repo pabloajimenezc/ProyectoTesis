@@ -43,7 +43,7 @@ classdef ClassIM
         Tb    % [Nm] Base torque
         H     % [s] Inertia constant
         Zb    % [Ohm] Base impedance
-        sN    % [pu] Nominal apparent power
+        Lb    % [H] Base inductance
         rs    % [pu] Stator resistance
         rr    % [pu] Stator resistance
         los   % [pu] Stator leakage reactance
@@ -68,8 +68,7 @@ classdef ClassIM
             IM.FrN   = sqrt(2/3)*IM.VLLN/(2*pi*IM.fN);
             IM.np    = 2;
             
-            % IM.J    = 0.006; % Original (Too low for the RTDS -> Numerical errors)
-            IM.J    = 0.01;
+            IM.J    = 0.006;
             % IM.J    = 0.1;
             IM.Rs   = 1.8;
             IM.Rr   = 1.8;
@@ -92,17 +91,17 @@ classdef ClassIM
             IM.isqN  = IM.TN / (IM.kT*IM.FrN);
 
             % Per unit
-            IM.Sb = 10000;
-            IM.wb = 2 * pi * IM.fN;
-            IM.Tb = IM.Sb / IM.wb;
-            IM.Zb = IM.VLLN^2 / IM.Sb;
-            IM.H = 0.5 * IM.J * IM.wN^2 / IM.Sb;
-            IM.sN = IM.SN / IM.Sb;
-            IM.rs = IM.Rs / IM.Zb;
-            IM.rr = IM.Rr / IM.Zb;
-            IM.los = 2*pi * IM.fN * IM.Los / IM.Zb;
-            IM.lor = 2*pi * IM.fN * IM.Lor / IM.Zb;
-            IM.lm = 2*pi * IM.fN * IM.Lm / IM.Zb;
+            IM.Sb  = 10000;
+            IM.wb  = 2 * pi * IM.fN;
+            IM.Tb  = IM.Sb / IM.wb;
+            IM.Zb  = IM.VLLN^2 / IM.Sb;
+            IM.Lb  = IM.Zb / IM.Zb;
+            IM.H   = 0.5 * IM.J * IM.wb^2 / IM.Sb;
+            IM.rs  = IM.Rs / IM.Zb;
+            IM.rr  = IM.Rr / IM.Zb;
+            IM.los = IM.wb * IM.Los / IM.Zb;
+            IM.lor = IM.wb * IM.Lor / IM.Zb;
+            IM.lm  = IM.wb * IM.Lm / IM.Zb;
         end
 
         function s = toStruct(obj)

@@ -29,6 +29,8 @@ classdef ClassKF
         function KF = ClassKF(Ts, IM, M2C)
             % ClassKF: Construct an instance of this class
 
+            % Note: The equivalent stator resistance and inductance values
+            % are in the motor point of view.
             KF.Re    = M2C.R/2 + IM.Ro;
             KF.Le    = M2C.L/2 + IM.Lo;
             KF.tau_e = KF.Le / KF.Re;
@@ -42,7 +44,6 @@ classdef ClassKF
             KF.Q     = diag([KF.qi, KF.qi, KF.qF, KF.qF]);
             KF.R     = KF.r*eye(KF.ny);
             KF.x1_mu = zeros(KF.nx, 1);
-            % KF.x1_mu = [IM.isdN; 0; IM.FrN; 0];
 
             KF.A       = zeros(KF.nx);
             KF.A(1, 1) = -1/KF.tau_e;

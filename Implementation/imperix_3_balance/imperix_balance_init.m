@@ -12,14 +12,14 @@ Ts_ce = 1/fs_ce; % Energy control timestep
 
 RFT = ClassRFT();                     % Reference Frame Transforms
 IM  = ClassIM();                      % Induction Machine
-M2C = ClassM2C(IM);                   % Modular Multilevel Converter
+M2C = ClassM2C(IM, RFT);              % Modular Multilevel Converter
 KF  = ClassKF(Ts_cc, IM, M2C);        % Kalman Filter
-MCC = ClassMCC(Ts_cc, IM, M2C);       % Machine Current Control
+MCC = ClassMCC(Ts_cc, IM, M2C);       % Induction Machine Current Control
 FOC = ClassFOC(Ts_cc, IM, MCC, M2C);  % Field Oriented Control
 PCC = ClassPCC(Ts_cc, M2C);           % Positive DC-link Current Control
-TEC = ClassTEC(Ts_cc, M2C, PCC);      % Total Energy Control
-IEC = ClassIEC(Ts_ce, M2C);           % Intercluster Energy Control
-CCC = ClassCCC(Ts_cc, M2C, IEC, RFT); % Circulating Current Control
+TEC = ClassTEC(Ts_cc, M2C, PCC);      % Total Energy Balance Control
+IEC = ClassIEC(Ts_ce, M2C);           % Intercluster Energy Balance Control
+CCC = ClassCCC(Ts_cc, M2C, IEC);      % Circulating Current Control
 
 % Convert to struct for code generation
 RFT = RFT.toStruct();
