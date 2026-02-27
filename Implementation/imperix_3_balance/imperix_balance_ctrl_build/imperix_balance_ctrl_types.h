@@ -8,9 +8,9 @@
 // Code generated for Simulink model 'imperix_balance_ctrl'.
 // To be implemented on the B-Box RCP or the B-Board PRO.
 //
-// Model version                  : 19.161
+// Model version                  : 19.176
 // Simulink Coder version         : 25.1 (R2025a) 21-Nov-2024
-// C/C++ source code generated on : Thu Feb 26 19:55:06 2026
+// C/C++ source code generated on : Fri Feb 27 19:51:56 2026
 //
 #ifndef imperix_balance_ctrl_types_h_
 #define imperix_balance_ctrl_types_h_
@@ -183,54 +183,20 @@ struct struct_vMmolkBO3MQ2WCj8YrPzlG
 
 #endif
 
-#ifndef DEFINED_TYPEDEF_FOR_struct_YUQGZT1wNQqHOlVxPRDLvF_
-#define DEFINED_TYPEDEF_FOR_struct_YUQGZT1wNQqHOlVxPRDLvF_
+#ifndef DEFINED_TYPEDEF_FOR_struct_bCv8ot3jvmSLMyaAEw4UPF_
+#define DEFINED_TYPEDEF_FOR_struct_bCv8ot3jvmSLMyaAEw4UPF_
 
-struct struct_YUQGZT1wNQqHOlVxPRDLvF
+struct struct_bCv8ot3jvmSLMyaAEw4UPF
 {
   real_T Ts;
-  real_T Nl;
-  real_T Np;
-  real_T ONE[24];
-  real_T NN[48];
-  real_T MI[144];
-  real_T K[144];
-  real_T Hu_z[16];
-  real_T Aineq_z[96];
-  real_T Hu_o[4];
-  real_T Aineq_o[8];
-  real_T lambda_z;
-  real_T lambda_o;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
-
-struct struct_eLXpdkXVH71IKiDfJkdaiC
-{
-  real_T abc2ab[6];
-  real_T ab2abc[6];
-  real_T rot[4];
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_struct_rFOxCXlMLRQfdQMau5zCw_
-#define DEFINED_TYPEDEF_FOR_struct_rFOxCXlMLRQfdQMau5zCw_
-
-struct struct_rFOxCXlMLRQfdQMau5zCw
-{
-  real_T Ts;
-  real_T A[8];
-  real_T B[16];
-  real_T Q[16];
+  real_T A[16];
+  real_T B[64];
+  real_T Q[64];
   real_T lambda;
   real_T R[16];
   real_T QT[4];
-  real_T H[16];
-  real_T Aineq[96];
+  real_T H[64];
+  real_T Aineq[192];
   real_T tau_f;
   real_T alpha;
 };
@@ -265,6 +231,18 @@ struct struct_Rky7CkjZg6FWKeiF92MwY
 
 #endif
 
+#ifndef DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+#define DEFINED_TYPEDEF_FOR_struct_eLXpdkXVH71IKiDfJkdaiC_
+
+struct struct_eLXpdkXVH71IKiDfJkdaiC
+{
+  real_T abc2ab[6];
+  real_T ab2abc[6];
+  real_T rot[4];
+};
+
+#endif
+
 #ifndef struct_cell_wrap_imperix_balance_ctr_T
 #define struct_cell_wrap_imperix_balance_ctr_T
 
@@ -295,24 +273,10 @@ struct dsp_simulink_MovingAverage_im_T
 
 #endif                                // struct_dsp_simulink_MovingAverage_im_T
 
-// Custom Type definition for MATLAB Function: '<S1>/LICCs control'
-#ifndef struct_mpcActiveSetOptions_imperix_b_T
-#define struct_mpcActiveSetOptions_imperix_b_T
-
-struct mpcActiveSetOptions_imperix_b_T
-{
-  boolean_T IntegrityChecks;
-  int32_T MaxIterations;
-  real_T ConstraintTolerance;
-  boolean_T UseHessianAsInput;
-};
-
-#endif                                // struct_mpcActiveSetOptions_imperix_b_T
-
-// Parameters for system: '<S386>/Subsystem - pi//2 delay'
+// Parameters for system: '<S387>/Subsystem - pi//2 delay'
 typedef struct P_Subsystempi2delay_imperix_b_T_ P_Subsystempi2delay_imperix_b_T;
 
-// Parameters for system: '<S386>/Subsystem1'
+// Parameters for system: '<S387>/Subsystem1'
 typedef struct P_Subsystem1_imperix_balance__T_ P_Subsystem1_imperix_balance__T;
 
 // Parameters (default storage)

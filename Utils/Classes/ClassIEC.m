@@ -23,8 +23,12 @@ classdef ClassIEC
             % ClassIEC: Construct an instance of this class
             
             IEC.Ts        = Ts;
-            IEC.Nl        = 10;
-            IEC.Np        = 2;
+            % IEC.Nl        = 15;
+            % IEC.Np        = 2;
+            % IEC.Nl        = 4;
+            % IEC.Np        = 3;
+            IEC.Nl        = 2;
+            IEC.Np        = 4;
             ONE           = repmat({ones(M2C.m, 1)}, IEC.Np, 1);
             IEC.ONE       = blkdiag(ONE{:});
             NN            = repmat({M2C.N}, IEC.Np, 1);
